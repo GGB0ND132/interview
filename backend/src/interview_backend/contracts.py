@@ -10,15 +10,22 @@ class RequestModel(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
 
 
-class Config(BaseModel):
+class QuestionSelection(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    mode: Literal["question_practice"] = "question_practice"
     difficulty: Literal["easy", "medium", "hard"] = "easy"
     language: Literal["zh-CN"] = "zh-CN"
     question_types: list[Literal["technical"]] = Field(default=["technical"], min_length=1)
     focus_competency_ids: list[str] = Field(default_factory=list)
     max_followups_per_question: Literal[0] = 0
     feedback_timing: Literal["after_question_group"] = "after_question_group"
+
+
+class Config(QuestionSelection):
+    mode: Literal["question_practice"] = "question_practice"
+
+
+class AvailabilityConfig(QuestionSelection):
+    mode: Literal["question_practice", "mock_interview"] = "question_practice"
 
 
 class CreateSession(RequestModel):

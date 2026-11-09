@@ -1,0 +1,10 @@
+.qp-coverage { display: grid; gap: 12px; padding-block: 20px; border-block: 1px solid var(--border-subtle); }
+.qp-coverage h2 { font: 600 var(--fs-sub)/var(--lh-sub) var(--font-sans); }
+.qp-coverage .field-heading { gap: 16px; flex-wrap: wrap; }
+.qp-stage-list, .qp-topic-list { list-style: none; margin: 0; padding: 0; }
+.qp-stage-list li, .qp-topic-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 8px; border-bottom: 1px solid var(--border-subtle); }
+.qp-stage-list li > :last-child, .qp-topic-list li > :last-child { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.coverage-ready { color: var(--success-fg); }
+.coverage-missing { color: var(--warning-fg); }
+.qp-topics summary { cursor: pointer; color: var(--text-secondary); padding-block: 4px; }
+@media (max-width: 420px) { .qp-stage-list li { flex-wrap: wrap; gap: 4px 12px; } }

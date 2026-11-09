@@ -7,10 +7,17 @@ import sqlite3
 from typing import Any, cast
 from uuid import uuid4
 
-from .contracts import Config, CreateSession, SubmitAnswer, feedback
+from .contracts import (
+    AvailabilityConfig,
+    Config,
+    CreateSession,
+    QuestionSelection,
+    SubmitAnswer,
+    feedback,
+)
 from .errors import PracticeError
 from .model import PROMPT_VERSION, Evaluator, ModelError
-from .publishing import topic_counts
+from .publishing import PACK_ID, TOPICS, topic_counts
 from .store import Store
 
 
@@ -24,7 +31,9 @@ class Practice:
         self.evaluator = evaluator
         self.model_name = model_name
 
-    def _pool(self, db: sqlite3.Connection, pack_id: str, config: Config) -> list[dict[str, Any]]:
+    def _pool(
+        self, db: sqlite3.Connection, pack_id: str, config: QuestionSelection
+    ) -> list[dict[str, Any]]:
         pack = db.execute("SELECT * FROM role_packs WHERE id=?", (pack_id,)).fetchone()
         if pack is None or pack["status"] != "published":
             raise PracticeError("PACK_NOT_PUBLISHED", "该岗位包尚未发布", 400)
@@ -45,17 +54,59 @@ class Practice:
         with self.store.connect() as db:
             return [dict(row) for row in db.execute("SELECT * FROM role_packs ORDER BY id")]
 
-    def availability(self, pack_id: str, config: Config) -> dict[str, Any]:
+    def availability(self, pack_id: str, config: AvailabilityConfig) -> dict[str, Any]:
         with self.store.connect() as db:
             pool = self._pool(db, pack_id, config)
-        return {
+            catalog = self._pool(
+                db, pack_id, config.model_copy(update={"focus_competency_ids": []})
+            )
+        topics = dict(TOPICS) if pack_id == PACK_ID else {}
+        topics.update({q["topic"]: q["competency_id"] for q in catalog})
+        result = {
             "pack_id": pack_id,
             "mode": config.mode,
             "available_count": len(pool),
             "topic_counts": topic_counts(pool),
+            "topics": [
+                {
+                    "topic": topic,
+                    "competency_id": competency,
+                    "available_count": sum(q["competency_id"] == competency for q in catalog),
+                    "interview_count": sum(
+                        q["competency_id"] == competency and q["interview_suitable"]
+                        for q in catalog
+                    ),
+                }
+                for topic, competency in topics.items()
+            ],
             "can_start": bool(pool),
             "missing": [] if pool else ["published_question"],
         }
+        if config.mode == "mock_interview":
+            interview_pool = [q for q in pool if q["interview_suitable"]]
+            eligible_topics = len({q["competency_id"] for q in interview_pool})
+            # Publishing currently accepts technical questions only. Other stages
+            # and the session planner belong to ticket 07; never invent fillers.
+            stages = [
+                {"id": stage, "label": label, "available_count": count, "ready": ready}
+                for stage, label, count, ready in (
+                    ("introduction", "开场", 0, False),
+                    ("experience_or_scenario", "经历或假设情境", 0, False),
+                    ("technical_topics", "技术", len(interview_pool), eligible_topics >= 3),
+                    ("behavioral", "行为", 0, False),
+                    ("candidate_questions", "候选人反问", 0, False),
+                )
+            ]
+            result.update(
+                available_count=len(interview_pool),
+                topic_counts=topic_counts(interview_pool),
+                eligible_topic_count=eligible_topics,
+                minimum_topic_count=3,
+                stages=stages,
+                can_start=False,
+                missing=[s["id"] for s in stages if not s["ready"]] + ["mock_interview_flow"],
+            )
+        return result
 
     @staticmethod
     def _row(db: sqlite3.Connection, session_id: str) -> sqlite3.Row:

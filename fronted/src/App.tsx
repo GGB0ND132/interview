@@ -27,22 +27,22 @@ function Workspace() {
   const page = location.pathname.startsWith('/materials') ? '资料管理' : location.pathname.startsWith('/history') ? '历史记录' : location.pathname.startsWith('/question-practice') ? '试题练习' : '面试练习'
   function start(next: PracticeConfig) { setConfig(next); setRun(n => n + 1); setActive(true); navigate('/practice') }
   function finish(session: Session) { setSessions(items => [session, ...items]); setActive(false); navigate(`/history/${session.id}`); setToast('练习记录已保存到当前演示空间') }
-  const nav = [ { to: '/practice', label: '面试练习', Icon: MessagesSquare }, { to: '/question-practice', label: '试题练习', Icon: ListChecks }, { to: '/materials', label: '资料管理', Icon: FolderOpen }, { to: '/history', label: '历史记录', Icon: HistoryIcon } ]
+  const nav = [ { to: '/question-practice', label: '开始练习', Icon: ListChecks }, { to: '/practice', label: '面试演示', Icon: MessagesSquare }, { to: '/materials', label: '资料管理', Icon: FolderOpen }, { to: '/history', label: '历史记录', Icon: HistoryIcon } ]
   return <div className="app-shell">
     {menuOpen && <button className="nav-scrim" aria-label="关闭导航" onClick={() => setMenuOpen(false)} />}
     <aside className={`sidebar ${menuOpen ? 'is-open' : ''}`}>
-      <div className="sidebar-top"><NavLink to="/practice" className="brand" onClick={() => setMenuOpen(false)}>面试练习</NavLink><button className="icon-button sidebar-close" aria-label="关闭导航" onClick={() => setMenuOpen(false)}><X size={18} /></button></div>
+      <div className="sidebar-top"><NavLink to="/question-practice" className="brand" onClick={() => setMenuOpen(false)}>面试练习</NavLink><button className="icon-button sidebar-close" aria-label="关闭导航" onClick={() => setMenuOpen(false)}><X size={18} /></button></div>
       <nav aria-label="主导航">{nav.map(({ to, label, Icon }) => <NavLink key={to} end={to !== '/history'} to={to} className={({ isActive }) => `nav-item ${isActive ? 'is-active' : ''}`} onClick={() => setMenuOpen(false)}><Icon size={18} aria-hidden="true" /><span>{label}</span>{to === '/history' && <span className="nav-count">{sessions.length}</span>}</NavLink>)}</nav>
       <div className="sidebar-bottom"><button className="nav-item nav-button" onClick={() => { setHelpOpen(true); setMenuOpen(false) }}><BookOpenText size={18} aria-hidden="true" />使用说明</button><div className="theme-control"><span>主题</span><div className="theme-options" role="group" aria-label="主题模式">{([{ value: 'system', Icon: Monitor, label: '跟随系统' }, { value: 'light', Icon: Sun, label: '浅色' }, { value: 'dark', Icon: Moon, label: '深色' }] as const).map(({ value, Icon, label }) => <button key={value} title={label} aria-label={label} aria-pressed={theme === value} className={theme === value ? 'is-active' : ''} onClick={() => setTheme(value)}><Icon size={16} /></button>)}</div></div></div>
     </aside>
     <div className="main-shell"><header className="topbar"><button className="icon-button mobile-menu" aria-label="打开导航" onClick={() => setMenuOpen(true)}><Menu size={20} /></button><span className="top-context">{page}</span><span className="top-spacer" /></header><Routes>
-      <Route path="/" element={<Navigate to="/practice" replace />} />
+      <Route path="/" element={<Navigate to="/question-practice" replace />} />
       <Route path="/practice" element={null} />
       <Route path="/question-practice" element={null} />
       <Route path="/materials" element={null} />
       <Route path="/history" element={null} />
       <Route path="/history/:id" element={null} />
-      <Route path="*" element={<Navigate to="/practice" replace />} />
+      <Route path="*" element={<Navigate to="/question-practice" replace />} />
     </Routes><div hidden={page !== '面试练习'}><Practice key={`${run}-${config.focus}`} config={config} active={active} onStart={start} onFinish={finish} notify={setToast} /></div><div hidden={page !== '试题练习'}><QuestionPractice /></div><div hidden={page !== '资料管理'}><Materials notify={setToast} /></div><div hidden={page !== '历史记录'}><History sessions={sessions} onPractice={(focus) => { setConfig(c => ({ ...c, focus: focus ?? c.focus })); setActive(false); navigate('/practice') }} /></div></div>
     <Modal open={helpOpen} onOpenChange={setHelpOpen} title="使用说明"><div className="help-content"><p>在资料管理中准备岗位描述和学习资料，再到面试练习选择题型与难度。答完一组后可查看反馈、示范回答和资料来源。</p><p>试题练习连接本机后端服务，题目、评价和历史来自服务端；面试练习、资料管理与历史记录目前仍使用浏览器内的演示数据，刷新页面后会重置。</p></div></Modal>
     {toast && <div className="toast" role="status"><span>{toast}</span><button className="icon-button" aria-label="关闭提示" onClick={() => setToast('')}><X size={16} /></button></div>}
