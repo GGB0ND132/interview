@@ -91,6 +91,10 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/api/v1/maintenance/question-publica
 
 可用性仍使用 `POST /role-packs/pack_agent_basics_mianstack/availability`，返回 `available_count/topic_counts/can_start`，与实际抽题使用相同候选池，支持 `focus_competency_ids`。预览中的 `imported_count` 是预计新增版本数，`committed=false`；实际发布为 true，接受数包含 `unchanged_count`。
 
+04 增加 `topics`：按当前题包和难度列出主题、`competency_id`、可抽数 `available_count` 与适合面试的题数 `interview_count`。该目录不受主题筛选影响，供前端切换主题；顶层总数仍遵守 `focus_competency_ids`。MianStack 目录保留全部 12 个主题，即使计数为 0；样题包使用自己的主题目录。
+
+可用性查询支持 `mode=mock_interview`，只读返回适合面试的技术题数、可覆盖主题数、五类必需环节的 `stages` 与 `missing`。技术部分至少要求 3 个有合格题的主题。当前发布入口只支持技术题，因此其他四类环节如实报告缺少已发布题；`mock_interview_flow` 表示真实模拟面试流程尚未接入，`can_start=false`。这不是 07 的会话规划器，创建会话接口仍只接受 `question_practice`，不会生成补位主问题。后续 07/08 接入时须用真实环节题池与规划器结果替换此就绪检查。
+
 在独立的空验收数据库上启动服务后运行（会发布、改版并停用验收题，不调用模型）：
 
 ```powershell

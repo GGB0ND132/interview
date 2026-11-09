@@ -27,3 +27,7 @@ docs/content-baseline/原始参考_Python后端_不入库/*
 Thumbs.db
 .vscode/
 .idea/
+
+# Local browser verification artifacts
+.playwright-cli/
+output/playwright/

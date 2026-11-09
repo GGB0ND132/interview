@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowRight, BookOpenText, ExternalLink, FileText, LoaderCircle, Play, SkipForward } from 'lucide-react'
 import { ApiError, createPracticeApi } from './api'
+import { useQuestionAvailability } from './useQuestionAvailability'
+import './question-availability.css'
 import type {
-  Availability,
   Dimension,
   Difficulty,
   Feedback,
   Pack,
   PracticeApi,
+  PracticeMode,
   SessionView,
   Submission,
 } from './api'
@@ -58,7 +60,9 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   const [packs, setPacks] = useState<Pack[]>([])
   const [packId, setPackId] = useState('')
   const [difficulty, setDifficulty] = useState<Difficulty>('easy')
-  const [availability, setAvailability] = useState<Availability | null>(null)
+  const [mode, setMode] = useState<PracticeMode>('question_practice')
+  const [focus, setFocus] = useState('')
+  const { availability, availabilityError, refreshAvailability } = useQuestionAvailability(api, packId, mode, difficulty, focus)
   const [session, setSession] = useState<SessionView | null>(null)
   const [answer, setAnswer] = useState('')
   const [busy, setBusy] = useState(false)
@@ -74,23 +78,17 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   }, [session?.phase, session?.revision])
 
 
-  async function chooseDifficulty(next: Difficulty) {
+  function chooseDifficulty(next: Difficulty) {
     setDifficulty(next)
-    if (!packId) return
-    setAvailability(null)
-    try {
-      setAvailability(await api.availability(packId, { mode: 'question_practice', difficulty: next }))
-    } catch (failure) {
-      setError(message(failure))
-    }
+    setError('')
   }
 
   async function draw() {
-    if (!packId || busy) return
+    if (!packId || busy || mode !== 'question_practice' || !availability?.can_start) return
     setBusy(true)
     setError('')
     try {
-      const draft = await api.create(packId, { mode: 'question_practice', difficulty })
+      const draft = await api.create(packId, { mode: 'question_practice', difficulty, ...(focus ? { focus_competency_ids: [focus] } : {}) })
       const started = await api.start(draft.session_id, draft.revision)
       storeSession(started.session_id)
       submitKey.current = null
@@ -98,6 +96,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
       setSession(started)
     } catch (failure) {
       setError(message(failure))
+      refreshAvailability()
     } finally {
       setBusy(false)
     }
@@ -191,7 +190,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
     try {
       const [list, recent] = await Promise.all([api.packs(), api.history(1, 10)])
       const published = list.items.filter(item => item.status === 'published')
-      const first = published[0]
+      const first = published.find(pack => pack.id === 'pack_agent_basics_mianstack') ?? published[0]
       setPacks(published)
       setHistory(recent.items)
       const stored = readStored()
@@ -203,8 +202,6 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
           storeSession(null)
         }
       }
-      const activePack = restored?.pack_id ?? first?.id
-      const activeDifficulty = restored?.difficulty ?? difficulty
       if (restored) {
         setPackId(restored.pack_id)
         setDifficulty(restored.difficulty)
@@ -213,15 +210,12 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
       } else if (first) {
         setPackId(first.id)
       }
-      if (activePack) {
-        setAvailability(await api.availability(activePack, { mode: 'question_practice', difficulty: activeDifficulty }))
-      }
     } catch (failure) {
       setError(message(failure))
     } finally {
       setBooting(false)
     }
-  }, [api, difficulty, watchJob])
+  }, [api, watchJob])
 
   function reconnect() {
     setBooting(true)
@@ -258,6 +252,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
     setAnswer('')
     setError('')
     void refreshHistory()
+    refreshAvailability()
   }
 
   async function reopen(id: string) {
@@ -280,17 +275,30 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   if (session) return <PracticeRun session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
 
   return <main className="page-content qp-setup">
-    <div className="page-header"><h1>试题练习</h1><p>从已发布的 Agent 原理与系统基础档随机抽一道题，提交后立即看到按本题答案与评分点生成的反馈。</p></div>
+    <div className="page-header"><h1>{mode === 'question_practice' ? '试题练习' : '模拟面试'}</h1><p>查看 Agent 基础档的实际可用题目与覆盖范围，再选择练习。</p></div>
     {booting ? <div className="processing" role="status"><LoaderCircle size={16} className="spin" />正在读取练习服务</div> : error && !packs.length ? <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" onClick={reconnect}>重新连接</button></div> : <form className="setup-form" onSubmit={event => { event.preventDefault(); void draw() }}>
-      <div className="form-field"><label htmlFor="qp-pack">岗位包</label><select id="qp-pack" className="field" value={packId} onChange={e => setPackId(e.target.value)}>{packs.map(pack => <option key={pack.id} value={pack.id}>{pack.title}</option>)}</select><p className="field-help">首批开放 Agent 原理与系统基础档，题目与答案带来源版本。</p></div>
+      <fieldset className="choice-field"><legend>练习模式</legend><div className="choice-row">{([{ value: 'question_practice', label: '试题练习' }, { value: 'mock_interview', label: '模拟面试' }] as const).map(item => <label className={`choice ${mode === item.value ? 'selected' : ''}`} key={item.value}><input type="radio" name="qp-mode" checked={mode === item.value} onChange={() => { setMode(item.value); setError('') }} /><span>{item.label}</span></label>)}</div></fieldset>
+      <div className="form-field"><label htmlFor="qp-pack">岗位包</label><select id="qp-pack" className="field" value={packId} onChange={e => { setPackId(e.target.value); setFocus(''); setError('') }}>{packs.map(pack => <option key={pack.id} value={pack.id}>{pack.title}</option>)}</select><p className="field-help">首批开放 Agent 原理与系统基础档，题目与答案带来源版本。</p></div>
       <fieldset className="choice-field"><legend>难度</legend><div className="choice-row">{DIFFICULTIES.map(level => <label className={`choice ${difficulty === level.value ? 'selected' : ''}`} key={level.value}><input type="radio" name="qp-difficulty" checked={difficulty === level.value} onChange={() => void chooseDifficulty(level.value)} /><span>{level.label}</span></label>)}</div></fieldset>
-      <p className="qp-availability" role="status">{availability === null ? '正在查询可用题目' : availability.can_start ? <><b>{availability.available_count}</b> 道可抽</> : '当前筛选没有可评分的已发布题目'}</p>
-      {availability && !availability.can_start && <p className="field-error" role="alert">没有满足条件的题：发布校验未通过的题不会进入抽题池。可以更换难度或稍后重试。</p>}
+      <div className="form-field"><label htmlFor="qp-topic">练习主题</label><select id="qp-topic" className="field" value={focus} disabled={!availability} onChange={e => { setFocus(e.target.value); setError('') }}><option value="">全部主题</option>{availability?.topics.map(topic => <option key={topic.competency_id} value={topic.competency_id}>{topic.topic}（{mode === 'mock_interview' ? topic.interview_count : topic.available_count} 道）</option>)}</select></div>
+      <section className="qp-coverage" aria-label="题库可用性">
+        <div className="field-heading"><h2>题库可用性</h2><button className="text-link" type="button" disabled={!packId || (!availability && !availabilityError)} onClick={() => { setError(''); refreshAvailability() }}>刷新可用性</button></div>
+        <p className="qp-availability" role="status">{!packs.length ? '尚无已发布的岗位包' : availabilityError ? '题库可用性查询失败' : availability === null ? '正在查询可用题目' : mode === 'mock_interview' ? <><b>{availability.available_count}</b> 道适合面试的技术题</> : availability.available_count > 0 ? <><b>{availability.available_count}</b> 道可抽</> : '当前筛选没有可评分的已发布题目'}</p>
+        <p className="field-help">仅统计通过发布校验且未停用的题，取材候选数不计入可用题数。</p>
+        {availabilityError && <p className="field-error" role="alert">{availabilityError}。请点击刷新可用性重试。</p>}
+        {availability && mode === 'question_practice' && !availability.can_start && <p className="field-error" role="alert">没有满足条件的题：发布校验未通过或已停用的题不会进入抽题池。可以更换主题、难度或刷新可用性。</p>}
+        {availability && mode === 'mock_interview' && <>
+          <p className="body-copy">可覆盖 {availability.eligible_topic_count ?? 0} 个技术主题，至少需要 {availability.minimum_topic_count ?? 3} 个。</p>
+          <ul className="qp-stage-list">{availability.stages?.map(stage => <li key={stage.id}><span>{stage.label}</span><span className={stage.ready ? 'coverage-ready' : 'coverage-missing'}>{stage.ready ? '可覆盖' : stage.id === 'technical_topics' ? '主题覆盖不足' : '缺少已发布题'}（{stage.available_count} 道）</span></li>)}</ul>
+          {!availability.can_start && <p className="field-error" role="alert">{availability.missing.includes('mock_interview_flow') ? '模拟面试流程尚未接入。' : ''}必需环节或主题覆盖不足时无法开始，不会临时生成主问题补齐。</p>}
+        </>}
+        {availability && <details className="qp-topics"><summary>查看主题覆盖与缺口</summary><ul className="qp-topic-list" aria-label="主题覆盖">{availability.topics.filter(topic => !focus || topic.competency_id === focus).map(topic => <li key={topic.competency_id}><span>{topic.topic}</span><span>{mode === 'mock_interview' ? topic.interview_count : topic.available_count} 道</span></li>)}</ul></details>}
+      </section>
       {error && <p className="field-error" role="alert">{error}</p>}
-      <button className="button primary setup-submit" type="submit" disabled={!availability?.can_start || busy}><Play size={17} />{busy ? '正在抽题' : '随机抽一题'}</button>
+      <button className="button primary setup-submit" type="submit" disabled={!availability?.can_start || busy || mode === 'mock_interview'}><Play size={17} />{mode === 'mock_interview' ? '开始模拟面试' : busy ? '正在抽题' : '随机抽一题'}</button>
     </form>}
     {history.length > 0 && <section className="qp-history"><h2>最近练习</h2><div className="history-list">{history.map(item => <button className="history-row qp-history-row" key={item.session_id} onClick={() => void reopen(item.session_id)}><div><strong>{item.current_turn?.topic ?? '抽题中'}</strong><div className="history-sub"><span>{item.pack_title ?? item.pack_id}</span><span>{new Intl.DateTimeFormat('zh-CN', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(item.created_at))}</span><span>{PHASES[item.phase]}</span></div></div><span className="history-score">{item.submissions[0]?.score ?? '—'}</span></button>)}</div></section>}
-    <p className="page-footnote">所有题目、评分和历史来自本机练习服务；模拟面试与资料管理页面仍是浏览器内演示数据。</p>
+    <p className="page-footnote">可用性、单题练习和最近练习来自本机服务；面试演示、资料管理和旧历史页仍为演示数据。</p>
   </main>
 }
 

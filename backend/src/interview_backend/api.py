@@ -10,7 +10,7 @@ from fastapi import BackgroundTasks, FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from .contracts import Config, CreateSession, RevisionRequest, SubmitAnswer
+from .contracts import AvailabilityConfig, CreateSession, RevisionRequest, SubmitAnswer
 from .errors import PracticeError
 from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
@@ -71,7 +71,7 @@ def create_app(
         return response({"items": items, "page": 1, "page_size": len(items), "total": len(items)})
 
     @app.post("/api/v1/role-packs/{pack_id}/availability")
-    def availability(pack_id: str, config: Config) -> JSONResponse:
+    def availability(pack_id: str, config: AvailabilityConfig) -> JSONResponse:
         return response(service.availability(pack_id, config))
 
     @app.post("/api/v1/sessions")

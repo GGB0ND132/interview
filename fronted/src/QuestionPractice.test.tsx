@@ -135,6 +135,7 @@ const AVAILABILITY: Availability = {
   available_count: 2,
   can_start: true,
   missing: [],
+  topics: [],
 }
 
 const HISTORY: HistoryPage = { items: [awaiting()], page: 1, page_size: 10, total: 1 }
@@ -165,8 +166,9 @@ function deferred<T>() {
 }
 
 async function startQuestion(user: ReturnType<typeof userEvent.setup>) {
-  await screen.findByRole('button', { name: '随机抽一题' })
-  await user.click(screen.getByRole('button', { name: '随机抽一题' }))
+  const draw = await screen.findByRole('button', { name: '随机抽一题' }) as HTMLButtonElement
+  await waitFor(() => expect(draw.disabled).toBe(false))
+  await user.click(draw)
   await screen.findByText(TURN.text)
 }
 
@@ -179,6 +181,100 @@ afterEach(() => {
 })
 
 describe('question practice page', () => {
+  it('filters by server topics and blocks starting when that topic has no published question', async () => {
+    const api = fakeApi()
+    api.availability.mockImplementation(async (_pack, config) => ({
+      ...AVAILABILITY,
+      available_count: config.focus_competency_ids?.length ? 0 : 2,
+      can_start: !config.focus_competency_ids?.length,
+      missing: config.focus_competency_ids?.length ? ['published_question'] : [],
+      topics: [
+        { topic: '工具调用', competency_id: 'agent_tool_calling', available_count: 2, interview_count: 2 },
+        { topic: '记忆系统', competency_id: 'agent_memory', available_count: 0, interview_count: 0 },
+      ],
+    }))
+    const user = userEvent.setup()
+    render(<QuestionPractice api={api} />)
+    await screen.findByRole('option', { name: '记忆系统（0 道）' })
+    await user.selectOptions(screen.getByLabelText('练习主题'), 'agent_memory')
+    await screen.findByText('当前筛选没有可评分的已发布题目')
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(api.create).not.toHaveBeenCalled()
+  })
+
+  it('shows missing interview stages from the server and prevents starting the unfinished flow', async () => {
+    const api = fakeApi()
+    api.availability.mockImplementation(async (_pack, config) => config.mode === 'question_practice' ? AVAILABILITY : {
+      ...AVAILABILITY, mode: 'mock_interview', can_start: false,
+      eligible_topic_count: 2, minimum_topic_count: 3,
+      missing: ['introduction', 'technical_topics', 'mock_interview_flow'],
+      stages: [
+        { id: 'introduction', label: '开场', available_count: 0, ready: false },
+        { id: 'technical_topics', label: '技术', available_count: 2, ready: false },
+      ],
+    })
+    const user = userEvent.setup()
+    render(<QuestionPractice api={api} />)
+    await screen.findByRole('button', { name: '随机抽一题' })
+    await user.click(screen.getByRole('radio', { name: '模拟面试' }))
+    await screen.findByText('可覆盖 2 个技术主题，至少需要 3 个。')
+    expect(screen.getByText('缺少已发布题（0 道）')).not.toBeNull()
+    expect(screen.getByText(/不会临时生成主问题补齐/)).not.toBeNull()
+    expect((screen.getByRole('button', { name: '开始模拟面试' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(api.create).not.toHaveBeenCalled()
+  })
+
+  it('rejects late counts and rechecks a previous filter before enabling start', async () => {
+    const api = fakeApi()
+    const medium = deferred<Availability>()
+    const easyAgain = deferred<Availability>()
+    api.availability.mockResolvedValueOnce(AVAILABILITY)
+      .mockReturnValueOnce(medium.promise).mockReturnValueOnce(easyAgain.promise)
+    const user = userEvent.setup()
+    render(<QuestionPractice api={api} />)
+    await screen.findByText((_, el) => el?.tagName === 'P' && el.textContent === '2 道可抽')
+    await user.click(screen.getByRole('radio', { name: '进阶' }))
+    await user.click(screen.getByRole('radio', { name: '基础' }))
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+    await act(async () => { medium.resolve({ ...AVAILABILITY, available_count: 99 }) })
+    expect(screen.queryByText('99')).toBeNull()
+    await act(async () => { easyAgain.resolve({ ...AVAILABILITY, available_count: 0, can_start: false, missing: ['published_question'] }) })
+    await screen.findByText('当前筛选没有可评分的已发布题目')
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  it('refreshes after a question is disabled and keeps start blocked until a failed refresh recovers', async () => {
+    const api = fakeApi()
+    api.availability.mockResolvedValueOnce(AVAILABILITY)
+      .mockRejectedValueOnce(new Error('offline'))
+      .mockResolvedValueOnce({ ...AVAILABILITY, available_count: 0, can_start: false, missing: ['published_question'] })
+    const user = userEvent.setup()
+    render(<QuestionPractice api={api} />)
+    await screen.findByText((_, el) => el?.tagName === 'P' && el.textContent === '2 道可抽')
+    await user.click(screen.getByRole('button', { name: '刷新可用性' }))
+    await screen.findByText('题库可用性查询失败')
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+    await user.click(screen.getByRole('button', { name: '刷新可用性' }))
+    await screen.findByText('当前筛选没有可评分的已发布题目')
+    expect(screen.queryByText('题库可用性查询失败')).toBeNull()
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  it('rechecks the selected pack instead of showing the previous pack count', async () => {
+    const api = fakeApi()
+    const next = deferred<Availability>()
+    api.packs.mockResolvedValue({ items: [PACK, { ...PACK, id: 'second', title: '第二题包' }] })
+    api.availability.mockResolvedValueOnce(AVAILABILITY).mockReturnValueOnce(next.promise)
+    const user = userEvent.setup()
+    render(<QuestionPractice api={api} />)
+    await screen.findByText((_, el) => el?.tagName === 'P' && el.textContent === '2 道可抽')
+    await user.selectOptions(screen.getByLabelText('岗位包'), 'second')
+    expect((screen.getByRole('button', { name: '随机抽一题' }) as HTMLButtonElement).disabled).toBe(true)
+    await act(async () => { next.resolve({ ...AVAILABILITY, pack_id: 'second', available_count: 0, can_start: false }) })
+    await screen.findByText('当前筛选没有可评分的已发布题目')
+    expect(screen.queryByText((_, el) => el?.tagName === 'P' && el.textContent === '2 道可抽')).toBeNull()
+  })
+
   it('reads the available question count from the server instead of fixed demo content', async () => {
     const api = fakeApi()
     render(<QuestionPractice api={api} />)
@@ -354,9 +450,7 @@ describe('question practice page', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
     api.job.mockResolvedValue({ job_id: 'job-1', status: 'running', phase: 'evaluation', result_entity_id: null, error: null })
     render(<QuestionPractice api={api} />)
-    await screen.findByRole('button', { name: '随机抽一题' })
-    await user.click(screen.getByRole('button', { name: '随机抽一题' }))
-    await screen.findByLabelText('你的回答')
+    await startQuestion(user)
     await user.type(screen.getByLabelText('你的回答'), ANSWER)
     await user.click(screen.getByRole('button', { name: '提交回答' }))
 

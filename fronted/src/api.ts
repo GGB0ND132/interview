@@ -81,7 +81,13 @@ export type Availability = {
   available_count: number
   can_start: boolean
   missing: string[]
+  topics: { topic: string; competency_id: string; available_count: number; interview_count: number }[]
+  stages?: { id: string; label: string; available_count: number; ready: boolean }[]
+  eligible_topic_count?: number
+  minimum_topic_count?: number
 }
+export type PracticeMode = 'question_practice' | 'mock_interview'
+export type AvailabilityConfig = Omit<PracticeConfig, 'mode'> & { mode: PracticeMode }
 export type HistoryPage = { items: SessionView[]; page: number; page_size: number; total: number }
 export type Job = {
   job_id: string
@@ -155,7 +161,7 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
 
   return {
     packs: () => request<{ items: Pack[] }>('/role-packs'),
-    availability: (packId: string, config: PracticeConfig) =>
+    availability: (packId: string, config: AvailabilityConfig) =>
       request<Availability>(`/role-packs/${encodeURIComponent(packId)}/availability`, {
         method: 'POST',
         body: JSON.stringify(config),
