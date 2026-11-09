@@ -5,6 +5,11 @@ fronted/node_modules/
 fronted/dist/
 **/__pycache__/
 *.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/*.egg-info/
+backend/data/
 
 # Local configuration and credentials
 **/.env

@@ -1,0 +1,55 @@
+{
+  "pack_id": "pack_agent_basics_sample",
+  "title": "Agent 原理与系统基础档（演示样题）",
+  "status": "published",
+  "version": 1,
+  "scope": "ticket_01_sample_only_not_full_pack_release",
+  "generation": {"author": "Codex", "generated_at": "2026-11-09", "model": "runtime_model_id_not_exposed", "revision": 1},
+  "questions": [
+    {
+      "code": "Q-AGENT-SAMPLE-01",
+      "topic": "工具调用",
+      "competency_id": "agent_tool_calling",
+      "difficulty": "easy",
+      "stage": "technical",
+      "prompt": "Agent 如何根据工具执行结果继续任务？为什么要有停止条件？",
+      "rubric": ["模型选择工具并由程序执行", "读取工具返回的实际结果而非臆测成功", "根据反馈继续或纠错，并设置完成/失败或最大迭代停止条件"],
+      "answer": "模型决定下一步需要的工具，程序执行工具并返回结果；Agent 根据实际工具结果或环境反馈判断后续动作，必要时纠错。不能把发出调用当作执行成功。完成任务时结束；异常或超过最大迭代次数等边界时停止并说明结果，避免失控循环。",
+      "answer_origin": "agent_generated",
+      "answer_refs": [{"title": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "publisher": "Anthropic", "heading": "Agents", "checked_at": "2026-11-09", "checked_phrases": ["ground truth", "maximum number of iterations"]}],
+      "source": {"source_id": "SRC-AGENT-DEMO-01", "locator": "samples.json#Q-AGENT-SAMPLE-01", "author": "Codex", "usage": "original_project_sample", "not_mianstack": true},
+      "status": "published",
+      "interview_suitable": true
+    },
+    {
+      "code": "Q-AGENT-SAMPLE-02",
+      "topic": "工作流与 Agent",
+      "competency_id": "agent_workflow_distinction",
+      "difficulty": "easy",
+      "stage": "technical",
+      "prompt": "预定义工作流与由模型动态决策的 Agent 有什么区别？如何选择？",
+      "rubric": ["工作流按预先编写的路径组织模型和工具", "Agent 由模型动态决定流程和工具使用", "任务明确时优先简单可预测的工作流，开放任务才考虑动态性及其成本"],
+      "answer": "工作流通过预定义代码路径组织模型与工具；Agent 则让模型根据任务和环境反馈动态决定步骤与工具使用。流程固定且成功标准明确时，工作流更易预测和维护；开放问题需要灵活决策时可以采用 Agent，但要承担额外成本、延迟和验证复杂度，优先选择满足需求的简单方案。",
+      "answer_origin": "agent_generated",
+      "answer_refs": [{"title": "Building effective agents", "url": "https://www.anthropic.com/engineering/building-effective-agents", "publisher": "Anthropic", "heading": "What are agents?", "checked_at": "2026-11-09", "checked_phrases": ["predefined code paths", "dynamically direct"]}],
+      "source": {"source_id": "SRC-AGENT-DEMO-02", "locator": "samples.json#Q-AGENT-SAMPLE-02", "author": "Codex", "usage": "original_project_sample", "not_mianstack": true},
+      "status": "published",
+      "interview_suitable": true
+    },
+    {
+      "code": "Q-AGENT-UNPUBLISHED-01",
+      "topic": "未发布样题",
+      "competency_id": "agent_unpublished",
+      "difficulty": "easy",
+      "stage": "technical",
+      "prompt": "这道题不应出现在练习中。",
+      "rubric": ["占位"],
+      "answer": "占位答案",
+      "answer_origin": "candidate",
+      "answer_refs": [],
+      "source": {"source_id": "SRC-UNPUBLISHED", "locator": "candidate"},
+      "status": "candidate",
+      "interview_suitable": true
+    }
+  ]
+}

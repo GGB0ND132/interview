@@ -1,0 +1,133 @@
+{
+  "checked_at": "2026-11-09T09:52:26.700829+00:00",
+  "transport": "real HTTP API and configured external model",
+  "pack_scope": "two original Agent samples; not the 115-question release",
+  "availability": {
+    "pack_id": "pack_agent_basics_sample",
+    "mode": "question_practice",
+    "available_count": 1,
+    "can_start": true,
+    "missing": []
+  },
+  "current_turn": {
+    "id": "db113304-8dd0-464e-9d44-bad6e8690e0a",
+    "question_code": "Q-AGENT-SAMPLE-01",
+    "question_version": 1,
+    "kind": "main",
+    "question_type": "technical",
+    "stage": "technical",
+    "topic": "工具调用",
+    "competency_id": "agent_tool_calling",
+    "text": "Agent 如何根据工具执行结果继续任务？为什么要有停止条件？"
+  },
+  "submitted_answer": "模型先决定需要调用的工具，由程序执行并把实际工具返回结果送回模型。Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+  "submission": {
+    "id": "0ab4cebc-c7c9-4b2c-9a3e-6154a856dcc8",
+    "turn_id": "db113304-8dd0-464e-9d44-bad6e8690e0a",
+    "client_submission_id": "live-acceptance-1",
+    "disposition": "answered",
+    "answer_text": "模型先决定需要调用的工具，由程序执行并把实际工具返回结果送回模型。Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+    "status": "completed",
+    "job_id": "76c15b7e-e3de-4e16-8f35-55e3865be66b",
+    "score": 98,
+    "feedback": {
+      "answer_generation": {
+        "author": "Codex",
+        "generated_at": "2026-11-09",
+        "model": "runtime_model_id_not_exposed",
+        "revision": 1
+      },
+      "answer_origin": "agent_generated",
+      "answer_version": 1,
+      "assessment_coverage": 1.0,
+      "assessment_status": "complete",
+      "dimensions": [
+        {
+          "answer_quote": "Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+          "name": "accuracy",
+          "reason": "回答准确覆盖题干两个子问题：'如何根据工具执行结果继续任务'（读取结果判断下一步、失败时调整）和'为什么要有停止条件'（完成目标结束、设最大迭代防失控），且与参考答案中'不能把发出调用当作执行成功''避免失控循环'等核心要点完全一致。",
+          "score": 100
+        },
+        {
+          "answer_quote": "模型先决定需要调用的工具，由程序执行并把实际工具返回结果送回模型。Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+          "name": "completeness",
+          "reason": "完整覆盖评分点全部三项：'模型选择工具并由程序执行'（对应'模型先决定需要调用的工具，由程序执行'）、'读取工具返回的实际结果而非臆测成功'（对应'读取结果判断下一步...不能把发出调用当作成功'）、'根据反馈继续或纠错，并设置完成/失败或最大迭代停止条件'（对应'失败时根据错误调整'+'完成目标就结束，也要设置最大迭代次数'）。",
+          "score": 100
+        },
+        {
+          "answer_quote": "模型先决定需要调用的工具，由程序执行并把实际工具返回结果送回模型。Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+          "name": "relevance",
+          "reason": "所有内容均紧扣'Agent如何根据工具结果继续任务'和'为何需停止条件'两个问题，无无关技术细节、背景介绍或举例。",
+          "score": 100
+        },
+        {
+          "answer_quote": "模型先决定需要调用的工具，由程序执行并把实际工具返回结果送回模型。Agent 应读取结果判断下一步，失败时根据错误调整，不能把发出调用当作成功。完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+          "name": "structure",
+          "reason": "逻辑清晰分两层：前半句讲'如何继续任务'（工具调用→结果读取→判断/纠错），后半句讲'停止条件'（完成目标+最大迭代），但未显式用连接词（如'此外''同时'）区分两问，略弱于理想结构。",
+          "score": 95
+        },
+        {
+          "answer_quote": "完成目标就结束，也要设置最大迭代次数，达到限制时停止并说明未完成的部分。",
+          "name": "specificity",
+          "reason": "明确指出'读取结果判断下一步''失败时根据错误调整''说明未完成的部分'等具体行为，但未像参考答案中'异常或超过最大迭代次数等边界时停止并说明结果'那样列举'异常'这一典型边界类型。",
+          "score": 90
+        }
+      ],
+      "improvements": [
+        "可在‘最大迭代次数’后补充一个典型异常场景（如‘网络超时’或‘工具不可用’），使停止条件覆盖更全面。",
+        "用‘此外’或‘另一方面’等连接词显式分隔‘如何继续任务’与‘为何停止’两部分，强化逻辑层次。",
+        "将‘说明未完成的部分’扩展为‘说明当前状态、失败原因及未完成部分’，提升结果交付的完整性。"
+      ],
+      "independent_references": [
+        {
+          "checked_at": "2026-11-09",
+          "checked_phrases": [
+            "ground truth",
+            "maximum number of iterations"
+          ],
+          "heading": "Agents",
+          "publisher": "Anthropic",
+          "title": "Building effective agents",
+          "url": "https://www.anthropic.com/engineering/building-effective-agents"
+        }
+      ],
+      "limitations": [],
+      "overall_score": 98,
+      "prompt_version": "single_question_v1",
+      "question_source": {
+        "author": "Codex",
+        "locator": "samples.json#Q-AGENT-SAMPLE-01",
+        "not_mianstack": true,
+        "source_id": "SRC-AGENT-DEMO-01",
+        "usage": "original_project_sample"
+      },
+      "reference_answer": "模型决定下一步需要的工具，程序执行工具并返回结果；Agent 根据实际工具结果或环境反馈判断后续动作，必要时纠错。不能把发出调用当作执行成功。完成任务时结束；异常或超过最大迭代次数等边界时停止并说明结果，避免失控循环。",
+      "requested_model": "qwen-plus",
+      "rubric_version": "technical_v1",
+      "strengths": [
+        "精准区分工具调用动作与执行结果，强调‘不能把发出调用当作成功’这一关键认知。",
+        "将‘停止条件’拆解为正向（完成目标）与负向（最大迭代）两类，体现结构化思维。",
+        "使用‘说明未完成的部分’这一表述，比单纯说‘返回失败’更具用户导向和可操作性。",
+        "动词选择精准：‘决定’‘执行’‘读取’‘判断’‘调整’‘停止’，全部指向Agent主动行为。",
+        "完全规避了虚构工具名、代码片段等题干未要求的冗余信息。"
+      ]
+    }
+  },
+  "job": {
+    "job_id": "76c15b7e-e3de-4e16-8f35-55e3865be66b",
+    "status": "succeeded",
+    "phase": "evaluation",
+    "result_entity_id": "0ab4cebc-c7c9-4b2c-9a3e-6154a856dcc8",
+    "error": null
+  },
+  "report": {
+    "session_id": "1d5f803e-0911-43ea-ac76-d39e3dc1c99d",
+    "average_score": 98,
+    "answered_count": 1,
+    "blank_count": 0,
+    "skipped_count": 0,
+    "status": "completed",
+    "scoring_scope": "single_question_training"
+  },
+  "duplicate_replay": true
+}
