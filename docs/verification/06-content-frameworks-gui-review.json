@@ -1,0 +1,719 @@
+{
+  "version": "06-content-frameworks-gui-review-v1",
+  "review_scope": "full_content",
+  "actor_type": "agent",
+  "reviewer": "content_frameworks_gui",
+  "reviewed_at": "2026-11-10T00:54:00+08:00",
+  "candidate_file": "backend/src/interview_backend/agent_topics_second_half.json",
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "scope": {
+    "competency_ids": [
+      "agent_frameworks_harness",
+      "agent_gui"
+    ],
+    "expected_question_count": 17,
+    "actual_reviewed_count": 17,
+    "frameworks_harness": {
+      "source_question_count": 16,
+      "candidate_question_count": 16,
+      "reviewed_count": 16
+    },
+    "gui": {
+      "source_question_count": 1,
+      "candidate_question_count": 1,
+      "reviewed_count": 1
+    }
+  },
+  "summary": {
+    "approved": 17,
+    "changes_required": 0,
+    "uncertain": 0,
+    "content_issues": [],
+    "human_required_for_content_resolution": false
+  },
+  "sources_checked": {
+    "local_files": [
+      {
+        "locator": "backend/src/interview_backend/agent_topics_second_half.json",
+        "scope": "17 道题完整 prompt、answer、rubric、provenance、interview_suitable；通过 topic_pack.candidate_digest 实际计算 SHA-256。"
+      },
+      {
+        "locator": "backend/src/interview_backend/mianstack_snapshot.json",
+        "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "scope": "对应 17 原题的元数据/正文，三道 ready 题的答案与候选逐字比较均相同；来源数量 16+1。"
+      },
+      {
+        "locator": "backend/content/agent-topics-second-half.md",
+        "scope": "逐题编辑依据、补写答案/评分与全局允许正确不同实现及诚实无经历的评分总则。"
+      },
+      {
+        "locator": "backend/content/agent-answer-sources.json",
+        "version": "06-editorial-v1",
+        "scope": "已读取；其状态明确是 reading list 而非已逐句核验引用，本审查另行实际取资料。"
+      },
+      {
+        "locator": "backend/src/interview_backend/topic_pack.py",
+        "scope": "只读取 candidate_digest 序列化规则并导入该函数计算摘要；未调用 TopicPack.run、发布 API 或数据库。"
+      }
+    ],
+    "primary_materials": [
+      {
+        "locator": "https://www.anthropic.com/research/building-effective-agents",
+        "version": "2024-12-19；HTTP 200"
+      },
+      {
+        "locator": "https://www.anthropic.com/research/effective-harnesses-for-long-running-agents",
+        "version": "2025-11-26；HTTP 200"
+      },
+      {
+        "locator": "https://docs.temporal.io/activity-definition",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://developers.openai.com/api/reference/resources/completions/methods/create",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档"
+      },
+      {
+        "locator": "https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档"
+      },
+      {
+        "locator": "https://developers.openai.com/api/docs/guides/function-calling",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档"
+      },
+      {
+        "locator": "https://developers.openai.com/api/docs/guides/production-best-practices",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档"
+      },
+      {
+        "locator": "https://developers.openai.com/api/docs/guides/error-codes.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/runner.ts",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/ai/src/types.ts",
+        "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200"
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/langchain/models.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/llms.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/chat_models.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/integrations/embeddings/index.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/runnables/base.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/prompt.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/chat.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/base.py",
+        "version": "langchain-core==1.0.0 tag；HTTP 200"
+      },
+      {
+        "locator": "https://docs.dify.ai/en/home",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200，原 introduction URL 重定向至本页"
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md",
+        "version": "Coze Studio 官方 main README，2026-11-10 实取；未锁 commit；HTTP 200"
+      },
+      {
+        "locator": "https://docs.spring.io/spring-ai/reference/",
+        "version": "官方页面显示 Spring AI 2.0.2；2026-11-10 实取；HTTP 200"
+      },
+      {
+        "locator": "https://docs.langchain4j.dev/intro/",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://code.claude.com/docs/en/plugins.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://agentskills.io/specification",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      },
+      {
+        "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool.md",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200；原 Anthropic docs URL 的官方目标文档"
+      },
+      {
+        "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+        "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200"
+      }
+    ],
+    "verification_boundary": "已获取并阅读上述资料的相关关键片段，逐题材料中记录核查内容。未声称把 source_original 正文所列全部教程和二级参考链接逐一访问，也未将未取得的网页算作已核对证据。"
+  },
+  "retrieval_notes": [
+    "Coze 云文档 workflow URL 返回 HTTP 200 但只有前端壳，没有可核查正文；改取官方 coze-dev/coze-studio README。其开源部署版本与云服务功能不等同，候选已明确产品/部署/版本差异，未依赖该页面断言云端专有能力。",
+    "旧 LangChain LLM index Markdown URL 返回 404；改取 langchain-core==1.0.0 的 BaseLLM/BaseChatModel 源码，不以失效 URL 作为证据。",
+    "LangGraph durable-execution URL 重定向 persistence 页面且未取到幂等说明；检查点/外部副作用的通用边界另以 Temporal 官方 Activity Idempotency 说明和源答案逻辑交叉验证。",
+    "OpenAI Chat Completions Python 引用页初次 web open 超时；后续通用 REST 引用页及其 Markdown 成功读取，实际取得 POST、messages 和 stream 契约。"
+  ],
+  "limitations": [
+    "本次是全量内容和来源审核，未运行 Pi CLI、真实模型、付费请求或数据库操作；源码一致不等于真实 Pi 加载或业务端到端验证完成。",
+    "未制造任何 actor_type=human 记录。本报告仅给出内容层面无待人工裁决问题；发布门禁和 GUI 来源数量处理由主 Agent 按用户当前授权另行处理。"
+  ],
+  "issues": [],
+  "samples": [
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "65d035493b6dfbb4d9c3b16d3d5e35e5af1ca57b82fc8d5a5c8f8c201a649417",
+      "code": "Q-0048",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0048",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：执行环境与模型决策的分工。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/effective-harnesses-for-long-running-agents",
+          "version": "2025-11-26；HTTP 200",
+          "checked_excerpt": "progress across multiple context windows；Environment management；实际正文讨论逐步验证、任务清单和测试。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "getActiveTools(): string[]；getAllTools(): ToolInfo[]；setActiveTools；codemode/deferred 工具未激活时仍可从 codemode 脚本调用。"
+        },
+        {
+          "locator": "https://docs.temporal.io/activity-definition",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Temporal recommends that Activities be idempotent. Activities should be designed to be safely executed multiple times."
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致，已独立复核而非因 source_original 自动通过。模型生成决策、Harness 执行工具及状态/权限/预算/反馈的分工正确；明确提示词不构成权限、恢复不等于回滚、最终回答不等于业务验收。三条评分点覆盖题意且是语义要点，不限定框架实现。正文的教程及全部二级参考链接未逐一核验，不把它们计为已访问材料。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "79970581815114fdd3c0ea7f7d0aeb555d2d7e4ac70d89c58df063c64a2c3944",
+      "code": "Q-0798",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0798",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：固定查询与动态补查。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致。答案承认普通后端可以多步/分支，也能通过 API 暴露 Agent，避免把 API 和 Agent 当互斥产品；只有开放语义和证据驱动决策值得引入 Agent。参考场景明确为假设，没有编造经历。三条评分点与比较题一致，不强制所有任务使用 Agent。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "fa530eda4c1188164f5a4fe49a9e1de071723c5a68484ccd7df87ce88c7e9b6d",
+      "code": "Q-0897",
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0897",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：界面观察与动作反馈。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200；原 Anthropic docs URL 的官方目标文档",
+          "checked_excerpt": "agent loop；tool_use/tool_result；screenshot、left_click、type；Human confirmation；页面/图像指令可能造成 prompt injection。"
+        },
+        {
+          "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Claude analyzes the tool results；coordinate scaling；截图缩放后点击坐标需映射，动作回执与截图分别返回。"
+        }
+      ],
+      "findings": "完整答案和三条 rubric 已全量复核。观察—选择动作—执行—再观察的循环正确；支持截图及界面结构，不把某一供应商协议当 GUI Agent 的定义。焦点、布局、分辨率和延迟属于合理失败因素；以任务状态验收、限制权限与预算、按授权处理敏感动作以及不信任网页指令均有覆盖。固定源和候选本主题各只有 1 题是来源数量事实，不构成本题技术缺陷。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "472e8e8918c3bc9dde4442213b457713bc2761a8fbbf170ebe87490e03d40500",
+      "code": "Q-0977",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0977",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：低代码链路与定制限制。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.dify.ai/en/home",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200，原 introduction URL 重定向至本页",
+          "checked_excerpt": "官方首页包括 Workflow & Chatflow、Publish、Logs、Knowledge、Model Providers、Tools。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md",
+          "version": "Coze Studio 官方 main README，2026-11-10 实取；未锁 commit；HTTP 200",
+          "checked_excerpt": "Build, publish, and manage agent；workflows, knowledge bases；Plugins；API and SDK。"
+        }
+      ],
+      "findings": "模型/工作流/工具/知识检索/发布的共性描述与两方官方资料吻合，明确具体功能随版本和部署变化，未把开源 Studio 与云版逐项等同。假设检索流程标明为假设，区分节点配置成功和业务结果正确。rubric 与编辑稿总则明确允许未使用者诚实解释，不要求虚构经历；无内容修订项。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "f54aed867b63c4b190cdbe35d2aec3254310639e46988c585a1f17a45f7adbc7",
+      "code": "Q-1085",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-1085",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：endpoint、消息格式与兼容范围。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/completions/methods/create",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "官方 curl 示例使用 /v1/completions 与 prompt，而非 messages。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Responses uses input and output arrays of typed Items."
+        }
+      ],
+      "findings": "准确区分 Chat Completions 的 messages、旧 Completions 的 prompt 与 Responses 的 typed items；/chat/completions 是相对 API base 的端点表达，不是漏掉版本号的错误。可选参数以模型与兼容实现支持为前提，未宣称兼容全部能力。要求说明项目实际端点但允许未接入者诚实说明，三条评分点可公平覆盖不同实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "e0704b983f6df5c07713a7fd3fbcbb2a3c85f25efde3ca2319932c920f9964d6",
+      "code": "Q-1268",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-1268",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模型接入方式与部署归属。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/production-best-practices",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Avoid exposing the API keys in your code or in public repositories."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        }
+      ],
+      "findings": "接入分类为部署/调用方式，答案同时指出 SDK 通常仍调用远端 API，不误作互斥底层协议。真实服务、模型、认证与调用链、服务端凭证、超时响应和自部署约束覆盖原题；未接入可明确说明，没有要求编造经验。评分点不限定托管供应商或部署方案。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "9f3a11df568d5ca534527b5359e90783586bda3a63033e553728966e9d87b85d",
+      "code": "Q-2343",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-2343",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：节点依赖、分支与执行状态。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        },
+        {
+          "locator": "https://docs.temporal.io/activity-definition",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Temporal recommends that Activities be idempotent. Activities should be designed to be safely executed multiple times."
+        }
+      ],
+      "findings": "Workflow 的节点输入输出、依赖、分支与程序控制定义正确；可包含模型或 Agent 节点而不等于全自治。并行前提写为独立且输入齐备是合理简化；超时、重试、取消与验收覆盖运行状态。检查点不保证外部写入恰好一次，幂等/去重/状态查询建议正确，评分点未要求某个编排器。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "e40b2e457b20f9fb2a2234adcba6840c1ffd92f793cef1d10f1ae0ea67418a89",
+      "code": "Q-3287",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3287",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：扩展入口、注册与运行验证。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "getActiveTools(): string[]；getAllTools(): ToolInfo[]；setActiveTools；codemode/deferred 工具未激活时仍可从 codemode 脚本调用。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/runner.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "emitContext 使用 structuredClone；过滤 system；接收 handlerResult?.messages；随后 restoreSystemMessages。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": ".pi/extensions/ 是项目扩展目录；项目配置在 trust 授予后加载；手工改资源后执行 /reload。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/ai/src/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "UserMessage: role: \"user\"; content: string | (TextContent | ImageContent)[]; timestamp: number。"
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致。实际取到声明 commit 的源码，包名/1.4.0 版本、ExtensionAPI 默认入口、registerCommand 的 args/ctx、工具查询/切换、context 的消息返回及 UserMessage 字段均符实。源码确认 context 过滤并恢复系统消息，示例复制消息不改原数组；重复开启保留原工具集，off 恢复且停用插入逻辑。项目 trust、--extension、无需单独编译和 /reload 有官方依据。正文明确 codemode/deferred 可绕过活动集合，未虚称沙箱；reload/分支时实例状态丢失亦已说明。操作题评分需要实际加载/触发/退出证据属题意；本次仅做源码内容核验，未启动 Pi 或付费模型，不把源码吻合说成真实运行通过。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "22c4100750e5fb868cbe277d73219e548b82f7feaee0371bed83c88abbc1c756",
+      "code": "Q-3588",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3588",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：请求构造、模型调用与响应。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/function-calling",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Execute function calls and append results；示例关联 tool_call_id 后再次发送上下文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/production-best-practices",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Avoid exposing the API keys in your code or in public repositories."
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/error-codes.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "APITimeoutError；AuthenticationError；429 - Rate limit reached for requests；文档分别说明原因和应对。"
+        }
+      ],
+      "findings": "服务端 SDK/HTTP 构造请求、认证、模型与上下文、普通/流响应、校验输出的链路正确。工具建议—应用执行—关联结果回传的区别准确；超时/限流/格式错误及副作用重试边界可迁移到不同 API。三条评分点覆盖实践题核心，不要求特定 SDK 或关键词。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "c63a2f95cbc3e99df8755dcc51fd08b3d5e2a6fbc36f1be7df86f346837f94fe",
+      "code": "Q-3687",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3687",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：Java 模型应用与组件封装。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.langchain4j.dev/intro/",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "integrating LLMs into Java applications；AI Services；Prompt templates；chat memory；Tools (function calling)；RAG。"
+        }
+      ],
+      "findings": "模型、聊天记忆、提示模板、工具、检索及 AI Services 与官方功能列表一致；明确适合 Java/Spring 技术栈，简单一次调用不必引入整框架。没有保证框架自动解决检索正确性、数据库权限或可靠恢复。rubric 按技术栈、任务与版本能力判断，不要求展示并未拥有的项目。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "51cba0c9a0574bde0d15747e9a00cf9089b4dbf3ec7b9ee83cffd92418c54289",
+      "code": "Q-3696",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3696",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：组合流程与下一步控制方式。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/runnables/base.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "RunnableSequence：the output of one is the input of the next；支持 | 组合以及 sync、async、batch。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        }
+      ],
+      "findings": "模板—模型—解析器的组合有固定版本源码证据；区分历史 Chain 类与 Runnable/LCEL 的说法避免把旧接口作为永久 API。固定组合由程序控制、Agent 根据观察选动作的比较准确；复杂恢复可另用图式编排，不承诺所有链自动恢复。三条评分覆盖调用流程与边界，允许不同正确实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "4ad8a86d93dfdbf4412d55a90c5296460078666194300a1d7bd63c7d254fc2f7",
+      "code": "Q-4112",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4112",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：官方模块理解与最小实践。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.spring.io/spring-ai/reference/",
+          "version": "官方页面显示 Spring AI 2.0.2；2026-11-10 实取；HTTP 200",
+          "checked_excerpt": "Model API；ChatClient API；Auto Configuration and Starters；Chat Conversation Memory and Retrieval Augmented Generation。"
+        }
+      ],
+      "findings": "Spring AI 的模型 API、ChatClient、消息/提示、工具、向量存储/检索和 Spring 自动配置与官方结构吻合。参考答案明确未读过不虚构，并把具体版本、provider、装配配置交给实际依赖验证；rubric 首条允许未阅读的诚实回答，按编辑稿总则不能要求未读者捏造版本。该经历题为 interview_suitable=false，未误作所有面试者必备经历。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "7e6c66ebbb5123303bec48affa047e47872f6c0a325875a4ffea561d22487aef",
+      "code": "Q-4923",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4923",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：生成接口与嵌入接口。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/llms.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseLLM(BaseLanguageModel[str], ABC): It should take in a prompt and return a string."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/chat_models.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseChatModel(BaseLanguageModel[AIMessage], ABC)；invoke 接受 str、消息列表或 PromptValue，stream 输出 BaseMessageChunk。"
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/integrations/embeddings/index.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "fixed-length vector；embed_documents(texts: List[str]) → List[List[float]]；embed_query。"
+        }
+      ],
+      "findings": "LLM 文本生成、Chat Model 消息生成、Embedding 向量表示三种抽象与固定源码/官方文档一致。答案额外说明适配器可能接受多种输入，避免把 Chat Model 只接受消息列表当绝对 API 限制。文档/查询向量须模型与维度兼容；切换 embedding 通常需要重算索引的判断正确，未声称仅维度相同就可通用。三条评分针对用途和契约，不绑定 provider。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "065b4687e27bfb870fed2e254b8b4e706b713960edf4c0ccc59c7df62a72bb8d",
+      "code": "Q-4924",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4924",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模型配置与调用链。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/models.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "model.invoke；专用 provider integration packages；Invoke 输入消息并输出消息，Stream 实时产生输出。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/chat_models.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseChatModel(BaseLanguageModel[AIMessage], ABC)；invoke 接受 str、消息列表或 PromptValue，stream 输出 BaseMessageChunk。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/error-codes.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "APITimeoutError；AuthenticationError；429 - Rate limit reached for requests；文档分别说明原因和应对。"
+        }
+      ],
+      "findings": "provider 集成包、服务端地址/模型/凭证、Chat Model、invoke、stream/异步、消息块合并的流程与源码/文档吻合。创建实例与真正请求上游区分明确；流式和工具消息要求依据具体模型支持。未虚构固定导入路径或一段版本无关的运行代码，评分允许正确的实际 provider 实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "ca3c56e7fda9690996cdd05d329f5d2aae99501101cf4acdb557314a92ae23b5",
+      "code": "Q-4925",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4925",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模板变量与消息组装。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/prompt.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "PromptTemplate.from_template(\"Say {foo}\")；prompt.format(foo=\"bar\")；不可信 Jinja2 模板有执行风险。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/chat.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "ChatPromptTemplate.from_messages；带 system/human 角色模板；invoke、format_messages 和 partial 方法存在。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/base.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "missing variables；escape it with double curly braces；invoke 返回 PromptValue；partial 绑定变量。"
+        }
+      ],
+      "findings": "PromptTemplate、ChatPromptTemplate、format、format_messages、invoke、partial 均在固定 langchain-core 1.0.0 源码存在，答案称对应接口而未要求所有类都共享全部方法。变量校验、花括号转义和保留角色契约正确；将用户数据作为参数不会自动提供权限/注入防护，答案已明确此边界。修改模板保留版本/回归样例是合理工程建议，rubric 不强制唯一写法。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "ed6dcef2b9980eeac0a34507f436a13b11a1ed3c2d13853780b0bf08f2266474",
+      "code": "Q-5078",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-5078",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：扩展包装与能力组合。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://code.claude.com/docs/en/plugins.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "A Claude Code plugin is a directory of skills, agents, hooks, MCP servers, or other components."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "SKILL.md；Optional directories: scripts/, references/, assets/；Progressive disclosure。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        }
+      ],
+      "findings": "插件作为宿主定义的安装/分发单位、可组合 Skills/MCP/命令/钩子与 UI 的说明正确，未伪造跨宿主统一格式。官方 Claude Code 插件目录证明组合关系，Agent Skills 规范证明指导与资源结构，Pi 扩展源码证明宿主运行边界。加载、认证与真正任务成功分开核查合理；三条评分不把安装本身当业务成功。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "79a222d5b4e92bc97877ca3ab61ddc3fd774a71504b848b7c1ab4b7ab1276500",
+      "code": "Q-7004",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-7004",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：编码 Harness 与按需扩展。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": ".pi/extensions/ 是项目扩展目录；项目配置在 trust 授予后加载；手工改资源后执行 /reload。"
+        }
+      ],
+      "findings": "固定 Pi 仓库实证其 CLI 文件/命令工具、会话及扩展入口的基本构成。答案要求指出所指仓库与版本而不将某版本 API 永久化；明确未使用者可仅有概念了解，符合公平评分。权限/预算被列作评估 Harness 职责的维度，没有宣称默认具备强制沙箱或某种固定审批能力。",
+      "conclusion": "approved"
+    }
+  ]
+}

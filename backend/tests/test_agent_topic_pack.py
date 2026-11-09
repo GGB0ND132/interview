@@ -39,6 +39,30 @@ def test_complete_second_half_pack_previews_without_publishing(tmp_path: Path):
         )
 
 
+def test_audited_corrections_preserve_original_source_identity(tmp_path: Path):
+    corrected = [
+        question
+        for question in second_half()["questions"]
+        if question["code"] in {"Q-0416", "Q-0872", "Q-1664", "Q-0140", "Q-0379", "Q-1247"}
+    ]
+    with TestClient(create_app(database_path=tmp_path / "audited.sqlite3")) as client:
+        report = data(
+            client.post("/api/v1/maintenance/question-publications", json={"questions": corrected})
+        )
+        assert report["accepted_count"] == 6
+        for question in corrected:
+            saved = data(client.get(f"/api/v1/maintenance/questions/{question['code']}"))[
+                "versions"
+            ][0]
+            assert saved["content_version"] != "agent-basics-06-v1"
+            assert saved["source"]["answer_status"] == "ready"
+            assert saved["source"]["original_id"] == question["code"]
+            if question["code"] == "Q-0140":
+                assert saved["answer_origin"] == "source_original"
+            else:
+                assert saved["answer_origin"] == "maintainer_edited"
+
+
 def test_release_requires_human_review_and_reports_all_twelve_topics(tmp_path: Path):
     with TestClient(create_app(database_path=tmp_path / "release.sqlite3")) as client:
         pack = TopicPack(client)

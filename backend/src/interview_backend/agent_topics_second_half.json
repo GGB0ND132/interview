@@ -104,7 +104,7 @@
     },
     {
       "code": "Q-0140",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "Workflow 和 Agent 有什么区别？",
       "topic": "工作流、状态与执行恢复",
       "competency_id": "agent_workflow_recovery",
@@ -114,14 +114,14 @@
       "rubric": [
         "区分代码预设路径和模型动态选择步骤",
         "说明可在工作流中组合 Agent 节点",
-        "根据可预测性成本和验收需求选择并处理副作用重试"
+        "根据可预测性成本和验收需求选择并设置预算及失败出口"
       ],
       "answer_origin": "source_original",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {
@@ -240,24 +240,24 @@
     },
     {
       "code": "Q-0379",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "Skill、提示词工程与 MCP 有什么区别和联系？",
       "topic": "Skills 能力系统",
       "competency_id": "agent_skills",
       "difficulty": "easy",
       "stage": "technical",
-      "answer": "> 在面栈阅读：[Skill、提示词工程与 MCP 有什么区别和联系？](https://mianstack.com/question/q-0379)\n\n## 核心回答\n\n三者解决的问题不同，也可以组合使用：\n\n- **提示词工程**：设计和验证给模型的指令、背景、示例、约束及输出要求，改善它如何理解和完成任务。\n- **Skill**：把一类任务反复使用的流程、规范和资源打包，便于发现、复用和按需加载；常见形式是 `SKILL.md` 加可选脚本、模板和参考资料。\n- **`MCP`**：连接AI应用与外部工具、资源和提示模板的协议，规范能力发现和调用方式。\n\n例如生成业务报告：提示词明确“先核对口径，结论要有依据”；报告Skill保存完整流程与模板；通过`MCP`工具取得业务数据。**Skill里仍需要好的提示词，Skill也可以使用`MCP`接入的工具**。它们不是互斥选项，也没有公认的固定高低层级。\n\n## 展开说明\n\n### 1. 提示词工程是一种设计方法，不只是一句用户请求\n\n它可以作用于系统指令、工具说明、Skill正文和任务输入。目标是让模型清楚任务、边界、参考信息与输出标准，并通过真实样例检查效果。\n\n一次性摘要或改写，清晰提示通常已经够用。提示也能描述多步骤流程，不是只有Skill才能写步骤；问题在于规则越长、复用越多，复制和维护成本会增加。需要时可以把稳定内容组织到Skill，继续用提示词工程改善其中的说明和示例。\n\n### 2. Skill增加了可复用的组织方式和加载入口\n\n按Agent Skills开放格式，一个Skill至少有 `SKILL.md`，前置元数据说明名称和适用场景，正文描述执行方法。脚本、长参考资料和模板可放在附属文件中，需要时再用。\n\n这种组织让宿主先展示简短信息，命中任务后再读取完整说明，减少把所有流程永久塞进上下文的负担。它不只是给一段长提示换个文件名，还涉及发现、按需读取、资源引用和维护。\n\n不过，实际发现方式、显式调用入口和脚本执行能力由宿主决定。Skill可以只有审查标准，也可以指导Agent运行脚本或调用工具；真正执行仍依赖宿主已有工具和环境。开放格式支持跨产品复用，不代表所有宿主的扩展字段和行为完全相同。\n\n### 3. MCP提供连接和交换约定，不负责替你写业务流程\n\nHost通过Client访问Server，发现其提供的工具、资源或Prompt。Server可以封装数据库、内部API、文档系统等能力；Host再决定怎样把它们交给模型使用。\n\n`MCP`统一的是这段交互，不决定模型如何规划、Skill何时触发，也不自动生成正确业务参数或保证操作结果。`MCP`中也有可复用的Prompts，但提示模板本身与包含流程、脚本和资料目录的Skill不是同一个概念。\n\n### 4. 用报告任务看三者怎样配合\n\n假设经常需要按固定格式生成周报，可以把统计口径、处理顺序、输出模板和异常说明整理成Skill。提示词写清“数据不足要说明，不得补造数值”，并用样例检验模型是否遵循。\n\n执行时，Agent读取Skill，按流程查数据、核对时间范围、做统计并生成报告。如果数据由`MCP` Server提供，就通过相应工具获取；如果已有本地函数或`HTTP`客户端，也可直接使用。没有外部数据需求的写作Skill，完全可以不接`MCP`。\n\n是否采用某项机制取决于具体问题：指令含糊先改提示；流程反复复制可整理Skill；多个AI应用需要复用外部能力时再考虑`MCP`。不能为了凑齐术语，把一个简单任务拆出不必要的服务。\n\n## 常见追问\n\n### Skill能保证百分之百触发和执行吗？\n\n不能仅凭安装了文件就保证。需要检查宿主是否发现元数据、任务是否匹配、正文有没有读入、资源路径和工具是否可用。明确触发场景并测试相似任务和误触发反例，可以改善选择；必须执行的程序检查应放在相应执行逻辑中。\n\n### Skill是不是更高级的提示词？\n\n可以把它看成提示与流程经验的一种工程化封装，但“高级”容易掩盖区别。它主要改善复用、发现和资料组织，正文质量仍要靠提示设计与验证；简单问题不一定需要Skill。\n\n### Skill能替代MCP吗？\n\n不能一概而论。Skill可以指导使用本地脚本、函数或其他接口，从而不依赖`MCP`；如果需要`MCP` Server提供的能力，仍要有对应Client和执行通道。流程说明不会仅因写了某个接口名，就自动拥有连接和访问权限。\n\n## 对应教程\n\n- [Skills技能与AI编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：从长提示的维护问题到可发现、可复用的技能目录，理解Skill增加了哪些组织能力。\n- [研搜：中间件机制与Skills配置](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/7-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%BA%E5%88%B6%E4%B8%8ESkills%E9%85%8D%E7%BD%AE.md)：通过元数据、按需读取和资源路径检查，理解“Skill文件存在”到“本次任务实际使用”之间还需要宿主支持。\n\n## 参考资料\n\n- 国内：[JavaGuide：Skill、Prompt与MCP的关系](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：借鉴一次任务中说明加载与工具使用的分工，说明正文中 Skill、提示词工程和 MCP 如何协作。\n- 国内：[ranxi2001：Skills模块化与加载](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-survey/11-skills-claudecode/index.md)：依据 Skill 输入输出规范、目录与加载示例，说明正文中可复用流程怎样进入模型上下文；具体 API 仍依赖宿主实现。\n- 国内：[JavaGuide：MCP能力与调用边界](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/mcp.md)：采用 Host、Client、Server 与 Tools、Resources、Prompts 的职责划分，解释正文中 MCP 的能力连接作用及其与完整任务流程的区别。\n- 国外：[Agent Skills格式规范](https://agentskills.io/specification)：依据元数据、正文、可选目录和渐进加载的开放格式，说明正文中 Skill 的内容构成及宿主负责的加载行为。\n- 国外：[MCP架构说明，2026-07-28](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)：依据协议范围、参与者和外部能力类型，说明正文中 MCP 与提示设计、可复用任务包的职责关系。",
+      "answer": "提示词工程关注怎样组织指令、上下文、示例和输出约束，帮助模型理解某次任务；Skill 把某类任务的知识、步骤和资源组织成可复用的技能包，可能包含提示示例、参考文档和脚本，宿主按需加载；MCP 则规定宿主客户端与外部能力服务器的接入交互，按 MCP 2025-06-18 可发现和调用 Tools、读取 Resources、获取 Prompts。三者可以配合：提示说明本次目标，Skill 指导工作方法，宿主通过 MCP 连接执行所需工具。Skill 不等于一个新的执行 Agent，MCP 也不是替模型编写业务决策的提示模板；提示写得好、Skill 已加载或 MCP 已连接，都不能证明实际任务完成。工具权限、参数校验、预算和最终结果验证须由宿主及业务系统落实。具体 Skill 触发与加载方式依赖所用产品，不应把某个宿主的惯例称为通用协议保证。依据：https://agentskills.io/specification 和 https://modelcontextprotocol.io/specification/2025-06-18/architecture 。",
       "rubric": [
         "区分提示词表达 Skill 组织能力 MCP 接入协议",
         "解释三者可以组合使用",
         "说明工作流程文本不保证实际动作和结果"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {
@@ -308,24 +308,24 @@
     },
     {
       "code": "Q-0416",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "MCP 的本质与作用是什么？",
       "topic": "MCP、A2A 与工具协议",
       "competency_id": "agent_protocols",
       "difficulty": "easy",
       "stage": "technical",
-      "answer": "> 在面栈阅读：[MCP 的本质与作用是什么？](https://mianstack.com/question/q-0416)\n\n## 核心回答\n\n`MCP`，全称 Model Context Protocol，是 **AI 应用接入外部工具和数据的开放通信协议**。它统一能力描述、发现、调用和结果返回，让同一套外部能力能够被不同 AI 应用复用，减少重复适配。\n\n三者的职责分别是：**`Tool Calling`** 让模型表达“调用哪个工具、传什么参数”；**`MCP`** 规定应用怎样发现外部能力、发送请求并取得结果；**Agent** 根据任务目标和返回结果决定下一步。\n\n例如把天气查询封装为 `MCP` Server 后，聊天应用和编程 IDE 都可以通过各自的 `MCP` Client 获取工具说明、发送城市参数并接收天气结果。模型再根据结果回答用户，或继续处理信息缺失的问题。\n\n`MCP` 统一的是接入方式，不负责规划任务，也不保证调用正确。应用和服务端仍要检查参数、权限和执行结果；工具也可以由程序直接触发，不必每次都经过模型。\n\n## 用天气服务说明它到底连接了什么\n\n假设天气能力要同时提供给一个聊天应用和一个编程 IDE。直接集成时，两边可能各自维护工具说明、参数转换和调用代码；封装为 `MCP` Server 后，共同的发现和调用约定由协议承担，天气查询仍由服务端实现。\n\n这里有三个角色：\n\n- **Host：** 用户使用的聊天应用或 IDE，管理模型交互、工具可见范围和执行策略。\n- **Client：** Host 内的通信组件，向某个 Server 请求能力列表、发送调用并接收结果。\n- **Server：** 提供天气能力的程序，收到请求后执行查询或转交业务 API；可以运行在本机，也可以在远端。\n\n下面把三者的位置与消息方向画出来：Client 在 Host 内，Server 后面才是实际业务能力。\n\n[![MCP Client 位于 Host 内，向 Server 发送发现与调用请求并接收结果](../assets/questions/Q-0416/q-0416-f6c255b179b5.svg)](../assets/questions/Q-0416/q-0416-f6c255b179b5.svg)\n\n图示按[教程第 20 章 §5.1](https://didilili.github.io/ai-agents-from-zero/#/20-MCP模型上下文协议)的角色关系重绘。“发现与调用”概括两类交互，不表示每次调用都重新获取能力列表。\n\n用户输入“查北京现在的天气”后，主要链路如下：\n\n```text\nClient 用 tools/list 获取工具名称、说明和 inputSchema\n  → Host 把允许使用的工具适配给模型\n  → 模型提出 get_weather 和城市参数\n  → Host 检查请求，Client 用 tools/call 发给 Server\n  → Server 校验输入和权限，执行天气查询\n  → 结果返回 Host，模型据此回答或处理失败\n```\n\n这里要分清**服务发现**与**工具发现**。在本文采用的 `2026-07-28` 版本中，`server/discover` 返回服务支持的协议版本、能力类别与服务信息；`tools/list` 才返回具体工具名、说明和 `inputSchema`。知道服务支持 Tools，不等于已经拿到全部工具定义，也不等于这些工具都已向当前模型开放。Host 还要注册工具、适配模型接口，并按任务和权限筛选可见工具。\n\n例如天气服务可复用于聊天应用和 IDE，但两边可以开放不同的工具集合；统一接入不要求它们采用相同的模型、提示词或界面。\n\n`inputSchema` 是参数结构说明，例如城市字段的类型和必填要求。如果服务返回城市不明确，Agent 可以补问；如果凭证失效，就应处理配置问题。协议让反馈有统一的传递方式，具体选择仍由应用和模型完成。\n\nServer 还可以暴露 **Resources** 和 **Prompts**。三者分别对应“执行动作”“提供可读取内容”“提供可复用提示模板”：天气查询适合作为 Tool，已有文档可作为 Resource，报告写作模板可作为 Prompt。资源如何进入上下文通常由应用组织，提示模板通常由用户选择，不是三类能力都自动交给模型执行。\n\nServer 可以只提供其中一类能力，Host 也可能只支持部分能力。例如某宿主能调用天气 Tool，却未实现 Prompt 的选择界面，两者并不矛盾。接入时要核对双方支持的协议版本、传输和具体能力，不能把“支持 `MCP`”理解为所有功能都自动可用。\n\n## 它通过什么方式通信？\n\n`MCP` 使用 `JSON-RPC` 消息。标准传输包括 **`stdio`** 和 **`Streamable HTTP`**：`stdio` 常用于本地子进程，通过标准输入输出通信；`Streamable HTTP` 向 `MCP` 端点发 `HTTP` 请求，响应可以是 `JSON`，也可以是 `SSE` 流。\n\n`SSE` 是一种传输流式消息的机制，收到进度事件也不等于收到了模型逐 token 生成的文本。教程中的 `transport=\"sse\"` 是旧 `HTTP`+`SSE` 兼容示例，与 `Streamable HTTP` 使用 `SSE` 返回流是两回事。接入时应核对两端实际支持的协议。本文采用的 `2026-07-28` 版本已移除旧版 `initialize` / `initialized` 握手和 `Mcp-Session-Id`，请求通过版本与能力元数据自描述；Server 必须实现 `server/discover`，但 Client 不必每次先调用它，也可以直接发起支持的请求。课程 SDK 1.x 中的初始化与会话示例，应在其兼容版本下理解，不能套到所有连接上。\n\n## 追问\n\n**不用 `MCP`，能不能让模型调用天气 API？**\n\n可以，应用直接把天气 API 封装成工具即可。一个应用只有几个固定内部接口时，直接集成可能更简单；多个宿主要复用相同能力，或要接入现有 `MCP` 生态时，标准协议更有价值。`MCP` Server 可以部署成适配层，但 `MCP` 本身是协议，不是某个现成中间件产品。\n\n**接入标准协议后，为什么还可能不可靠？**\n\n统一了请求格式，仍要检查城市是否正确、数据是否完整、调用者是否有权限。`HTTP` 接入有对应的认证授权规范，业务系统还要落实具体资源和操作的权限。Host 控制可用工具和必要确认，Server 做输入校验、访问控制与限流。返回内容也可能不可信，不能把工具结果里的文字直接升级成系统指令。\n\n还要分清两类失败。调用了不存在的工具，或请求结构不符合协议，应返回 `JSON-RPC` 错误；天气查询本身执行失败、输入值不符合业务要求，则可在工具结果中用 `isError: true` 返回可修正的信息。因此收到 `result` 只说明拿到了调用结果，不能据此宣布天气查询成功。模型收到“城市有歧义”可以补问，收到“凭证无效”则应由应用处理配置；统一错误通道不会自动选择正确的恢复办法。\n\n**`MCP` 和 Skills 可以互相替代吗？**\n\n不能。`MCP` 解决怎么接入能力；Skills 把某类任务的方法、规则和配套资料组织起来，供宿主按需加载。例如研究报告 Skill 说明先核对来源再整理报告，执行时可以使用 `MCP` 提供的搜索工具，也可以使用本地工具。\n\n## 对应教程\n\n- [MCP 模型上下文协议：1.1～1.2、3.2、5.1～5.3](https://didilili.github.io/ai-agents-from-zero/#/20-MCP模型上下文协议)：接入痛点、角色、三类能力与传输。\n- [Tools 工具调用：2.2～2.4](https://didilili.github.io/ai-agents-from-zero/#/17-Tools工具调用)：与模型侧调用意图和结果反馈对照。\n\n## 参考资料\n\n- 国内：[WeThinkIn：MCP 与 A2A 协议高频考点](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/04_MCP%E4%B8%8EA2A%E5%8D%8F%E8%AE%AE%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md#q-012)“Tools、Resources、Prompts 有什么区别？”——借鉴对 Tools、Resources、Prompts 的比较，说明它们的用途与宿主使用方式；发现过程以本文注明的协议版本为准。\n- 国内：[JavaGuide：MCP 和 Function Calling、Agent 的关系](https://javaguide.cn/ai/agent/mcp.html)：参考接入复用与职责划分的讲解，解释 MCP 与 Function Calling、Agent 的关系；涉及握手的旧版描述需按实际协议版本区分。\n- 国内：[王二讲 Agent：MCP 与工具调用](https://www.javabetter.cn/ai/video/#_273-mcp-%E6%98%AF%E4%BB%80%E4%B9%88-%E5%AE%83%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98)：参考 §273～277 中工具复用、模型调用意图与协议接入的分工，说明同一服务可供不同应用使用，而模型选择和工具执行仍各有职责。\n- 国内：[AgentScope：MCP](https://doc.agentscope.io/zh_CN/tutorial/task_mcp.html)：借鉴客户端获取工具、注册工具集和发起调用的示例，说明正文中框架如何接入 MCP；框架会话管理与协议级会话分别处理。\n- 国外：[MCP：Architecture overview](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)：依据本文所用版本的架构文档，说明宿主、客户端与服务端的角色，以及能力、传输和发现机制如何配合。\n- 国外：[MCP：Discovery](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)：依据服务发现请求的返回字段与调用条件，区分协议能力发现、具体工具列表和模型可见工具，并说明新版发现不等同于旧版会话握手。\n- 国外：[MCP：Tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)：依据工具规范说明发现与调用流程，并补充参数约束、业务错误反馈和调用各方的安全职责。\n\n协议版本：2026-07-28。",
+      "answer": "MCP（Model Context Protocol）统一宿主与外部工具、上下文服务之间的交互，使不同应用复用客户端/服务器接入方式。模型本身不会因为“有 MCP”就直接执行操作：宿主创建 MCP client，与 server 通信，由宿主决定提供哪些能力和如何授权执行，服务器再实现具体业务。本文以 MCP 2025-06-18 为基准，连接后先发送 initialize 协商协议版本和能力，成功后客户端发送 notifications/initialized；tools/list 发现具体工具，tools/call 调用工具并取得关联结果。Resources 提供可读取的上下文，Prompts 提供参数化提示模板，三者不是不同的权限等级。标准化解决重复适配和能力发现问题，不保证技术事实正确、认证成功或副作用幂等。stdio 适合本地进程；Streamable HTTP 面向 HTTP 端点，具体认证、可选会话和事件流仍需按版本与实现核对。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 。",
       "rubric": [
         "说明 MCP 统一上下文和工具的客户端服务端交互",
         "区分协议标准化与具体工具业务实现",
         "说明权限认证和工具执行仍由宿主及服务端负责"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {
@@ -478,24 +478,24 @@
     },
     {
       "code": "Q-0872",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "MCP 与客户端有哪些通信方式，如何配置？",
       "topic": "MCP、A2A 与工具协议",
       "competency_id": "agent_protocols",
       "difficulty": "easy",
       "stage": "technical",
-      "answer": "> 在面栈阅读：[MCP 与客户端有哪些通信方式，如何配置？](https://mianstack.com/question/q-0872)\n\n## 核心回答\n\n按 **`MCP` 2026-07-28 revision**，标准传输主要是两种：\n\n- **`stdio`**：Client 启动 Server 子进程，通过标准输入、标准输出交换 `JSON-RPC`，适合本地文件、CLI 等能力。配置启动命令、参数、运行环境和访问范围。\n- **`Streamable HTTP`**：Server 独立提供 `MCP` 端点，Client 用 `HTTP` `POST` 发送请求，响应可以是 `JSON` 或该请求的 `SSE` 流，适合远程和团队共享服务。配置服务 URL、鉴权及网络超时。\n\n旧的 **`HTTP`+`SSE` 传输**用于历史兼容，新接入通常选择 `Streamable HTTP`。注意“`SSE` 传输旧方案”与“`HTTP` 响应使用 `SSE` 流”不是一回事。配置前还要确认 Host、Client SDK、Server 支持的协议 revision，不能把旧版初始化和会话规则套进当前版本。\n\n## 展开说明\n\n### 1. stdio 如何通信和配置？\n\nHost 内的 Client 按配置启动服务进程，把请求写入它的 `stdin`，从 `stdout` 读取返回；`JSON-RPC` 消息按行分隔，通过请求 ID 关联结果。`stdout` 只能输出协议消息，调试日志写 `stderr` 或单独日志通道，否则容易出现“进程启动了但协议解析失败”。\n\n配置重点是可执行文件、脚本和参数是否正确，依赖是否安装，工作目录和必要环境变量是否符合预期。子进程有自己的生命周期，通常随 Client 管理；它能访问哪些文件和凭证，仍要由实际运行权限限制。\n\n### 2. 给出一个具体客户端配置例子\n\n以 [Claude Code 当前配置方式](https://code.claude.com/docs/en/mcp-quickstart)为例，假设已有一个天气 `MCP` 服务脚本，可以登记本地命令：\n\n```bash\nclaude mcp add weather -- python /srv/mcp/weather_server.py\n```\n\n这里 `--` 后面是 Host 启动 Server 的命令；脚本路径和 `Python` 环境按实际部署替换。若服务已经部署到远程，配置形状是：\n\n```bash\nclaude mcp add --transport http weather-remote https://mcp.example.com/mcp\nclaude mcp list\n```\n\n示例 URL 需换成实际 `MCP` 端点，不能填普通 `REST` 查询接口就期待它支持 `MCP`。需要登录的服务按宿主完成认证，凭证通过受控配置注入。不同 Host 的字段、存储位置和配置作用域并不统一，不应直接互拷整份配置。\n\n登记成功只表示配置保存了。还需检查连接、权限、工具列表，再用无副作用的调用确认名称、参数和返回符合预期。\n\n### 3. 当前 Streamable HTTP 与旧教程有什么差别？\n\n当前绑定使用单一 `POST` 端点，Client 要支持 `JSON` 和请求级 `SSE` 两种响应。请求携带协议元数据，并按规范提供协议版本、方法以及适用调用的名称请求头；通常交给兼容 SDK 处理。\n\n2026-07-28 已移除旧的 `initialize` 握手和传输层会话，不再使用旧的 `GET` 流端点或 `Mcp-Session-Id`。使用 2025-11-25 等旧版的 SDK 和服务仍可能采用旧行为，需按双方支持的版本和传输探测规则兼容，而不是只改一个版本字符串。\n\n远程连接还要检查 `TLS`、身份、授权范围和代理设置；本地 `HTTP` 服务通常只监听 `localhost`，并按规范校验 `Origin`。若响应使用 `SSE`，代理缓冲与空闲超时也可能影响事件到达。\n\n### 4. 连接成功却看不到工具，怎么排查？\n\n先看服务进程是否正常、URL 和传输类型是否匹配，再查协议兼容和认证；随后检查 `tools/list` 是否成功、当前身份是否能看到对应工具，以及 Host 是否启用了它。\n\n工具发现结果由 Host 适配成模型可用的工具定义，模型提出调用意图后才由 Client 请求 Server 执行。连通 `MCP` 并不等于工具已经自动进入所有模型调用。\n\n超时后能否重试，取决于工具是否可能已经产生副作用。请求 ID 用来关联协议结果，不能替代业务幂等键。\n\n## 常见追问\n\n### SSE 能否用 Last-Event-ID 断点续传？\n\n一般 `SSE` 应用可以设计事件 ID 和重放，但不能由此推断所有 `MCP` 版本都支持。当前 2026-07-28 `Streamable HTTP` 规范明确不支持通过 `Last-Event-ID` 恢复 `SSE` 流。旧版实现需按当时规范和服务能力判断；重新连接、重新订阅与重新执行业务操作也要分开。\n\n### 断开流是否代表任务取消了？\n\n当前 `HTTP` 绑定将关闭请求的 `SSE` 响应流作为该请求的取消信号；`stdio` 则通过带请求 ID 的取消通知表达。服务端应尽快停止工作，但已经发生的外部操作不会自动撤销，业务侧仍需确认状态。\n\n### WebSocket 也是 MCP 标准传输吗？\n\n当前标准绑定是 `stdio` 和 `Streamable HTTP`，可以自定义其他传输，但必须保持协议消息、元数据和取消等语义，并确认双方都实现了相同绑定。不能把某宿主的私有 `WebSocket` 通道直接当成通用 `MCP` 支持。\n\n## 对应教程\n\n- [MCP 模型上下文协议](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/20-MCP%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE.md)：介绍统一接入、Host/Client/Server 和 SDK 适配路线。固定版依赖使用 MCP Python SDK 1.x 范围，复用代码时应核对其实际支持的协议版本，再选择配置和兼容方式。\n\n## 参考资料\n\n- 国内：[JavaGuide：MCP](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/mcp.md)：依据本地与远程传输、stdout 日志和 HTTP 元数据规则，说明正文中通信方式的选择与配置边界。\n- 国内：[zero2Agent：工具管理](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/02-tool-management/index.md)：依据发现、调用与结果回传机制，解释正文中的调用链；2025-11-25 握手、GET 和会话语境用于说明旧客户端兼容。\n- 国内：[WeThinkIn：MCP 与 A2A 协议](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/04_MCP%E4%B8%8EA2A%E5%8D%8F%E8%AE%AE%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：采用部署位置、资源范围与身份控制的比较，说明正文中 stdio、Streamable HTTP 与旧 SSE 路线的选择。\n- 国外：[MCP：stdio 绑定](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)：依据标准流消息、日志、取消和新旧版本探测规则，说明正文中 stdio 配置及兼容处理。\n- 国外：[MCP：Streamable HTTP 绑定](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http)：依据 POST、JSON／SSE 响应、请求头与断流语义，说明正文中当前 HTTP 绑定的工作方式，以及不支持 Last-Event-ID 续流的边界。",
+      "answer": "本题按 MCP 2025-06-18 区分两种标准传输。stdio 由宿主启动本地服务器进程，通过 stdin/stdout 交换 JSON-RPC 消息，日志写 stderr；客户端配置通常需要可执行 command、args 和必要环境变量，字段格式按具体客户端确认。Streamable HTTP 使用单一 MCP 端点，客户端以 POST 发送 JSON-RPC，请求可得到 JSON 或 SSE 响应，GET 可建立服务端事件流；不提供 GET 流时服务器可返回 405。HTTP 配置通常需要 URL、传输类型和认证方式，不应把凭证写入共享配置。旧 HTTP+SSE 使用分开的 SSE 接收端点和消息 POST 端点，是 2024-11-05 的历史方式，不能与 Streamable HTTP 混称。2025-06-18 两种传输均先 initialize 协商，再 notifications/initialized；HTTP 后续请求应携带协商后的 MCP-Protocol-Version。服务器可在初始化时返回 Mcp-Session-Id，返回后客户端后续请求必须携带。SSE 重放是可选能力；提供事件 ID 时客户端可通过 GET 与 Last-Event-ID 尝试续传。断开连接不应被解释为取消请求，要取消应显式发送 notifications/cancelled，外部已发生的副作用也不会自动撤销。最后需验证实际工具发现和调用结果，不能仅凭服务器在线判断成功。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 。",
       "rubric": [
         "区分本地 stdio 与远程 HTTP 传输",
         "说明旧 HTTP SSE 与 Streamable HTTP 的版本区别",
         "按客户端实际支持配置命令环境或服务地址并验证调用"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {
@@ -682,24 +682,24 @@
     },
     {
       "code": "Q-1247",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "MCP 与 Skill 有什么区别？",
       "topic": "Skills 能力系统",
       "competency_id": "agent_skills",
       "difficulty": "easy",
       "stage": "technical",
-      "answer": "> 在面栈阅读：[MCP 与 Skill 有什么区别？](https://mianstack.com/question/q-1247)\n\n## 核心回答\n\n**`MCP` 是 AI 应用接入外部能力的协议；Skill 是 Agent 可复用、按需加载的任务能力包。**这里的 Skill 指 Agent Skills 这类组织任务知识和流程的方式，不局限于某一个产品。\n\n`MCP` 约定客户端和服务端怎样发现能力、传递参数、读取资源和返回结果，常见能力包括 Tools、Resources 和 Prompts。Skill 则说明什么时候处理某类任务、按什么步骤做、参考哪些资料、交付什么结果；采用 Agent Skills 格式时，通常以 `SKILL.md` 为入口，也可以附带脚本、模板和参考文件。\n\n例如做代码审查，Skill 规定先理解需求和差异，再检查正确性、安全和边界条件，最后按位置和依据输出问题；Agent 可以通过 `MCP` 工具读取仓库差异、提交记录或测试信息。**Skill 提供任务方法，`MCP` 提供标准化接入，两者可以组合。**只用本地文件、CLI 或直接 API 的 Skill 也能工作；接入 `MCP` 的 Agent 也不必依赖 Skill。\n\n## 展开说明\n\n### 1. 两者标准化的对象不同\n\n`MCP` 面向客户端与服务端的交互。Host 是承载模型调用的 AI 应用，内部的 Client 与 Server 交换协议消息，Server 再连接真实工具或数据源。统一的能力描述和消息约定，有助于同一服务被多个支持协议的应用复用。\n\nSkill 面向一类任务的知识与执行方法。`name`、`description` 帮助宿主发现适用任务，`SKILL.md` 正文给出流程、输入输出和特殊情况，额外文件承载脚本、资料或模板。宿主通常先了解元信息，任务需要时再加载正文和资源，这就是渐进式披露。\n\nSkill 不一定只有提示词，也可以带可执行脚本；但脚本仍由宿主的执行工具或运行环境调用。把脚本放进技能目录，并不会自动获得数据库连接、网络访问或文件权限。具体能力还取决于宿主、依赖和授权配置。\n\n### 2. 怎样把 Skill 与 MCP 接到同一次任务里\n\n以代码审查为例，一条组合链路可以是：\n\n1. Agent 根据用户任务找到代码审查 Skill，读取检查流程和输出要求。\n2. 发现需要差异和相关代码时，选择已接入的仓库查询工具，由宿主通过 `MCP` Client 调用相应 Server。\n3. Server 返回差异、文件内容等结果，Agent 按 Skill 的方法继续分析，必要时补查。\n4. Agent 输出问题位置、依据和建议，实际读写范围仍由宿主与服务端控制。\n\nSkill 负责说明“这类任务怎样完成”，`MCP` 不替 Agent 决定审查是否充分；`MCP` 连接成功，也不代表工具返回的信息足够或结论正确。是否完成任务，要按 Skill 的交付要求和业务验收检查。\n\n### 3. 不要按“本地文件”和“远程服务”划界\n\n`MCP` Server 可以在本机运行，也可以部署为远程服务。Skill 可以由本地目录提供，也可以通过支持的服务分发，位置不是两者的本质区别。\n\n当前官方已有 **`MCP` Skills 扩展**，可以借助 Resources 分发 Skill 文件；它规定的是传输映射，技能目录、元信息和渐进式披露仍遵循 Agent Skills 格式。该扩展面向 `2026-07-28` 及之后的基线协议，实际能否使用还取决于客户端和服务端是否支持。因此，“通过 `MCP` 取得一个 Skill”并不改变它们在协议与任务内容上的职责。\n\n### 4. 如何判断需求该落在哪一层\n\n如果要让多个 AI 应用复用同一组仓库、工单或数据查询能力，重点是统一能力接入，可以考虑 `MCP`。如果已有工具可用，只是某类任务总要重复解释检查顺序、业务规则和输出模板，适合沉淀为 Skill。如果两类需求同时存在，就组合使用。\n\n`MCP` 的 Prompts 本身也能提供可复用指令，所以不能说“`MCP` 只有代码、Skill 只有文字”。Skill 的特点是用能力包组织任务说明及附带文件；`MCP` 的特点是标准化能力发现和交互。业务规则写进 Skill 有助于指导模型，真正的参数校验、数据权限和操作限制仍应由执行层落实。\n\n## 常见追问\n\n### Skill 会替代 MCP 吗？\n\n一般不会，因为解决的问题不同。Skill 可以教 Agent 调用直接 API、CLI 或 `MCP` 工具；`MCP` 可以提供 Skill 所需的数据与动作，也可以通过扩展分发 Skill。本质上是任务方法和能力接入的组合。\n\n### 一个 Skill 能调用多个 MCP Server 吗？\n\n可以描述跨多个服务的流程。例如先读取代码仓库，再查询关联工单，最后汇总审查结论。宿主需要已接入相应服务，并给当前任务合适的权限；Skill 中写了工具名称，不代表它自动存在或已经获准使用。\n\n### 按需加载是不是就完全不占上下文？\n\n不是。元信息会有开销，激活后正文和读取的资料也会占用上下文。渐进式披露减少的是一开始加载全部详细规则的负担，效果取决于元信息规模、触发准确性和实际读取内容，不能简单推导为固定的 Token 节省比例。\n\n## 对应教程\n\n- [MCP 模型上下文协议](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/20-MCP%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE.md)：回看外部能力统一接入、Host / Client / Server 与 Tools / Resources / Prompts 的定位；具体协议版本以当前官方资料为准。\n- [Skills 技能与 AI 编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：查看能力包结构、渐进式披露，以及 Skill、Tool、MCP 的职责边界。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills 是什么？和 Prompt、MCP 到底差在哪？](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：借鉴任务说明与代码审查流程，说明正文中 Skill 的作用，以及元信息、正文和资源的按需加载。\n- 国内：[JavaGuide：什么是 Model Context Protocol（MCP）？](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/mcp.md)：依据 Host、Client 与 Server 调用链，区分正文中的协议接入、模型调用提案和 Agent 任务决策。\n- 国内：[zero2Agent：Skills + Claude Code：模块化技能系统](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-survey/11-skills-claudecode/index.md)：借鉴技能说明与附带资料的组织，说明正文中 Skill 的方法与资源封装；产品操作仍以当前宿主支持为准。\n- 国内：[WeThinkIn：MCP 与 A2A 协议高频考点](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/04_MCP%E4%B8%8EA2A%E5%8D%8F%E8%AE%AE%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：依据工具与上下文的标准化接入，说明正文中 MCP 服务复用的价值及业务权限边界。\n- 国外：[MCP：Architecture overview](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)：依据协议参与方、能力类型与交互范围，说明正文中 MCP 标准化的对象。\n- 国外：[Agent Skills：Specification](https://agentskills.io/specification)：依据开放技能格式的 `SKILL.md`、元信息、可选脚本资料及渐进披露约定，说明正文中技能包结构和加载流程。\n- 国外：[MCP Skills Extension：Skills](https://skills.extensions.modelcontextprotocol.io/specification/stable/skills)：依据 MCP Resources 分发 Skill 的扩展，说明正文中协议传输映射与技能格式为何仍属不同层次。",
+      "answer": "MCP 解决应用怎样用统一协议连接外部上下文和可调用能力；Skill 解决某类任务怎样组织知识、步骤、脚本和验收方法。MCP 服务器提供的 Tool 可以由多个应用复用，Skill 则可把这些工具组合进可重复执行的任务方法；两者不是互斥选择。以本题采用的 MCP 2025-06-18 为准，Resources 可以暴露宿主可读取的文件或其他上下文。如果宿主把取得的文件用作 Skill，还要自行识别技能包、检查目录和元信息，并依 Agent Skills 格式加载；读取资源不等于该基线协议已经提供统一的 Skill 安装、发现或激活机制。一个不使用 MCP 的应用也能加载本地 Skill，一个 MCP 客户端也可以完全不使用 Skill。加载任务指导不自动产生工具权限，连接服务器也不证明业务调用成功，仍要检查真实结果。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/resources 、https://modelcontextprotocol.io/specification/2025-06-18/architecture 和 https://agentskills.io/specification 。",
       "rubric": [
         "区分 MCP 服务接入和 Skill 任务知识",
         "说明 Skill 可调用 MCP 工具",
         "指出任一机制都不能取代执行层权限和结果检查"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {
@@ -750,24 +750,24 @@
     },
     {
       "code": "Q-1664",
-      "content_version": "agent-basics-06-v1",
+      "content_version": "agent-basics-06-v2",
       "prompt": "MCP、Skill 和 Tool 三者有什么区别？",
       "topic": "MCP、A2A 与工具协议",
       "competency_id": "agent_protocols",
       "difficulty": "easy",
       "stage": "technical",
-      "answer": "> 在面栈阅读：[MCP、Skill 和 Tool 三者有什么区别？](https://mianstack.com/question/q-1664)\n\n## 核心回答\n\n三者处在不同层次：`Tool` 是可执行能力，`MCP` 是宿主接入外部能力的标准协议，`Skill` 是处理某类任务的方法与资源包。它们可以组合使用。\n\n例如生成经营分析报告：查询销售数据是工具；如果这项能力通过 `MCP Server` 暴露，宿主可以按协议发现并调用它；报表分析技能则规定先确认口径，再计算、核对和写报告。Agent 负责根据任务与中间结果组织这些步骤。\n\n因此，新增业务动作看工具，跨宿主接入看协议，反复复用专业流程看技能。`Skill` 可以直接使用本地工具，不必经过 `MCP`。\n\n## 各自负责什么\n\n| 对象  | 提供的东西                               | 不自动解决的问题                     |\n| ----- | ---------------------------------------- | ------------------------------------ |\n| Tool  | 名称、参数契约、执行逻辑和结果           | 当前任务应该先做哪一步               |\n| MCP   | 外部工具、资源等的标准化发现与交互       | 业务正确性、服务端权限与整体任务规划 |\n| Skill | 触发说明、步骤、领域规则、可选模板与脚本 | 真实执行能力、独立权限和运行时保障   |\n\n`MCP` 不只是工具列表，也可以提供资源和提示词等能力。`Function Calling` 则是模型输出结构化调用意图的机制；宿主收到调用后，可以执行本地函数，也可以转交 `MCP Client`，不需要模型直接实现协议通信。\n\n## 一次组合调用\n\n用户要求“按本月已支付订单生成销售报告”。宿主先让 Agent 看到报表技能摘要；任务匹配后，Agent 读取 `SKILL.md`，得知要确认退款口径、查询数据和核对总额。\n\n查询时模型生成工具名称和参数，宿主校验并通过 `MCP Client` 发起 `tools/call`，服务端执行受限查询，返回数据和执行状态。Agent 根据结果继续计算或补问，最后使用模板交付报告。技能文件本身不查询数据库，协议本身也不计算销售额。\n\n在实现层面，`AgentScope` 的技能注册与工具注册是不同入口；技能还需要读文件等工具来读取正文。`Deep Agents` 的分层加载同样把技能说明与后续执行区分开。这解释了为什么“加载了技能”并不等于“已经完成业务动作”。\n\n## 追问\n\n**有 MCP 后还需要写 Tool 吗？**\n\n需要具体能力的实现。可以复用现成服务，也可以自己写服务端工具；协议减少重复接入约定，但不会凭空提供业务逻辑。\n\n**Skill 能包装成 Tool 吗？**\n\n可以提供一个加载技能的工具，也可以把固定任务封装为业务工具。外层接口可以相同，但前者主要交付方法与上下文，后者执行具体处理，调试和验收要看实际职责。\n\n**三个概念都用上，系统就更好吗？**\n\n不一定。单一宿主中几个本地函数可能已经够用；只有专业流程需要复用、外部能力需要标准化共享时，新增层次的收益才可能抵过维护成本。\n\n## 对应教程\n\n- [第 27 章：Skills 技能与 AI 编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：回看目录结构、渐进式加载、触发测试及代码审查示例。\n- [第 20 章：MCP 模型上下文协议](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/20-MCP%E6%A8%A1%E5%9E%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8D%8F%E8%AE%AE.md)：回看 Host、Client、Server 分工与天气服务；本文涉及的新协议行为另依据官方文档补充。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills 是什么？和 Prompt、MCP 到底差在哪？](https://javaguide.cn/ai/agent/skills.html)：采用 Prompt、Function Calling、MCP 和 Skill 的链路划分，解释模型意图、接入与任务方法。\n- 国内：[Datawhale：如何写出好的 Skill](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/Extra-Chapter/Extra08-%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BA%E5%A5%BD%E7%9A%84Skill.md)：采用指令、参考资料与脚本的分工，说明技能目录不会自动产生执行能力。\n- 国内：[AgentScope：Agent Skill](https://doc.agentscope.io/tutorial/task_agent_skill.html)：采用技能注册及读取工具要求，说明技能加载与业务工具执行的区别。\n- 国内：[小林：MCP 和 Agent Skill 的区别是什么？](https://xiaolinnote.com/ai/tools/10_mcp_vs_skill.html)：借鉴技能指导流程、工具提供动作的组合场景，组织报表分析示例。\n- 国外：[LangChain：Deep Agents Skills](https://docs.langchain.com/oss/python/deepagents/skills)：核对分层加载与执行的分离，支撑“加载技能不等于完成动作”的解释。\n- 国外：[MCP：Tools（2026-07-28）](https://modelcontextprotocol.io/specification/2026-07-28/server/tools)：核对 tools/list、tools/call 与参数和结果契约，说明 MCP 层如何接入实际工具。",
+      "answer": "Tool 是具有输入输出契约的可执行能力，例如读文件或查天气；模型提出工具调用后，仍由宿主校验参数、权限并真正执行。MCP 是客户端与服务器之间的标准接入协议，2025-06-18 规定初始化、能力发现、Tools、Resources 和 Prompts 等交互；一个 MCP server 可以暴露多个工具，应用内函数也可直接当 Tool，不要求使用 MCP。Skill 是可复用的任务指导与资源包，例如一个包含 SKILL.md、参考资料和脚本的文档处理流程；它告诉 Agent 何时以及怎样组织动作，不会单凭加载文本就自动获得执行能力或权限。三者可以组合：Agent 读取 Skill，再借助 MCP 发现并调用具体工具，最后检查真实产物。不要把工具业务功能、接入协议和工作方法混成同一层，也不要认为其中任何一个能代替宿主权限或结果验收。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/tools 和 https://agentskills.io/specification 。",
       "rubric": [
         "区分工具执行动作与 Skill 工作指导",
         "说明 MCP 作为工具和上下文的接入协议",
         "说明三者可组合但不互相替代权限控制"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "generation": {
         "author": "Codex (ticket 06 editorial draft; human review pending)",
         "generated_at": "2026-11-10",
         "model": "Codex (runtime model identifier not recorded)",
-        "revision": "06-editorial-v1"
+        "revision": "06-content-review-v2"
       },
       "answer_refs": [],
       "source": {

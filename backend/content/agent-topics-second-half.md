@@ -1,7 +1,7 @@
-# 06 逐题编辑稿 v1
+# 06 逐题编辑稿（含独立内容审核修订）
 
 固定题面与原始答案来自 MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77。
-下列答案仅用于源状态 pending 的题；ready 题直接保留快照正文，下列仅提供本项目评分点。
+pending 题使用逐题补答；ready 题默认保留快照正文，明确给出替换答案时标记 maintainer_edited。版本和修订号按题记录，固定来源快照不改写。
 每条评分点是语义要点，不要求关键词逐字命中；允许正确的不同实现和没有相关项目经历的诚实回答。
 资料版本与核对边界见 agent-answer-sources.json；这些编辑依据不作为用户端独立引用。
 
@@ -12,14 +12,23 @@
 
 ## Q-0416
 依据: mcp
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+答案: MCP（Model Context Protocol）统一宿主与外部工具、上下文服务之间的交互，使不同应用复用客户端/服务器接入方式。模型本身不会因为“有 MCP”就直接执行操作：宿主创建 MCP client，与 server 通信，由宿主决定提供哪些能力和如何授权执行，服务器再实现具体业务。本文以 MCP 2025-06-18 为基准，连接后先发送 initialize 协商协议版本和能力，成功后客户端发送 notifications/initialized；tools/list 发现具体工具，tools/call 调用工具并取得关联结果。Resources 提供可读取的上下文，Prompts 提供参数化提示模板，三者不是不同的权限等级。标准化解决重复适配和能力发现问题，不保证技术事实正确、认证成功或副作用幂等。stdio 适合本地进程；Streamable HTTP 面向 HTTP 端点，具体认证、可选会话和事件流仍需按版本与实现核对。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 。
 评分: 说明 MCP 统一上下文和工具的客户端服务端交互；区分协议标准化与具体工具业务实现；说明权限认证和工具执行仍由宿主及服务端负责
 
 ## Q-0872
 依据: mcp
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+答案: 本题按 MCP 2025-06-18 区分两种标准传输。stdio 由宿主启动本地服务器进程，通过 stdin/stdout 交换 JSON-RPC 消息，日志写 stderr；客户端配置通常需要可执行 command、args 和必要环境变量，字段格式按具体客户端确认。Streamable HTTP 使用单一 MCP 端点，客户端以 POST 发送 JSON-RPC，请求可得到 JSON 或 SSE 响应，GET 可建立服务端事件流；不提供 GET 流时服务器可返回 405。HTTP 配置通常需要 URL、传输类型和认证方式，不应把凭证写入共享配置。旧 HTTP+SSE 使用分开的 SSE 接收端点和消息 POST 端点，是 2024-11-05 的历史方式，不能与 Streamable HTTP 混称。2025-06-18 两种传输均先 initialize 协商，再 notifications/initialized；HTTP 后续请求应携带协商后的 MCP-Protocol-Version。服务器可在初始化时返回 Mcp-Session-Id，返回后客户端后续请求必须携带。SSE 重放是可选能力；提供事件 ID 时客户端可通过 GET 与 Last-Event-ID 尝试续传。断开连接不应被解释为取消请求，要取消应显式发送 notifications/cancelled，外部已发生的副作用也不会自动撤销。最后需验证实际工具发现和调用结果，不能仅凭服务器在线判断成功。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 。
 评分: 区分本地 stdio 与远程 HTTP 传输；说明旧 HTTP SSE 与 Streamable HTTP 的版本区别；按客户端实际支持配置命令环境或服务地址并验证调用
 
 ## Q-1664
 依据: mcp, skills
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+答案: Tool 是具有输入输出契约的可执行能力，例如读文件或查天气；模型提出工具调用后，仍由宿主校验参数、权限并真正执行。MCP 是客户端与服务器之间的标准接入协议，2025-06-18 规定初始化、能力发现、Tools、Resources 和 Prompts 等交互；一个 MCP server 可以暴露多个工具，应用内函数也可直接当 Tool，不要求使用 MCP。Skill 是可复用的任务指导与资源包，例如一个包含 SKILL.md、参考资料和脚本的文档处理流程；它告诉 Agent 何时以及怎样组织动作，不会单凭加载文本就自动获得执行能力或权限。三者可以组合：Agent 读取 Skill，再借助 MCP 发现并调用具体工具，最后检查真实产物。不要把工具业务功能、接入协议和工作方法混成同一层，也不要认为其中任何一个能代替宿主权限或结果验收。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/tools 和 https://agentskills.io/specification 。
 评分: 区分工具执行动作与 Skill 工作指导；说明 MCP 作为工具和上下文的接入协议；说明三者可组合但不互相替代权限控制
 
 ## Q-2426
@@ -83,6 +92,9 @@
 
 ## Q-0379
 依据: skills, mcp
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+答案: 提示词工程关注怎样组织指令、上下文、示例和输出约束，帮助模型理解某次任务；Skill 把某类任务的知识、步骤和资源组织成可复用的技能包，可能包含提示示例、参考文档和脚本，宿主按需加载；MCP 则规定宿主客户端与外部能力服务器的接入交互，按 MCP 2025-06-18 可发现和调用 Tools、读取 Resources、获取 Prompts。三者可以配合：提示说明本次目标，Skill 指导工作方法，宿主通过 MCP 连接执行所需工具。Skill 不等于一个新的执行 Agent，MCP 也不是替模型编写业务决策的提示模板；提示写得好、Skill 已加载或 MCP 已连接，都不能证明实际任务完成。工具权限、参数校验、预算和最终结果验证须由宿主及业务系统落实。具体 Skill 触发与加载方式依赖所用产品，不应把某个宿主的惯例称为通用协议保证。依据：https://agentskills.io/specification 和 https://modelcontextprotocol.io/specification/2025-06-18/architecture 。
 评分: 区分提示词表达 Skill 组织能力 MCP 接入协议；解释三者可以组合使用；说明工作流程文本不保证实际动作和结果
 
 ## Q-0624
@@ -108,6 +120,9 @@
 
 ## Q-1247
 依据: skills, mcp
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+答案: MCP 解决应用怎样用统一协议连接外部上下文和可调用能力；Skill 解决某类任务怎样组织知识、步骤、脚本和验收方法。MCP 服务器提供的 Tool 可以由多个应用复用，Skill 则可把这些工具组合进可重复执行的任务方法；两者不是互斥选择。以本题采用的 MCP 2025-06-18 为准，Resources 可以暴露宿主可读取的文件或其他上下文。如果宿主把取得的文件用作 Skill，还要自行识别技能包、检查目录和元信息，并依 Agent Skills 格式加载；读取资源不等于该基线协议已经提供统一的 Skill 安装、发现或激活机制。一个不使用 MCP 的应用也能加载本地 Skill，一个 MCP 客户端也可以完全不使用 Skill。加载任务指导不自动产生工具权限，连接服务器也不证明业务调用成功，仍要检查真实结果。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/resources 、https://modelcontextprotocol.io/specification/2025-06-18/architecture 和 https://agentskills.io/specification 。
 评分: 区分 MCP 服务接入和 Skill 任务知识；说明 Skill 可调用 MCP 工具；指出任一机制都不能取代执行层权限和结果检查
 
 ## Q-1768
@@ -141,7 +156,9 @@
 
 ## Q-0140
 依据: workflow
-评分: 区分代码预设路径和模型动态选择步骤；说明可在工作流中组合 Agent 节点；根据可预测性成本和验收需求选择并处理副作用重试
+版本: agent-basics-06-v2
+修订: 06-content-review-v2
+评分: 区分代码预设路径和模型动态选择步骤；说明可在工作流中组合 Agent 节点；根据可预测性成本和验收需求选择并设置预算及失败出口
 
 ## Q-2266
 依据: skills, workflow

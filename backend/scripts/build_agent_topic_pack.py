@@ -35,12 +35,15 @@ def main() -> None:
         if source["topic"] not in list(TOPICS)[6:]:
             continue
         edit = edits.pop(code)
-        origin = "source_original" if source["answerStatus"] == "ready" else "agent_generated"
+        if source["answerStatus"] == "ready":
+            origin = "maintainer_edited" if "答案" in edit else "source_original"
+        else:
+            origin = "agent_generated"
         answer = body.strip() if origin == "source_original" else edit["答案"]
         questions.append(
             {
                 "code": code,
-                "content_version": "agent-basics-06-v1",
+                "content_version": edit.get("版本", "agent-basics-06-v1"),
                 "prompt": source["title"],
                 "topic": source["topic"],
                 "competency_id": TOPICS[source["topic"]],
@@ -53,7 +56,7 @@ def main() -> None:
                     "author": "Codex (ticket 06 editorial draft; human review pending)",
                     "generated_at": "2026-11-10",
                     "model": "Codex (runtime model identifier not recorded)",
-                    "revision": "06-editorial-v1",
+                    "revision": edit.get("修订", "06-editorial-v1"),
                 },
                 "answer_refs": [],
                 "source": {

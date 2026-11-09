@@ -71,7 +71,7 @@
         "skills",
         "mcp"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "rubric_origin": "agent_generated",
       "human_review": "pending"
     },
@@ -89,7 +89,7 @@
       "editorial_basis": [
         "mcp"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "rubric_origin": "agent_generated",
       "human_review": "pending"
     },
@@ -134,7 +134,7 @@
       "editorial_basis": [
         "mcp"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "rubric_origin": "agent_generated",
       "human_review": "pending"
     },
@@ -189,7 +189,7 @@
         "skills",
         "mcp"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "rubric_origin": "agent_generated",
       "human_review": "pending"
     },
@@ -208,7 +208,7 @@
         "mcp",
         "skills"
       ],
-      "answer_origin": "source_original",
+      "answer_origin": "maintainer_edited",
       "rubric_origin": "agent_generated",
       "human_review": "pending"
     },
