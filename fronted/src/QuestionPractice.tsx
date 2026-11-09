@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowRight, BookOpenText, ExternalLink, FileText, LoaderCircle, Play, SkipForward } from 'lucide-react'
 import { ApiError, createPracticeApi } from './api'
 import type {
@@ -51,7 +51,9 @@ function message(error: unknown) {
   return error instanceof ApiError ? error.message : '练习服务暂时不可用'
 }
 
-export default function QuestionPractice({ api = createPracticeApi() }: { api?: PracticeApi }) {
+const defaultApi = createPracticeApi()
+
+export default function QuestionPractice({ api = defaultApi }: { api?: PracticeApi }) {
   const [booting, setBooting] = useState(true)
   const [packs, setPacks] = useState<Pack[]>([])
   const [packId, setPackId] = useState('')
@@ -68,51 +70,9 @@ export default function QuestionPractice({ api = createPracticeApi() }: { api?: 
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    void load()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'end' })
   }, [session?.phase, session?.revision])
 
-  async function load() {
-    setBooting(true)
-    setError('')
-    try {
-      const [list, recent] = await Promise.all([api.packs(), api.history(1, 10)])
-      const published = list.items.filter(item => item.status === 'published')
-      const first = published[0]
-      setPacks(published)
-      setHistory(recent.items)
-      const stored = readStored()
-      let restored: SessionView | null = null
-      if (stored) {
-        try {
-          restored = await api.session(stored)
-        } catch {
-          storeSession(null)
-        }
-      }
-      const activePack = restored?.pack_id ?? first?.id
-      const activeDifficulty = restored?.difficulty ?? difficulty
-      if (restored) {
-        setPackId(restored.pack_id)
-        setDifficulty(restored.difficulty)
-        setSession(restored)
-        if (restored.phase === 'evaluating') void watchJob(restored, restored.submissions[0]?.job_id ?? null)
-      } else if (first) {
-        setPackId(first.id)
-      }
-      if (activePack) {
-        setAvailability(await api.availability(activePack, { mode: 'question_practice', difficulty: activeDifficulty }))
-      }
-    } catch (failure) {
-      setError(message(failure))
-    } finally {
-      setBooting(false)
-    }
-  }
 
   async function chooseDifficulty(next: Difficulty) {
     setDifficulty(next)
@@ -186,19 +146,36 @@ export default function QuestionPractice({ api = createPracticeApi() }: { api?: 
     }
   }
 
-  async function watchJob(current: SessionView, jobId: string | null) {
+  const refreshHistory = useCallback(async () => {
+    try {
+      const recent = await api.history(1, 10)
+      setHistory(recent.items)
+    } catch {
+      // History is a convenience; the current session stays usable.
+    }
+  }, [api])
+
+  const watchJob = useCallback(async (current: SessionView, jobId: string | null) => {
     setWatching(true)
+    let lastError = ''
     try {
       if (jobId) {
+        const deadline = Date.now() + 150_000
         for (;;) {
           const job = await api.job(jobId)
           if (job.status === 'succeeded' || job.status === 'failed') break
+          if (Date.now() >= deadline) {
+            lastError = '评价仍在排队或运行，回答已经保存。可以稍后重新打开本次练习查看结果。'
+            break
+          }
           await sleep(700)
         }
       }
       const updated = await api.session(current.session_id)
       setSession(updated)
-      if (updated.phase !== 'evaluating') {
+      if (lastError) {
+        setError(lastError)
+      } else if (updated.phase !== 'evaluating') {
         submitLock.current = null
         submitKey.current = null
         void refreshHistory()
@@ -208,9 +185,58 @@ export default function QuestionPractice({ api = createPracticeApi() }: { api?: 
     } finally {
       setWatching(false)
     }
+  }, [api, refreshHistory])
+
+  const load = useCallback(async () => {
+    try {
+      const [list, recent] = await Promise.all([api.packs(), api.history(1, 10)])
+      const published = list.items.filter(item => item.status === 'published')
+      const first = published[0]
+      setPacks(published)
+      setHistory(recent.items)
+      const stored = readStored()
+      let restored: SessionView | null = null
+      if (stored) {
+        try {
+          restored = await api.session(stored)
+        } catch {
+          storeSession(null)
+        }
+      }
+      const activePack = restored?.pack_id ?? first?.id
+      const activeDifficulty = restored?.difficulty ?? difficulty
+      if (restored) {
+        setPackId(restored.pack_id)
+        setDifficulty(restored.difficulty)
+        setSession(restored)
+        if (restored.phase === 'evaluating') void watchJob(restored, restored.submissions[0]?.job_id ?? null)
+      } else if (first) {
+        setPackId(first.id)
+      }
+      if (activePack) {
+        setAvailability(await api.availability(activePack, { mode: 'question_practice', difficulty: activeDifficulty }))
+      }
+    } catch (failure) {
+      setError(message(failure))
+    } finally {
+      setBooting(false)
+    }
+  }, [api, difficulty, watchJob])
+
+  function reconnect() {
+    setBooting(true)
+    setError('')
+    void load()
   }
 
-  async function restart() {
+  useEffect(() => {
+    // All state settled by `load` arrives after its awaits; this is data fetching,
+    // not a synchronous cascading render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void load()
+  }, [load])
+
+  async function retryEvaluation() {
     if (!session || busy || watching) return
     setBusy(true)
     setError('')
@@ -221,15 +247,6 @@ export default function QuestionPractice({ api = createPracticeApi() }: { api?: 
       setError(message(failure))
     } finally {
       setBusy(false)
-    }
-  }
-
-  async function refreshHistory() {
-    try {
-      const recent = await api.history(1, 10)
-      setHistory(recent.items)
-    } catch {
-      // History is a convenience; the current session stays usable.
     }
   }
 
@@ -260,11 +277,11 @@ export default function QuestionPractice({ api = createPracticeApi() }: { api?: 
     }
   }
 
-  if (session) return <PracticeRun session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={restart} onLeave={leave} bottomRef={bottomRef} />
+  if (session) return <PracticeRun session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
 
   return <main className="page-content qp-setup">
     <div className="page-header"><h1>试题练习</h1><p>从已发布的 Agent 原理与系统基础档随机抽一道题，提交后立即看到按本题答案与评分点生成的反馈。</p></div>
-    {booting ? <div className="processing" role="status"><LoaderCircle size={16} className="spin" />正在读取练习服务</div> : error && !packs.length ? <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" onClick={() => void load()}>重新连接</button></div> : <form className="setup-form" onSubmit={event => { event.preventDefault(); void draw() }}>
+    {booting ? <div className="processing" role="status"><LoaderCircle size={16} className="spin" />正在读取练习服务</div> : error && !packs.length ? <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" onClick={reconnect}>重新连接</button></div> : <form className="setup-form" onSubmit={event => { event.preventDefault(); void draw() }}>
       <div className="form-field"><label htmlFor="qp-pack">岗位包</label><select id="qp-pack" className="field" value={packId} onChange={e => setPackId(e.target.value)}>{packs.map(pack => <option key={pack.id} value={pack.id}>{pack.title}</option>)}</select><p className="field-help">首批开放 Agent 原理与系统基础档，题目与答案带来源版本。</p></div>
       <fieldset className="choice-field"><legend>难度</legend><div className="choice-row">{DIFFICULTIES.map(level => <label className={`choice ${difficulty === level.value ? 'selected' : ''}`} key={level.value}><input type="radio" name="qp-difficulty" checked={difficulty === level.value} onChange={() => void chooseDifficulty(level.value)} /><span>{level.label}</span></label>)}</div></fieldset>
       <p className="qp-availability" role="status">{availability === null ? '正在查询可用题目' : availability.can_start ? <><b>{availability.available_count}</b> 道可抽</> : '当前筛选没有可评分的已发布题目'}</p>
@@ -301,8 +318,10 @@ function PracticeRun({ session, answer, setAnswer, busy, watching, error, onSend
 }) {
   const turn = session.current_turn
   const submission = session.submissions[0]
+  const actions = session.available_actions
   const processing = session.phase === 'evaluating' || watching
-  const awaiting = session.phase === 'awaiting_answer'
+  const canAnswer = actions.includes('answer')
+  const canSkip = actions.includes('skip')
   return <main className="practice-active">
     <div className="practice-context"><strong>{session.pack_title ?? session.pack_id}</strong><div><button className="button ghost" onClick={onLeave}>返回练习入口</button></div></div>
     <div className="practice-scroll"><div className="reading-column">
@@ -312,15 +331,15 @@ function PracticeRun({ session, answer, setAnswer, busy, watching, error, onSend
       {session.phase === 'evaluating' && <div className="processing" role="status"><LoaderCircle size={16} className="spin" />回答已保存，正在生成反馈</div>}
       {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>评价未完成</h2><p>{submission?.error?.message ?? '模型评价暂时失败，你的回答已经保存。'}</p><button className="button primary" disabled={busy || watching} onClick={onRetry}>{watching ? '正在重试' : '重试评价'}</button></section>}
       {session.phase === 'feedback_ready' && submission && <QuestionFeedback submission={submission} />}
-      {awaiting && !processing && <p className="meta-note qp-submit-note">提交后立即返回本题反馈；空白提交记 0 分并计入均分，明确跳过不计分。</p>}
+      {(canAnswer || canSkip) && !processing && <p className="meta-note qp-submit-note">提交后立即返回本题反馈；空白提交记 0 分并计入均分，明确跳过不计分。</p>}
       {error && <p className="field-error" role="alert">{error}</p>}
       <div ref={bottomRef} />
     </div></div>
-    {awaiting && <div className="composer-area"><div className="composer-inner">
+    {canAnswer && <div className="composer-area"><div className="composer-inner">
       <label htmlFor="qp-answer" className="composer-label">你的回答</label>
       <textarea id="qp-answer" className="field answer-field" placeholder="输入你的回答……" value={answer} maxLength={5000} onChange={e => setAnswer(e.target.value)} onKeyDown={e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); if (answer.trim()) onSend('answered', answer.trim()) } }} />
       <div className="composer-toolbar"><span className="keyboard-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> 提交</span><div><span className={`word-count ${answer.length >= 4500 ? 'near-limit' : ''}`}>{answer.length} 字</span><button className="button primary" disabled={!answer.trim() || busy} onClick={() => onSend('answered', answer.trim())}>提交回答</button></div></div>
-      <div className="practice-actions"><button className="button ghost" disabled={busy} onClick={() => onSend('blank_answer')}>空白提交</button><button className="button ghost" disabled={busy} onClick={() => onSend('skipped')}><SkipForward size={16} />跳过本题</button>{!answer.trim() && <span className="meta-note">不输入内容直接提交，会按空白提交记 0 分。</span>}</div>
+      <div className="practice-actions"><button className="button ghost" disabled={busy} onClick={() => onSend('blank_answer')}>空白提交</button>{canSkip && <button className="button ghost" disabled={busy} onClick={() => onSend('skipped')}><SkipForward size={16} />跳过本题</button>}{!answer.trim() && <span className="meta-note">不输入内容直接提交，会按空白提交记 0 分。</span>}</div>
     </div></div>}
   </main>
 }

@@ -328,6 +328,46 @@ describe('question practice page', () => {
     await waitFor(() => expect(draw.disabled).toBe(false))
   })
 
+  it('renders actions from the server available actions instead of the phase alone', async () => {
+    const api = fakeApi()
+    const user = userEvent.setup()
+    let calls = 0
+    api.session.mockImplementation(async () => {
+      calls += 1
+      return calls === 1 ? { ...awaiting(), available_actions: [] } : awaiting()
+    })
+    localStorage.setItem('ia-qp-session', 's1')
+    render(<QuestionPractice api={api} />)
+
+    expect(await screen.findByText(TURN.text)).not.toBeNull()
+    expect(screen.queryByLabelText('你的回答')).toBeNull()
+    expect(screen.queryByRole('button', { name: '跳过本题' })).toBeNull()
+    expect(screen.queryByRole('button', { name: '提交回答' })).toBeNull()
+    await user.click(screen.getByRole('button', { name: '返回练习入口' }))
+    await user.click(await screen.findByRole('button', { name: '随机抽一题' }))
+    expect(await screen.findByLabelText('你的回答')).not.toBeNull()
+  })
+
+  it('stops polling a job that never finishes and tells the user the answer is saved', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    const api = fakeApi()
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    api.job.mockResolvedValue({ job_id: 'job-1', status: 'running', phase: 'evaluation', result_entity_id: null, error: null })
+    render(<QuestionPractice api={api} />)
+    await screen.findByRole('button', { name: '随机抽一题' })
+    await user.click(screen.getByRole('button', { name: '随机抽一题' }))
+    await screen.findByLabelText('你的回答')
+    await user.type(screen.getByLabelText('你的回答'), ANSWER)
+    await user.click(screen.getByRole('button', { name: '提交回答' }))
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(151_000)
+    })
+    expect(api.job.mock.calls.length).toBeLessThan(1000)
+    expect(await screen.findByText(/评价仍在排队或运行，回答已经保存/)).not.toBeNull()
+    expect(screen.getByText(ANSWER)).not.toBeNull()
+  })
+
   it('shows the saved server record when a submit response is lost after the answer was stored', async () => {
     const api = fakeApi()
     const user = userEvent.setup()

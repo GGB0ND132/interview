@@ -13,8 +13,9 @@
   - 「最近练习」列表读取服务端 `GET /sessions`，每条记录一条提交，没有重复行。
   - 打开 `/history`、`/practice` 时可见明确标注的演示数据说明，并指向「试题练习」的真实入口。
 - 浏览器验收过程中发现并修复一处缺陷：刷新恢复后返回练习入口时，可用题数未读取，开始按钮保持禁用。已补充回归测试 `can draw a new question after returning from a refreshed session`。
-- 前端自动检查：`npx vitest run` 13 项通过（API 客户端 4 项、单题练习页 9 项，覆盖可用数来自服务端、处理中状态、即时反馈、空白 0 分、跳过无分、刷新恢复、失败保留与重试、响应丢失后的服务端对账、重复点击只提交一次）；`npx tsc -b`、`npm run lint`、`npm run build` 通过。
+- 前端自动检查：`npm test`（`vitest run`）15 项通过（API 客户端 4 项、单题练习页 11 项，覆盖可用数来自服务端、可用动作按服务端渲染、处理中状态、即时反馈、空白 0 分、跳过无分、刷新恢复、失败保留与重试、响应丢失后的服务端对账、重复点击只提交一次、轮询超时停止）；`npx tsc -b`、`npm run lint`、`npm run build` 通过。
 - 后端回归：`uv run pytest -q` 23 项通过；`mypy`、`ruff check`、`ruff format --check` 通过。新增检查覆盖会话视图的 `created_at`、`difficulty`、`pack_title` 与历史列表。
+- [代码审查记录](02-code-review.md)：标准面 0 硬性违规、6 项判断（2 已修复、4 保留并说明）；规格面 0 缺陷，2 项缺失已修复。
 - 真实调用证据：[02-live-model.json](02-live-model.json)，保存题号/版本、回答、原话引文、五维反馈、服务端总分、参考答案、来源和报告，不含密钥。
 
 ## 复现
