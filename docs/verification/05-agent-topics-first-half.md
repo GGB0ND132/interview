@@ -42,4 +42,4 @@
 
 真实 TCP HTTP 验收由 `scripts/acceptance_first_half.py` 启动独立 Uvicorn，在自动清理的临时数据库验证。机器记录见 [05-first-half-http.json](05-first-half-http.json)：未人工审核的正式命令拒绝且可用数 0；随后仅在验收数据库通过通用维护接口验证接受 57、拒绝 0、六主题实际抽题、重复导入新增 0；模拟停用一题后可用 56，重新导入拒绝该题并保留原因。该临时数据库已移除，没有把验收发布冒充正式上线。复现：`uv run --locked python -X utf8 scripts/acceptance_first_half.py --output <report.json>`。
 
-本次未调用付费模型，不声称这批分数经过人工校准。后端完整检查与双轴审查结果见 [05-code-review.md](05-code-review.md)。
+本次未调用付费模型，不声称这批分数经过人工校准。后端 68 项完整测试、mypy、ruff check 与格式检查通过；双轴独立审查发现的 2 项 P2 均已修正并复核。详情见 [05-code-review.md](05-code-review.md)。

@@ -47,6 +47,10 @@ def main():
         raise ValueError(f"Editorial inventory mismatch: {set(editorial) ^ set(selected)}")
     if set(scoring_notes) != set(selected):
         raise ValueError("Scoring notes must cover exactly the selected questions")
+    for code, note in scoring_notes.items():
+        for field in ("optional_point", "common_misconception"):
+            if not isinstance(note.get(field), str) or not note[field].strip():
+                raise ValueError(f"Missing or blank {field} for {code}")
     questions = []
     for code, (metadata, raw) in sorted(selected.items()):
         snapshot["files"][code] = raw
@@ -64,8 +68,8 @@ def main():
             "rubric": [
                 "考察点：" + metadata["focus"],
                 *["必须点：" + point for point in entry["rubric"]],
-                "可选点（不是必答，不因缺少而扣分）：" + scoring_notes[code][0],
-                "常见误区：" + scoring_notes[code][1],
+                "可选点（不是必答，不因缺少而扣分）：" + scoring_notes[code]["optional_point"],
+                "常见误区：" + scoring_notes[code]["common_misconception"],
                 "可接受变体：机制等价的表述、不同框架或明确标注的假设例子均可；不要求复述本答案。经历题不因未实践或没有量化指标而直接判错。",
             ],
             "answer_origin": "source_original" if original else "agent_generated",
