@@ -6,13 +6,14 @@
 
 **Status:** ready-for-agent
 
-- [ ] 可查询一个已发布 Agent 基础题的可用性，创建会话并随机抽到合格题；未发布题不可被选中。
-- [ ] 非空回答先保存再评价，反馈引用本次回答片段，组分数和总分由后端计算，不信任模型给出的总分。
-- [ ] 空白提交作为已回答题组记 0 分、计入均分并单列，不调用模型；明确跳过记空分且不进入均分。
-- [ ] 相同提交标识与会话版本的重试不会重复保存答案或反馈；可通过接口读取已保存练习记录。
-- [ ] 有一条通过真实模型调用的单题验收记录，另有可重复运行的外部行为检查覆盖正常回答、空白、跳过和重复提交。
+- [x] 可查询一个已发布 Agent 基础题的可用性，创建会话并随机抽到合格题；未发布题不可被选中。
+- [x] 非空回答先保存再评价，反馈引用本次回答片段，组分数和总分由后端计算，不信任模型给出的总分。
+- [x] 空白提交作为已回答题组记 0 分、计入均分并单列，不调用模型；明确跳过记空分且不进入均分。
+- [x] 相同提交标识与会话版本的重试不会重复保存答案或反馈；可通过接口读取已保存练习记录。
+- [x] 有一条通过真实模型调用的单题验收记录，另有可重复运行的外部行为检查覆盖正常回答、空白、跳过和重复提交。
 
 ## Comments
 
-- 原始工单位于 `C:/Users/ctrlz/Desktop/study/interview agent/.scratch/agent-principles-demo/issues/01-backend-single-question-practice.md`；此副本随实施分支保存，原始目录不改写。
+- 原始工单位于 `C:/Users/ctrlz/Desktop/study/interview agent/.scratch/agent-principles-demo/issues/01-backend-single-question-practice.md`；此副本随实施分支保存，验收勾选和完成说明同步回原始工单，业务代码仅写入当前实施分支。
 - 完整阶段规格位于同级上层 `spec.md`；本工单仅实现后端单题闭环，批量发布、双模式恢复分别属于 03、15。
+- 2026-11-09：Implementation completed，分支 `GGB0ND132/01`，实现提交 `16bd866`。22 项接口检查、mypy、ruff 和真实百炼 `qwen-plus` 单题验收通过；审查无规格缺陷，保留一项低优先级类型建模建议。验证和运行步骤见 `docs/verification/01-backend-single-question.md`、`backend/README.md`。现有五种 triage 状态没有 closed；完成情况以本工单勾选与此记录为准。
