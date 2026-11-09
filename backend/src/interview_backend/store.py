@@ -45,7 +45,16 @@ class Store:
                     )
                 db.execute("PRAGMA user_version=1")
                 db.commit()
-            elif version != 1:
+                version = 1
+            if version == 1:
+                db.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + files("interview_backend")
+                    .joinpath("migration_2.sql")
+                    .read_text(encoding="utf-8")
+                    + "\nCOMMIT;"
+                )
+            elif version != 2:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
 
     @contextmanager

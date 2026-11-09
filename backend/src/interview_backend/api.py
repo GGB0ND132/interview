@@ -14,6 +14,7 @@ from .contracts import Config, CreateSession, RevisionRequest, SubmitAnswer
 from .errors import PracticeError
 from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
+from .publishing import DisableQuestion, PublicationRequest, Publishing
 from .store import Store
 
 
@@ -23,6 +24,7 @@ def create_app(
     evaluator: Evaluator | None = None,
     model_settings: ModelSettings | None = None,
     model_transport: httpx.BaseTransport | None = None,
+    source_transport: httpx.BaseTransport | None = None,
 ) -> FastAPI:
     settings = model_settings or ModelSettings.from_env()
     service = Practice(
@@ -30,7 +32,8 @@ def create_app(
         evaluator or HttpEvaluator(settings, model_transport),
         model_name="external_adapter" if evaluator else settings.model,
     )
-    app = FastAPI(title="Interview Agent — single-question sample API", version="0.1.0")
+    app = FastAPI(title="Interview Agent — practice and question publishing API", version="0.2.0")
+    publishing = Publishing(service.store, source_transport)
 
     def response(data: Any = None, *, error: Any = None, status: int = 200) -> JSONResponse:
         return JSONResponse(
@@ -74,6 +77,26 @@ def create_app(
     @app.post("/api/v1/sessions")
     def create(request: CreateSession) -> JSONResponse:
         return response(service.create(request), status=201)
+
+    @app.post("/api/v1/maintenance/question-publications/preview")
+    def preview_publication(request: PublicationRequest) -> JSONResponse:
+        return response(publishing.review(request, publish=False))
+
+    @app.post("/api/v1/maintenance/question-publications")
+    def publish_questions(request: PublicationRequest) -> JSONResponse:
+        return response(publishing.review(request, publish=True), status=201)
+
+    @app.get("/api/v1/maintenance/question-publications/{publication_id}")
+    def get_publication(publication_id: str) -> JSONResponse:
+        return response(publishing.publication(publication_id))
+
+    @app.get("/api/v1/maintenance/questions/{code}")
+    def get_question_versions(code: str) -> JSONResponse:
+        return response(publishing.question(code))
+
+    @app.post("/api/v1/maintenance/questions/{code}/disable")
+    def disable_question(code: str, request: DisableQuestion) -> JSONResponse:
+        return response(publishing.disable(code, request))
 
     @app.get("/api/v1/sessions")
     def history(

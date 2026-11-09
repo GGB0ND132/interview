@@ -10,6 +10,7 @@ from uuid import uuid4
 from .contracts import Config, CreateSession, SubmitAnswer, feedback
 from .errors import PracticeError
 from .model import PROMPT_VERSION, Evaluator, ModelError
+from .publishing import TOPICS
 from .store import Store
 
 
@@ -55,6 +56,7 @@ class Practice:
             "pack_id": pack_id,
             "mode": config.mode,
             "available_count": len(pool),
+            "topic_counts": {topic: sum(q["topic"] == topic for q in pool) for topic in TOPICS},
             "can_start": bool(pool),
             "missing": [] if pool else ["published_question"],
         }
@@ -175,7 +177,7 @@ class Practice:
                 "candidate_pool": [{"code": q["code"], "version": q["version"]} for q in pool],
             }
             db.execute(
-                "UPDATE sessions SET status='active',phase='awaiting_answer',revision=revision+1,turn_id=?,question_json=?,selection_json=? WHERE id=?",
+                "UPDATE sessions SET status='active',phase='awaiting_answer',revision=revision+1,turn_id=?,question_json=?,selection_json=?,pack_version=(SELECT version FROM role_packs WHERE id=sessions.pack_id) WHERE id=?",
                 (str(uuid4()), encode(question), encode(selection), session_id),
             )
             return self._view(db, session_id)
@@ -266,7 +268,7 @@ class Practice:
                     "prompt_version": PROMPT_VERSION,
                     "requested_model": self.model_name,
                     "question_source": question["source"],
-                    "answer_generation": question["generation"],
+                    "answer_generation": question.get("generation"),
                     "independent_references": question.get("answer_refs", []),
                 }
             )
