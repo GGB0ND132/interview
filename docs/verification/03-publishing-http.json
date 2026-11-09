@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-11-09T13:41:02.872179+00:00",
+  "verified_at": "2026-11-09T13:48:21.951288+00:00",
   "transport": "TCP HTTP to local FastAPI; actual SQLite; no model invocation",
   "scope": "two fixed-source questions for ticket 03, not the 115-question release or human topic sampling",
   "published": {
@@ -53,7 +53,7 @@
         "action": "imported"
       }
     ],
-    "publication_id": "8b11678e-eb47-43ca-b1a8-3425c838dc04"
+    "publication_id": "a82ff60a-cb1a-420c-859f-b27fef798bfe"
   },
   "replayed": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -106,7 +106,7 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "b3172352-080e-4455-b785-ef3578ee1c02"
+    "publication_id": "798a8c36-e639-4033-8e2c-aea10bb2b93e"
   },
   "available_after_publish": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -180,7 +180,7 @@
           "action": "unchanged"
         }
       ],
-      "publication_id": "51a28787-76bd-4272-b474-1043828bc0c6"
+      "publication_id": "6e4d9cec-7143-4584-a9b3-3503d6dfbdd5"
     },
     "duplicate_id": {
       "pack_id": "pack_agent_basics_mianstack",
@@ -242,7 +242,7 @@
           ]
         }
       ],
-      "publication_id": "a2ff811f-640c-47de-88c0-909f6047b0bc"
+      "publication_id": "2846b378-895a-435c-bacb-1eed35a5c550"
     },
     "invalid_locator": {
       "pack_id": "pack_agent_basics_mianstack",
@@ -293,7 +293,7 @@
           "action": "unchanged"
         }
       ],
-      "publication_id": "36190fa4-0a19-476b-a0ac-112ae43599c4"
+      "publication_id": "ba5c087c-d379-4017-89a3-5f82ac6cdab2"
     },
     "disabled": {
       "pack_id": "pack_agent_basics_mianstack",
@@ -344,7 +344,7 @@
           "action": "unchanged"
         }
       ],
-      "publication_id": "7d5bd5d1-73a6-4f54-a009-fdcf951634b7"
+      "publication_id": "11bc4be8-61bb-4b24-9432-5102afd430e4"
     }
   },
   "revision": {
@@ -398,7 +398,7 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "5c60b5c6-bcdc-4ed5-9784-dfd3c9c31658"
+    "publication_id": "afb7ed0a-0eee-4c4c-ba42-56d059f45498"
   },
   "available_after_disable": {
     "pack_id": "pack_agent_basics_mianstack",

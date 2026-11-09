@@ -16,3 +16,4 @@
 
 - 原始工单位于 `C:/Users/ctrlz/Desktop/study/interview agent/.scratch/agent-principles-demo/issues/03-backend-question-publishing.md`；业务代码仅修改当前实施分支，完成说明同步回原始工单。
 - 2026-11-09：已实现发布预览、逐题拒绝、幂等发布、版本保留、停用和主题可用数。使用固定来源 Q-0058、Q-0140 完成真实 TCP HTTP 验收；全部 115 题内容整理和主题人工抽查仍属于 05/06。运行与接口见 `backend/README.md`；验收记录见 `docs/verification/03-backend-question-publishing.md`、`docs/verification/03-publishing-http.json`。现有五种 triage 状态没有 closed，完成情况以本工单勾选与记录为准。
+- 实现提交 `91684ea`，审查修正 `c09dc18`；最终 54 项测试、mypy、ruff 与修正后 TCP HTTP 验收通过。双轴独立审查已完成并复核，无未解决缺陷，见 `docs/verification/03-code-review.md`。
