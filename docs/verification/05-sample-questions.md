@@ -1,6 +1,6 @@
-# 05 人工抽查题面、候选答案与评分点
+# 05 发布前抽查题面、候选答案与评分点
 
-本文件由题包机械生成。12 题均为 Agent 补答，尚未人工通过。核查材料、Agent 自查与人工记录方法见 [05-human-sampling.md](05-human-sampling.md)。
+本文件由题包机械生成，12 题均为 Agent 补答。当前审核类型、结论及后续人工升级方法见 [05-human-sampling.md](05-human-sampling.md)，独立审核证据见 [05-independent-agent-review.md](05-independent-agent-review.md)。
 
 ## Q-0062：从使用体验看，有记忆和无记忆的 Agent 有什么区别？
 

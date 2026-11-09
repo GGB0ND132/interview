@@ -58,7 +58,7 @@ def main():
         original = metadata["answerStatus"] in {"ready", "reviewed"}
         question = {
             "code": code,
-            "content_version": "05.1",
+            "content_version": entry.get("content_version", "05.1"),
             "prompt": entry.get("prompt", metadata["title"]),
             "topic": metadata["topic"],
             "competency_id": TOPICS[metadata["topic"]],
@@ -66,7 +66,7 @@ def main():
             "stage": "technical",
             "answer": raw.split("---", 2)[2].strip() if original else entry["answer"],
             "rubric": [
-                "考察点：" + metadata["focus"],
+                "考察点：" + entry.get("assessment_focus", metadata["focus"]),
                 *["必须点：" + point for point in entry["rubric"]],
                 "可选点（不是必答，不因缺少而扣分）：" + scoring_notes[code]["optional_point"],
                 "常见误区：" + scoring_notes[code]["common_misconception"],
@@ -97,7 +97,7 @@ def main():
                 "author": "Codex (ticket 05)",
                 "model": "Codex (exact runtime model ID unavailable)",
                 "generated_at": "2026-11-10",
-                "revision": "05.1",
+                "revision": question["content_version"],
             }
         questions.append(question)
     bundle = {"questions": questions}
@@ -131,6 +131,7 @@ def main():
         existing_review is not None
         and existing_review.get("incidents") == []
         and all(sample.get("human_review") is None for sample in existing_review.get("samples", []))
+        and all(sample.get("agent_review") is None for sample in existing_review.get("samples", []))
     )
     if existing_review is None or untouched_template:
         template = {
@@ -149,8 +150,8 @@ def main():
         )
     sample_codes = {code for codes in SAMPLES.values() for code in codes}
     sample_doc = [
-        "# 05 人工抽查题面、候选答案与评分点\n",
-        "本文件由题包机械生成。12 题均为 Agent 补答，尚未人工通过。核查材料、Agent 自查与人工记录方法见 [05-human-sampling.md](05-human-sampling.md)。\n",
+        "# 05 发布前抽查题面、候选答案与评分点\n",
+        "本文件由题包机械生成，12 题均为 Agent 补答。当前审核类型、结论及后续人工升级方法见 [05-human-sampling.md](05-human-sampling.md)，独立审核证据见 [05-independent-agent-review.md](05-independent-agent-review.md)。\n",
     ]
     for question in questions:
         if question["code"] not in sample_codes:

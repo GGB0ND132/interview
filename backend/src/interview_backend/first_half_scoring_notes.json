@@ -205,7 +205,7 @@
   },
   "Q-4839": {
     "optional_point": "说明事件响应与主动定时检查如何组合。",
-    "common_misconception": "认为主动式 Agent 不需要调度器或可以越过授权。"
+    "common_misconception": "把主动性等同定时运行，或认为模型脱离宿主机制自行后台计时、可越过授权。"
   },
   "Q-4896": {
     "optional_point": "说明后台任务需要用户澄清时怎样回到会话。",

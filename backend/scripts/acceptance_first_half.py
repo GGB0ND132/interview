@@ -26,6 +26,14 @@ def main():
     )
     with tempfile.TemporaryDirectory(prefix="interview-05-") as temp:
         database = Path(temp) / "acceptance.sqlite3"
+        pending = json.loads(
+            files("interview_backend").joinpath("first_half_review.json").read_text("utf-8")
+        )
+        for sample in pending["samples"]:
+            sample["human_review"] = None
+            sample.pop("agent_review", None)
+        pending_path = Path(temp) / "pending-review.json"
+        pending_path.write_text(json.dumps(pending, ensure_ascii=False), encoding="utf-8")
         gate = subprocess.run(
             [
                 sys.executable,
@@ -36,6 +44,8 @@ def main():
                 "--database",
                 str(database),
                 "--publish",
+                "--review-file",
+                str(pending_path),
             ],
             capture_output=True,
             text=True,
@@ -92,9 +102,27 @@ def main():
                 assert before["available_count"] == 0
                 preview = post("maintenance/question-publications/preview", bundle)
                 assert preview["accepted_count"] == 57 and preview["rejected_count"] == 0
-                # Direct maintenance publication is only to test runtime behavior in
-                # this disposable database, not a production release or human approval.
-                publication = post("maintenance/question-publications", bundle)
+                # Exercise the real independent-agent policy and saved reviews;
+                # the target remains this disposable test database.
+                release = subprocess.run(
+                    [
+                        sys.executable,
+                        "-X",
+                        "utf8",
+                        "-m",
+                        "interview_backend.first_half_release",
+                        "--database",
+                        str(database),
+                        "--publish",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    encoding="utf-8",
+                    check=False,
+                )
+                assert release.returncode == 0, release.stderr + release.stdout
+                release_report = json.loads(release.stdout)
+                publication = release_report["publication"]
                 assert publication["imported_count"] == 57
                 available = post(f"role-packs/{PACK_ID}/availability", config)
                 assert available["available_count"] == 57
@@ -133,9 +161,11 @@ def main():
                 report = {
                     "test_only": True,
                     "human_review_completed": False,
+                    "independent_agent_review_completed": True,
                     "release_published": False,
                     "database": "disposable temporary SQLite, removed after verification",
-                    "human_gate_refusal": refusal,
+                    "pending_review_refusal": refusal,
+                    "agent_gate_policy": release_report["review_policy"],
                     "before": before,
                     "preview": preview,
                     "test_publication": publication,
@@ -156,6 +186,7 @@ def main():
                             "topics_drawn": len(draws),
                             "after_test_disable": 56,
                             "human_review_completed": False,
+                            "independent_agent_review_completed": True,
                             "release_published": False,
                         }
                     )

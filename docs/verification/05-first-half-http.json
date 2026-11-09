@@ -1,10 +1,12 @@
 {
   "test_only": true,
   "human_review_completed": false,
+  "independent_agent_review_completed": true,
   "release_published": false,
   "database": "disposable temporary SQLite, removed after verification",
-  "human_gate_refusal": {
-    "bundle_sha256": "5674630fae0cc9b25fb750f6e8cacaa762e716c50ee6c7fc49857c6acea1ed13",
+  "pending_review_refusal": {
+    "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+    "review_policy": "independent_agent_first",
     "preview": {
       "pack_id": "pack_agent_basics_mianstack",
       "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
@@ -773,18 +775,18 @@
       ]
     },
     "review_blockers": [
-      "Q-0419 尚无完整的人工通过结论。",
-      "Q-1674 尚无完整的人工通过结论。",
-      "Q-0898 尚无完整的人工通过结论。",
-      "Q-2078 尚无完整的人工通过结论。",
-      "Q-0883 尚无完整的人工通过结论。",
-      "Q-2506 尚无完整的人工通过结论。",
-      "Q-7020 尚无完整的人工通过结论。",
-      "Q-7196 尚无完整的人工通过结论。",
-      "Q-0062 尚无完整的人工通过结论。",
-      "Q-4837 尚无完整的人工通过结论。",
-      "Q-1675 尚无完整的人工通过结论。",
-      "Q-4836 尚无完整的人工通过结论。"
+      "Q-0419 尚无符合审核策略的完整通过结论。",
+      "Q-1674 尚无符合审核策略的完整通过结论。",
+      "Q-0898 尚无符合审核策略的完整通过结论。",
+      "Q-2078 尚无符合审核策略的完整通过结论。",
+      "Q-0883 尚无符合审核策略的完整通过结论。",
+      "Q-2506 尚无符合审核策略的完整通过结论。",
+      "Q-7020 尚无符合审核策略的完整通过结论。",
+      "Q-7196 尚无符合审核策略的完整通过结论。",
+      "Q-0062 尚无符合审核策略的完整通过结论。",
+      "Q-4837 尚无符合审核策略的完整通过结论。",
+      "Q-1675 尚无符合审核策略的完整通过结论。",
+      "Q-4836 尚无符合审核策略的完整通过结论。"
     ],
     "published": false,
     "actual_available_count": 0,
@@ -803,6 +805,7 @@
       "GUI、Computer Use 与多模态 Agent": 0
     }
   },
+  "agent_gate_policy": "independent_agent_first",
   "before": {
     "pack_id": "pack_agent_basics_mianstack",
     "mode": "question_practice",
@@ -2433,7 +2436,7 @@
         "action": "imported"
       }
     ],
-    "publication_id": "2654a6e4-ea01-48df-919f-d81f2e31d46d"
+    "publication_id": "533dea54-c4b2-4449-88b2-c2f0fa315ba5"
   },
   "availability": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -2532,62 +2535,62 @@
   },
   "draws": [
     {
-      "id": "391b9e00-99ee-4e9a-9341-ace294868006",
-      "question_code": "Q-0597",
+      "id": "f5e02d4c-0637-4a27-8f48-0dc8f27f2b60",
+      "question_code": "Q-1555",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "Agent 基础与运行循环",
       "competency_id": "agent_loop",
-      "text": "Agent 与 LLM 有什么区别？"
+      "text": "Agent 会用到哪些数据结构？"
     },
     {
-      "id": "8c43da59-20c2-498f-b35c-ec072aaec9c5",
-      "question_code": "Q-2797",
+      "id": "12191d34-bc59-4707-90fc-a4c7c1825978",
+      "question_code": "Q-0137",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "Agent 应用架构与场景设计",
       "competency_id": "agent_application_architecture",
-      "text": "RPA、LLM、Agent 与 Workflow 有什么关系？"
+      "text": "除了编码，Agent 还在哪些场景中帮助你提效？"
     },
     {
-      "id": "5422160c-6bb5-4b28-90d7-7e1b8acef19a",
-      "question_code": "Q-0883",
+      "id": "3fbd1367-6794-4d27-9e4d-aaa3f653e5f1",
+      "question_code": "Q-2536",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "规划、推理与任务执行",
       "competency_id": "agent_planning",
-      "text": "Function Calling 与完整 Agent 有什么区别？"
+      "text": "Agent 任务规划主要包含哪些内容？"
     },
     {
-      "id": "4bd6ba4c-f8bf-47e8-af57-4ebf0e56f78e",
-      "question_code": "Q-7196",
+      "id": "6ef27723-d631-4ed8-900a-1e39c473b6a8",
+      "question_code": "Q-7020",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "上下文工程",
       "competency_id": "agent_context_engineering",
-      "text": "输入超过模型上下文窗口时，有哪些处理方式？"
+      "text": "Context Engineering 与 RAG 是什么关系？"
     },
     {
-      "id": "2e6c3c94-2910-4b7d-940a-658e233cd3b1",
-      "question_code": "Q-3168",
+      "id": "101151be-98fd-4a58-bc31-d2c19b075171",
+      "question_code": "Q-0062",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "记忆系统",
       "competency_id": "agent_memory",
-      "text": "Agent.md 与 memory.md 的职责有什么区别？"
+      "text": "从使用体验看，有记忆和无记忆的 Agent 有什么区别？"
     },
     {
-      "id": "a022d718-88f8-47ae-b7dc-20356407cdfd",
+      "id": "12a309a0-ea4d-46b2-b46d-f5e8b44eb827",
       "question_code": "Q-1909",
       "question_version": 1,
       "kind": "main",
@@ -3364,7 +3367,7 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "009b0b78-e052-455a-87e5-c94e45c8d263"
+    "publication_id": "2e46045c-eca3-4be6-8dd6-9e74332e4cb6"
   },
   "after_test_disable": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -3566,13 +3569,15 @@
       {
         "index": 6,
         "code": "Q-0597",
-        "accepted": false,
+        "accepted": true,
         "reasons": [
           {
-            "code": "QUESTION_DISABLED",
-            "message": "已停用题不可通过重新导入恢复"
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
           }
-        ]
+        ],
+        "version": 1,
+        "action": "unchanged"
       },
       {
         "index": 7,
@@ -3642,15 +3647,13 @@
       {
         "index": 12,
         "code": "Q-1555",
-        "accepted": true,
+        "accepted": false,
         "reasons": [
           {
-            "code": "VALIDATED",
-            "message": "内容结构、分类与固定来源校验通过"
+            "code": "QUESTION_DISABLED",
+            "message": "已停用题不可通过重新导入恢复"
           }
-        ],
-        "version": 1,
-        "action": "unchanged"
+        ]
       },
       {
         "index": 13,
@@ -4225,6 +4228,6 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "1194e1fc-52fc-4f8c-91a8-2d6f7d5c1fdf"
+    "publication_id": "8c5befb5-9648-4774-a0d9-d94b5a2ed92e"
   }
 }

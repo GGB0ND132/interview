@@ -70,7 +70,15 @@ def test_first_half_pack_validates_and_every_topic_can_be_drawn(tmp_path):
             }
 
 
-def test_release_command_refuses_pending_human_review_without_publishing(tmp_path):
+def test_release_command_refuses_pending_review_without_publishing(tmp_path):
+    review = json.loads(
+        files("interview_backend").joinpath("first_half_review.json").read_text("utf-8")
+    )
+    for sample in review["samples"]:
+        sample["human_review"] = None
+        sample.pop("agent_review", None)
+    review_path = tmp_path / "pending.json"
+    review_path.write_text(json.dumps(review, ensure_ascii=False), encoding="utf-8")
     database = tmp_path / "release.sqlite3"
     result = subprocess.run(
         [
@@ -82,6 +90,8 @@ def test_release_command_refuses_pending_human_review_without_publishing(tmp_pat
             "--database",
             str(database),
             "--publish",
+            "--review-file",
+            str(review_path),
         ],
         capture_output=True,
         text=True,
@@ -113,6 +123,11 @@ def test_release_command_refuses_pending_human_review_without_publishing(tmp_pat
         "rechecked",
         "partial",
         "rejected_sample",
+        "agent_approved",
+        "agent_policy_missing",
+        "agent_failed",
+        "agent_human_veto",
+        "expanded_veto",
     ],
 )
 def test_release_command_respects_review_version_and_expanded_checks(tmp_path, state):
@@ -128,14 +143,26 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
         "conclusion": "passed",
     }
     for sample in review["samples"]:
+        sample.pop("agent_review", None)
         sample["human_review"] = dict(approval)
+    if state in {"agent_approved", "agent_policy_missing", "agent_failed", "agent_human_veto"}:
+        review["review_policy"] = "independent_agent_first"
+        for sample in review["samples"]:
+            sample["human_review"] = None
+            sample["agent_review"] = {**approval, "review_kind": "independent_agent"}
+        if state == "agent_policy_missing":
+            review.pop("review_policy")
+        elif state == "agent_failed":
+            review["samples"][0]["agent_review"]["conclusion"] = "failed"
+        elif state == "agent_human_veto":
+            review["samples"][0]["human_review"] = {**approval, "conclusion": "failed"}
     if state == "stale":
         review["bundle_sha256"] = "0" * 64
     elif state == "failed":
         review["samples"][0]["human_review"]["conclusion"] = "failed"
     elif state == "missing_sample":
         review["samples"].pop()
-    elif state in {"repeated_error", "rechecked"}:
+    elif state in {"repeated_error", "rechecked", "expanded_veto"}:
         review["incidents"] = [
             {
                 "topic": "记忆系统",
@@ -146,7 +173,7 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
             }
             for code in ["Q-0062", "Q-4837"]
         ]
-        if state == "rechecked":
+        if state in {"rechecked", "expanded_veto"}:
             for incident in review["incidents"]:
                 incident["resolution"] = "corrected_and_rechecked"
                 incident["expanded_review"] = [
@@ -154,6 +181,10 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
                     for q in candidates()["questions"]
                     if q["topic"] == "记忆系统"
                 ]
+            if state == "expanded_veto":
+                review["incidents"][0]["expanded_review"].append(
+                    {"code": "Q-0062", **approval, "conclusion": "failed"}
+                )
     review_path = tmp_path / "review.json"
     review_path.write_text(json.dumps(review, ensure_ascii=False), encoding="utf-8")
     database = tmp_path / "review.sqlite3"
@@ -185,8 +216,10 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
         encoding="utf-8",
         check=False,
     )
-    approved = state in {"approved", "rechecked", "partial"}
-    assert result.returncode == (0 if approved else 2), result.stderr + result.stdout
+    approved = state in {"approved", "rechecked", "partial", "agent_approved"}
+    assert result.returncode == (0 if approved else 2), result.stderr + json.dumps(
+        json.loads(result.stdout).get("review_blockers"), ensure_ascii=False
+    )
     report = json.loads(result.stdout)
     assert report["published"] is approved
     with TestClient(create_app(database_path=database)) as client:

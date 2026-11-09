@@ -1,8 +1,8 @@
-# 05 发布前人工抽查
+# 05 发布前审核与人工升级
 
-状态：等待人工。日期：2026-11-10。**本页的技术检查由 Agent 完成，不是人工审核结论。**
+状态：独立子 Agent 审核及修正复查已通过，无未解决的人工问题。日期：2026-11-10。**本页与关联记录均明确区分 Agent 审核和人工审核。**
 
-人工只需审核本批选定的 12 题，不要求逐题批准全部 57 题。完整题面、候选答案和评分点在 [抽查题册](05-sample-questions.md)，待填写记录在 [first_half_review.json](../../backend/src/interview_backend/first_half_review.json)。记录绑定完整题包 SHA-256；题面、答案或评分点变化后必须重新核对，不能沿用旧通过记录。
+按用户 2026-11-10 最新指示，05 先由独立子 Agent 审核，只有未解决疑点才转人工；没有问题后回到 `ready-for-agent`。本轮已覆盖全部 57 题，包括每主题两道补答样本；两道问题题已修正，对其所在主题扩大复查通过。结论与材料见 [独立审核报告](05-independent-agent-review.md)。完整样本题面、答案和评分点仍在 [抽查题册](05-sample-questions.md)，真实记录见 [first_half_review.json](../../backend/src/interview_backend/first_half_review.json)。记录绑定完整题包 SHA-256；内容变化后必须重新核对。
 
 ## 核查材料
 
@@ -36,22 +36,22 @@
 | 工具调用 | Q-1675 | E、F | 结构参数需校验；错误分类、退避、幂等与未知结果查询是工程设计补充，非声称官方逐条规定。 |
 | 工具调用 | Q-4836 | E、F | 核对调用意图与真实执行；结构输出可作数据结果。结构合法不证明语义或权限正确。 |
 
-## 人工记录方法
+## 审核记录与后续发布
 
-打开抽查题册，回看上表材料；分别核对答案的核心命题和评分点是否允许合理的不同答法。对每题填写 `human_review` 对象，字段为 `reviewer`、带时区的 ISO `reviewed_at`、实际核查 `materials`、具体 `findings`、`conclusion`（`passed` 或 `failed`）。不要填写不存在的审核人、时间和核查结果。
+顶层 `review_policy=independent_agent_first` 明确本批授权，样本的 `agent_review` 单独保存审查者、带时区的审核时间、材料、发现与结论，`review_kind=independent_agent` 标识其类型；原 `human_review` 保持为空。若后续出现需人工裁决的疑点，则暂停并据实际人工核查填写 `human_review`，字段同样包含 `reviewer`、`reviewed_at`、`materials`、`findings`、`conclusion`。不能编造审核人、时间和结论，任一显式失败仍会阻断。
 
-全部 12 题通过后，在 backend 目录运行：
+审核通过后，后续 Agent 可在 backend 目录对明确目标数据库发布：
 
 ```powershell
 uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3 --publish
 ```
 
-默认读取仓库记录，也可用 `--review-file <path>` 指定已完成的记录。没有 `--publish` 时仅预览，返回 `preview` 中预计接受数及 `actual_available_count` 中实际已发布总数；二者不是同一个含义。直接调用 03 通用维护 API 不会执行本批人工门槛，因此本批正式发布必须走此命令。命令是本机维护流程，不提供审核人认证或防篡改保证。
+默认读取仓库记录，也可用 `--review-file <path>` 指定记录。没有 `--publish` 时仅预览，返回预计接受数及实际已发布数；二者不同。没有明确 Agent 授权策略的记录仍按原人工方式检查。直接调用 03 通用维护 API 不会执行本批审核门槛，因此正式发布必须走此命令。本轮只进入 `ready-for-agent`，未对正式数据库发布。
 
 ## 错误、扩大抽查与暂停
 
-一旦发现技术错误，将该题人工结论记为 `failed`，在 `incidents` 留下 `topic`、`code`、`error_class`、具体发现与材料；停止本批发布并扩大到该主题全部题目。本批采用比最低要求更保守的策略：首次错误即暂停整批发布，同类错误再次出现时该主题继续暂停，直到修正与全主题复查完成。
+一旦发现技术错误，记录失败与 `incidents` 的题号、主题、错误类型、发现和材料，停止本批发布并扩大到全主题。修正后另存通过复查结果，并保留原事件。尚未解决或无法依据资料判断的问题才升级人工。本批首次错误即暂停整批发布，同类错误再现时该主题继续暂停，直到修正与全主题复查完成。
 
 尚未发布的错题保持候选；若其他维护流程已发布，立即调用 `POST /api/v1/maintenance/questions/{code}/disable`，携带当前 `expected_version` 和具体 `reason`。同主题重复出现同类错误时，对该主题全部已发布题执行停用，以实际可用数为 0 确认主题评分暂停。停用后原会话保留快照，新练习不可再抽到。03 的接口不支持通过重新导入恢复停用题；重新开放需单独处理，不要删库绕过。
 
-修正正文或评分点时增加 `content_version`，保留原发现，并记录新的题包摘要；重新核对全部 12 道常规样本。每个 incident 的 `expanded_review` 必须包含该主题所有题号，每条携带 `code` 及上述人工字段且通过，`resolution` 改为 `corrected_and_rechecked` 后才允许发布。不要移除旧事件来跳过复查。命令检查这些已记录的门槛；自动校验和抽查均不能保证未抽题全部正确。
+修正正文或评分点时增加 `content_version`，保留原发现，更新绑定摘要，并重新核对 12 道常规样本。每个 incident 的 `expanded_review` 必须包含该主题所有题号及真实审核字段且全部通过，`resolution=corrected_and_rechecked` 才放行；同题的通过记录不能掩盖失败记录。不要移除旧事件跳过复查。自动校验和独立审核不能保证所有技术答案或模型打分都正确。

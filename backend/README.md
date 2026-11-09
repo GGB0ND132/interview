@@ -103,6 +103,6 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 ## 工单 05：前六主题候选题包
 
-本批 57 题已整理并自动校验，**尚待每主题两题的人工抽查，不随服务启动自动发布**。抽查题册、资料与记录流程见 [05-human-sampling.md](../docs/verification/05-human-sampling.md)，交付与验证见 [05-agent-topics-first-half.md](../docs/verification/05-agent-topics-first-half.md)。
+本批 57 题已整理并自动校验，三个独立子 Agent 审核及问题修正复查已通过，状态为 `ready-for-agent`，**不随服务启动自动发布**。用户授权 05 先由子 Agent 审核，未解决疑点才转人工；审核结论见 [05-independent-agent-review.md](../docs/verification/05-independent-agent-review.md)，执行方式见 [05-human-sampling.md](../docs/verification/05-human-sampling.md)。
 
-在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。完成 `src/interview_backend/first_half_review.json` 的人工记录后，加 `--publish` 正式发布；内容变更或错误主题未复查时命令拒绝。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 的通用维护 API 仍是底层维护入口。
+在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。本批 `first_half_review.json` 已记录明确的 `independent_agent_first` 策略及真实审核，后续加 `--publish` 可发布到指定数据库；内容变更、失败或未完成扩大复查时仍拒绝。人审与 Agent 字段分别保存，不把 Agent 记录冒充人审。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 通用维护 API 仍是底层维护入口。

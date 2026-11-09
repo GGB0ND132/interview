@@ -1,4 +1,4 @@
-"""Preview ticket 05; publish only after the recorded human sample review passes."""
+"""Preview ticket 05; publish only after its recorded review policy passes."""
 
 from __future__ import annotations
 
@@ -44,10 +44,22 @@ def review_blockers(bundle: dict[str, Any], review: dict[str, Any]) -> list[str]
     ):
         return ["必须提供前六主题各两道指定抽查题的完整记录。"]
     blockers = []
+    allow_agents = review.get("review_policy") == "independent_agent_first"
     for sample in samples:
         human = sample.get("human_review")
-        if not passed_review(human):
-            blockers.append(f"{sample['code']} 尚无完整的人工通过结论。")
+        agent = sample.get("agent_review")
+        failed = any(
+            isinstance(record, dict) and record.get("conclusion") == "failed"
+            for record in (human, agent)
+        )
+        agent_passed = (
+            allow_agents
+            and isinstance(agent, dict)
+            and agent.get("review_kind") == "independent_agent"
+            and passed_review(agent)
+        )
+        if failed or not (passed_review(human) or agent_passed):
+            blockers.append(f"{sample['code']} 尚无符合审核策略的完整通过结论。")
     # A failed expanded review blocks the whole batch. Corrections require a new digest
     # and fresh reviews, including all affected-topic questions after a detected error.
     incidents = review.get("incidents")
@@ -68,6 +80,9 @@ def review_blockers(bundle: dict[str, Any], review: dict[str, Any]) -> list[str]
         if (
             topic not in SAMPLES
             or not affected.issubset(reviewed)
+            or (
+                isinstance(expanded, list) and any(not passed_review(record) for record in expanded)
+            )
             or finding.get("resolution") != "corrected_and_rechecked"
         ):
             blockers.append(f"{topic} 发现错误后须停用错题、扩大至全主题抽查；复查前暂停本批发布。")
@@ -95,7 +110,11 @@ def main() -> int:
         "--database", type=Path, required=True, help="Target SQLite file (explicit)."
     )
     parser.add_argument("--review-file", type=Path)
-    parser.add_argument("--publish", action="store_true", help="Requires completed human review.")
+    parser.add_argument(
+        "--publish",
+        action="store_true",
+        help="Requires completed review under the recorded policy.",
+    )
     args = parser.parse_args()
     assets = files("interview_backend")
     bundle = json.loads(assets.joinpath("first_half_candidates.json").read_text("utf-8"))
@@ -114,6 +133,7 @@ def main() -> int:
             blockers.append(f"抽查题 {item['code']} 未通过发布校验；须修正后重新抽查。")
     report: dict[str, Any] = {
         "bundle_sha256": bundle_digest(bundle),
+        "review_policy": review.get("review_policy", "human_sample"),
         "preview": preview,
         "review_blockers": blockers,
         "published": False,
