@@ -1,7 +1,7 @@
 {
-  "version": "06-editorial-v1",
-  "status": "editorial_reading_list_not_independently_verified_citations",
-  "note": "答案由 Codex 基于固定原题及下列规范概念补写。链接与版本供人工核查，未声称逐句外部核验；用户端 answer_refs 保持为空。ready 答案保留 MianStack 原文，所有评分点由本项目编写。",
+  "version": "06-content-review-v2",
+  "status": "editorial_reading_list_with_separate_agent_verification_records",
+  "note": "下列为编辑依据目录，逐题关键技术资料已由三组独立 Agent 核查，实际片段与结论见 docs/verification/06-content-*-review.json；不声称所有延伸链接均已访问，用户端 answer_refs 保持为空。当前16题保留原文，5题标记 maintainer_edited，37题补答；6题内容版本v2、52题v1，所有评分点由本项目编写。Agent 核查不冒充人工审核。",
   "sources": {
     "mcp": {"version": "2025-06-18", "url": "https://modelcontextprotocol.io/specification/2025-06-18", "review_focus": "传输层 SSE、tools/call 最终结果与 progress notification 的区别；能力类型不是权限级别"},
     "skills": {"version": "Agent Skills specification; reading list 2026-11-10", "url": "https://agentskills.io/specification", "review_focus": "SKILL.md 文件名、元数据、按需资源、宿主差异；文本不保证执行"},

@@ -1946,16 +1946,16 @@
         "action": "imported"
       }
     ],
-    "publication_id": "cc0a0c54-a2b3-434b-ab0a-2ab56dc72987"
+    "publication_id": "f7f08d6c-2c57-43fa-81a4-7bdedef74df6"
   },
   "practice_draws_mechanism_only": [
     {
       "competency_id": "agent_protocols",
       "topic": "MCP、A2A 与工具协议",
       "available_count": 15,
-      "question_code": "Q-0416",
+      "question_code": "Q-0872",
       "report": {
-        "session_id": "3b55d9bc-24b4-4903-b52a-2871f63a6487",
+        "session_id": "cbec80c2-d6f4-4c84-834c-337f44e74526",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
@@ -1968,9 +1968,9 @@
       "competency_id": "agent_skills",
       "topic": "Skills 能力系统",
       "available_count": 13,
-      "question_code": "Q-0935",
+      "question_code": "Q-0378",
       "report": {
-        "session_id": "7be64095-31ed-48ef-99f1-756eb2e726a4",
+        "session_id": "425b4684-68d6-4a97-86e3-0171581e1f3c",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
@@ -1983,9 +1983,9 @@
       "competency_id": "agent_workflow_recovery",
       "topic": "工作流、状态与执行恢复",
       "available_count": 5,
-      "question_code": "Q-2266",
+      "question_code": "Q-2537",
       "report": {
-        "session_id": "c2886cd9-1d0d-4190-8263-ff6da4f2e638",
+        "session_id": "f63bb28b-7aa4-4418-9a40-950e4457524c",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
@@ -1998,9 +1998,9 @@
       "competency_id": "agent_multi_agent",
       "topic": "多 Agent 编排与协作",
       "available_count": 8,
-      "question_code": "Q-3487",
+      "question_code": "Q-0382",
       "report": {
-        "session_id": "18e62d47-9fec-4adf-9d90-897c5f6a9c88",
+        "session_id": "47b5245d-6be1-4e6a-b3f5-cd1e79421da9",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
@@ -2013,9 +2013,9 @@
       "competency_id": "agent_frameworks_harness",
       "topic": "Agent 框架与 Harness",
       "available_count": 16,
-      "question_code": "Q-7004",
+      "question_code": "Q-3687",
       "report": {
-        "session_id": "795c0055-84f2-4702-98f7-5f85b0bfade8",
+        "session_id": "1c7303e5-1da7-45e1-a20a-9a1b88e4c4da",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
@@ -2030,7 +2030,7 @@
       "available_count": 1,
       "question_code": "Q-0897",
       "report": {
-        "session_id": "31a346c7-0a19-4317-8aee-f67ab4c7cf63",
+        "session_id": "0ce67062-b344-4a23-aaa6-b99697e82f0c",
         "average_score": null,
         "answered_count": 0,
         "blank_count": 0,
