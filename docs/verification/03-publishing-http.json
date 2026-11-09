@@ -1,0 +1,425 @@
+{
+  "verified_at": "2026-11-09T13:48:21.951288+00:00",
+  "transport": "TCP HTTP to local FastAPI; actual SQLite; no model invocation",
+  "scope": "two fixed-source questions for ticket 03, not the 115-question release or human topic sampling",
+  "published": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+    "committed": true,
+    "accepted_count": 2,
+    "rejected_count": 0,
+    "imported_count": 2,
+    "unchanged_count": 0,
+    "available_count": 2,
+    "topic_counts": {
+      "Agent 基础与运行循环": 1,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 1,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "items": [
+      {
+        "index": 0,
+        "code": "Q-0058",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 1,
+        "code": "Q-0140",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      }
+    ],
+    "publication_id": "a82ff60a-cb1a-420c-859f-b27fef798bfe"
+  },
+  "replayed": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+    "committed": true,
+    "accepted_count": 2,
+    "rejected_count": 0,
+    "imported_count": 0,
+    "unchanged_count": 2,
+    "available_count": 2,
+    "topic_counts": {
+      "Agent 基础与运行循环": 1,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 1,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "items": [
+      {
+        "index": 0,
+        "code": "Q-0058",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      {
+        "index": 1,
+        "code": "Q-0140",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      }
+    ],
+    "publication_id": "798a8c36-e639-4033-8e2c-aea10bb2b93e"
+  },
+  "available_after_publish": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 2,
+    "topic_counts": {
+      "Agent 基础与运行循环": 1,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 1,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "can_start": true,
+    "missing": []
+  },
+  "rejection_records": {
+    "missing_field": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 1,
+      "rejected_count": 1,
+      "imported_count": 0,
+      "unchanged_count": 1,
+      "available_count": 2,
+      "topic_counts": {
+        "Agent 基础与运行循环": 1,
+        "Agent 应用架构与场景设计": 0,
+        "规划、推理与任务执行": 0,
+        "上下文工程": 0,
+        "记忆系统": 0,
+        "工具调用与 Function Calling": 0,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 1,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": false,
+          "reasons": [
+            {
+              "code": "INVALID_FIELD",
+              "field": "answer",
+              "message": "字段缺失或格式无效"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "code": "Q-0140",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        }
+      ],
+      "publication_id": "6e4d9cec-7143-4584-a9b3-3503d6dfbdd5"
+    },
+    "duplicate_id": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 1,
+      "rejected_count": 2,
+      "imported_count": 0,
+      "unchanged_count": 1,
+      "available_count": 2,
+      "topic_counts": {
+        "Agent 基础与运行循环": 1,
+        "Agent 应用架构与场景设计": 0,
+        "规划、推理与任务执行": 0,
+        "上下文工程": 0,
+        "记忆系统": 0,
+        "工具调用与 Function Calling": 0,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 1,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": false,
+          "reasons": [
+            {
+              "code": "DUPLICATE_ID",
+              "message": "批次内题号重复，所有同号项均拒绝"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "code": "Q-0140",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 2,
+          "code": "Q-0058",
+          "accepted": false,
+          "reasons": [
+            {
+              "code": "DUPLICATE_ID",
+              "message": "批次内题号重复，所有同号项均拒绝"
+            }
+          ]
+        }
+      ],
+      "publication_id": "2846b378-895a-435c-bacb-1eed35a5c550"
+    },
+    "invalid_locator": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 1,
+      "rejected_count": 1,
+      "imported_count": 0,
+      "unchanged_count": 1,
+      "available_count": 2,
+      "topic_counts": {
+        "Agent 基础与运行循环": 1,
+        "Agent 应用架构与场景设计": 0,
+        "规划、推理与任务执行": 0,
+        "上下文工程": 0,
+        "记忆系统": 0,
+        "工具调用与 Function Calling": 0,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 1,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": false,
+          "reasons": [
+            {
+              "code": "INVALID_SOURCE_LOCATOR",
+              "message": "必须定位到固定提交中的同号标准题"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "code": "Q-0140",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        }
+      ],
+      "publication_id": "ba5c087c-d379-4017-89a3-5f82ac6cdab2"
+    },
+    "disabled": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 1,
+      "rejected_count": 1,
+      "imported_count": 0,
+      "unchanged_count": 1,
+      "available_count": 1,
+      "topic_counts": {
+        "Agent 基础与运行循环": 0,
+        "Agent 应用架构与场景设计": 0,
+        "规划、推理与任务执行": 0,
+        "上下文工程": 0,
+        "记忆系统": 0,
+        "工具调用与 Function Calling": 0,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 1,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": false,
+          "reasons": [
+            {
+              "code": "QUESTION_DISABLED",
+              "message": "已停用题不可通过重新导入恢复"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "code": "Q-0140",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        }
+      ],
+      "publication_id": "11bc4be8-61bb-4b24-9432-5102afd430e4"
+    }
+  },
+  "revision": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+    "committed": true,
+    "accepted_count": 2,
+    "rejected_count": 0,
+    "imported_count": 1,
+    "unchanged_count": 1,
+    "available_count": 2,
+    "topic_counts": {
+      "Agent 基础与运行循环": 1,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 1,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "items": [
+      {
+        "index": 0,
+        "code": "Q-0058",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 2,
+        "action": "imported"
+      },
+      {
+        "index": 1,
+        "code": "Q-0140",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      }
+    ],
+    "publication_id": "afb7ed0a-0eee-4c4c-ba42-56d059f45498"
+  },
+  "available_after_disable": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 1,
+    "topic_counts": {
+      "Agent 基础与运行循环": 0,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 1,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "can_start": true,
+    "missing": []
+  },
+  "passed": true
+}

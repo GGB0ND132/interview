@@ -6,6 +6,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from importlib.resources import files
 from pathlib import Path
+from typing import Any
 
 
 class Store:
@@ -45,7 +46,16 @@ class Store:
                     )
                 db.execute("PRAGMA user_version=1")
                 db.commit()
-            elif version != 1:
+                version = 1
+            if version == 1:
+                db.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + files("interview_backend")
+                    .joinpath("migration_2.sql")
+                    .read_text(encoding="utf-8")
+                    + "\nCOMMIT;"
+                )
+            elif version != 2:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
 
     @contextmanager
@@ -63,3 +73,12 @@ class Store:
             raise
         finally:
             db.close()
+
+    @staticmethod
+    def published_questions(db: sqlite3.Connection, pack_id: str) -> list[dict[str, Any]]:
+        rows = db.execute(
+            "SELECT payload FROM questions WHERE pack_id=? AND status='published' "
+            "AND version=(SELECT MAX(q.version) FROM questions q WHERE q.code=questions.code)",
+            (pack_id,),
+        ).fetchall()
+        return [json.loads(row["payload"]) for row in rows]
