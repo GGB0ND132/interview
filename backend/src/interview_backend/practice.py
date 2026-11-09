@@ -10,7 +10,7 @@ from uuid import uuid4
 from .contracts import Config, CreateSession, SubmitAnswer, feedback
 from .errors import PracticeError
 from .model import PROMPT_VERSION, Evaluator, ModelError
-from .publishing import TOPICS
+from .publishing import topic_counts
 from .store import Store
 
 
@@ -28,16 +28,12 @@ class Practice:
         pack = db.execute("SELECT * FROM role_packs WHERE id=?", (pack_id,)).fetchone()
         if pack is None or pack["status"] != "published":
             raise PracticeError("PACK_NOT_PUBLISHED", "该岗位包尚未发布", 400)
-        rows = db.execute(
-            "SELECT payload FROM questions WHERE pack_id=? AND difficulty=? AND status='published' "
-            "AND version=(SELECT MAX(q.version) FROM questions q WHERE q.code=questions.code)",
-            (pack_id, config.difficulty),
-        ).fetchall()
-        pool = [json.loads(row["payload"]) for row in rows]
+        pool = self.store.published_questions(db, pack_id)
         return [
             q
             for q in pool
-            if q["stage"] == "technical"
+            if q["difficulty"] == config.difficulty
+            and q["stage"] == "technical"
             and q["answer"].strip()
             and q["rubric"]
             and (
@@ -56,7 +52,7 @@ class Practice:
             "pack_id": pack_id,
             "mode": config.mode,
             "available_count": len(pool),
-            "topic_counts": {topic: sum(q["topic"] == topic for q in pool) for topic in TOPICS},
+            "topic_counts": topic_counts(pool),
             "can_start": bool(pool),
             "missing": [] if pool else ["published_question"],
         }

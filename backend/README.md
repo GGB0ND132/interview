@@ -63,7 +63,7 @@ uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-liv
 
 ## MianStack 发布（03）
 
-固定来源为 `didilili/mianstack@b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的 `questions/Q-*.md`，仅接受 `category=agent, level=基础`。12 个原始主题及能力 ID 映射见 `publishing.py` 的 `TOPICS`。不读取第三方题集或面经。自有题解 MIT 署名及完整许可见 `third_party/mianstack-LICENSE.txt`。原始正文中的资料链接未由本项目独立核对，`answer_refs` 留空，不作为独立技术引用展示。
+固定来源为 `didilili/mianstack@b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的 `questions/Q-*.md`，仅接受 `category=agent, level=基础`。12 个原始主题及能力 ID 映射见 `publishing.py` 的 `TOPICS`。不读取第三方题集或面经。自有题解 MIT 署名及完整许可见 `third_party/mianstack-LICENSE.txt`。原始正文中的资料链接未由本项目独立核对，不作为独立技术引用展示。03 发布入口只允许空 `answer_refs`，非空逐题拒绝；独立引用的保存与核验留给 13。01 已核对样题的独立引用保持原有行为。
 
 维护接口均有 `/api/v1` 前缀：
 

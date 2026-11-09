@@ -425,3 +425,20 @@ def test_schema_one_database_migrates_without_changing_saved_sessions(tmp_path):
             ]
             == 2
         )
+
+
+def test_unverified_independent_references_cannot_enter_published_feedback(tmp_path):
+    request = batch()
+    request["questions"][0]["answer_refs"] = [
+        {"title": "fabricated unchecked reference", "url": "https://example.invalid/not-real"}
+    ]
+    with TestClient(create_app(database_path=tmp_path / "references.sqlite3")) as client:
+        report = data(client.post("/api/v1/maintenance/question-publications", json=request))
+        assert report["accepted_count"] == 1
+        assert report["items"][0]["reasons"][0]["field"] == "answer_refs"
+        assert (
+            data(client.post(f"/api/v1/role-packs/{PACK}/availability", json=CONFIG))[
+                "available_count"
+            ]
+            == 1
+        )

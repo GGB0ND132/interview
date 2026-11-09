@@ -4,13 +4,14 @@ import hashlib
 import json
 import re
 from collections import Counter
+from collections.abc import Iterable
 from datetime import datetime
 from importlib.resources import files
 from typing import Any, Literal
 from uuid import uuid4
 
 import httpx
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from .contracts import RequestModel
 from .errors import PracticeError
@@ -18,7 +19,6 @@ from .store import Store
 
 COMMIT = "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77"
 PACK_ID = "pack_agent_basics_mianstack"
-PACK_TITLE = "Agent 原理与系统基础档（MianStack）"
 REPOSITORY = "https://github.com/didilili/mianstack"
 TOPICS = {
     "Agent 基础与运行循环": "agent_loop",
@@ -36,6 +36,11 @@ TOPICS = {
 }
 
 
+def topic_counts(questions: Iterable[dict[str, Any]]) -> dict[str, int]:
+    counts = Counter(question["topic"] for question in questions)
+    return {topic: counts[topic] for topic in TOPICS}
+
+
 class SourceLocator(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     original_id: str
@@ -45,6 +50,27 @@ class SourceLocator(BaseModel):
     license: Literal["MIT"]
     attribution: Literal["Copyright (c) 2026 didilili"]
     answer_status: Literal["pending", "outline", "draft", "ready", "reviewed"]
+
+
+class GenerationMetadata(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    author: str
+    generated_at: str
+    model: str
+    revision: str
+
+    @field_validator("author", "generated_at", "model", "revision")
+    @classmethod
+    def nonblank(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError("Generation metadata cannot be blank")
+        return value
+
+    @field_validator("generated_at")
+    @classmethod
+    def iso_timestamp(cls, value: str) -> str:
+        datetime.fromisoformat(value)
+        return value
 
 
 class QuestionCandidate(BaseModel):
@@ -59,8 +85,9 @@ class QuestionCandidate(BaseModel):
     answer: str = Field(min_length=40, max_length=50000)
     rubric: list[str] = Field(min_length=1, max_length=30)
     answer_origin: Literal["source_original", "agent_generated", "maintainer_edited"]
-    generation: dict[str, Any] | None = None
-    answer_refs: list[dict[str, Any]] = Field(default_factory=list)
+    generation: GenerationMetadata | None = None
+    # Independently checked citations need the ticket-13 verification workflow.
+    answer_refs: list[dict[str, Any]] = Field(default_factory=list, max_length=0)
     source: SourceLocator
     interview_suitable: bool
     status: Literal["candidate", "published", "disabled"] = "candidate"
@@ -169,21 +196,10 @@ class Publishing:
                 )
             ):
                 raise PracticeError("INVALID_CONTENT", f"{field} 为空、不完整或含占位内容", 400)
-        if candidate.answer_origin == "agent_generated":
-            generation = candidate.generation or {}
-            if not all(
-                isinstance(generation.get(key), str) and generation[key].strip()
-                for key in ("author", "generated_at", "model", "revision")
-            ):
-                raise PracticeError(
-                    "GENERATION_REQUIRED", "Agent 补写须记录作者、生成时间、模型与版本", 400
-                )
-            try:
-                datetime.fromisoformat(generation["generated_at"])
-            except ValueError as exc:
-                raise PracticeError(
-                    "GENERATION_REQUIRED", "生成时间须为 ISO 日期时间", 400
-                ) from exc
+        if candidate.answer_origin == "agent_generated" and candidate.generation is None:
+            raise PracticeError(
+                "GENERATION_REQUIRED", "Agent 补写须记录作者、生成时间、模型与版本", 400
+            )
         source = self._validate_source(candidate)
         if TOPICS.get(candidate.topic) != candidate.competency_id:
             raise PracticeError(
@@ -227,12 +243,8 @@ class Publishing:
             if not publish:
                 db.execute("BEGIN")
             pool = {
-                row["code"]: json.loads(row["payload"])
-                for row in db.execute(
-                    "SELECT code,payload FROM questions WHERE pack_id=? AND status='published' "
-                    "AND version=(SELECT MAX(q.version) FROM questions q WHERE q.code=questions.code)",
-                    (PACK_ID,),
-                )
+                question["code"]: question
+                for question in self.store.published_questions(db, PACK_ID)
             }
             for index, (candidate, source, reasons) in enumerate(validated):
                 result: dict[str, Any] = {
@@ -317,9 +329,7 @@ class Publishing:
                 "imported_count": sum(item.get("action") == "imported" for item in results),
                 "unchanged_count": sum(item.get("action") == "unchanged" for item in results),
                 "available_count": len(pool),
-                "topic_counts": {
-                    topic: sum(q["topic"] == topic for q in pool.values()) for topic in TOPICS
-                },
+                "topic_counts": topic_counts(pool.values()),
                 "items": results,
             }
             if publish:
