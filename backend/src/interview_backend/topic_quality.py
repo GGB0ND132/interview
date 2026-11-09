@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from collections import Counter
 from datetime import UTC, datetime
 from typing import Any
 
@@ -20,6 +19,7 @@ from .publishing import (
     QuestionCandidate,
     SourceLocator,
 )
+from .store import active_incidents
 from .topic_pack import candidate_digest, review_problem, source_catalog
 
 
@@ -39,7 +39,7 @@ class QualityIncident(RequestModel):
 
 class QualityCorrection(RequestModel):
     expected_version: int = Field(ge=1, strict=True)
-    candidate: dict[str, Any]
+    candidate: QuestionCandidate
     review: dict[str, Any]
 
 
@@ -130,9 +130,7 @@ class TopicQuality:
             if row["version"] != request.expected_version:
                 raise PracticeError("STATE_CONFLICT", "题目版本已变化")
             state["incidents"].append(request.model_dump(exclude={"schema_version"}))
-            active = state["incidents"][state.get("resolved_incident_count", 0) :]
-            repeated = Counter(item["error_kind"] for item in active)
-            state["paused"] = state["paused"] or max(repeated.values()) >= 2
+            state["paused"] = state["paused"] or len(active_incidents(state)) >= 2
             count = sum(source["topic"] == topic for source in source_catalog())
             state["required_sample_count"] = min(4, count)
             question = json.loads(row["payload"])
@@ -147,9 +145,18 @@ class TopicQuality:
 
     def correct(self, competency: str, request: QualityCorrection) -> dict[str, Any]:
         topic = self._topic(competency)
-        candidate = request.candidate
+        candidate = request.candidate.model_dump(exclude_none=True)
         if candidate.get("topic") != topic or request.review.get("code") != candidate.get("code"):
             raise PracticeError("INVALID_REVIEW", "更正题目与主题或核查题号不匹配", 400)
+        with self.store.connect() as db:
+            if not any(
+                incident["code"] == candidate["code"]
+                and incident["expected_version"] == request.expected_version
+                for incident in active_incidents(self._state(db, topic))
+            ):
+                raise PracticeError(
+                    "QUALITY_INCIDENT_REQUIRED", "须先登记该停用版本的错误并进入扩大抽查流程"
+                )
         problem = review_problem(request.review, candidate)
         if problem:
             raise PracticeError(problem, "更正须由人工核查并绑定新的完整内容", 400)
@@ -164,7 +171,7 @@ class TopicQuality:
         topic = self._topic(competency)
         with self.store.connect(write=True) as db:
             state = self._state(db, topic)
-            active = state["incidents"][state.get("resolved_incident_count", 0) :]
+            active = active_incidents(state)
             if not active:
                 raise PracticeError("STATE_CONFLICT", "此主题没有待复查错误")
             current = {

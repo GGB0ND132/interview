@@ -68,8 +68,8 @@ uv run python -X utf8 scripts/release_agent_topics.py --reviews ../docs/content-
 | --- | --- | --- |
 | 查质量状态 | GET，无后缀 | 错误记录、暂停状态、需抽查数、恢复历史、当前完整候选内容及哈希 |
 | 发现已知错题 | POST `/incidents` | `{code, expected_version, error_kind, reason}`；原子停用该版本、隔离题号，扩大到同主题 4 道不同题；不足 4 道则检查全部 |
-| 重复同类错误 | 同上 | 同一未解决周期内第二条同类错误触发主题暂停；同一版本重复报同一错误不累计 |
-| 修正题目 | POST `/corrections` | `{expected_version, candidate, review}`；新 `content_version`、逐题自动校验和真实人工批准缺一不可，批准结构与前文相同；更正记录保存在 publication |
+| 重复主题错误 | 同上 | 同一未解决周期内第二条错误记录触发主题暂停，错误类别可以不同；同一版本重复报同一错误不累计 |
+| 修正题目 | POST `/corrections` | `{expected_version, candidate, review}`；须先为该停用版本登记 active incident，新 `content_version`、逐题自动校验和真实人工批准缺一不可，批准结构与前文相同；更正记录保存在 publication |
 | 复查后恢复 | POST `/resume` | `{samples:[...]}`；达到扩大抽查数且包含全部更正错题，按当前内容哈希复核后才能解除暂停与隔离；记录完整材料、发现、结论和时间 |
 
 单道错题更正后仍隔离，直到扩大抽查完成。暂停主题和隔离题同时从 availability 与真实抽题候选池剔除；评价开始前及模型返回后都会检查状态，避免执行中的任务落下已失效评分。回答保留并返回明确错误，历史题目快照不改写；已停用旧版本不会因发布新版本而重新评分。空白 0 分和明确跳过的既有规则保留。

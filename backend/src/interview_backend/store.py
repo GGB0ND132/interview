@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Any
 
 
+def active_incidents(state: dict[str, Any]) -> list[dict[str, Any]]:
+    return list(state["incidents"][state.get("resolved_incident_count", 0) :])
+
+
 class Store:
     """One connection per transaction; no database lock spans a model call."""
 
@@ -102,11 +106,7 @@ class Store:
             if (state := json.loads(row["payload"]))["pack_id"] == pack_id
         ]
         held = {state["topic"] for state in states if state["paused"]}
-        quarantined = {
-            incident["code"]
-            for state in states
-            for incident in state["incidents"][state.get("resolved_incident_count", 0) :]
-        }
+        quarantined = {incident["code"] for state in states for incident in active_incidents(state)}
         return [q for q in questions if q["topic"] not in held and q["code"] not in quarantined]
 
     @staticmethod
@@ -130,8 +130,7 @@ class Store:
         if hold is not None and version is not None:
             state = json.loads(hold["payload"])
             if state["pack_id"] == version["pack_id"] and question["code"] in {
-                incident["code"]
-                for incident in state["incidents"][state.get("resolved_incident_count", 0) :]
+                incident["code"] for incident in active_incidents(state)
             }:
                 return "QUESTION_QUARANTINED"
         return None

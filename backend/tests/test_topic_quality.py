@@ -12,14 +12,14 @@ from interview_backend.topic_pack import candidate_digest
 BASE = "/api/v1/maintenance/topic-quality/agent_protocols"
 
 
-def incident(client, code):
+def incident(client, code, error_kind="test-transport-confusion"):
     return data(
         client.post(
             f"{BASE}/incidents",
             json={
                 "code": code,
                 "expected_version": 1,
-                "error_kind": "test-transport-confusion",
+                "error_kind": error_kind,
                 "reason": "Synthetic quality incident for API test",
             },
         )
@@ -43,10 +43,10 @@ def test_repeat_errors_pause_topic_until_corrections_and_expanded_review(tmp_pat
         first = incident(client, "Q-0322")
         assert first["paused"] is False
         assert first["required_sample_count"] == 4
-        second = incident(client, "Q-0416")
+        second = incident(client, "Q-0416", "test-different-technical-error")
         assert second["paused"] is True
         # Duplicate reports about the same version do not fabricate more errors.
-        assert len(incident(client, "Q-0416")["incidents"]) == 2
+        assert len(incident(client, "Q-0416", "test-different-technical-error")["incidents"]) == 2
         filtered = {**CONFIG, "focus_competency_ids": ["agent_protocols"]}
         assert (
             data(client.post(f"/api/v1/role-packs/{PACK}/availability", json=filtered))[
@@ -168,3 +168,25 @@ def test_correction_stays_quarantined_until_expanded_review(tmp_path: Path):
         assert (
             client.post(f"{BASE}/resume", json={"samples": [sample(correction)]}).status_code == 409
         )
+
+
+def test_generic_disable_cannot_bypass_quality_recovery(tmp_path: Path):
+    original = next(q for q in second_half()["questions"] if q["code"] == "Q-0322")
+    with TestClient(create_app(database_path=tmp_path / "generic-disable.sqlite3")) as client:
+        data(client.post("/api/v1/maintenance/question-publications", json=second_half()))
+        data(
+            client.post(
+                "/api/v1/maintenance/questions/Q-0322/disable",
+                json={"expected_version": 1, "reason": "Synthetic wrong-answer disable"},
+            )
+        )
+        correction = deepcopy(original)
+        correction.update(
+            content_version="generic-disable-v2", answer=original["answer"] + "校验新版本。"
+        )
+        response = client.post(
+            f"{BASE}/corrections",
+            json={"expected_version": 1, "candidate": correction, "review": sample(correction)},
+        )
+        assert response.status_code == 409
+        assert response.json()["error"]["code"] == "QUALITY_INCIDENT_REQUIRED"
