@@ -1,6 +1,6 @@
 {
   "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
-  "bundle_sha256": "bc3c6e8fa781179fd49f83fc5f24045701e392cd2219c17b4bcc07dc5fb1b4c1",
+  "bundle_sha256": "5674630fae0cc9b25fb750f6e8cacaa762e716c50ee6c7fc49857c6acea1ed13",
   "instructions": "See docs/verification/05-human-sampling.md. Agent checks are not human approval. After errors, review every question in that topic and record incidents; do not erase failed findings.",
   "samples": [
     {

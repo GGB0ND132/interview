@@ -4,7 +4,7 @@
   "release_published": false,
   "database": "disposable temporary SQLite, removed after verification",
   "human_gate_refusal": {
-    "bundle_sha256": "bc3c6e8fa781179fd49f83fc5f24045701e392cd2219c17b4bcc07dc5fb1b4c1",
+    "bundle_sha256": "5674630fae0cc9b25fb750f6e8cacaa762e716c50ee6c7fc49857c6acea1ed13",
     "preview": {
       "pack_id": "pack_agent_basics_mianstack",
       "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
@@ -2433,7 +2433,7 @@
         "action": "imported"
       }
     ],
-    "publication_id": "bac210c1-7042-44c1-bf72-ca4e6dcad058"
+    "publication_id": "2654a6e4-ea01-48df-919f-d81f2e31d46d"
   },
   "availability": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -2532,40 +2532,40 @@
   },
   "draws": [
     {
-      "id": "e6a24d04-2890-4637-989c-4c8145aa3aea",
-      "question_code": "Q-2330",
+      "id": "391b9e00-99ee-4e9a-9341-ace294868006",
+      "question_code": "Q-0597",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "Agent 基础与运行循环",
       "competency_id": "agent_loop",
-      "text": "Tool 与 Skill 有什么区别？"
+      "text": "Agent 与 LLM 有什么区别？"
     },
     {
-      "id": "5740cd35-e8c8-4cbf-bb6e-877c8e7aca8e",
-      "question_code": "Q-3383",
+      "id": "8c43da59-20c2-498f-b35c-ec072aaec9c5",
+      "question_code": "Q-2797",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "Agent 应用架构与场景设计",
       "competency_id": "agent_application_architecture",
-      "text": "传统搜索引擎与 AI 搜索有什么区别？"
+      "text": "RPA、LLM、Agent 与 Workflow 有什么关系？"
     },
     {
-      "id": "6cea8c0d-f313-4b0f-9ff8-9b1537e30eb3",
-      "question_code": "Q-2506",
+      "id": "5422160c-6bb5-4b28-90d7-7e1b8acef19a",
+      "question_code": "Q-0883",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "规划、推理与任务执行",
       "competency_id": "agent_planning",
-      "text": "ReAct 与普通单次 LLM 调用有什么区别？"
+      "text": "Function Calling 与完整 Agent 有什么区别？"
     },
     {
-      "id": "291d6a07-2492-400a-a762-c0c9f8c6ac9b",
+      "id": "4bd6ba4c-f8bf-47e8-af57-4ebf0e56f78e",
       "question_code": "Q-7196",
       "question_version": 1,
       "kind": "main",
@@ -2576,26 +2576,26 @@
       "text": "输入超过模型上下文窗口时，有哪些处理方式？"
     },
     {
-      "id": "ea2b59bc-e947-4d38-96db-e18fa5743b6c",
-      "question_code": "Q-2007",
+      "id": "2e6c3c94-2910-4b7d-940a-658e233cd3b1",
+      "question_code": "Q-3168",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "记忆系统",
       "competency_id": "agent_memory",
-      "text": "Agent Memory 是什么？"
+      "text": "Agent.md 与 memory.md 的职责有什么区别？"
     },
     {
-      "id": "a3b3fbe0-81c4-4e55-84b3-063e01ba419a",
-      "question_code": "Q-2659",
+      "id": "a022d718-88f8-47ae-b7dc-20356407cdfd",
+      "question_code": "Q-1909",
       "question_version": 1,
       "kind": "main",
       "question_type": "technical",
       "stage": "technical",
       "topic": "工具调用与 Function Calling",
       "competency_id": "agent_tool_calling",
-      "text": "如何理解 Agent 中的 Tool？"
+      "text": "Agent 的工具可以如何分类？"
     }
   ],
   "idempotent_replay": {
@@ -3364,7 +3364,7 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "41dda8d8-ac66-4a54-b0e3-420facd09f67"
+    "publication_id": "009b0b78-e052-455a-87e5-c94e45c8d263"
   },
   "after_test_disable": {
     "pack_id": "pack_agent_basics_mianstack",
@@ -3566,15 +3566,13 @@
       {
         "index": 6,
         "code": "Q-0597",
-        "accepted": true,
+        "accepted": false,
         "reasons": [
           {
-            "code": "VALIDATED",
-            "message": "内容结构、分类与固定来源校验通过"
+            "code": "QUESTION_DISABLED",
+            "message": "已停用题不可通过重新导入恢复"
           }
-        ],
-        "version": 1,
-        "action": "unchanged"
+        ]
       },
       {
         "index": 7,
@@ -3774,13 +3772,15 @@
       {
         "index": 22,
         "code": "Q-2330",
-        "accepted": false,
+        "accepted": true,
         "reasons": [
           {
-            "code": "QUESTION_DISABLED",
-            "message": "已停用题不可通过重新导入恢复"
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
           }
-        ]
+        ],
+        "version": 1,
+        "action": "unchanged"
       },
       {
         "index": 23,
@@ -4225,6 +4225,6 @@
         "action": "unchanged"
       }
     ],
-    "publication_id": "cf540f37-027a-4b01-9da1-d1f6c39b5ebc"
+    "publication_id": "1194e1fc-52fc-4f8c-91a8-2d6f7d5c1fdf"
   }
 }

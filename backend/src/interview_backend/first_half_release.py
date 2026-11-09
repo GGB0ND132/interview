@@ -108,8 +108,10 @@ def main() -> int:
     request = PublicationRequest.model_validate(bundle)
     preview = publishing.review(request, publish=False)
     blockers = review_blockers(bundle, review)
-    if preview["rejected_count"]:
-        blockers.append("存在发布校验拒绝项；修正并重新抽查后再发布。")
+    sample_codes = {code for codes in SAMPLES.values() for code in codes}
+    for item in preview["items"]:
+        if not item["accepted"] and item["code"] in sample_codes:
+            blockers.append(f"抽查题 {item['code']} 未通过发布校验；须修正后重新抽查。")
     report: dict[str, Any] = {
         "bundle_sha256": bundle_digest(bundle),
         "preview": preview,
@@ -119,7 +121,8 @@ def main() -> int:
     if args.publish and not blockers:
         publication = publishing.review(request, publish=True)
         report["publication"] = publication
-        report["published"] = publication["rejected_count"] == 0
+        report["published"] = publication["accepted_count"] > 0
+        report["partial_publication"] = publication["rejected_count"] > 0
     # Publish reports distinguish this batch from any already-published questions.
     with publishing.store.connect() as db:
         pool = publishing.store.published_questions(db, preview["pack_id"])

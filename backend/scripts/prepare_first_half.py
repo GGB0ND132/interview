@@ -42,8 +42,11 @@ def main():
         files("interview_backend").joinpath("mianstack_snapshot.json").read_text("utf-8")
     )
     editorial = json.loads((ASSETS / "first_half_editorial.json").read_text("utf-8"))
+    scoring_notes = json.loads((ASSETS / "first_half_scoring_notes.json").read_text("utf-8"))
     if set(editorial) != set(selected):
         raise ValueError(f"Editorial inventory mismatch: {set(editorial) ^ set(selected)}")
+    if set(scoring_notes) != set(selected):
+        raise ValueError("Scoring notes must cover exactly the selected questions")
     questions = []
     for code, (metadata, raw) in sorted(selected.items()):
         snapshot["files"][code] = raw
@@ -58,7 +61,13 @@ def main():
             "difficulty": "easy",
             "stage": "technical",
             "answer": raw.split("---", 2)[2].strip() if original else entry["answer"],
-            "rubric": entry["rubric"],
+            "rubric": [
+                "考察点：" + metadata["focus"],
+                *["必须点：" + point for point in entry["rubric"]],
+                "可选点（不是必答，不因缺少而扣分）：" + scoring_notes[code][0],
+                "常见误区：" + scoring_notes[code][1],
+                "可接受变体：机制等价的表述、不同框架或明确标注的假设例子均可；不要求复述本答案。经历题不因未实践或没有量化指标而直接判错。",
+            ],
             "answer_origin": "source_original" if original else "agent_generated",
             "answer_refs": [],
             "source": {
@@ -82,8 +91,8 @@ def main():
         if not original or "answer_replacements" in entry:
             question["generation"] = {
                 "author": "Codex (ticket 05)",
-                "model": "GPT-6",
-                "generated_at": "2026-11-10T00:00:00+08:00",
+                "model": "Codex (exact runtime model ID unavailable)",
+                "generated_at": "2026-11-10",
                 "revision": "05.1",
             }
         questions.append(question)
@@ -113,7 +122,13 @@ def main():
             json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
     review_path = ASSETS / "first_half_review.json"
-    if not review_path.exists():
+    existing_review = json.loads(review_path.read_text("utf-8")) if review_path.exists() else None
+    untouched_template = (
+        existing_review is not None
+        and existing_review.get("incidents") == []
+        and all(sample.get("human_review") is None for sample in existing_review.get("samples", []))
+    )
+    if existing_review is None or untouched_template:
         template = {
             "source_commit": COMMIT,
             "bundle_sha256": bundle_digest(bundle),

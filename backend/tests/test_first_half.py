@@ -103,7 +103,17 @@ def test_release_command_refuses_pending_human_review_without_publishing(tmp_pat
 
 
 @pytest.mark.parametrize(
-    "state", ["approved", "stale", "failed", "missing_sample", "repeated_error", "rechecked"]
+    "state",
+    [
+        "approved",
+        "stale",
+        "failed",
+        "missing_sample",
+        "repeated_error",
+        "rechecked",
+        "partial",
+        "rejected_sample",
+    ],
 )
 def test_release_command_respects_review_version_and_expanded_checks(tmp_path, state):
     # Synthetic approval records exercise the gate; they are never shipped as human findings.
@@ -147,6 +157,16 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
     review_path = tmp_path / "review.json"
     review_path.write_text(json.dumps(review, ensure_ascii=False), encoding="utf-8")
     database = tmp_path / "review.sqlite3"
+    if state in {"partial", "rejected_sample"}:
+        with TestClient(create_app(database_path=database)) as client:
+            data(client.post("/api/v1/maintenance/question-publications", json=candidates()))
+            code = "Q-0058" if state == "partial" else "Q-0419"
+            data(
+                client.post(
+                    f"/api/v1/maintenance/questions/{code}/disable",
+                    json={"expected_version": 1, "reason": "test rejection"},
+                )
+            )
     result = subprocess.run(
         [
             sys.executable,
@@ -165,13 +185,14 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
         encoding="utf-8",
         check=False,
     )
-    approved = state in {"approved", "rechecked"}
+    approved = state in {"approved", "rechecked", "partial"}
     assert result.returncode == (0 if approved else 2), result.stderr + result.stdout
     report = json.loads(result.stdout)
     assert report["published"] is approved
     with TestClient(create_app(database_path=database)) as client:
         availability = data(client.post(f"/api/v1/role-packs/{PACK}/availability", json=CONFIG))
-        assert availability["available_count"] == (57 if approved else 0)
+        expected_count = 56 if state in {"partial", "rejected_sample"} else 57 if approved else 0
+        assert availability["available_count"] == expected_count
         if approved:
             publication = report["publication"]
             saved = data(
@@ -180,3 +201,7 @@ def test_release_command_respects_review_version_and_expanded_checks(tmp_path, s
                 )
             )
             assert saved == publication
+            if state == "partial":
+                assert report["partial_publication"] is True
+                assert publication["accepted_count"] == 56
+                assert publication["rejected_count"] == 1
