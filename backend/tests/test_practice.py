@@ -439,3 +439,15 @@ def test_invalid_submission_does_not_save_an_answer(tmp_path: Path, disposition:
         session = start(client)
         assert submit(client, session, "bad-input", disposition, text).status_code == 422
         assert data(client.get(f"/api/v1/sessions/{session['session_id']}"))["submissions"] == []
+
+
+def test_session_view_exposes_created_at_and_difficulty_for_history(tmp_path: Path):
+    with TestClient(create_app(database_path=tmp_path / "history.sqlite3")) as client:
+        session = start(client)
+        assert session["created_at"].endswith("Z")
+        assert session["difficulty"] == "easy"
+        assert session["pack_title"]
+        listed = data(client.get("/api/v1/sessions?page=1&page_size=20"))
+        assert listed["total"] == 1
+        assert listed["items"][0]["session_id"] == session["session_id"]
+        assert listed["items"][0]["created_at"] == session["created_at"]

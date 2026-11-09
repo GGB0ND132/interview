@@ -114,10 +114,14 @@ class Practice:
             "feedback_ready": [],
             "evaluation_failed": ["retry"],
         }
+        pack = db.execute("SELECT title FROM role_packs WHERE id=?", (row["pack_id"],)).fetchone()
         return {
             "session_id": row["id"],
             "pack_id": row["pack_id"],
             "pack_version": row["pack_version"],
+            "pack_title": pack["title"] if pack else None,
+            "created_at": row["created_at"],
+            "difficulty": json.loads(row["config_json"])["difficulty"],
             "revision": row["revision"],
             "status": row["status"],
             "phase": row["phase"],
