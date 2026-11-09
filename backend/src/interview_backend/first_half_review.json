@@ -1,0 +1,68 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "bundle_sha256": "bc3c6e8fa781179fd49f83fc5f24045701e392cd2219c17b4bcc07dc5fb1b4c1",
+  "instructions": "See docs/verification/05-human-sampling.md. Agent checks are not human approval. After errors, review every question in that topic and record incidents; do not erase failed findings.",
+  "samples": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "code": "Q-0419",
+      "human_review": null
+    },
+    {
+      "topic": "Agent 基础与运行循环",
+      "code": "Q-1674",
+      "human_review": null
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "code": "Q-0898",
+      "human_review": null
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "code": "Q-2078",
+      "human_review": null
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "code": "Q-0883",
+      "human_review": null
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "code": "Q-2506",
+      "human_review": null
+    },
+    {
+      "topic": "上下文工程",
+      "code": "Q-7020",
+      "human_review": null
+    },
+    {
+      "topic": "上下文工程",
+      "code": "Q-7196",
+      "human_review": null
+    },
+    {
+      "topic": "记忆系统",
+      "code": "Q-0062",
+      "human_review": null
+    },
+    {
+      "topic": "记忆系统",
+      "code": "Q-4837",
+      "human_review": null
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "code": "Q-1675",
+      "human_review": null
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "code": "Q-4836",
+      "human_review": null
+    }
+  ],
+  "incidents": []
+}

@@ -100,3 +100,9 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/api/v1/maintenance/question-publica
 ```powershell
 uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0.1:8000
 ```
+# 工单 05：前六主题候选题包
+
+本批 57 题已整理并自动校验，**尚待每主题两题的人工抽查，不随服务启动自动发布**。抽查题册、资料与记录流程见 [05-human-sampling.md](../docs/verification/05-human-sampling.md)，交付与验证见 [05-agent-topics-first-half.md](../docs/verification/05-agent-topics-first-half.md)。
+
+在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。完成 `src/interview_backend/first_half_review.json` 的人工记录后，加 `--publish` 正式发布；内容变更或错误主题未复查时命令拒绝。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 的通用维护 API 仍是底层维护入口。
+
