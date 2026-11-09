@@ -1,0 +1,537 @@
+{
+  "schema_version": "1.0",
+  "recorded_date": "2026-11-09",
+  "source": "百炼 MCP BailianKnowledgeSearch（已发布知识检索服务）",
+  "workspace_id": "llm-zvk7yf8x9nw94gwj",
+  "pipeline_id": "dww893y6mg",
+  "agent_id": "aid-aa9147722c184458aae72ea8b942453a",
+  "settings": {
+    "query_rewrite": true,
+    "dense_top_k": 50,
+    "sparse_top_k": 50,
+    "rerank_model": "qwen3-rerank",
+    "rerank_mode": "qa",
+    "min_score": 0.2,
+    "final_top_n": 5
+  },
+  "cases": [
+    {
+      "id": "R01",
+      "expected_doc": "KB-BE-01",
+      "expected_doc_rank": null,
+      "answer_supported": false,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.349882
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.255461
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.228282
+        },
+        {
+          "rank": 4,
+          "document": "KB-BE-03_FastAPI请求验证与依赖",
+          "document_id": "file_2b5559446b2642cc82cdd5983e7e137b_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2b5559446b2642cc82cdd5983e7e137b_10446452_0_0",
+          "score": 0.220061
+        },
+        {
+          "rank": 5,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.217711
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "expected_doc": "KB-BE-02",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-BE-02_HTTP方法与幂等",
+          "document_id": "file_440e37c539f44801b0e3d398c6e68ad7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_440e37c539f44801b0e3d398c6e68ad7_10446452_0_0",
+          "score": 0.660809
+        },
+        {
+          "rank": 2,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.245571
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.244576
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.239244
+        },
+        {
+          "rank": 5,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.227886
+        }
+      ]
+    },
+    {
+      "id": "R05",
+      "expected_doc": "KB-BE-03",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-BE-03_FastAPI请求验证与依赖",
+          "document_id": "file_2b5559446b2642cc82cdd5983e7e137b_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2b5559446b2642cc82cdd5983e7e137b_10446452_0_0",
+          "score": 0.93667
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.213985
+        }
+      ]
+    },
+    {
+      "id": "R07",
+      "expected_doc": "KB-BE-04",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.705514
+        }
+      ]
+    },
+    {
+      "id": "R09",
+      "expected_doc": "KB-BE-05",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-BE-05_Redis过期与缓存旁路",
+          "document_id": "file_2f5b993455fc4da597359cf85ba42e94_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2f5b993455fc4da597359cf85ba42e94_10446452_0_0",
+          "score": 0.864713
+        },
+        {
+          "rank": 2,
+          "document": "KB-BE-03_FastAPI请求验证与依赖",
+          "document_id": "file_2b5559446b2642cc82cdd5983e7e137b_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2b5559446b2642cc82cdd5983e7e137b_10446452_0_0",
+          "score": 0.215863
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.213253
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.209579
+        },
+        {
+          "rank": 5,
+          "document": "KB-BE-02_HTTP方法与幂等",
+          "document_id": "file_440e37c539f44801b0e3d398c6e68ad7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_440e37c539f44801b0e3d398c6e68ad7_10446452_0_0",
+          "score": 0.208616
+        }
+      ]
+    },
+    {
+      "id": "R10",
+      "expected_doc": "KB-BE-05",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-BE-05_Redis过期与缓存旁路",
+          "document_id": "file_2f5b993455fc4da597359cf85ba42e94_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2f5b993455fc4da597359cf85ba42e94_10446452_0_0",
+          "score": 0.80046
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.242734
+        },
+        {
+          "rank": 3,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.23629
+        },
+        {
+          "rank": 4,
+          "document": "KB-BE-02_HTTP方法与幂等",
+          "document_id": "file_440e37c539f44801b0e3d398c6e68ad7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_440e37c539f44801b0e3d398c6e68ad7_10446452_0_0",
+          "score": 0.202042
+        },
+        {
+          "rank": 5,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.200129
+        }
+      ]
+    },
+    {
+      "id": "R11",
+      "expected_doc": "KB-FE-01",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.813341
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.281181
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.269135
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.240196
+        },
+        {
+          "rank": 5,
+          "document": "KB-FE-02_TypeScript联合类型与收窄",
+          "document_id": "file_7fbdd0e778e243939a0e072548c15a73_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_7fbdd0e778e243939a0e072548c15a73_10446452_0_0",
+          "score": 0.202413
+        }
+      ]
+    },
+    {
+      "id": "R12",
+      "expected_doc": "KB-FE-02",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-02_TypeScript联合类型与收窄",
+          "document_id": "file_7fbdd0e778e243939a0e072548c15a73_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_7fbdd0e778e243939a0e072548c15a73_10446452_0_0",
+          "score": 0.933107
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.209178
+        }
+      ]
+    },
+    {
+      "id": "R13",
+      "expected_doc": "KB-FE-03",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.930263
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.305237
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-02_TypeScript联合类型与收窄",
+          "document_id": "file_7fbdd0e778e243939a0e072548c15a73_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_7fbdd0e778e243939a0e072548c15a73_10446452_0_0",
+          "score": 0.281912
+        },
+        {
+          "rank": 4,
+          "document": "KB-BE-02_HTTP方法与幂等",
+          "document_id": "file_440e37c539f44801b0e3d398c6e68ad7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_440e37c539f44801b0e3d398c6e68ad7_10446452_0_0",
+          "score": 0.268668
+        },
+        {
+          "rank": 5,
+          "document": "KB-BE-05_Redis过期与缓存旁路",
+          "document_id": "file_2f5b993455fc4da597359cf85ba42e94_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2f5b993455fc4da597359cf85ba42e94_10446452_0_0",
+          "score": 0.263318
+        }
+      ]
+    },
+    {
+      "id": "R14",
+      "expected_doc": "KB-FE-04",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.853395
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.333993
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.2671
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.231309
+        }
+      ]
+    },
+    {
+      "id": "R15",
+      "expected_doc": "KB-FE-05",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.701147
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.241132
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-02_TypeScript联合类型与收窄",
+          "document_id": "file_7fbdd0e778e243939a0e072548c15a73_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_7fbdd0e778e243939a0e072548c15a73_10446452_0_0",
+          "score": 0.212651
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.210811
+        }
+      ]
+    },
+    {
+      "id": "R16",
+      "expected_doc": "KB-FE-06",
+      "expected_doc_rank": 1,
+      "answer_supported": true,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-06_Vite构建与环境变量",
+          "document_id": "file_2cae99d3c4c74e1eb1c9e6c9760d92f9_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2cae99d3c4c74e1eb1c9e6c9760d92f9_10446452_0_0",
+          "score": 0.907912
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.246387
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.238159
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.235993
+        },
+        {
+          "rank": 5,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.230732
+        }
+      ]
+    },
+    {
+      "id": "N01",
+      "expected_doc": null,
+      "expected_doc_rank": null,
+      "answer_supported": false,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.253048
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.248521
+        },
+        {
+          "rank": 3,
+          "document": "KB-BE-02_HTTP方法与幂等",
+          "document_id": "file_440e37c539f44801b0e3d398c6e68ad7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_440e37c539f44801b0e3d398c6e68ad7_10446452_0_0",
+          "score": 0.208793
+        },
+        {
+          "rank": 4,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.203334
+        },
+        {
+          "rank": 5,
+          "document": "KB-BE-05_Redis过期与缓存旁路",
+          "document_id": "file_2f5b993455fc4da597359cf85ba42e94_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_2f5b993455fc4da597359cf85ba42e94_10446452_0_0",
+          "score": 0.202914
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "expected_doc": null,
+      "expected_doc_rank": null,
+      "answer_supported": false,
+      "results": [
+        {
+          "rank": 1,
+          "document": "KB-FE-04_React状态与Effect",
+          "document_id": "file_6933e1ce45de4995b7fa80a003c71416_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_6933e1ce45de4995b7fa80a003c71416_10446452_0_0",
+          "score": 0.24691
+        },
+        {
+          "rank": 2,
+          "document": "KB-FE-03_浏览器Fetch与CORS",
+          "document_id": "file_e560ff306d594afdbc76ab8fe1e3d608_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e560ff306d594afdbc76ab8fe1e3d608_10446452_0_0",
+          "score": 0.243466
+        },
+        {
+          "rank": 3,
+          "document": "KB-FE-01_JavaScript异步与Promise",
+          "document_id": "file_bc9a805e2cfd46bb84edf352b8a700c3_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_bc9a805e2cfd46bb84edf352b8a700c3_10446452_0_0",
+          "score": 0.233479
+        },
+        {
+          "rank": 4,
+          "document": "KB-FE-05_Vue响应式与组件通信",
+          "document_id": "file_b65a125daa424b3f9a89ae6bf36653b7_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_b65a125daa424b3f9a89ae6bf36653b7_10446452_0_0",
+          "score": 0.219486
+        },
+        {
+          "rank": 5,
+          "document": "KB-BE-04_MySQL索引与事务",
+          "document_id": "file_e098f308e4274744988e4b62173452bd_10446452",
+          "chunk_id": "llm-zvk7yf8x9nw94gwj_dww893y6mg_file_e098f308e4274744988e4b62173452bd_10446452_0_0",
+          "score": 0.207956
+        }
+      ]
+    }
+  ]
+}

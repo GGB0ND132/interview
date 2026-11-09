@@ -1,0 +1,24 @@
+# Local tools and environments
+.claude/
+backend/.venv/
+fronted/node_modules/
+fronted/dist/
+**/__pycache__/
+*.py[cod]
+
+# Local configuration and credentials
+**/.env
+**/.env.*
+!**/.env.example
+*.local
+
+# Cloned research repositories and downloaded source material
+.scratch/**/repos/
+docs/content-baseline/原始参考_Python后端_不入库/*
+!docs/content-baseline/原始参考_Python后端_不入库/README.md
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

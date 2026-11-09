@@ -1,0 +1,48 @@
+@import '@fontsource-variable/noto-serif-sc';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/noto-sans-sc';
+@import '@fontsource-variable/jetbrains-mono';
+:root {
+  color-scheme: light dark;
+  --surface-page:#fbfbfa; --surface-raised:#fff; --surface-sunken:#f2f2f0; --surface-hover:#f0f0ee; --surface-active:#e8e8e5;
+  --border-subtle:#e6e6e2; --border-default:#949487; --border-strong:#858578;
+  --text-primary:#1a1a18; --text-secondary:#575750; --text-muted:#72726a; --text-inverse:#fbfbfa;
+  --accent:#3f4fe0; --accent-hover:#2f3ec4; --accent-subtle:#eef0fe; --accent-border:#c3c9fb;
+  --success-fg:#1f6b3c; --success-bg:#eaf5ed; --warning-fg:#8a5a05; --warning-bg:#fbf3e2; --danger-fg:#a52020; --danger-bg:#fbeded;
+  --shadow-pop:0 1px 2px rgb(0 0 0 / .04),0 8px 24px -8px rgb(0 0 0 / .12);
+  --font-display:'Noto Serif SC Variable','Songti SC','SimSun',serif;
+  --font-sans:'Geist Variable','Noto Sans SC Variable','PingFang SC','Microsoft YaHei',sans-serif;
+  --font-mono:'JetBrains Mono Variable',ui-monospace,'Cascadia Code',monospace;
+  --fs-display:32px; --fs-page:26px; --fs-section:19px; --fs-question:22px; --fs-sub:16px; --fs-body:16px; --fs-body-sm:15px; --fs-ui:14px; --fs-meta:13px; --fs-mono:12px;
+  --lh-display:1.3; --lh-page:1.35; --lh-section:1.45; --lh-question:1.6; --lh-sub:1.5; --lh-body:1.75; --lh-body-sm:1.65; --lh-ui:1.5; --lh-meta:1.5; --lh-mono:1.4;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px; --space-12:48px; --space-16:64px;
+  --radius-xs:3px; --radius-sm:5px; --radius-md:8px; --radius-lg:12px; --radius-full:999px;
+  --z-sticky:10; --z-drawer:40; --z-overlay:50; --z-modal:60; --z-toast:80;
+  --dur-instant:90ms; --dur-fast:140ms; --dur-base:200ms; --dur-slow:320ms;
+  --ease-out:cubic-bezier(.2,0,0,1); --ease-in-out:cubic-bezier(.4,0,.2,1);
+}
+@media (prefers-color-scheme:dark) { :root:not([data-theme='light']) {
+  --surface-page:#111318; --surface-raised:#1a1d24; --surface-sunken:#0c0e12; --surface-hover:#21252d; --surface-active:#282d37;
+  --border-subtle:#2a2e37; --border-default:#6b7488; --border-strong:#7b8499;
+  --text-primary:#e9e9e6; --text-secondary:#adb2bd; --text-muted:#8b92a0; --text-inverse:#111318;
+  --accent:#8b95ff; --accent-hover:#a6aeff; --accent-subtle:#1e2130; --accent-border:#3b4270;
+  --success-fg:#6fcf97; --success-bg:#132019; --warning-fg:#e0b15c; --warning-bg:#221c10; --danger-fg:#f08a8a; --danger-bg:#251516;
+  --shadow-pop:0 1px 2px rgb(0 0 0 / .4),0 8px 28px -8px rgb(0 0 0 / .6);
+} }
+:root[data-theme='dark'] {
+  --surface-page:#111318; --surface-raised:#1a1d24; --surface-sunken:#0c0e12; --surface-hover:#21252d; --surface-active:#282d37;
+  --border-subtle:#2a2e37; --border-default:#6b7488; --border-strong:#7b8499;
+  --text-primary:#e9e9e6; --text-secondary:#adb2bd; --text-muted:#8b92a0; --text-inverse:#111318;
+  --accent:#8b95ff; --accent-hover:#a6aeff; --accent-subtle:#1e2130; --accent-border:#3b4270;
+  --success-fg:#6fcf97; --success-bg:#132019; --warning-fg:#e0b15c; --warning-bg:#221c10; --danger-fg:#f08a8a; --danger-bg:#251516;
+  --shadow-pop:0 1px 2px rgb(0 0 0 / .4),0 8px 28px -8px rgb(0 0 0 / .6);
+}
+*{box-sizing:border-box} html,body,#root{margin:0;min-width:320px;min-height:100%}
+html,body{background:var(--surface-page);color:var(--text-primary);transition:background-color var(--dur-base),color var(--dur-base)}
+body{font:400 var(--fs-ui)/var(--lh-ui) var(--font-sans);-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed}
+a{color:inherit;text-decoration:none}h1,h2,h3,h4,p{margin:0}h1,h2,h3{text-wrap:balance}
+input,textarea,select{accent-color:var(--accent)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius-sm)}
+::selection{background:var(--accent-subtle)}[hidden]{display:none!important}
+@media(max-width:767px){:root{--fs-display:26px;--fs-page:22px;--fs-question:20px;--lh-question:1.55}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
