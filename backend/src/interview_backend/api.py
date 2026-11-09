@@ -16,6 +16,7 @@ from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
 from .publishing import DisableQuestion, PublicationRequest, Publishing
 from .store import Store
+from .topic_quality import QualityCorrection, QualityIncident, QualityResume, TopicQuality
 
 
 def create_app(
@@ -34,6 +35,7 @@ def create_app(
     )
     app = FastAPI(title="Interview Agent — practice and question publishing API", version="0.2.0")
     publishing = Publishing(service.store, source_transport)
+    quality = TopicQuality(publishing)
 
     def response(data: Any = None, *, error: Any = None, status: int = 200) -> JSONResponse:
         return JSONResponse(
@@ -103,6 +105,22 @@ def create_app(
         page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100)
     ) -> JSONResponse:
         return response(service.history(page, page_size))
+
+    @app.get("/api/v1/maintenance/topic-quality/{competency_id}")
+    def topic_quality(competency_id: str) -> JSONResponse:
+        return response(quality.view(competency_id))
+
+    @app.post("/api/v1/maintenance/topic-quality/{competency_id}/incidents")
+    def topic_incident(competency_id: str, request: QualityIncident) -> JSONResponse:
+        return response(quality.incident(competency_id, request))
+
+    @app.post("/api/v1/maintenance/topic-quality/{competency_id}/corrections")
+    def topic_correction(competency_id: str, request: QualityCorrection) -> JSONResponse:
+        return response(quality.correct(competency_id, request))
+
+    @app.post("/api/v1/maintenance/topic-quality/{competency_id}/resume")
+    def resume_topic(competency_id: str, request: QualityResume) -> JSONResponse:
+        return response(quality.resume(competency_id, request))
 
     @app.post("/api/v1/sessions/{session_id}/start")
     def start(session_id: str, request: RevisionRequest) -> JSONResponse:

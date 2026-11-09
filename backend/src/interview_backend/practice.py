@@ -309,6 +309,10 @@ class Practice:
         failure = None
         result = None
         try:
+            with self.store.connect() as db:
+                block = self.store.scoring_block(db, question)
+            if block:
+                raise ModelError("题目已停用或主题评分暂停；回答已保留，请等待维护复核", block)
             evaluation = self.evaluator.evaluate(question=question, answer=row["answer_text"])
             result = feedback(evaluation, row["answer_text"])
             result.update(
@@ -332,6 +336,14 @@ class Practice:
                 "retryable": True,
             }
         with self.store.connect(write=True) as db:
+            block = self.store.scoring_block(db, question)
+            if block:
+                result = None
+                failure = {
+                    "code": block,
+                    "message": "题目已停用或主题评分暂停；回答已保留，请等待维护复核",
+                    "retryable": True,
+                }
             db.execute(
                 "UPDATE submissions SET status=?,score=?,evaluation_json=?,error_json=? WHERE id=?",
                 (

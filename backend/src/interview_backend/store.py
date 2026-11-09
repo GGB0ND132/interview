@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
 from importlib.resources import files
 from pathlib import Path
@@ -55,7 +55,16 @@ class Store:
                     .read_text(encoding="utf-8")
                     + "\nCOMMIT;"
                 )
-            elif version != 2:
+                version = 2
+            if version == 2:
+                db.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + files("interview_backend")
+                    .joinpath("migration_3.sql")
+                    .read_text(encoding="utf-8")
+                    + "\nCOMMIT;"
+                )
+            elif version != 3:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
 
     @contextmanager
@@ -81,4 +90,48 @@ class Store:
             "AND version=(SELECT MAX(q.version) FROM questions q WHERE q.code=questions.code)",
             (pack_id,),
         ).fetchall()
-        return [json.loads(row["payload"]) for row in rows]
+        return Store.filter_quality(db, pack_id, (json.loads(row["payload"]) for row in rows))
+
+    @staticmethod
+    def filter_quality(
+        db: sqlite3.Connection, pack_id: str, questions: Iterable[dict[str, Any]]
+    ) -> list[dict[str, Any]]:
+        states = [
+            state
+            for row in db.execute("SELECT payload FROM topic_quality")
+            if (state := json.loads(row["payload"]))["pack_id"] == pack_id
+        ]
+        held = {state["topic"] for state in states if state["paused"]}
+        quarantined = {
+            incident["code"]
+            for state in states
+            for incident in state["incidents"][state.get("resolved_incident_count", 0) :]
+        }
+        return [q for q in questions if q["topic"] not in held and q["code"] not in quarantined]
+
+    @staticmethod
+    def scoring_block(db: sqlite3.Connection, question: dict[str, Any]) -> str | None:
+        version = db.execute(
+            "SELECT status,pack_id FROM questions WHERE code=? AND version=?",
+            (question["code"], question["version"]),
+        ).fetchone()
+        if version is not None and version["status"] == "disabled":
+            return "QUESTION_DISABLED"
+        hold = db.execute(
+            "SELECT payload FROM topic_quality WHERE topic=?", (question["topic"],)
+        ).fetchone()
+        if (
+            hold is not None
+            and version is not None
+            and json.loads(hold["payload"])["paused"]
+            and json.loads(hold["payload"])["pack_id"] == version["pack_id"]
+        ):
+            return "TOPIC_SCORING_PAUSED"
+        if hold is not None and version is not None:
+            state = json.loads(hold["payload"])
+            if state["pack_id"] == version["pack_id"] and question["code"] in {
+                incident["code"]
+                for incident in state["incidents"][state.get("resolved_incident_count", 0) :]
+            }:
+                return "QUESTION_QUARANTINED"
+        return None

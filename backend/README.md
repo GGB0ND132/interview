@@ -12,7 +12,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 2；现有 schema 1 自动迁移，保留原题与会话。MianStack 示例不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 3；现有 schema 1/2 自动迁移，保留原题与会话。MianStack 示例与 06 候选题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
@@ -75,7 +75,7 @@ uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-liv
 | `GET /maintenance/questions/{code}` | 维护者读取完整题目/答案/来源及全部版本 |
 | `POST /maintenance/questions/{code}/disable` | 正文 `{"expected_version":1,"reason":"发现答案错误"}`；停用当前版本，新抽题不回退旧版本 |
 
-请求格式为 `{"questions":[...]}`，单批 1–500 项。完整可调用示例在 `src/interview_backend/mianstack_example.json`，包含 Q-0058、Q-0140 的原文答案与本项目编写的评分点。源文件快照（另含 Q-0597）在 `mianstack_snapshot.json`。示例发布不声称已经完成 05/06 的主题人工抽查。
+请求格式为 `{"questions":[...]}`，单批 1–500 项。完整可调用示例在 `src/interview_backend/mianstack_example.json`，包含 Q-0058、Q-0140 的原文答案与本项目编写的评分点。`mianstack_snapshot.json` 经 06 扩充为固定版本全部 115 道 Agent 基础题。示例发布不声称已经完成 05/06 的主题人工抽查。
 
 ```powershell
 $batch = Get-Content -LiteralPath src/interview_backend/mianstack_example.json -Raw -Encoding utf8
@@ -100,3 +100,9 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/api/v1/maintenance/question-publica
 ```powershell
 uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0.1:8000
 ```
+
+## 06：后六主题内容与质量维护
+
+后六主题 58 道候选题、37 道补答、逐题评分点、12 主题盘点、人工核查卡片与发布命令见 [06 题包说明](../docs/content-baseline/agent-topics-06/README.md)。自动校验通过 58、正式人工审核 0、正式发布 0。GUI 固定来源仅一题，未自动放宽每主题两题的要求。05 前六主题题包尚未合入本分支，报告保留其取材数量与未整理缺口。
+
+06 增加 schema 3 的题目隔离、主题暂停及版本绑定的更正/扩大抽查/恢复接口。已知错题先停用，同主题重复同类错误暂停评分，纠正并复查后才能恢复；暂停或隔离同时影响抽题与进行中的模型评分，用户回答保留。普通 03 发布仍不允许绕过停用；显式的 `/maintenance/topic-quality/{competency_id}/corrections` 入口才可在人工核查后提交新版本。完整请求格式与边界见上述说明。
