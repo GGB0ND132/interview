@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-11-09T13:56:46.002Z",
+  "transport": "real browser (Chrome) -> Vite dev proxy -> real FastAPI service -> configured external model",
+  "frontend_route": "http://127.0.0.1:5173/question-practice",
+  "availability": {
+    "available_count": 2,
+    "can_start": true
+  },
+  "answered": {
+    "session_id": "076a0134-989a-4cb1-b26e-bc5f030d6592",
+    "question_code": "Q-AGENT-SAMPLE-02",
+    "question_version": 1,
+    "question_text": "预定义工作流与由模型动态决策的 Agent 有什么区别？如何选择？",
+    "submitted_answer": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+    "score": 71,
+    "dimensions": [
+      {
+        "answer_quote": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+        "name": "accuracy",
+        "reason": "用户回答聚焦于 Agent 的执行机制（工具调用→结果反馈→动态判断），但未明确对比‘预定义工作流’的核心特征（如固定路径、无运行时决策），也未提及工作流的适用场景（任务明确/可预测）；对‘如何选择’仅隐含在迭代控制中，未回应题干要求的权衡依据（如成本、延迟、验证复杂度）。",
+        "score": 70
+      },
+      {
+        "answer_quote": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+        "name": "completeness",
+        "reason": "缺失题干明确要求的两个核心部分：（1）预定义工作流的定义与特征；（2）‘如何选择’的完整判断标准（如题库答案中的‘任务明确优先工作流’‘开放问题才考虑Agent及其成本’）。仅描述了Agent单侧执行逻辑，未构成对比与选择框架。",
+        "score": 50
+      },
+      {
+        "answer_quote": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+        "name": "relevance",
+        "reason": "全部内容紧扣‘Agent动态决策机制’这一子主题，所举细节（真实结果反馈、纠错、最大迭代）均属Agent运行的关键实践要素，无离题信息。",
+        "score": 90
+      },
+      {
+        "answer_quote": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+        "name": "structure",
+        "reason": "按时间顺序清晰呈现Agent执行闭环（决定→执行→反馈→判断→纠错→终止），逻辑连贯；但缺乏总分结构（如开头未点明对比维度，结尾未总结选择原则），未体现‘区别+如何选择’的双重要求框架。",
+        "score": 80
+      },
+      {
+        "answer_quote": "模型先决定调用哪个工具，程序执行工具并把真实返回结果交回模型。Agent 根据实际结果判断下一步，失败时纠错，不能把发出调用当成成功。完成目标后结束，同时设置最大迭代次数作为停止边界。",
+        "name": "specificity",
+        "reason": "使用具体行为动词（‘决定’‘执行’‘交回’‘判断’‘纠错’）和明确约束（‘不能把发出调用当成成功’‘最大迭代次数’），避免笼统表述，具实操指导性。",
+        "score": 85
+      }
+    ],
+    "overall_score_from_server": 71,
+    "assessment_status": "complete",
+    "reference_answer": "工作流通过预定义代码路径组织模型与工具；Agent 则让模型根据任务和环境反馈动态决定步骤与工具使用。流程固定且成功标准明确时，工作流更易预测和维护；开放问题需要灵活决策时可以采用 Agent，但要承担额外成本、延迟和验证复杂度，优先选择满足需求的简单方案。",
+    "source": {
+      "author": "Codex",
+      "locator": "samples.json#Q-AGENT-SAMPLE-02",
+      "not_mianstack": true,
+      "source_id": "SRC-AGENT-DEMO-02",
+      "usage": "original_project_sample"
+    },
+    "independent_references": [
+      {
+        "checked_at": "2026-11-09",
+        "checked_phrases": [
+          "predefined code paths",
+          "dynamically direct"
+        ],
+        "heading": "What are agents?",
+        "publisher": "Anthropic",
+        "title": "Building effective agents",
+        "url": "https://www.anthropic.com/engineering/building-effective-agents"
+      }
+    ],
+    "restored_after_browser_refresh": true
+  },
+  "blank_submission": {
+    "score": 0,
+    "disposition": "blank_answer"
+  },
+  "skipped_submission": {
+    "score": null,
+    "disposition": "skipped"
+  },
+  "report": {
+    "session_id": "076a0134-989a-4cb1-b26e-bc5f030d6592",
+    "average_score": 71,
+    "answered_count": 1,
+    "blank_count": 0,
+    "skipped_count": 0,
+    "status": "completed",
+    "scoring_scope": "single_question_training"
+  },
+  "duplicate_records_per_session": {
+    "31e63101-7efa-473c-9a30-1f8ae5412f2b": 1,
+    "7ae48e14-3c4a-479f-ab4e-0236d383f7d6": 1,
+    "076a0134-989a-4cb1-b26e-bc5f030d6592": 1,
+    "942979bd-75c8-4667-ae80-2d1e23023200": 1
+  }
+}
