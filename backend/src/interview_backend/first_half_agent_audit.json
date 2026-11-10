@@ -1,0 +1,818 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+  "review_policy": "independent_agent_first",
+  "authorization": "User instruction, 2026-11-10: independent subagents review first; only unresolved issues need human review; if clear move ticket05 to ready-for-agent.",
+  "counts": {
+    "reviewed": 57,
+    "passed": 57,
+    "needs_fix": 0,
+    "needs_human": 0
+  },
+  "groups": {
+    "loop": {
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "topics": [
+        "Agent 基础与运行循环"
+      ],
+      "sources": [
+        [
+          "Anthropic Building effective agents",
+          "https://www.anthropic.com/research/building-effective-agents",
+          "What are agents; Agents; Appendix1"
+        ],
+        [
+          "Alibaba Function Calling",
+          "https://help.aliyun.com/zh/model-studio/qwen-function-calling",
+          "工作原理1-5"
+        ],
+        [
+          "LangChain Agents",
+          "https://docs.langchain.com/oss/python/langchain/agents",
+          "Model/Harness"
+        ],
+        [
+          "Wooldridge & Jennings",
+          "https://www.cs.ox.ac.uk/people/michael.wooldridge/pubs/ker95/subsubsectionstar3_1_1_1.html",
+          "reactivity/pro-activeness"
+        ],
+        [
+          "Gemini Robotics",
+          "https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/",
+          "Interactivity; controllers; safety"
+        ],
+        [
+          "Anthropic Agent Skills",
+          "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills",
+          "Anatomy; code execution"
+        ],
+        [
+          "LangGraph Graph API",
+          "https://docs.langchain.com/oss/python/langgraph/graph-api",
+          "State; messages"
+        ]
+      ]
+    },
+    "architecture": {
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "topics": [
+        "Agent 应用架构与场景设计"
+      ],
+      "sources": [
+        [
+          "Dify",
+          "https://docs.dify.ai/en/quick-start",
+          "Step2/3"
+        ],
+        [
+          "Coze",
+          "https://docs.coze.cn/",
+          "产品定位与工具扩展"
+        ],
+        [
+          "OpenClaw",
+          "https://docs.openclaw.ai/",
+          "What is OpenClaw; How it works; Configuration"
+        ],
+        [
+          "Anthropic",
+          "https://www.anthropic.com/research/building-effective-agents",
+          "What are agents; coding agents"
+        ],
+        [
+          "Retrieval",
+          "https://docs.langchain.com/oss/python/deepagents/retrieval",
+          "From retrieval to RAG; agentic RAG"
+        ],
+        [
+          "OR-Tools",
+          "https://developers.google.com/optimization/cp/cp_solver",
+          "Model; return values"
+        ],
+        [
+          "KernelBench",
+          "https://github.com/ScalingIntelligence/KernelBench",
+          "Evaluation; Multi-Turn"
+        ],
+        [
+          "APScheduler",
+          "https://apscheduler.readthedocs.io/en/master/userguide.html",
+          "Introduction; Basic concepts"
+        ],
+        [
+          "Open-Meteo",
+          "https://open-meteo.com/en/docs",
+          "API参数"
+        ],
+        [
+          "MCP",
+          "https://modelcontextprotocol.io/specification/2025-06-18/server/tools",
+          "Listing/Calling tools; errors; security"
+        ],
+        [
+          "Deep Research",
+          "https://openai.com/index/introducing-deep-research/",
+          "How it works; Limitations"
+        ],
+        [
+          "UiPath RPA",
+          "https://www.uipath.com/rpa/robotic-process-automation",
+          "RPA at a glance"
+        ]
+      ]
+    },
+    "planning_memory_tools": {
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "topics": [
+        "规划、推理与任务执行",
+        "上下文工程",
+        "记忆系统",
+        "工具调用与 Function Calling"
+      ],
+      "sources": [
+        [
+          "Context engineering",
+          "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+          "Context retrieval; compaction; structured notes"
+        ],
+        [
+          "Memory",
+          "https://docs.langchain.com/oss/python/concepts/memory",
+          "Short/long term; memory types"
+        ],
+        [
+          "ReAct v3",
+          "https://arxiv.org/html/2210.03629v3",
+          "Abstract; sections2/3.3/4"
+        ],
+        [
+          "Alibaba",
+          "https://help.aliyun.com/zh/model-studio/qwen-function-calling",
+          "工作原理"
+        ],
+        [
+          "Deep Agents",
+          "https://docs.langchain.com/oss/python/deepagents/overview",
+          "Memory; Task planning"
+        ],
+        [
+          "subprocess",
+          "https://docs.python.org/3/library/subprocess.html",
+          "Using; Security; Popen.communicate"
+        ],
+        [
+          "AWS retries",
+          "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/",
+          "Timeouts; retries and backoff"
+        ],
+        [
+          "Structured output",
+          "https://docs.langchain.com/oss/python/langchain/structured-output",
+          "ToolStrategy/ProviderStrategy"
+        ],
+        [
+          "topological_sort",
+          "https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.dag.topological_sort.html",
+          "DAG与拓扑序"
+        ]
+      ]
+    }
+  },
+  "results": [
+    {
+      "code": "Q-0058",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "组件划分、状态/上下文和停止/成功边界正确，原答一致。"
+    },
+    {
+      "code": "Q-0062",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "保存和召回进入上下文才影响回答，不等于权重更新。"
+    },
+    {
+      "code": "Q-0137",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "资料整理、人工核验和假设经历的评分边界公平。"
+    },
+    {
+      "code": "Q-0419",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "模型提议、宿主执行、回执反馈正确，不强制向量库。"
+    },
+    {
+      "code": "Q-0544",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "产品定位和Dify节点步骤有官方依据，版本限制明确。"
+    },
+    {
+      "code": "Q-0561",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "RAG信息供给与Agent控制可组合，不强制向量库。"
+    },
+    {
+      "code": "Q-0597",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "模型生成与应用执行分工正确，原答一致。"
+    },
+    {
+      "code": "Q-0883",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "函数调用请求与完整运行循环区分正确。"
+    },
+    {
+      "code": "Q-0898",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "读仓库、编辑、测试和反馈闭环正确，不冒充已部署。"
+    },
+    {
+      "code": "Q-0925",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "知识库和MCP调用链正确，允许仅讲一类或假设。"
+    },
+    {
+      "code": "Q-1009",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "迭代研究、证据缺口和引用核验合理，不强制多Agent。"
+    },
+    {
+      "code": "Q-1434",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "算子调优强调正确性及真实同口径测量，不要求虚构加速比。"
+    },
+    {
+      "code": "Q-1555",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "消息状态依赖结构合理，索引按需，不设唯一实现。"
+    },
+    {
+      "code": "Q-1674",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "两类运行时分工正确，明确是工程划分。"
+    },
+    {
+      "code": "Q-1675",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "有限重试、参数修正及幂等边界有官方资料支持。"
+    },
+    {
+      "code": "Q-1843",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "多环节归因与有限修复合理，预算和缺口边界清楚。"
+    },
+    {
+      "code": "Q-1897",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "任务和反馈说明合理，接受文档了解或假设。"
+    },
+    {
+      "code": "Q-1909",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "分类维度可交叉，题面扩写保留原ID。"
+    },
+    {
+      "code": "Q-2001",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "建模与求解器分工正确，可行不等于证明最优。"
+    },
+    {
+      "code": "Q-2007",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "记忆作用范围、内容类型与持久化区分正确。"
+    },
+    {
+      "code": "Q-2078",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "宿主定时与天气数据职责清楚，允许固定工作流。"
+    },
+    {
+      "code": "Q-2186",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "待办记录不等于执行和调度，术语依项目。"
+    },
+    {
+      "code": "Q-2330",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "技能方法与工具接口分工正确，脚本依赖执行环境。"
+    },
+    {
+      "code": "Q-2466",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "简洁概括闭环与成本可靠性权限挑战。"
+    },
+    {
+      "code": "Q-2506",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "ReAct交替动作观察准确，不要求暴露完整思考。"
+    },
+    {
+      "code": "Q-2507",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "错误观察和长轨迹风险合理，预算措施属工程判断。"
+    },
+    {
+      "code": "Q-2536",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "规划反馈与累计预算边界正确，v0.7说明已查官方。"
+    },
+    {
+      "code": "Q-2612",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "动态任务收益与固定流程边界正确。"
+    },
+    {
+      "code": "Q-2637",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "对话入口和执行方式可重叠，非互斥类别。"
+    },
+    {
+      "code": "Q-2659",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "工具契约、宿主执行和业务完成分工清楚。"
+    },
+    {
+      "code": "Q-2676",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "Memory/RAG按目的生命周期区别，设施可复用。"
+    },
+    {
+      "code": "Q-2797",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "RPA/LLM/Workflow/Agent分工可组合，未混淆分支与动态控制。"
+    },
+    {
+      "code": "Q-2985",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "模型建议与程序执行权限分开。"
+    },
+    {
+      "code": "Q-2993",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "本地推理与远程接口边界合理，不强求统一服务清单。"
+    },
+    {
+      "code": "Q-2995",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.2",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "05.2复查：仅长耗时任务要求异步或等效非阻塞，短任务同步方案不再误扣分。"
+    },
+    {
+      "code": "Q-3003",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "循环工程明确是工程解释，未冒充标准。"
+    },
+    {
+      "code": "Q-3054",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "按缺口影响决定澄清，区分偏好和外部事实。"
+    },
+    {
+      "code": "Q-3168",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "指令和记忆文件的名称及加载依宿主而变。"
+    },
+    {
+      "code": "Q-3322",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "节点边DAG拓扑含义正确，图表达不自动保证容错。"
+    },
+    {
+      "code": "Q-3323",
+      "topic": "规划、推理与任务执行",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "DAG与有向环区别准确，允许分支并行和节点内重试。"
+    },
+    {
+      "code": "Q-3382",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "OpenClaw网关、通道和会话描述与官方定位一致。"
+    },
+    {
+      "code": "Q-3383",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "搜索与生成可重叠，引用不是正确性保证。"
+    },
+    {
+      "code": "Q-3456",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "模型/应用边界明确，不猜测不可见内部推理。"
+    },
+    {
+      "code": "Q-3642",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "意图是操作路由候选，不替代权限和事实校验。"
+    },
+    {
+      "code": "Q-3921",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "目标动作反馈与真实完成证据区分正确。"
+    },
+    {
+      "code": "Q-3939",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "生成嵌入重排分工合理，不要求全部模型类型。"
+    },
+    {
+      "code": "Q-3946",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "按动态控制与环境反馈判断，不按工具数量。"
+    },
+    {
+      "code": "Q-4188",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "按动态需求、成本和可验证性选型。"
+    },
+    {
+      "code": "Q-4303",
+      "topic": "Agent 应用架构与场景设计",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_architecture",
+      "reviewed_at": "2026-11-10T00:49:00+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+      "findings": "按职责解释Agent与交接，允许单Agent，不虚构经历。"
+    },
+    {
+      "code": "Q-4836",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "结构合法、调用意图和业务成功不混淆。"
+    },
+    {
+      "code": "Q-4837",
+      "topic": "记忆系统",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "记忆范围与内容类型交叉，短期状态也可持久化。"
+    },
+    {
+      "code": "Q-4839",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.2",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "05.2复查：移除独立调度器的强制要求，目标主动性允许事件、持续循环或定时机制。"
+    },
+    {
+      "code": "Q-4896",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "会话与任务是侧重点，允许交互澄清和后台目标交付并存。"
+    },
+    {
+      "code": "Q-5588",
+      "topic": "工具调用与 Function Calling",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:51:25+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "固定检索与按需工具可组合，不强制Function Calling。"
+    },
+    {
+      "code": "Q-5711",
+      "topic": "Agent 基础与运行循环",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_loop",
+      "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+      "findings": "具身感知行动反馈与高层/低层控制分工正确。"
+    },
+    {
+      "code": "Q-7020",
+      "topic": "上下文工程",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "上下文工程范围大于RAG，包含整体输入与约束。"
+    },
+    {
+      "code": "Q-7196",
+      "topic": "上下文工程",
+      "content_version": "05.1",
+      "review_kind": "independent_agent",
+      "reviewer": "/root/content_review_planning_memory_tools",
+      "reviewed_at": "2026-11-10T00:49:24+08:00",
+      "conclusion": "passed",
+      "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+      "findings": "摘要检索外存和分阶段处理的收益与信息损失均说明。"
+    }
+  ],
+  "limitations": [
+    "Independent Agent review is not human approval.",
+    "No claim of scoring-model calibration or production publication.",
+    "Engineering recommendations are distinguished from documented facts in the linked report."
+  ]
+}

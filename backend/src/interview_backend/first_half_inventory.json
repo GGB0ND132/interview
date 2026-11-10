@@ -1,0 +1,358 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "archive_sha256": "71939290f6001c4df5434e0df6bb1650629d1060d6f90ed25a80d125790e3aaf",
+  "source_inventory_count": 115,
+  "selected_count": 57,
+  "topics": {
+    "Agent 基础与运行循环": 17,
+    "记忆系统": 6,
+    "Agent 应用架构与场景设计": 18,
+    "规划、推理与任务执行": 8,
+    "工具调用与 Function Calling": 6,
+    "上下文工程": 2
+  },
+  "questions": [
+    {
+      "code": "Q-0058",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "ready",
+      "source_sha256": "2ce29a6eb1e19d5b6f8d6cf13dba3d7f85099108ddee3652f8d3c6254842738c"
+    },
+    {
+      "code": "Q-0062",
+      "topic": "记忆系统",
+      "answer_status": "pending",
+      "source_sha256": "d9932b31c28f2e2f4f80d09a5f0f20a962adef5cd0ff7387ea14fe9a26bfd32e"
+    },
+    {
+      "code": "Q-0137",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "ready",
+      "source_sha256": "b7f4bf8ecf2418d2062c6b38677fa3de662028162527202d4e29897004d43edc"
+    },
+    {
+      "code": "Q-0419",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "bcc42e1793d3053c09e966c071205d9223f43904b2b9a6a061794fb7a74de0fb"
+    },
+    {
+      "code": "Q-0544",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "ready",
+      "source_sha256": "b8fe5d32ca074a7f0bb8abcecfd69d5237a8c446173d5405d6878bfebf85666a"
+    },
+    {
+      "code": "Q-0561",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "ready",
+      "source_sha256": "a8df6126ae8bb1b0c750fd41e2990f51f173fb14e42d571ad6df9adb65ab2381"
+    },
+    {
+      "code": "Q-0597",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "ready",
+      "source_sha256": "125ca36eeaef0f8071494ee5ec839cd1c2fa6ff0b61a795ea5766c36e837c7c8"
+    },
+    {
+      "code": "Q-0883",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "7e8e4098241d3df47a1de6e65c14b1e419f58d69d192f3ac37ce64d2b34716db"
+    },
+    {
+      "code": "Q-0898",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "757e8a0830ee4365d83f8318e4aa1d9f620129b3d3c63809c2e6f464d876988b"
+    },
+    {
+      "code": "Q-0925",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "a09bd65f23b8eda2691fbc6c408af9d9931819f66c6844a2e0baf7dc6cb4b03a"
+    },
+    {
+      "code": "Q-1009",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "ready",
+      "source_sha256": "93a3df90eb35d77e55305fc36c1b1bad397d1518b1b4a359a0db76766e86f28e"
+    },
+    {
+      "code": "Q-1434",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "5e1bbf5c6602e294f4fa99f7e0d2437d52f5e7c6002b2394b21da2c99c0352cd"
+    },
+    {
+      "code": "Q-1555",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "43b8cc2c234650e646cb2096c84c83cb2b096b22eb33c318c3267f780e2e8a1c"
+    },
+    {
+      "code": "Q-1674",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "c24c7d3e0e1c31518e530561556490e6edcabc894e5e5542dec35c7c34344dea"
+    },
+    {
+      "code": "Q-1675",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "a2a468ef69f8d8dc12efa7e0d46600e94d6233e718e6a431f6da46f2e4bb9bbf"
+    },
+    {
+      "code": "Q-1843",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "e36239bb73c6e5a2a53ca6b24da4defdb54000c9054554546c12fb4ce47b3433"
+    },
+    {
+      "code": "Q-1897",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "ec30fb40e96cec21c2dd91f57d3fe7069cd32031e7c08000e5c7bb42eb83bb07"
+    },
+    {
+      "code": "Q-1909",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "fb97d7af0c5697c4014c6dadf9af77ab45741cb6636a7d054c364e78ac099291"
+    },
+    {
+      "code": "Q-2001",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "ec1b1ef9163992453d90c0f49782f1f197a51f6889491f6d006a2ffdc07c0ec4"
+    },
+    {
+      "code": "Q-2007",
+      "topic": "记忆系统",
+      "answer_status": "ready",
+      "source_sha256": "533e6dbfe3fb246c6627d1fbcd84fbfa59687fa64f392d428c88fa1dd354e107"
+    },
+    {
+      "code": "Q-2078",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "2cf8a86017aeb8c0babcf23206c47086f1028eefcdb895627e700ce0d417d520"
+    },
+    {
+      "code": "Q-2186",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "a6528f1ff911a5e977e922cfdbe85d5df91d5fb805bf5ac2d2e45426f477fef7"
+    },
+    {
+      "code": "Q-2330",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "ready",
+      "source_sha256": "ae07d08c7f1c30da0bc1ab666e46303ddb47a727d8778671693d90c4349a4fbe"
+    },
+    {
+      "code": "Q-2466",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "8e73e1c4241a5cb018fce7a04478fd752bcce7495095d70d79e81f9555a6b18d"
+    },
+    {
+      "code": "Q-2506",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "0ae26ab3acf1f0e5f614b6cc6bcb5d8c019dba99b13e207ca1b40626b5a92367"
+    },
+    {
+      "code": "Q-2507",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "de01ea27a065feb6c1be2b5b4b15b4f94c72839f0320b93820a0fd79292e20c5"
+    },
+    {
+      "code": "Q-2536",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "ready",
+      "source_sha256": "2a47f1d8da0ccce58c8ae6f760cf803d91a334f55c6735cd9a4427029b137930"
+    },
+    {
+      "code": "Q-2612",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "3e6a872260f182af21b702d78d6350c84c30d7aca0174b6fdc03ebeef599caac"
+    },
+    {
+      "code": "Q-2637",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "74bb3137b8e18ca90ed95091303a22cbe61ac27508d535d7873d3756b0cb4882"
+    },
+    {
+      "code": "Q-2659",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "c2995470bf867ec04085e1ce369bfdc244a4fa3d3a2b1fe66880cdf64b976b71"
+    },
+    {
+      "code": "Q-2676",
+      "topic": "记忆系统",
+      "answer_status": "pending",
+      "source_sha256": "19a7dfdba3e8e2db4b99008a3b4e5810077d9f80ee8a7f1848119c9f7bf339ec"
+    },
+    {
+      "code": "Q-2797",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "c341c3a7984193d94ae8bd8fed4850586dfc0827f2e57edc1e829c7907c57eb4"
+    },
+    {
+      "code": "Q-2985",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "61302a4504012f4bb5192df5a1e84775a1398879240c9e193484d82ea9744b56"
+    },
+    {
+      "code": "Q-2993",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "bd8676cfe429ce0542f02b02f92d0bd4b2d3a087aa97ae86a37a50a0c61999d2"
+    },
+    {
+      "code": "Q-2995",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "262420abd4d66ad6949bebdb972fe4638170de9197846360f3ca5872b6f9c718"
+    },
+    {
+      "code": "Q-3003",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "a12ad3d630b7d1b8cdfc58f8fc6457dfeb84086b353e857fa61066c398bf1de0"
+    },
+    {
+      "code": "Q-3054",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "781c94497c15cb199bd1807eb9764faa06dbd23d0489ee1830a1ed86e68351ba"
+    },
+    {
+      "code": "Q-3168",
+      "topic": "记忆系统",
+      "answer_status": "pending",
+      "source_sha256": "78e5d68d1ee0322426487e2f55988ce2d60beab64c1af089e45a7ce8ef450b66"
+    },
+    {
+      "code": "Q-3322",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "ead08b4e06daca681f06536b4dac1ad6010ea0eecf591230dea33120fadf43a3"
+    },
+    {
+      "code": "Q-3323",
+      "topic": "规划、推理与任务执行",
+      "answer_status": "pending",
+      "source_sha256": "169d309a61b46197e266e580ce3810ce5d03531f4c03781baa7b1cade63cf3bb"
+    },
+    {
+      "code": "Q-3382",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "3d3330060f7857496d629285a9343921f06a5b2d1ea608d3e986870289b4f035"
+    },
+    {
+      "code": "Q-3383",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "cfb098e24186790da3ca437f90c4012d671ff89db0d89034eab401c06d2e03fd"
+    },
+    {
+      "code": "Q-3456",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "aa5be67253f47c03461358752a98e9fb99914c02383390bf9e9d9dd3ea4e3fc2"
+    },
+    {
+      "code": "Q-3642",
+      "topic": "记忆系统",
+      "answer_status": "pending",
+      "source_sha256": "9d34c5497ae763646d72578ea89dba98376900fb803cf41bccfb0dee41a3117b"
+    },
+    {
+      "code": "Q-3921",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "372565a0e647c0fab77afa5a5ba0b57a94a56be8ae140cd529e316985d8d6213"
+    },
+    {
+      "code": "Q-3939",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "47e30145b6a54a61f9ac547dce041397e31b7b14dc7f729f7c40c3cc5f354cec"
+    },
+    {
+      "code": "Q-3946",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "7dbe87bd7d94079f55f803f5b9aa55270153938c0109bf4a496da593b84589ca"
+    },
+    {
+      "code": "Q-4188",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "66db8b73bb940d46c67d0d05c986e34c97e10be4d2fdd9574d2c51219599fe28"
+    },
+    {
+      "code": "Q-4303",
+      "topic": "Agent 应用架构与场景设计",
+      "answer_status": "pending",
+      "source_sha256": "b44dc022147fa33a743e5a95244c09d055fe6f5865c1a704b852de3174a6ee38"
+    },
+    {
+      "code": "Q-4836",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "6783f5f804a45b32f47c229223055d43a2f9e9bb057525f869e9bb5327107949"
+    },
+    {
+      "code": "Q-4837",
+      "topic": "记忆系统",
+      "answer_status": "pending",
+      "source_sha256": "b8e1b26bef3af5979b66903e3968311e6fa29bbe9f7ede3e8a0e46c4c8292fe7"
+    },
+    {
+      "code": "Q-4839",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "a5b58e475f848942f3005c4853d71704397de3c2a4c2a6504ff884ea03561c9f"
+    },
+    {
+      "code": "Q-4896",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "2f3f4c49feb12b497fab76d9fc9fffef62c865ff8a6f0aa0881a44597c9a753d"
+    },
+    {
+      "code": "Q-5588",
+      "topic": "工具调用与 Function Calling",
+      "answer_status": "pending",
+      "source_sha256": "dcc544a9e8a4c26066f4e9287bb75c913ffabeed282ad0aa665a085a1877d61d"
+    },
+    {
+      "code": "Q-5711",
+      "topic": "Agent 基础与运行循环",
+      "answer_status": "pending",
+      "source_sha256": "326d769063797914a8320d63e5394b97920e009022ca24db9632302ba6ae3871"
+    },
+    {
+      "code": "Q-7020",
+      "topic": "上下文工程",
+      "answer_status": "pending",
+      "source_sha256": "b87b72514ee3082afbda2df2b5498a24936dff80b1262fcb23ecb3194cc370fd"
+    },
+    {
+      "code": "Q-7196",
+      "topic": "上下文工程",
+      "answer_status": "pending",
+      "source_sha256": "f3d76b7ce38807051504b09e85d407d867c8b17189aec76702416d16ea6cb64e"
+    }
+  ]
+}

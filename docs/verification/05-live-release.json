@@ -1,0 +1,3367 @@
+{
+  "verified_at": "2026-11-10T10:05:53.291676+00:00",
+  "target_scope": "current workspace persistent local database; not remote deployment",
+  "database": "C:\\Users\\ctrlz\\orca\\workspaces\\interview agent\\05\\backend\\data\\practice.sqlite3",
+  "base_url": "http://127.0.0.1:8000",
+  "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+  "independent_agent_review_completed": true,
+  "human_review_completed": false,
+  "release_published": true,
+  "model_calls": 0,
+  "before": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 0,
+    "topic_counts": {
+      "Agent 基础与运行循环": 0,
+      "Agent 应用架构与场景设计": 0,
+      "规划、推理与任务执行": 0,
+      "上下文工程": 0,
+      "记忆系统": 0,
+      "工具调用与 Function Calling": 0,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 0,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 0,
+        "interview_count": 0
+      }
+    ],
+    "can_start": false,
+    "missing": [
+      "published_question"
+    ]
+  },
+  "release": {
+    "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+    "review_policy": "independent_agent_first",
+    "preview": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": false,
+      "accepted_count": 57,
+      "rejected_count": 0,
+      "imported_count": 57,
+      "unchanged_count": 0,
+      "available_count": 57,
+      "topic_counts": {
+        "Agent 基础与运行循环": 17,
+        "Agent 应用架构与场景设计": 18,
+        "规划、推理与任务执行": 8,
+        "上下文工程": 2,
+        "记忆系统": 6,
+        "工具调用与 Function Calling": 6,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 0,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 1,
+          "code": "Q-0062",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 2,
+          "code": "Q-0137",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 3,
+          "code": "Q-0419",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 4,
+          "code": "Q-0544",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 5,
+          "code": "Q-0561",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 6,
+          "code": "Q-0597",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 7,
+          "code": "Q-0883",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 8,
+          "code": "Q-0898",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 9,
+          "code": "Q-0925",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 10,
+          "code": "Q-1009",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 11,
+          "code": "Q-1434",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 12,
+          "code": "Q-1555",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 13,
+          "code": "Q-1674",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 14,
+          "code": "Q-1675",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 15,
+          "code": "Q-1843",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 16,
+          "code": "Q-1897",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 17,
+          "code": "Q-1909",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 18,
+          "code": "Q-2001",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 19,
+          "code": "Q-2007",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 20,
+          "code": "Q-2078",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 21,
+          "code": "Q-2186",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 22,
+          "code": "Q-2330",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 23,
+          "code": "Q-2466",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 24,
+          "code": "Q-2506",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 25,
+          "code": "Q-2507",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 26,
+          "code": "Q-2536",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 27,
+          "code": "Q-2612",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 28,
+          "code": "Q-2637",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 29,
+          "code": "Q-2659",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 30,
+          "code": "Q-2676",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 31,
+          "code": "Q-2797",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 32,
+          "code": "Q-2985",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 33,
+          "code": "Q-2993",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 34,
+          "code": "Q-2995",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 35,
+          "code": "Q-3003",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 36,
+          "code": "Q-3054",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 37,
+          "code": "Q-3168",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 38,
+          "code": "Q-3322",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 39,
+          "code": "Q-3323",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 40,
+          "code": "Q-3382",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 41,
+          "code": "Q-3383",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 42,
+          "code": "Q-3456",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 43,
+          "code": "Q-3642",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 44,
+          "code": "Q-3921",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 45,
+          "code": "Q-3939",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 46,
+          "code": "Q-3946",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 47,
+          "code": "Q-4188",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 48,
+          "code": "Q-4303",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 49,
+          "code": "Q-4836",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 50,
+          "code": "Q-4837",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 51,
+          "code": "Q-4839",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 52,
+          "code": "Q-4896",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 53,
+          "code": "Q-5588",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 54,
+          "code": "Q-5711",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 55,
+          "code": "Q-7020",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 56,
+          "code": "Q-7196",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        }
+      ]
+    },
+    "review_blockers": [],
+    "published": true,
+    "publication": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 57,
+      "rejected_count": 0,
+      "imported_count": 57,
+      "unchanged_count": 0,
+      "available_count": 57,
+      "topic_counts": {
+        "Agent 基础与运行循环": 17,
+        "Agent 应用架构与场景设计": 18,
+        "规划、推理与任务执行": 8,
+        "上下文工程": 2,
+        "记忆系统": 6,
+        "工具调用与 Function Calling": 6,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 0,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 1,
+          "code": "Q-0062",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 2,
+          "code": "Q-0137",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 3,
+          "code": "Q-0419",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 4,
+          "code": "Q-0544",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 5,
+          "code": "Q-0561",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 6,
+          "code": "Q-0597",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 7,
+          "code": "Q-0883",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 8,
+          "code": "Q-0898",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 9,
+          "code": "Q-0925",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 10,
+          "code": "Q-1009",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 11,
+          "code": "Q-1434",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 12,
+          "code": "Q-1555",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 13,
+          "code": "Q-1674",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 14,
+          "code": "Q-1675",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 15,
+          "code": "Q-1843",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 16,
+          "code": "Q-1897",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 17,
+          "code": "Q-1909",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 18,
+          "code": "Q-2001",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 19,
+          "code": "Q-2007",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 20,
+          "code": "Q-2078",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 21,
+          "code": "Q-2186",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 22,
+          "code": "Q-2330",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 23,
+          "code": "Q-2466",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 24,
+          "code": "Q-2506",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 25,
+          "code": "Q-2507",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 26,
+          "code": "Q-2536",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 27,
+          "code": "Q-2612",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 28,
+          "code": "Q-2637",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 29,
+          "code": "Q-2659",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 30,
+          "code": "Q-2676",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 31,
+          "code": "Q-2797",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 32,
+          "code": "Q-2985",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 33,
+          "code": "Q-2993",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 34,
+          "code": "Q-2995",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 35,
+          "code": "Q-3003",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 36,
+          "code": "Q-3054",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 37,
+          "code": "Q-3168",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 38,
+          "code": "Q-3322",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 39,
+          "code": "Q-3323",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 40,
+          "code": "Q-3382",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 41,
+          "code": "Q-3383",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 42,
+          "code": "Q-3456",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 43,
+          "code": "Q-3642",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 44,
+          "code": "Q-3921",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 45,
+          "code": "Q-3939",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 46,
+          "code": "Q-3946",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 47,
+          "code": "Q-4188",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 48,
+          "code": "Q-4303",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 49,
+          "code": "Q-4836",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 50,
+          "code": "Q-4837",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 51,
+          "code": "Q-4839",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 52,
+          "code": "Q-4896",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 53,
+          "code": "Q-5588",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 54,
+          "code": "Q-5711",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 55,
+          "code": "Q-7020",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        },
+        {
+          "index": 56,
+          "code": "Q-7196",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "imported"
+        }
+      ],
+      "publication_id": "a82ce858-d104-4ba7-a5c8-c44cab0bc862"
+    },
+    "partial_publication": false,
+    "actual_available_count": 57,
+    "actual_topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 0,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    }
+  },
+  "availability": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 57,
+    "topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 0,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 17,
+        "interview_count": 16
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 18,
+        "interview_count": 11
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 8,
+        "interview_count": 8
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 2,
+        "interview_count": 2
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 6,
+        "interview_count": 6
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 6,
+        "interview_count": 5
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 0,
+        "interview_count": 0
+      }
+    ],
+    "can_start": true,
+    "missing": []
+  },
+  "draws": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "available_count": 17,
+      "session_id": "0be36061-5ceb-44e0-a69e-dcbe2cdc70bb",
+      "question_code": "Q-5711",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "available_count": 18,
+      "session_id": "e05f6995-51e1-4501-9fc8-15278c48240a",
+      "question_code": "Q-2001",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "available_count": 8,
+      "session_id": "10681e6f-3e6e-4ddd-944a-092d6a13ffba",
+      "question_code": "Q-2186",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    },
+    {
+      "topic": "上下文工程",
+      "available_count": 2,
+      "session_id": "9aec7e66-3cd4-4a47-bb56-8ff39f44ac83",
+      "question_code": "Q-7196",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    },
+    {
+      "topic": "记忆系统",
+      "available_count": 6,
+      "session_id": "3a969fa2-9262-4918-9cad-48627bbcd3f9",
+      "question_code": "Q-2676",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "available_count": 6,
+      "session_id": "3420e807-418b-4c3f-b4d4-ebfa76eede29",
+      "question_code": "Q-5588",
+      "question_version": 1,
+      "phase": "awaiting_answer"
+    }
+  ],
+  "idempotent_replay": {
+    "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+    "review_policy": "independent_agent_first",
+    "preview": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": false,
+      "accepted_count": 57,
+      "rejected_count": 0,
+      "imported_count": 0,
+      "unchanged_count": 57,
+      "available_count": 57,
+      "topic_counts": {
+        "Agent 基础与运行循环": 17,
+        "Agent 应用架构与场景设计": 18,
+        "规划、推理与任务执行": 8,
+        "上下文工程": 2,
+        "记忆系统": 6,
+        "工具调用与 Function Calling": 6,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 0,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 1,
+          "code": "Q-0062",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 2,
+          "code": "Q-0137",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 3,
+          "code": "Q-0419",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 4,
+          "code": "Q-0544",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 5,
+          "code": "Q-0561",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 6,
+          "code": "Q-0597",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 7,
+          "code": "Q-0883",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 8,
+          "code": "Q-0898",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 9,
+          "code": "Q-0925",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 10,
+          "code": "Q-1009",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 11,
+          "code": "Q-1434",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 12,
+          "code": "Q-1555",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 13,
+          "code": "Q-1674",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 14,
+          "code": "Q-1675",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 15,
+          "code": "Q-1843",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 16,
+          "code": "Q-1897",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 17,
+          "code": "Q-1909",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 18,
+          "code": "Q-2001",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 19,
+          "code": "Q-2007",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 20,
+          "code": "Q-2078",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 21,
+          "code": "Q-2186",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 22,
+          "code": "Q-2330",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 23,
+          "code": "Q-2466",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 24,
+          "code": "Q-2506",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 25,
+          "code": "Q-2507",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 26,
+          "code": "Q-2536",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 27,
+          "code": "Q-2612",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 28,
+          "code": "Q-2637",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 29,
+          "code": "Q-2659",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 30,
+          "code": "Q-2676",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 31,
+          "code": "Q-2797",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 32,
+          "code": "Q-2985",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 33,
+          "code": "Q-2993",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 34,
+          "code": "Q-2995",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 35,
+          "code": "Q-3003",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 36,
+          "code": "Q-3054",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 37,
+          "code": "Q-3168",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 38,
+          "code": "Q-3322",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 39,
+          "code": "Q-3323",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 40,
+          "code": "Q-3382",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 41,
+          "code": "Q-3383",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 42,
+          "code": "Q-3456",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 43,
+          "code": "Q-3642",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 44,
+          "code": "Q-3921",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 45,
+          "code": "Q-3939",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 46,
+          "code": "Q-3946",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 47,
+          "code": "Q-4188",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 48,
+          "code": "Q-4303",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 49,
+          "code": "Q-4836",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 50,
+          "code": "Q-4837",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 51,
+          "code": "Q-4839",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 52,
+          "code": "Q-4896",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 53,
+          "code": "Q-5588",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 54,
+          "code": "Q-5711",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 55,
+          "code": "Q-7020",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 56,
+          "code": "Q-7196",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        }
+      ]
+    },
+    "review_blockers": [],
+    "published": true,
+    "publication": {
+      "pack_id": "pack_agent_basics_mianstack",
+      "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+      "committed": true,
+      "accepted_count": 57,
+      "rejected_count": 0,
+      "imported_count": 0,
+      "unchanged_count": 57,
+      "available_count": 57,
+      "topic_counts": {
+        "Agent 基础与运行循环": 17,
+        "Agent 应用架构与场景设计": 18,
+        "规划、推理与任务执行": 8,
+        "上下文工程": 2,
+        "记忆系统": 6,
+        "工具调用与 Function Calling": 6,
+        "MCP、A2A 与工具协议": 0,
+        "Skills 能力系统": 0,
+        "工作流、状态与执行恢复": 0,
+        "多 Agent 编排与协作": 0,
+        "Agent 框架与 Harness": 0,
+        "GUI、Computer Use 与多模态 Agent": 0
+      },
+      "items": [
+        {
+          "index": 0,
+          "code": "Q-0058",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 1,
+          "code": "Q-0062",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 2,
+          "code": "Q-0137",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 3,
+          "code": "Q-0419",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 4,
+          "code": "Q-0544",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 5,
+          "code": "Q-0561",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 6,
+          "code": "Q-0597",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 7,
+          "code": "Q-0883",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 8,
+          "code": "Q-0898",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 9,
+          "code": "Q-0925",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 10,
+          "code": "Q-1009",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 11,
+          "code": "Q-1434",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 12,
+          "code": "Q-1555",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 13,
+          "code": "Q-1674",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 14,
+          "code": "Q-1675",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 15,
+          "code": "Q-1843",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 16,
+          "code": "Q-1897",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 17,
+          "code": "Q-1909",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 18,
+          "code": "Q-2001",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 19,
+          "code": "Q-2007",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 20,
+          "code": "Q-2078",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 21,
+          "code": "Q-2186",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 22,
+          "code": "Q-2330",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 23,
+          "code": "Q-2466",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 24,
+          "code": "Q-2506",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 25,
+          "code": "Q-2507",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 26,
+          "code": "Q-2536",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 27,
+          "code": "Q-2612",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 28,
+          "code": "Q-2637",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 29,
+          "code": "Q-2659",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 30,
+          "code": "Q-2676",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 31,
+          "code": "Q-2797",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 32,
+          "code": "Q-2985",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 33,
+          "code": "Q-2993",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 34,
+          "code": "Q-2995",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 35,
+          "code": "Q-3003",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 36,
+          "code": "Q-3054",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 37,
+          "code": "Q-3168",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 38,
+          "code": "Q-3322",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 39,
+          "code": "Q-3323",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 40,
+          "code": "Q-3382",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 41,
+          "code": "Q-3383",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 42,
+          "code": "Q-3456",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 43,
+          "code": "Q-3642",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 44,
+          "code": "Q-3921",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 45,
+          "code": "Q-3939",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 46,
+          "code": "Q-3946",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 47,
+          "code": "Q-4188",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 48,
+          "code": "Q-4303",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 49,
+          "code": "Q-4836",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 50,
+          "code": "Q-4837",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 51,
+          "code": "Q-4839",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 52,
+          "code": "Q-4896",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 53,
+          "code": "Q-5588",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 54,
+          "code": "Q-5711",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 55,
+          "code": "Q-7020",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        },
+        {
+          "index": 56,
+          "code": "Q-7196",
+          "accepted": true,
+          "reasons": [
+            {
+              "code": "VALIDATED",
+              "message": "内容结构、分类与固定来源校验通过"
+            }
+          ],
+          "version": 1,
+          "action": "unchanged"
+        }
+      ],
+      "publication_id": "b1b94ba8-ac3b-4f91-8b02-0c9e7e3b181b"
+    },
+    "partial_publication": false,
+    "actual_available_count": 57,
+    "actual_topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 0,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    }
+  }
+}

@@ -1,0 +1,478 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "bundle_sha256": "95f13360681b8ca166ec49d47e4bb6f78de168215f459eabda1792e0917cb459",
+  "instructions": "Independent Agent review authorized by user for05. Human fields remain null. Failures and unresolved human questions still block; records bind the complete bundle digest. See docs/verification/05-independent-agent-review.md.",
+  "samples": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "code": "Q-0419",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-0419",
+        "topic": "Agent 基础与运行循环",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_loop",
+        "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+        "findings": "模型提议、宿主执行、回执反馈正确，不强制向量库。"
+      }
+    },
+    {
+      "topic": "Agent 基础与运行循环",
+      "code": "Q-1674",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-1674",
+        "topic": "Agent 基础与运行循环",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_loop",
+        "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+        "findings": "两类运行时分工正确，明确是工程划分。"
+      }
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "code": "Q-0898",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-0898",
+        "topic": "Agent 应用架构与场景设计",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_architecture",
+        "reviewed_at": "2026-11-10T00:49:00+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+        "findings": "读仓库、编辑、测试和反馈闭环正确，不冒充已部署。"
+      }
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "code": "Q-2078",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-2078",
+        "topic": "Agent 应用架构与场景设计",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_architecture",
+        "reviewed_at": "2026-11-10T00:49:00+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group architecture",
+        "findings": "宿主定时与天气数据职责清楚，允许固定工作流。"
+      }
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "code": "Q-0883",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-0883",
+        "topic": "规划、推理与任务执行",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "函数调用请求与完整运行循环区分正确。"
+      }
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "code": "Q-2506",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-2506",
+        "topic": "规划、推理与任务执行",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "ReAct交替动作观察准确，不要求暴露完整思考。"
+      }
+    },
+    {
+      "topic": "上下文工程",
+      "code": "Q-7020",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-7020",
+        "topic": "上下文工程",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "上下文工程范围大于RAG，包含整体输入与约束。"
+      }
+    },
+    {
+      "topic": "上下文工程",
+      "code": "Q-7196",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-7196",
+        "topic": "上下文工程",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "摘要检索外存和分阶段处理的收益与信息损失均说明。"
+      }
+    },
+    {
+      "topic": "记忆系统",
+      "code": "Q-0062",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-0062",
+        "topic": "记忆系统",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "保存和召回进入上下文才影响回答，不等于权重更新。"
+      }
+    },
+    {
+      "topic": "记忆系统",
+      "code": "Q-4837",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-4837",
+        "topic": "记忆系统",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:49:24+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "记忆范围与内容类型交叉，短期状态也可持久化。"
+      }
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "code": "Q-1675",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-1675",
+        "topic": "工具调用与 Function Calling",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:51:25+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "有限重试、参数修正及幂等边界有官方资料支持。"
+      }
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "code": "Q-4836",
+      "human_review": null,
+      "agent_review": {
+        "code": "Q-4836",
+        "topic": "工具调用与 Function Calling",
+        "content_version": "05.1",
+        "review_kind": "independent_agent",
+        "reviewer": "/root/content_review_planning_memory_tools",
+        "reviewed_at": "2026-11-10T00:51:25+08:00",
+        "conclusion": "passed",
+        "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+        "findings": "结构合法、调用意图和业务成功不混淆。"
+      }
+    }
+  ],
+  "incidents": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "code": "Q-4839",
+      "error_class": "unnecessary_scheduler_requirement",
+      "found_in_version": "05.1",
+      "corrected_content_version": "05.2",
+      "findings": "主动性被窄化为定时观察；已移除独立调度器的强制要求，正文、考察点和评分点同步修正。",
+      "resolution": "corrected_and_rechecked",
+      "expanded_review": [
+        {
+          "code": "Q-0058",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "组件划分、状态/上下文和停止/成功边界正确，原答一致。"
+        },
+        {
+          "code": "Q-0419",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "模型提议、宿主执行、回执反馈正确，不强制向量库。"
+        },
+        {
+          "code": "Q-0597",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "模型生成与应用执行分工正确，原答一致。"
+        },
+        {
+          "code": "Q-1555",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "消息状态依赖结构合理，索引按需，不设唯一实现。"
+        },
+        {
+          "code": "Q-1674",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "两类运行时分工正确，明确是工程划分。"
+        },
+        {
+          "code": "Q-1843",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "多环节归因与有限修复合理，预算和缺口边界清楚。"
+        },
+        {
+          "code": "Q-1897",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "任务和反馈说明合理，接受文档了解或假设。"
+        },
+        {
+          "code": "Q-2330",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "技能方法与工具接口分工正确，脚本依赖执行环境。"
+        },
+        {
+          "code": "Q-2466",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "简洁概括闭环与成本可靠性权限挑战。"
+        },
+        {
+          "code": "Q-2612",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "动态任务收益与固定流程边界正确。"
+        },
+        {
+          "code": "Q-2637",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "对话入口和执行方式可重叠，非互斥类别。"
+        },
+        {
+          "code": "Q-3003",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "循环工程明确是工程解释，未冒充标准。"
+        },
+        {
+          "code": "Q-3456",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "模型/应用边界明确，不猜测不可见内部推理。"
+        },
+        {
+          "code": "Q-3946",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "按动态控制与环境反馈判断，不按工具数量。"
+        },
+        {
+          "code": "Q-4839",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.2",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "05.2复查：移除独立调度器的强制要求，目标主动性允许事件、持续循环或定时机制。"
+        },
+        {
+          "code": "Q-4896",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "会话与任务是侧重点，允许交互澄清和后台目标交付并存。"
+        },
+        {
+          "code": "Q-5711",
+          "topic": "Agent 基础与运行循环",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_loop",
+          "reviewed_at": "2026-11-10T00:51:30.6973518+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group loop",
+          "findings": "具身感知行动反馈与高层/低层控制分工正确。"
+        }
+      ]
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "code": "Q-2995",
+      "error_class": "unconditional_async_scoring_requirement",
+      "found_in_version": "05.1",
+      "corrected_content_version": "05.2",
+      "findings": "原评分点无条件要求异步；已限定长任务异步或等效非阻塞，允许短任务同步并核验超时、退出及产物。",
+      "resolution": "corrected_and_rechecked",
+      "expanded_review": [
+        {
+          "code": "Q-1675",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "有限重试、参数修正及幂等边界有官方资料支持。"
+        },
+        {
+          "code": "Q-1909",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "分类维度可交叉，题面扩写保留原ID。"
+        },
+        {
+          "code": "Q-2659",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "工具契约、宿主执行和业务完成分工清楚。"
+        },
+        {
+          "code": "Q-2995",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.2",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "05.2复查：仅长耗时任务要求异步或等效非阻塞，短任务同步方案不再误扣分。"
+        },
+        {
+          "code": "Q-4836",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "结构合法、调用意图和业务成功不混淆。"
+        },
+        {
+          "code": "Q-5588",
+          "topic": "工具调用与 Function Calling",
+          "content_version": "05.1",
+          "review_kind": "independent_agent",
+          "reviewer": "/root/content_review_planning_memory_tools",
+          "reviewed_at": "2026-11-10T00:51:25+08:00",
+          "conclusion": "passed",
+          "materials": "docs/verification/05-independent-agent-review.md; source group planning_memory_tools",
+          "findings": "固定检索与按需工具可组合，不强制Function Calling。"
+        }
+      ]
+    }
+  ],
+  "review_policy": "independent_agent_first",
+  "authorization": "User instruction, 2026-11-10: independent subagents review first; only unresolved issues need human review; if clear move ticket05 to ready-for-agent."
+}

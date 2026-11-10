@@ -1,0 +1,230 @@
+{
+  "Q-0058": {
+    "optional_point": "用一次部分失败的工具调用说明如何续跑。",
+    "common_misconception": "把四元组当唯一标准，或把停止当成任务成功。"
+  },
+  "Q-0062": {
+    "optional_point": "说明用户更正偏好后如何避免旧记忆覆盖新值。",
+    "common_misconception": "认为保存数据库就会自动被模型读取或改变模型权重。"
+  },
+  "Q-0137": {
+    "optional_point": "给出包含核查返工的提效衡量方法。",
+    "common_misconception": "编造使用经历或没有依据的效率百分比。"
+  },
+  "Q-0419": {
+    "optional_point": "说明简单任务可以不单独实现规划或长期记忆。",
+    "common_misconception": "以组件名称或数量判断系统能力，忽略反馈与执行。"
+  },
+  "Q-0544": {
+    "optional_point": "用失败恢复或数据权限对比两类产品。",
+    "common_misconception": "把宣传功能等同于本人已接通或实际使用的能力。"
+  },
+  "Q-0561": {
+    "optional_point": "描述固定 RAG 和 Agent 按需检索两种组合。",
+    "common_misconception": "认为接入 RAG 自动成为 Agent，或二者不能组合。"
+  },
+  "Q-0597": {
+    "optional_point": "说明同一模型可用于单次生成或 Agent 多轮决策。",
+    "common_misconception": "把模型生成命令当作应用已经完成操作。"
+  },
+  "Q-0883": {
+    "optional_point": "用失败后修正参数说明多轮反馈。",
+    "common_misconception": "认为有函数调用就自动具备完整任务循环。"
+  },
+  "Q-0898": {
+    "optional_point": "举例说明测试失败后如何缩小修改范围。",
+    "common_misconception": "把生成代码、测试通过和部署成功混为一谈。"
+  },
+  "Q-0925": {
+    "optional_point": "说明无证据检索或工具不可达的回退验证。",
+    "common_misconception": "编造项目经验，或把 MCP 当作知识存储本身。"
+  },
+  "Q-1009": {
+    "optional_point": "讨论资料冲突时版本和时效的核查。",
+    "common_misconception": "把长答案或带链接的回答直接当成研究完成。"
+  },
+  "Q-1434": {
+    "optional_point": "说明保留最佳合格版本及基准复现日志。",
+    "common_misconception": "用模型判断代替真实性能测量或忽略数值正确性。"
+  },
+  "Q-1555": {
+    "optional_point": "解释按 ID 查询、依赖调度或消息追加的复杂度选择。",
+    "common_misconception": "认为所有 Agent 都必须使用向量库或同一种数据结构。"
+  },
+  "Q-1674": {
+    "optional_point": "描述模型或工具的超时如何反馈到上层循环。",
+    "common_misconception": "把应用执行算作模型内部动作，或把 Runtime 名称当协议标准。"
+  },
+  "Q-1675": {
+    "optional_point": "补充限流提示、指数退避或熔断的适用条件。",
+    "common_misconception": "无差别无限重试，或重试结果未知的写入造成重复副作用。"
+  },
+  "Q-1843": {
+    "optional_point": "说明用固定任务回归比较修复前后表现。",
+    "common_misconception": "仅归因模型不够强，忽略工具、权限及输入缺口。"
+  },
+  "Q-1897": {
+    "optional_point": "比较所举任务的完成标准或工具权限。",
+    "common_misconception": "仅报产品名，或把未公开内部结构说成已验证事实。"
+  },
+  "Q-1909": {
+    "optional_point": "比较同一工具在本地远程和读写两个维度的位置。",
+    "common_misconception": "把一种分类法当唯一标准，或忽略工具副作用。"
+  },
+  "Q-2001": {
+    "optional_point": "说明无可行解时怎样定位约束冲突。",
+    "common_misconception": "把生成方案当可行解，或把可行解当已证明最优。"
+  },
+  "Q-2007": {
+    "optional_point": "联系具体存储形式解释检索和维护。",
+    "common_misconception": "把聊天日志、向量库或模型参数更新等同于全部记忆机制。"
+  },
+  "Q-2078": {
+    "optional_point": "说明通知的接单与最终送达如何区分。",
+    "common_misconception": "认为模型会自行定时，或固定查询也必须采用自主 Agent。"
+  },
+  "Q-2186": {
+    "optional_point": "给出依赖或产物引用等适合长任务的字段。",
+    "common_misconception": "把待办标记完成当作真实执行或完整调度保障。"
+  },
+  "Q-2330": {
+    "optional_point": "解释确定业务路径为何可封装成较复杂的 Tool。",
+    "common_misconception": "认为 Skill 自动增加执行权限或必须依赖 MCP。"
+  },
+  "Q-2466": {
+    "optional_point": "用一项具体限制说明工程控制方式。",
+    "common_misconception": "用自主一词暗示系统无约束或保证完成任意任务。"
+  },
+  "Q-2506": {
+    "optional_point": "解释一次观察怎样改变下一步工具选择。",
+    "common_misconception": "认为 ReAct 必须展示完整内部思考，或动作请求就是执行完成。"
+  },
+  "Q-2507": {
+    "optional_point": "说明如何用成功率、无进展次数和总成本评测。",
+    "common_misconception": "认为增加推理长度或无限重试就能解决循环可靠性。"
+  },
+  "Q-2536": {
+    "optional_point": "说明保留有效中间结果而只重规划受影响步骤。",
+    "common_misconception": "把计划当事实，或用重规划重置累计执行预算。"
+  },
+  "Q-2612": {
+    "optional_point": "给出固定脚本更合适的反例。",
+    "common_misconception": "宣称 Agent 对所有任务都更快、更便宜或更准确。"
+  },
+  "Q-2637": {
+    "optional_point": "说明定时触发的无聊天界面 Agent。",
+    "common_misconception": "把聊天 UI 与 Agent 执行方式当互斥类别。"
+  },
+  "Q-2659": {
+    "optional_point": "说明调用标识如何关联工具请求与结果。",
+    "common_misconception": "认为工具定义存在即工具已接通，或接单即业务成功。"
+  },
+  "Q-2676": {
+    "optional_point": "说明两类信息如何共用检索设施但分开权限和生命周期。",
+    "common_misconception": "仅按是否使用向量检索区分 Memory 与 RAG。"
+  },
+  "Q-2797": {
+    "optional_point": "说明一个固定审批加动态资料搜集的组合。",
+    "common_misconception": "认为 Workflow 不能有分支重试，或 RPA 必然由 LLM 决策。"
+  },
+  "Q-2985": {
+    "optional_point": "说明模型提出动作后应用可以拒绝执行。",
+    "common_misconception": "认为模型的调度建议自带权限或代表已执行。"
+  },
+  "Q-2993": {
+    "optional_point": "给出某一接口的超时、认证和回执校验。",
+    "common_misconception": "照抄假想服务清单，或断言全部模型都通过外部 API 接入。"
+  },
+  "Q-2995": {
+    "optional_point": "说明沙箱、资源限制或任务取消机制。",
+    "common_misconception": "不可信输入拼接 shell 命令，或仅看进程启动就宣称视频成功。"
+  },
+  "Q-3003": {
+    "optional_point": "举例说明无进展检测或成本跟踪。",
+    "common_misconception": "把 Loop Engineering 当统一产品标准或只等同提示词优化。"
+  },
+  "Q-3054": {
+    "optional_point": "给出低风险先推进与高影响先澄清的对照。",
+    "common_misconception": "用检索替用户决定偏好，或对已明确条件反复确认。"
+  },
+  "Q-3168": {
+    "optional_point": "说明临时指令、长期规则和历史事实冲突时如何核实。",
+    "common_misconception": "把文件名当跨宿主统一的加载或优先级协议。"
+  },
+  "Q-3322": {
+    "optional_point": "说明就绪节点可并行的前提。",
+    "common_misconception": "认为画出图就自动获得正确状态、容错或执行保证。"
+  },
+  "Q-3323": {
+    "optional_point": "说明节点内部重试与图层面的有向环并非一回事。",
+    "common_misconception": "把 DAG 等同直线，或让含循环图没有退出条件。"
+  },
+  "Q-3382": {
+    "optional_point": "描述一条消息到工具结果的具体链路。",
+    "common_misconception": "认为自托管自动带来全部工具权限或没有风险。"
+  },
+  "Q-3383": {
+    "optional_point": "说明多来源矛盾或时效问题如何回查。",
+    "common_misconception": "把引用等同结论正确，或认为传统搜索不使用 AI。"
+  },
+  "Q-3456": {
+    "optional_point": "用进程、接口或日志定位内部处理发生在哪里。",
+    "common_misconception": "从模型输出反推不可见的内部推理或闭源架构事实。"
+  },
+  "Q-3642": {
+    "optional_point": "举例说明这次要求与长期偏好的不同写入处理。",
+    "common_misconception": "把意图识别结果直接固化为已核实且永久有效的用户事实。"
+  },
+  "Q-3921": {
+    "optional_point": "说明错误观察如何触发下一步修正或停止。",
+    "common_misconception": "以工具数量或执行轮次替代动态控制的判断。"
+  },
+  "Q-3939": {
+    "optional_point": "比较一个模型承担多角色和多个专用模型的取舍。",
+    "common_misconception": "要求项目必须使用所有模型类型，或把检索命中当回答正确。"
+  },
+  "Q-3946": {
+    "optional_point": "说明定义有宽窄差别并给出采用的工程边界。",
+    "common_misconception": "只凭产品名称、聊天框或一次工具调用判断是否为 Agent。"
+  },
+  "Q-4188": {
+    "optional_point": "说明如何用同类任务比较总成本和最终成功率。",
+    "common_misconception": "为使用新技术而增加自主决策，忽略确定性方案。"
+  },
+  "Q-4303": {
+    "optional_point": "说明委派时传入什么状态以及如何汇总结果。",
+    "common_misconception": "把每个函数或 LLM 节点都算 Agent，或虚构多 Agent 经验。"
+  },
+  "Q-4836": {
+    "optional_point": "举例比较行程数据 JSON 和真实下单工具调用。",
+    "common_misconception": "把结构合法等同语义正确，或把 JSON 输出直接当外部操作成功。"
+  },
+  "Q-4837": {
+    "optional_point": "将一条长期事件同时放入长期和情景两个维度解释。",
+    "common_misconception": "把短期等同不持久化，或把情景与长期分类当互斥。"
+  },
+  "Q-4839": {
+    "optional_point": "说明事件响应与主动定时检查如何组合。",
+    "common_misconception": "把主动性等同定时运行，或认为模型脱离宿主机制自行后台计时、可越过授权。"
+  },
+  "Q-4896": {
+    "optional_point": "说明后台任务需要用户澄清时怎样回到会话。",
+    "common_misconception": "按是否有聊天框把任务型与会话型绝对二分。"
+  },
+  "Q-5588": {
+    "optional_point": "描述按需补查检索结果的多轮例子。",
+    "common_misconception": "认为 RAG 必须靠 Function Calling，或工具调用只用于查知识。"
+  },
+  "Q-5711": {
+    "optional_point": "说明仿真验证到真实环境可能存在差异。",
+    "common_misconception": "把普通聊天工具调用等同具身智能，或让语言模型必然直接控制执行器。"
+  },
+  "Q-7020": {
+    "optional_point": "说明本轮不需要的记忆或工具定义应如何筛选。",
+    "common_misconception": "把 RAG 当上下文工程全部，或把检索资料当高优先级指令。"
+  },
+  "Q-7196": {
+    "optional_point": "比较更大窗口、分阶段处理与检索的成本和信息损失。",
+    "common_misconception": "任意截断关键指令或调用回执，或认为摘要不会丢信息。"
+  }
+}
