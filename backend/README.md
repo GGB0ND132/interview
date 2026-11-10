@@ -103,6 +103,6 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 ## 06：后六主题内容与质量维护
 
-后六主题 58 道候选题（16 原文、5 维护者修订、37 补答）、逐题评分点、12 主题盘点与发布命令见 [06 题包说明](../docs/content-baseline/agent-topics-06/README.md)。按用户 2026-11-10 新要求，三个独立子 Agent 已完成 58 题全量审核，6 处问题修正后复核通过，工单为 ready-for-agent；详见 [内容审核汇总](../docs/verification/06-content-review.md)。自动校验通过 58、Agent 审核通过 58、真实人工审核 0、正式发布 0，分别记录。GUI 唯一来源题已全量核查，不再作为本轮工单审核阻塞。既有人工发布脚本未在本轮更改或执行。05 前六主题题包尚未合入本分支，报告保留其取材数量与未整理缺口。
+后六主题 58 题（16 原文、5 维护者修订、37 补答）已通过三个独立子 Agent 全量审核和正式发布；6 处问题修正并复核后无未决项，GUI 唯一来源题已全量核查。显式 `--review-policy agent_full --scope second-half` 使用真实 Agent 身份及完整内容哈希审批；默认 `human_sample` 保留，人工模板不代填。06 本地持久化实例为 API 8001、前端 5174，继承 05 已发布的 57 题后，当前全部 12 主题实际可抽 115；05 原服务不受影响。详见 [在线发布与验收](../docs/verification/06-live-release.md)、[题包说明](../docs/content-baseline/agent-topics-06/README.md) 和 [内容审核](../docs/verification/06-content-review.md)。05 候选源码未合入本分支，继承数据与本轮整理/审核数量分别记录。
 
 06 增加 schema 3 的题目隔离、主题暂停及版本绑定的更正/扩大抽查/恢复接口。已知错题先停用，同主题重复错误暂停评分（错误类别可以不同），纠正并复查后才能恢复；暂停或隔离同时影响抽题与进行中的模型评分，用户回答保留。普通 03 发布仍不允许绕过停用；须先登记该版本质量问题，再经 `/maintenance/topic-quality/{competency_id}/corrections` 人工核查后提交新版本，扩大复查完成前仍隔离。完整请求格式与边界见上述说明。

@@ -3,6 +3,7 @@
 import argparse
 import json
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 
 
@@ -19,29 +20,27 @@ def main() -> None:
     # Exclusive file creation protects against accidentally replacing a concurrent seed.
     with target.open("xb"):
         pass
-    with (
-        sqlite3.connect(source.as_uri() + "?mode=ro", uri=True) as original,
-        sqlite3.connect(target) as copy,
-    ):
-        original.backup(copy)
-        if copy.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
-            raise RuntimeError("Copied database failed integrity check")
-        print(
-            json.dumps(
-                {
-                    "source": str(source),
-                    "target": str(target),
-                    "schema_version": copy.execute("PRAGMA user_version").fetchone()[0],
-                    "question_versions": copy.execute("SELECT COUNT(*) FROM questions").fetchone()[
-                        0
-                    ],
-                    "preserved_sessions": copy.execute("SELECT COUNT(*) FROM sessions").fetchone()[
-                        0
-                    ],
-                    "backup_method": "sqlite3.Connection.backup; source opened read-only",
-                }
-            )
-        )
+    try:
+        with (
+            closing(sqlite3.connect(source.as_uri() + "?mode=ro", uri=True)) as original,
+            closing(sqlite3.connect(target)) as copy,
+        ):
+            original.backup(copy)
+            if copy.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+                raise RuntimeError("Copied database failed integrity check")
+            result = {
+                "source": str(source),
+                "target": str(target),
+                "schema_version": copy.execute("PRAGMA user_version").fetchone()[0],
+                "question_versions": copy.execute("SELECT COUNT(*) FROM questions").fetchone()[0],
+                "preserved_sessions": copy.execute("SELECT COUNT(*) FROM sessions").fetchone()[0],
+                "backup_method": "sqlite3.Connection.backup; source opened read-only",
+            }
+    except Exception:
+        # Only this invocation's exclusively created target is removed, after closing it.
+        target.unlink()
+        raise
+    print(json.dumps(result))
 
 
 if __name__ == "__main__":

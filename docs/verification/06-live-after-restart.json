@@ -1,0 +1,419 @@
+{
+  "checked_at": "2026-11-10T10:47:20.860078+00:00",
+  "scope": "Local persistent 06 deployment; actual HTTP; no model calls",
+  "backend_url": "http://127.0.0.1:8001",
+  "frontend_url": "http://127.0.0.1:5174",
+  "expected_database_path": "C:\\Users\\ctrlz\\orca\\workspaces\\interview agent\\06\\backend\\data\\practice.sqlite3",
+  "publication_id": "55d425b3-4066-4c94-8157-286437d8f64e",
+  "saved_publication_matches": true,
+  "availability": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 115,
+    "topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 15,
+      "Skills 能力系统": 13,
+      "工作流、状态与执行恢复": 5,
+      "多 Agent 编排与协作": 8,
+      "Agent 框架与 Harness": 16,
+      "GUI、Computer Use 与多模态 Agent": 1
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 17,
+        "interview_count": 16
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 18,
+        "interview_count": 11
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 8,
+        "interview_count": 8
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 2,
+        "interview_count": 2
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 6,
+        "interview_count": 6
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 6,
+        "interview_count": 5
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 15,
+        "interview_count": 13
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 13,
+        "interview_count": 12
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 5,
+        "interview_count": 5
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 8,
+        "interview_count": 6
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 16,
+        "interview_count": 13
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 1,
+        "interview_count": 1
+      }
+    ],
+    "can_start": true,
+    "missing": []
+  },
+  "current_candidates_verified": [
+    {
+      "code": "Q-0019",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0022",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0048",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0140",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-0322",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0361",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0378",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0379",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-0382",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0416",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-0624",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0798",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0852",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0871",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0872",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-0897",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0935",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0976",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-0977",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-1085",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-1247",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-1268",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-1664",
+      "content_version": "agent-basics-06-v2"
+    },
+    {
+      "code": "Q-1768",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2075",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2095",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2266",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2343",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2426",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2537",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2639",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2864",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-2920",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3169",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3257",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3287",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3486",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3487",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3588",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3687",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3696",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3748",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3749",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3784",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-3795",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4112",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4113",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4240",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4456",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4460",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4923",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4924",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-4925",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-5078",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-7004",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-7077",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-7091",
+      "content_version": "agent-basics-06-v1"
+    },
+    {
+      "code": "Q-9127",
+      "content_version": "agent-basics-06-v1"
+    }
+  ],
+  "inherited_question_versions_identical": [
+    "Q-0058",
+    "Q-0062",
+    "Q-0137",
+    "Q-0419",
+    "Q-0544",
+    "Q-0561",
+    "Q-0597",
+    "Q-0883",
+    "Q-0898",
+    "Q-0925",
+    "Q-1009",
+    "Q-1434",
+    "Q-1555",
+    "Q-1674",
+    "Q-1675",
+    "Q-1843",
+    "Q-1897",
+    "Q-1909",
+    "Q-2001",
+    "Q-2007",
+    "Q-2078",
+    "Q-2186",
+    "Q-2330",
+    "Q-2466",
+    "Q-2506",
+    "Q-2507",
+    "Q-2536",
+    "Q-2612",
+    "Q-2637",
+    "Q-2659",
+    "Q-2676",
+    "Q-2797",
+    "Q-2985",
+    "Q-2993",
+    "Q-2995",
+    "Q-3003",
+    "Q-3054",
+    "Q-3168",
+    "Q-3322",
+    "Q-3323",
+    "Q-3382",
+    "Q-3383",
+    "Q-3456",
+    "Q-3642",
+    "Q-3921",
+    "Q-3939",
+    "Q-3946",
+    "Q-4188",
+    "Q-4303",
+    "Q-4836",
+    "Q-4837",
+    "Q-4839",
+    "Q-4896",
+    "Q-5588",
+    "Q-5711",
+    "Q-7020",
+    "Q-7196"
+  ],
+  "inherited_sessions_identical": [
+    "0471de97-610c-47cd-88fa-679a9b6470a2",
+    "3420e807-418b-4c3f-b4d4-ebfa76eede29",
+    "3a969fa2-9262-4918-9cad-48627bbcd3f9",
+    "9aec7e66-3cd4-4a47-bb56-8ff39f44ac83",
+    "10681e6f-3e6e-4ddd-944a-092d6a13ffba",
+    "e05f6995-51e1-4501-9fc8-15278c48240a",
+    "0be36061-5ceb-44e0-a69e-dcbe2cdc70bb"
+  ],
+  "source_05_available_count": 57,
+  "draws": [],
+  "persisted_skip_reports": [
+    "3c8d7f22-e926-47c5-b588-2df3c914ba6a",
+    "5f630ea6-1d8a-4230-9be2-a4ccb6b9abcd",
+    "c237f34e-4d01-4165-8487-38a3ff5bac68",
+    "0d0a9aa9-2617-41f0-99cb-61685fe1ece9",
+    "ed6366e0-3291-45a6-ad2f-10666efbdde5",
+    "33bf79fc-6fa5-4097-95ba-06d9f4a9249d"
+  ],
+  "frontend_http_status": 200,
+  "frontend_proxy_matches_backend": true,
+  "browser_visual_check": "Not performed by this HTTP verification script"
+}
