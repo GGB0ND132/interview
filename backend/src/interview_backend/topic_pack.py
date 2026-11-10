@@ -1,6 +1,6 @@
 """Release the curated topic pack through the existing publishing HTTP boundary.
 
-Human review is an explicit local-maintainer attestation, not model-generated evidence.
+Review identity is preserved. Agent review must be explicitly selected by the maintainer.
 The generic ticket-03 maintenance API remains available to trusted maintainers.
 """
 
@@ -10,7 +10,7 @@ import hashlib
 import json
 from datetime import datetime
 from importlib.resources import files
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 import httpx
 
@@ -46,11 +46,13 @@ def source_catalog() -> list[dict[str, Any]]:
     return [json.loads(raw.split("---", 2)[1]) for raw in snapshot["files"].values()]
 
 
-def review_problem(sample: dict[str, Any], question: dict[str, Any]) -> str | None:
+def review_problem(
+    sample: dict[str, Any], question: dict[str, Any], *, actor_type: str = "human"
+) -> str | None:
     if sample.get("candidate_sha256") != candidate_digest(question):
         return "REVIEW_CONTENT_CHANGED"
-    if sample.get("actor_type") != "human":
-        return "HUMAN_REVIEW_REQUIRED"
+    if sample.get("actor_type") != actor_type:
+        return "HUMAN_REVIEW_REQUIRED" if actor_type == "human" else "AGENT_REVIEW_REQUIRED"
     if any(
         not isinstance(sample.get(field), str) or not sample[field].strip()
         for field in ("reviewer", "reviewed_at", "findings")
@@ -86,12 +88,28 @@ class TopicPack:
         result: dict[str, Any] = response.json()["data"]
         return result
 
-    def run(self, reviews: dict[str, Any], *, publish: bool = False) -> dict[str, Any]:
-        questions = load_questions()
+    def run(
+        self,
+        reviews: dict[str, Any],
+        *,
+        publish: bool = False,
+        review_policy: Literal["human_sample", "agent_full"] = "human_sample",
+        competency_ids: list[str] | None = None,
+    ) -> dict[str, Any]:
+        if review_policy not in {"human_sample", "agent_full"}:
+            raise ValueError("Unknown release review policy")
+        scope = set(competency_ids if competency_ids is not None else TOPICS.values())
+        if not scope or not scope.issubset(set(TOPICS.values())):
+            raise ValueError("Release scope must contain known Agent competencies")
+        questions = [q for q in load_questions() if q["competency_id"] in scope]
+        if not questions:
+            raise ValueError("No prepared candidates in selected scope")
         by_code = {question["code"]: question for question in questions}
         preview = self._post("maintenance/question-publications/preview", {"questions": questions})
         passed = {item["code"] for item in preview["items"] if item["accepted"]}
-        review_errors = []
+        review_errors: list[dict[str, Any]] = []
+        if review_policy == "agent_full" and reviews.get("source_commit") != COMMIT:
+            review_errors.append({"reason": "REVIEW_SOURCE_MISMATCH"})
         approved = set()
         samples = reviews.get("samples", [])
         if not isinstance(samples, list):
@@ -112,7 +130,11 @@ class TopicPack:
                 seen.add(code)
                 if sample.get("conclusion") == "pending":
                     continue
-                problem = review_problem(sample, by_code[code])
+                problem = review_problem(
+                    sample,
+                    by_code[code],
+                    actor_type="agent" if review_policy == "agent_full" else "human",
+                )
                 if problem is None:
                     approved.add(code)
             if problem:
@@ -126,21 +148,26 @@ class TopicPack:
             codes = {row["code"] for row in candidates}
             reviewed = codes & approved
             blockers = []
-            if len(source_rows) < 2:
+            selected = competency in scope
+            if review_policy == "human_sample" and len(source_rows) < 2:
                 blockers.append("INSUFFICIENT_DISTINCT_SOURCE_QUESTIONS")
             if len(candidates) != len(source_rows):
                 blockers.append("INCOMPLETE_TOPIC_PACK")
-            if len(reviewed) < 2:
+            if review_policy == "agent_full":
+                if codes - reviewed or not codes:
+                    blockers.append("FULL_AGENT_REVIEW_REQUIRED")
+            elif len(reviewed) < 2:
                 blockers.append("TWO_HUMAN_SAMPLES_REQUIRED")
             generated = {q["code"] for q in candidates if q["answer_origin"] == "agent_generated"}
             if generated and not (generated & reviewed):
                 blockers.append("GENERATED_ANSWER_SAMPLE_REQUIRED")
-            if not blockers:
+            if selected and not blockers:
                 eligible.update(codes & passed)
             topics.append(
                 {
                     "topic": topic,
                     "competency_id": competency,
+                    "selected_for_release": selected,
                     "source_count": len(source_rows),
                     "source_ready_count": sum(
                         row["answerStatus"] == "ready" for row in source_rows
@@ -156,7 +183,17 @@ class TopicPack:
             )
         publication = None
         # A malformed review file must never partially authorize a publication.
-        if publish and eligible and not review_errors:
+        gate_passed = (
+            not review_errors
+            and preview["rejected_count"] == 0
+            and all(not row["blockers"] for row in topics if row["selected_for_release"])
+        )
+        if (
+            publish
+            and eligible
+            and not review_errors
+            and (review_policy == "human_sample" or gate_passed)
+        ):
             publication = self._post(
                 "maintenance/question-publications",
                 {"questions": [q for q in questions if q["code"] in eligible]},
@@ -167,23 +204,37 @@ class TopicPack:
         )
         for row in topics:
             row["available_count"] = available["topic_counts"][row["topic"]]
+        release_succeeded = publication is not None and (
+            publication["rejected_count"] == 0
+            and publication["accepted_count"] == len(questions)
+            and all(
+                row["available_count"] >= row["prepared_count"]
+                for row in topics
+                if row["selected_for_release"]
+            )
+        )
         return {
             "source_commit": COMMIT,
+            "review_policy": review_policy,
+            "scope_competency_ids": sorted(scope),
             "source_count": len(sources),
             "prepared_count": len(questions),
             "unprepared_count": len(sources) - len(questions),
             "validation_passed_count": preview["accepted_count"],
             "rejected_count": preview["rejected_count"],
             "reviewed_count": len(approved),
+            "agent_reviewed_count": len(approved) if review_policy == "agent_full" else 0,
+            "human_reviewed_count": len(approved) if review_policy == "human_sample" else 0,
             "eligible_for_release_count": len(eligible) if not review_errors else 0,
             "published_now_count": publication["imported_count"] if publication else 0,
             "available_count": available["available_count"],
             "topics": topics,
             "validation_items": preview["items"],
             "review_errors": review_errors,
-            "human_reviews": samples,
+            "human_reviews": samples if review_policy == "human_sample" else [],
+            "review_records": samples,
             "publication": publication,
-            "complete": all(not row["blockers"] for row in topics) and not review_errors,
+            "complete": gate_passed and (not publish or release_succeeded),
         }
 
 

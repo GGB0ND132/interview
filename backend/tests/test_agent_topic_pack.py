@@ -8,6 +8,72 @@ from test_publishing import CONFIG, PACK, data
 from interview_backend.api import create_app
 from interview_backend.topic_pack import TopicPack, review_template
 
+SECOND_HALF = [
+    "agent_protocols",
+    "agent_skills",
+    "agent_workflow_recovery",
+    "agent_multi_agent",
+    "agent_frameworks_harness",
+    "agent_gui",
+]
+
+
+def agent_reviews():
+    reports = Path(__file__).parents[2] / "docs/verification"
+    samples = []
+    for path in sorted(reports.glob("06-content-*-review.json")):
+        samples.extend(json.loads(path.read_text(encoding="utf-8"))["samples"])
+    return {
+        "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "samples": samples,
+    }
+
+
+def test_authorized_agent_full_review_releases_all_six_topics(tmp_path: Path):
+    database = tmp_path / "agent-release.sqlite3"
+    with TestClient(create_app(database_path=database)) as client:
+        result = TopicPack(client).run(
+            agent_reviews(), publish=True, review_policy="agent_full", competency_ids=SECOND_HALF
+        )
+        assert result["complete"] is True
+        assert result["agent_reviewed_count"] == 58
+        assert result["human_reviewed_count"] == 0
+        assert result["published_now_count"] == 58
+        assert result["available_count"] == 58
+        gui = next(t for t in result["topics"] if t["competency_id"] == "agent_gui")
+        assert gui["blockers"] == []
+        assert gui["available_count"] == 1
+        publication_id = result["publication"]["publication_id"]
+    with TestClient(create_app(database_path=database)) as client:
+        saved = data(client.get(f"/api/v1/maintenance/question-publications/{publication_id}"))
+        assert saved["accepted_count"] == 58
+        replay = TopicPack(client).run(
+            agent_reviews(), publish=True, review_policy="agent_full", competency_ids=SECOND_HALF
+        )
+        assert replay["complete"] is True
+        assert replay["published_now_count"] == 0
+        assert replay["publication"]["unchanged_count"] == 58
+
+
+def test_agent_release_rejects_incomplete_stale_or_wrong_source_reviews(tmp_path: Path):
+    for problem in ("missing", "stale", "wrong_source", "wrong_actor"):
+        reviews = agent_reviews()
+        if problem == "missing":
+            reviews["samples"].pop()
+        elif problem == "stale":
+            reviews["samples"][0]["candidate_sha256"] = "old content"
+        elif problem == "wrong_source":
+            reviews["source_commit"] = "unapproved upstream revision"
+        else:
+            reviews["samples"][0]["actor_type"] = "human"
+        with TestClient(create_app(database_path=tmp_path / f"{problem}.sqlite3")) as client:
+            result = TopicPack(client).run(
+                reviews, publish=True, review_policy="agent_full", competency_ids=SECOND_HALF
+            )
+            assert result["complete"] is False
+            assert result["published_now_count"] == 0
+            assert result["available_count"] == 0
+
 
 def second_half():
     return json.loads(
