@@ -1,6 +1,6 @@
 # 05 独立双轴审查
 
-当前补充状态：按用户后续指示，已完成三个独立子 Agent 的全量内容审核与问题修正复查，57/57 通过，状态改为 `ready-for-agent`。本文件前半部分保留首次交付的历史状态；当前审核见 [05-independent-agent-review.md](05-independent-agent-review.md)。
+当前补充状态：按用户后续指示，已完成三个独立子 Agent 的全量内容审核与问题修正复查，57/57 通过；之后完成本工作区持久化发布与默认浏览器验收，工单 **5/5**，triage 状态保留 `ready-for-agent`。本文件前半部分保留首次交付的历史状态；当前内容审核见 [05-independent-agent-review.md](05-independent-agent-review.md)，发布见 [05-live-release.md](05-live-release.md)。
 
 基线：`4a721d9a747a24ab3d8245ee309812ceb1b760cd`。实现：`b068348`；规格修正：`a98bb46`。审查分别由全新上下文的 Standards 与 Spec 子代理独立执行，不将其当作技术答案的人工抽查。
 
@@ -36,3 +36,17 @@ Spec 独立复核：两个 P2 均已解决，10 项针对性回归通过，未�
 真实 HTTP 验收已改为使用实际子 Agent 记录走发布命令，仅在临时数据库发布 57 题并核对六主题抽题、幂等与停用；未发布到正式目标数据库。当前 05 的正式发布清单保持未勾选。
 
 最终从固定源包重建后，完整测试 **73 passed**；mypy、ruff check、ruff format --check 全部通过，仅有既有 Starlette/httpx 弃用提示。题包、审核记录与逐题审计摘要一致，57 个题号及内容版本匹配，12 道样本与两次扩大复查均为完整通过，人工字段仍为空。
+
+## 持久化发布增量复核
+
+相对固定提交 `18b54029e56d225bcc0399bc8a45f31e833afe35`，两个全新上下文子 Agent 审查发布脚本、文档与证据；不重复修改题目内容。
+
+### Standards
+
+`/root/release_standards_review`：0 项发现。仓库位置与 triage 状态符合约定，发布包装脚本走既有审核门槛，无实质代码异味。
+
+### Spec
+
+`/root/release_spec_review`：0 项发现。57 题接受、0 拒绝、六主题真实抽题及页面 57/Q-3642 证据满足最后一项；本地范围、未测试在线评分和七个未作答验收会话均如实说明。该审查者还独立只读确认发布报告及六个保存会话；重启过程依据主 Agent 观测记录。
+
+规范轴 0 项，规格轴 0 项，无需人工裁决。持久化发布后后端完整测试再次 **73 passed**，mypy、ruff check/format 和前端 TypeScript/Vite build 通过。

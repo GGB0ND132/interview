@@ -46,7 +46,7 @@
 uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3 --publish
 ```
 
-默认读取仓库记录，也可用 `--review-file <path>` 指定记录。没有 `--publish` 时仅预览，返回预计接受数及实际已发布数；二者不同。没有明确 Agent 授权策略的记录仍按原人工方式检查。直接调用 03 通用维护 API 不会执行本批审核门槛，因此正式发布必须走此命令。本轮只进入 `ready-for-agent`，未对正式数据库发布。
+默认读取仓库记录，也可用 `--review-file <path>` 指定记录。没有 `--publish` 时仅预览，返回预计接受数及实际已发布数；二者不同。没有明确 Agent 授权策略的记录仍按原人工方式检查。直接调用 03 通用维护 API 不会执行本批审核门槛，因此正式发布必须走此命令。审核完成时先进入 `ready-for-agent`；随后用户要求继续剩余任务，现已对本工作区持久化数据库发布，证据见 [05-live-release.md](05-live-release.md)。
 
 ## 错误、扩大抽查与暂停
 

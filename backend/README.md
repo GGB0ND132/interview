@@ -105,4 +105,8 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 本批 57 题已整理并自动校验，三个独立子 Agent 审核及问题修正复查已通过，状态为 `ready-for-agent`，**不随服务启动自动发布**。用户授权 05 先由子 Agent 审核，未解决疑点才转人工；审核结论见 [05-independent-agent-review.md](../docs/verification/05-independent-agent-review.md)，执行方式见 [05-human-sampling.md](../docs/verification/05-human-sampling.md)。
 
+2026-11-10 已按用户后续指示发布到 `05` 工作区的持久化 `backend/data/practice.sqlite3`，57 题可用，六主题抽题与页面数量核对通过，工单 5/5。数据库按忽略规则仅留本机；其他检出仍须显式发布。证据见 [05-live-release.md](../docs/verification/05-live-release.md)。
+
 在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。本批 `first_half_review.json` 已记录明确的 `independent_agent_first` 策略及真实审核，后续加 `--publish` 可发布到指定数据库；内容变更、失败或未完成扩大复查时仍拒绝。人审与 Agent 字段分别保存，不把 Agent 记录冒充人审。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 通用维护 API 仍是底层维护入口。
+
+运行服务确认连接目标后，可用 `uv run --locked python -X utf8 scripts/release_first_half.py --database data/practice.sqlite3 --base-url http://127.0.0.1:8000 --output ../docs/verification/05-live-release.json` 执行上述审核门槛发布和持久化 HTTP 验收。它会发布、重复发布并创建六个未作答练习，不提交答案、不调用模型；输出文件只在全部检查通过后保存。仅适用于当前前六主题 57 题的独立目标库。

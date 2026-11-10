@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-10",
+  "browser": "Orca built-in browser",
+  "url": "http://127.0.0.1:5173/question-practice",
+  "pack_id": "pack_agent_basics_mianstack",
+  "visible_status": "57 道可抽",
+  "visible_topic_counts": {
+    "Agent 基础与运行循环": 17,
+    "Agent 应用架构与场景设计": 18,
+    "规划、推理与任务执行": 8,
+    "上下文工程": 2,
+    "记忆系统": 6,
+    "工具调用与 Function Calling": 6,
+    "MCP、A2A 与工具协议": 0,
+    "Skills 能力系统": 0,
+    "工作流、状态与执行恢复": 0,
+    "多 Agent 编排与协作": 0,
+    "Agent 框架与 Harness": 0,
+    "GUI、Computer Use 与多模态 Agent": 0
+  },
+  "draw_enabled": true,
+  "browser_draw": {
+    "question_code": "Q-3642",
+    "question_version": 1,
+    "topic": "记忆系统",
+    "prompt": "记忆系统中的意图识别承担什么职责？",
+    "answer_submitted": false
+  },
+  "restart": {
+    "method": "Initial unified exec services ended on user interruption; restarted against same database, reloaded browser, then verified persisted sessions over HTTP",
+    "backend_pid": 76824,
+    "frontend_pid": 82600,
+    "after_backend_restart_available": 57,
+    "restored_sessions": [
+      "0be36061-5ceb-44e0-a69e-dcbe2cdc70bb",
+      "e05f6995-51e1-4501-9fc8-15278c48240a",
+      "10681e6f-3e6e-4ddd-944a-092d6a13ffba",
+      "9aec7e66-3cd4-4a47-bb56-8ff39f44ac83",
+      "3a969fa2-9262-4918-9cad-48627bbcd3f9",
+      "3420e807-418b-4c3f-b4d4-ebfa76eede29"
+    ],
+    "same_question_codes_and_awaiting_answer": true,
+    "integrity_check": "ok",
+    "sessions": 7,
+    "submissions": 0,
+    "jobs": 0
+  },
+  "evidence_kind": "Recorded observed browser state and subsequent read-only HTTP/SQLite checks; not an automated UI test fixture"
+}
