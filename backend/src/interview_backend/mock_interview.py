@@ -266,7 +266,8 @@ def assess(evaluation: ModelEvaluation, answer: str, stage: str) -> dict[str, An
     result = feedback(adjusted, answer, weights=weights)
     result["rubric_version"] = f"interview_{stage}_v1"
     if stage == "technical" and re.search(
-        r"(?:我(?:不会|不知道|不清楚)(?:[，。,.!！?？]|解释|回答|其中|该|这)|^(?:不会|不知道|不清楚)[，。,.!！?？]?$)",
+        r"^(?:(?:这道题|这个问题)(?:问的[^，。！？“”\"']{1,80})?)?(?:我)?"
+        r"(?:不会(?=$|[，。,.!！?？]|解释|回答)|(?:不知道|不清楚)(?=$|[，。,.!！?？]|其中|该|这))",
         answer.strip(),
     ):
         result.update(

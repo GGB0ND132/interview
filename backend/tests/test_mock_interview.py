@@ -574,6 +574,34 @@ def test_unassessed_dimensions_can_omit_quotes_but_scores_and_nonempty_quotes_st
         assert refresh(client, session)["phase"] == phase
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        "我不会这样做，我会优化一下。",
+        "我不会这么设计，我会换一下。",
+        "不能把‘我不会回答’当作工具执行结果，后面再优化。",
+    ],
+)
+def test_negative_design_intentions_and_quoted_unknowns_do_not_override_vague_evidence(
+    tmp_path, text
+):
+    with TestClient(
+        create_app(
+            database_path=tmp_path / "not-a-declaration.sqlite3", evaluator=UnclearEvaluator()
+        )
+    ) as client:
+        ready(client)
+        session = start(client, max_main_questions=3)
+        report = run_remaining(client, session, technical_text=text)
+        technical = [g for g in report["groups"] if g["question"]["stage"] == "technical"]
+        assert all(not g["feedback"].get("knowledge_gap") for g in technical)
+        key = session["plan"]["selected_topics"][0]
+        assert (
+            next(c["status"] for c in report["coverage"] if c["competency_id"] == key)
+            == "insufficient"
+        )
+
+
 @pytest.mark.parametrize("violation", ["quote", "question", "competency"])
 def test_ungrounded_or_wrong_topic_proposals_cannot_become_followups(tmp_path, violation):
     class InvalidFollowup(UnclearEvaluator):

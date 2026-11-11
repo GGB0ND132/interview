@@ -113,7 +113,13 @@ def run_case(client: httpx.Client, name: str, answers: dict[str, str]) -> dict[s
             )
         if name in {"incorrect", "unknown"}:
             technical = [g for g in report["groups"] if g["question"]["stage"] == "technical"]
-            assert technical and all(g["score"] is None or g["score"] < 60 for g in technical)
+            assert technical
+            if name == "incorrect":
+                assert all(g["score"] is None or g["score"] < 60 for g in technical)
+            else:
+                assert all(
+                    g["feedback"].get("knowledge_gap") and g["followups"] == 0 for g in technical
+                )
     return {
         "case": name,
         "session_id": session["session_id"],
