@@ -10,12 +10,15 @@ class RequestModel(BaseModel):
     schema_version: Literal["1.0"] = "1.0"
 
 
-class QuestionSelection(BaseModel):
+class SelectionCriteria(BaseModel):
     model_config = ConfigDict(extra="forbid")
     difficulty: Literal["easy", "medium", "hard"] = "easy"
     language: Literal["zh-CN"] = "zh-CN"
     question_types: list[Literal["technical"]] = Field(default=["technical"], min_length=1)
     focus_competency_ids: list[str] = Field(default_factory=list)
+
+
+class QuestionSelection(SelectionCriteria):
     max_followups_per_question: Literal[0] = 0
     feedback_timing: Literal["after_question_group"] = "after_question_group"
 
@@ -24,13 +27,25 @@ class Config(QuestionSelection):
     mode: Literal["question_practice"] = "question_practice"
 
 
-class AvailabilityConfig(QuestionSelection):
+class AvailabilityConfig(SelectionCriteria):
     mode: Literal["question_practice", "mock_interview"] = "question_practice"
+    max_followups_per_question: int = Field(default=0, ge=0, le=2, strict=True)
+    feedback_timing: Literal["after_question_group", "after_session"] = "after_question_group"
+    experience_mode: Literal["experience", "scenario"] = "scenario"
+    max_main_questions: int = Field(default=12, ge=1, le=12, strict=True)
+
+
+class MockConfig(SelectionCriteria):
+    mode: Literal["mock_interview"]
+    max_followups_per_question: int = Field(default=2, ge=0, le=2, strict=True)
+    feedback_timing: Literal["after_session"] = "after_session"
+    experience_mode: Literal["experience", "scenario"] = "scenario"
+    max_main_questions: int = Field(default=12, ge=1, le=12, strict=True)
 
 
 class CreateSession(RequestModel):
     pack_id: str
-    config: Config = Field(default_factory=Config)
+    config: Config | MockConfig = Field(default_factory=Config)
 
 
 class RevisionRequest(RequestModel):
@@ -40,7 +55,7 @@ class RevisionRequest(RequestModel):
 class SubmitAnswer(RevisionRequest):
     turn_id: str
     client_submission_id: str = Field(min_length=1, max_length=100)
-    disposition: Literal["answered", "blank_answer", "skipped"]
+    disposition: Literal["answered", "blank_answer", "skipped", "no_experience", "no_questions"]
     answer_text: str = ""
 
     @field_validator("answer_text")
@@ -67,12 +82,24 @@ class Dimension(BaseModel):
     answer_quote: str = Field(min_length=1, max_length=5000)
 
 
+class Followup(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    text: str = Field(min_length=1, max_length=500)
+    answer_quote: str = Field(min_length=1, max_length=500)
+    purpose: str = Field(min_length=1, max_length=500)
+    question_code: str = Field(min_length=1, max_length=100)
+    competency_id: str = Field(min_length=1, max_length=100)
+
+
 class ModelEvaluation(BaseModel):
     # A provider-supplied overall_score is deliberately ignored.
     model_config = ConfigDict(extra="ignore")
     dimensions: list[Dimension] = Field(min_length=5, max_length=5)
     strengths: list[str] = Field(min_length=1, max_length=10)
     improvements: list[str] = Field(min_length=1, max_length=10)
+    evidence_status: Literal["observed", "insufficient"] | None = None
+    evidence_reason: str = Field(default="", max_length=2000)
+    followup: Followup | None = None
 
     @model_validator(mode="after")
     def unique_dimensions(self) -> ModelEvaluation:
