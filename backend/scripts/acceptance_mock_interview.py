@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import UTC, datetime
 from importlib.resources import files
 from pathlib import Path
@@ -39,7 +40,7 @@ def run_case(client: httpx.Client, name: str, answers: dict[str, str]) -> dict[s
     session = checked(client.post(f"{path}/start", json={"expected_revision": 0}))
     initial_plan = session["plan"]
     requests = []
-    while session["status"] != "completed":
+    while session["status"] not in {"completed", "ended_early"}:
         turn = session["current_turn"]
         disposition = "answered"
         answer = COMMON_ANSWERS.get(turn["stage"], answers.get(turn["question_code"], ""))
@@ -63,7 +64,7 @@ def run_case(client: httpx.Client, name: str, answers: dict[str, str]) -> dict[s
             "answer_text": answer,
         }
         submitted = checked(client.post(f"{path}/answers", json=request))
-        if submitted["session"]["status"] != "completed":
+        if submitted["session"]["status"] not in {"completed", "ended_early"}:
             assert (
                 "score" not in submitted["submission"] and "feedback" not in submitted["submission"]
             )
@@ -87,7 +88,7 @@ def run_case(client: httpx.Client, name: str, answers: dict[str, str]) -> dict[s
             time.sleep(0.5)
         assert session["phase"] != "evaluation_failed", session["submissions"][-1].get("error")
         print(f"{name}: {turn['stage']}/{turn['kind']} -> {session['phase']}", flush=True)
-        if session["status"] != "completed":
+        if session["status"] not in {"completed", "ended_early"}:
             assert all("score" not in s and "feedback" not in s for s in session["submissions"])
         if session["phase"] == "stage_transition":
             session = checked(
@@ -128,6 +129,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8007")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--case",
+        action="append",
+        choices=("complete", "vague", "incorrect", "unknown", "no_project"),
+    )
     args = parser.parse_args()
     bundle = json.loads(
         files("interview_backend").joinpath("first_half_candidates.json").read_text("utf-8")
@@ -142,15 +148,19 @@ def main() -> None:
     }
     try:
         with httpx.Client(base_url=args.base_url, timeout=15) as client:
-            for case in ("complete", "vague", "incorrect", "unknown", "no_project"):
-                record["cases"].append(run_case(client, case, answers))
-        record["passed"] = True
+            cases = args.case or ["complete", "vague", "incorrect", "unknown", "no_project"]
+            # Independent sessions can wait for the provider concurrently.
+            with ThreadPoolExecutor(max_workers=min(5, len(cases))) as executor:
+                pending = {executor.submit(run_case, client, case, answers): case for case in cases}
+                for future in as_completed(pending):
+                    record["cases"].append(future.result())
+        record["passed"] = all(case["passed"] for case in record["cases"])
     finally:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
-    print(f"PASS: five real-model interview cases; evidence={args.output}")
+    print(f"PASS: {len(record['cases'])} real-model interview cases; evidence={args.output}")
 
 
 if __name__ == "__main__":

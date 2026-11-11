@@ -381,8 +381,7 @@ class Practice:
                 "retryable": True,
             }
         with self.store.connect(write=True) as db:
-            # A user may end while the provider is running. Do not resurrect the
-            # completed session or write a late result into its saved report.
+            # Commit only the job claimed above.
             job = db.execute("SELECT status FROM jobs WHERE id=?", (job_id,)).fetchone()
             if job is None or job["status"] != "running":
                 return
@@ -461,7 +460,7 @@ class Practice:
         with self.store.connect() as db:
             session = self._row(db, session_id)
             if json.loads(session["config_json"])["mode"] == "mock_interview":
-                if session["status"] != "completed":
+                if session["status"] not in {"completed", "ended_early"}:
                     raise PracticeError("REPORT_NOT_READY", "模拟面试结束后才公开详细报告")
                 state = mock_interview.load(db, session_id)
                 assert state is not None
@@ -501,15 +500,12 @@ class Practice:
         with self.store.connect(write=True) as db:
             row = self._row(db, session_id)
             state = mock_interview.load(db, session_id)
-            if state is None or row["revision"] != revision or row["status"] != "active":
+            if (
+                state is None
+                or row["revision"] != revision
+                or row["status"] != "active"
+                or row["phase"] == "evaluating"
+            ):
                 raise PracticeError("STATE_CONFLICT", "当前状态不能结束模拟面试")
-            db.execute(
-                "UPDATE jobs SET status='cancelled' WHERE submission_id IN (SELECT id FROM submissions WHERE session_id=?) AND status IN ('queued','running')",
-                (session_id,),
-            )
-            db.execute(
-                "UPDATE submissions SET status='cancelled' WHERE session_id=? AND status='saved'",
-                (session_id,),
-            )
             mock_interview.finish(db, session_id, state, "user_ended")
             return self._view(db, session_id)

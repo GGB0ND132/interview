@@ -126,13 +126,13 @@ def test_complete_conversation_hides_scores_until_final_group_and_counts_groups_
         ready(client)
         session = start(client)
         stages = set()
-        while session["status"] != "completed":
+        while session["status"] not in {"completed", "ended_early"}:
             assert client.get(f"/api/v1/sessions/{session['session_id']}/report").status_code == 409
             stages.add(session["current_turn"]["stage"])
             result = answer(client, session)
             assert "score" not in result["submission"] and "feedback" not in result["submission"]
             session = refresh(client, session)
-            if session["status"] != "completed":
+            if session["status"] not in {"completed", "ended_early"}:
                 assert all("score" not in a and "feedback" not in a for a in session["submissions"])
                 session = next_group(client, session)
         assert stages == {
@@ -149,6 +149,8 @@ def test_complete_conversation_hides_scores_until_final_group_and_counts_groups_
         assert report["average_score"] == 75
         assert report["technical_average_score"] == 75
         assert report["groups"][0]["feedback"]["dimensions"][0]["score"] is None
+        assert report["groups"][0]["feedback"]["assessment_coverage"] == 1
+        assert report["groups"][0]["feedback"]["assessment_status"] == "complete"
 
 
 class UnclearEvaluator(InterviewEvaluator):
@@ -174,7 +176,7 @@ def run_remaining(
     technical_disposition="answered",
     technical_text="我会验证，但说不出具体怎样做。",
 ):
-    while session["status"] != "completed":
+    while session["status"] not in {"completed", "ended_early"}:
         technical = session["current_turn"]["stage"] == "technical"
         answer(
             client,
@@ -207,7 +209,7 @@ def test_vague_answers_trigger_grounded_deduplicated_followups_then_other_publis
         codes = [g["question"]["code"] for g in report["groups"]]
         assert len(codes) == len(set(codes))
         restored = refresh(client, session)
-        assert restored["status"] == "completed"
+        assert restored["status"] == "ended_early"
 
 
 @pytest.mark.parametrize("disposition,score", [("blank_answer", 0), ("skipped", None)])
@@ -403,7 +405,7 @@ def test_disabled_planned_question_stops_with_pool_gap_and_preserves_selection(t
         assert report["completeness"] == "partial"
 
 
-def test_user_end_during_model_call_keeps_partial_report_stable(tmp_path):
+def test_user_end_during_model_call_conflicts_then_can_end_after_evaluation(tmp_path):
     entered, release = Event(), Event()
 
     class BlockingEvaluator(InterviewEvaluator):
@@ -422,20 +424,84 @@ def test_user_end_during_model_call_keeps_partial_report_stable(tmp_path):
             try:
                 assert entered.wait(5)
                 pending = refresh(client, session)
-                assert "finish" in pending["available_actions"]
-                data(
+                assert "finish" not in pending["available_actions"]
+                assert (
                     client.post(
                         f"/api/v1/sessions/{session['session_id']}/finish",
                         json={"expected_revision": pending["revision"]},
-                    )
+                    ).status_code
+                    == 409
                 )
-                before = data(client.get(f"/api/v1/sessions/{session['session_id']}/report"))
-                assert before["completeness"] == "partial"
+                assert (
+                    client.get(f"/api/v1/sessions/{session['session_id']}/report").status_code
+                    == 409
+                )
             finally:
                 release.set()
             future.result(timeout=10)
-        assert data(client.get(f"/api/v1/sessions/{session['session_id']}/report")) == before
-        assert refresh(client, session)["status"] == "completed"
+        evaluated = refresh(client, session)
+        assert evaluated["phase"] == "stage_transition"
+        ended = data(
+            client.post(
+                f"/api/v1/sessions/{session['session_id']}/finish",
+                json={"expected_revision": evaluated["revision"]},
+            )
+        )
+        assert ended["status"] == "ended_early"
+        assert (
+            data(client.get(f"/api/v1/sessions/{session['session_id']}/report"))["completeness"]
+            == "partial"
+        )
+
+
+def test_explicit_observed_unknown_with_null_accuracy_does_not_trigger_repeated_questions(tmp_path):
+    class UnknownEvaluator(LowScoreEvaluator):
+        def evaluate(self, *, question, answer):
+            result = super().evaluate(question=question, answer=answer)
+            if question["stage"] == "technical":
+                result.dimensions[0].score = None
+            return result
+
+    with TestClient(
+        create_app(database_path=tmp_path / "null-accuracy.sqlite3", evaluator=UnknownEvaluator())
+    ) as client:
+        ready(client)
+        session = start(client)
+        report = run_remaining(
+            client,
+            session,
+            technical_text="我不会解释这道题中的具体机制，明确不知道模型决策与工具执行的衔接方式。",
+        )
+        assert report["completeness"] == "complete"
+        assert len(report["groups"]) == len(session["plan"]["questions"])
+        assert all(g["followups"] == 0 for g in report["groups"])
+
+
+def test_report_uses_behavior_and_experience_weights_with_applicable_coverage(tmp_path):
+    class VariedEvaluator(InterviewEvaluator):
+        def evaluate(self, *, question, answer):
+            result = super().evaluate(question=question, answer=answer)
+            scores = {
+                "accuracy": 100,
+                "completeness": 80,
+                "relevance": 40,
+                "structure": 60,
+                "specificity": 20,
+            }
+            for dimension in result.dimensions:
+                dimension.score = scores[dimension.name]
+            return result
+
+    with TestClient(
+        create_app(database_path=tmp_path / "weights.sqlite3", evaluator=VariedEvaluator())
+    ) as client:
+        ready(client)
+        report = run_remaining(client, start(client, experience_mode="experience"))
+        groups = {g["question"]["stage"]: g for g in report["groups"]}
+        assert groups["behavioral"]["score"] == 50
+        assert groups["experience"]["score"] == 48
+        assert groups["technical"]["score"] == 72
+        assert all(g["feedback"]["assessment_coverage"] == 1 for g in report["groups"])
 
 
 @pytest.mark.parametrize("violation", ["quote", "question", "competency"])

@@ -145,9 +145,9 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 经历环节可提交 `disposition=no_experience, answer_text=""`，记录不适用并插入已发布假设情境；明确输入“我没有项目经历”等短声明也走这一分支。场景必须取得证据才可完整。反问环节可提交 `no_questions`，或明确输入“没有问题”，表示该环节已进行且无提问质量分数；这两个 disposition 用在其他环节返回 400。空白为 0 分、证据不足；跳过无分数、证据不足，两者不调用模型也不追问。
 
-任意 active 状态可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束，包括模型评价中；本地任务取消，迟到的模型结果不能恢复会话或改变报告。正式后台任务崩溃接管仍属于 15。
+在等待回答、题组切换或评价失败时，可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束。模型评价执行中返回 409，不中断远端请求；等待评价成功、超时或失败后操作。正式后台任务崩溃接管仍属于 15。
 
-结束前，所有会话、历史和重复提交响应均隐藏详细分数与反馈，`GET /sessions/{id}/report` 返回 409。只有所需环节及本场优先能力都证据充分时以 `coverage_satisfied` 生成 `complete`；其他原因 `user_ended/safety_limit/question_pool_exhausted/key_evidence_insufficient` 一律为 `partial`，报告列出缺口与中文原因。报告保留完整问答、逐组反馈、整体组均分及独立技术均分；未完成组不计分，开场、行为、真实经历与反问按适用维度评价，不核实个人履历或伪造技术引用。
+结束前，所有会话、历史和重复提交响应均隐藏详细分数与反馈，`GET /sessions/{id}/report` 返回 409。只有所需环节及本场优先能力都证据充分时以 `coverage_satisfied` 生成 `complete`、会话 `completed`；其他原因 `user_ended/safety_limit/question_pool_exhausted/key_evidence_insufficient` 一律为 `partial`、会话 `ended_early`，报告列出缺口与中文原因。报告保留完整问答、逐组反馈、整体组均分及独立技术均分；未完成组不计分，开场、行为、真实经历与反问按适用维度评价，不核实个人履历或伪造技术引用。项目采用 20/20/20/15/25 权重后排除不可核实的准确性，行为题适用四维各 25%，评分覆盖率分母只包含适用维度；评分维度为 null 不自动改变能力的观察状态。
 
 真实模型验收（先启动已发布技术题和通用题的服务，会调用收费模型）：
 

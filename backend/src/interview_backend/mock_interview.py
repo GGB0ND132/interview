@@ -10,7 +10,7 @@ from collections import Counter
 from typing import Any
 from uuid import uuid4
 
-from .contracts import MockConfig, ModelEvaluation, feedback
+from .contracts import WEIGHTS, MockConfig, ModelEvaluation, feedback
 from .errors import PracticeError
 from .mock_catalog import STAGES, common_questions
 from .store import Store
@@ -22,6 +22,16 @@ IGNORED_DIMENSIONS = {
     "behavioral": {"accuracy"},
     "candidate_questions": {"accuracy", "completeness"},
 }
+STAGE_WEIGHTS = {
+    "experience": {
+        "accuracy": 20,
+        "completeness": 20,
+        "relevance": 20,
+        "structure": 15,
+        "specificity": 25,
+    },
+    "behavioral": {"completeness": 25, "relevance": 25, "structure": 25, "specificity": 25},
+}
 STOP_REASONS = {
     "coverage_satisfied": "所需环节与本场优先能力均已有充分材料可评价；不代表全部回答正确。",
     "user_ended": "用户提前结束，报告仅基于已完成题组，未完成部分不计分。",
@@ -31,10 +41,14 @@ STOP_REASONS = {
 }
 
 
+def eligible_topics(pool: list[dict[str, Any]]) -> list[str]:
+    counts = Counter(q["competency_id"] for q in pool)
+    return sorted(key for key, count in counts.items() if count >= MINIMUM_QUESTIONS_PER_TOPIC)
+
+
 def readiness(db: sqlite3.Connection, pool: list[dict[str, Any]]) -> dict[str, Any]:
     pool = [q for q in pool if q["interview_suitable"]]
-    counts = Counter(q["competency_id"] for q in pool)
-    eligible = [key for key, count in counts.items() if count >= MINIMUM_QUESTIONS_PER_TOPIC]
+    eligible = eligible_topics(pool)
     common = common_questions(db)
     stages = []
     for stage, label in STAGES.items():
@@ -93,8 +107,7 @@ def plan(
     seed = secrets.randbits(64)
     rng = random.Random(seed)
     pool = [q for q in pool if q["interview_suitable"]]
-    counts = Counter(q["competency_id"] for q in pool)
-    eligible = sorted(k for k, n in counts.items() if n >= MINIMUM_QUESTIONS_PER_TOPIC)
+    eligible = eligible_topics(pool)
     selected = rng.sample(eligible, rng.randint(3, min(4, len(eligible))))
     common = {q["stage"]: q for q in common_questions(db)}
     technical = []
@@ -200,14 +213,14 @@ def decorate(view: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
     view["plan"]["questions"] = [public_question(q) for q in state["questions"]]
     view["coverage"] = [{"competency_id": key, **item} for key, item in state["coverage"].items()]
     view["stop_reason"] = state["stop_reason"]
-    if view["status"] != "completed":
+    if view["status"] not in {"completed", "ended_early"}:
         for submission in view["submissions"]:
             submission.pop("score", None)
             submission.pop("feedback", None)
     view["available_actions"] = {
         "draft": ["start"],
         "awaiting_answer": ["answer", "skip", "finish"],
-        "evaluating": ["finish"],
+        "evaluating": [],
         "evaluation_failed": ["retry", "finish"],
         "stage_transition": ["next", "finish"],
         "feedback_ready": [],
@@ -244,7 +257,10 @@ def assess(evaluation: ModelEvaluation, answer: str, stage: str) -> dict[str, An
     for dimension in adjusted.dimensions:
         if dimension.name in ignored:
             dimension.score = None
-    result = feedback(adjusted, answer)
+    weights = {
+        key: value for key, value in STAGE_WEIGHTS.get(stage, WEIGHTS).items() if key not in ignored
+    }
+    result = feedback(adjusted, answer, weights=weights)
     result["rubric_version"] = f"interview_{stage}_v1"
     return result
 
@@ -261,8 +277,8 @@ def finish(db: sqlite3.Connection, session_id: str, state: dict[str, Any], reaso
     state["stop_reason"] = reason
     save(db, session_id, state)
     db.execute(
-        "UPDATE sessions SET status='completed',phase='feedback_ready',revision=revision+1 WHERE id=?",
-        (session_id,),
+        "UPDATE sessions SET status=?,phase='feedback_ready',revision=revision+1 WHERE id=?",
+        ("completed" if reason == "coverage_satisfied" else "ended_early", session_id),
     )
 
 
@@ -296,14 +312,6 @@ def after_answer(
     if result is not None:
         status = result.get("evidence_status") or "insufficient"
         reason = result.get("evidence_reason") or "模型未给出充分证据判断"
-        # Unassessed applicable dimensions cannot demonstrate sufficient evidence.
-        applicable = [
-            d
-            for d in result["dimensions"]
-            if d["name"] not in IGNORED_DIMENSIONS.get(question["stage"], set())
-        ]
-        if any(d["score"] is None for d in applicable):
-            status, reason = "insufficient", "适用维度缺少评价依据"
     if disposition == "no_experience":
         status, reason = "not_applicable", "用户确认没有项目经历"
         state["coverage"]["scenario"]["status"] = "unobserved"
@@ -410,7 +418,7 @@ def report(
     ]
     return {
         "session_id": session_id,
-        "status": "completed",
+        "status": "completed" if state["stop_reason"] == "coverage_satisfied" else "ended_early",
         "scoring_scope": "mock_interview_training",
         "completeness": "complete" if state["stop_reason"] == "coverage_satisfied" else "partial",
         "stop_reason": state["stop_reason"],

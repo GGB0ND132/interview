@@ -112,26 +112,34 @@ WEIGHTS = {"accuracy": 35, "completeness": 25, "relevance": 15, "structure": 15,
 RUBRIC_VERSION = "technical_v1"
 
 
-def feedback(evaluation: ModelEvaluation, answer: str) -> dict[str, Any]:
+def feedback(
+    evaluation: ModelEvaluation, answer: str, *, weights: dict[str, int] | None = None
+) -> dict[str, Any]:
     evaluation = ModelEvaluation.model_validate(evaluation.model_dump())
     for item in evaluation.dimensions:
         if not item.answer_quote.strip() or item.answer_quote not in answer:
             raise ValueError("Model quoted text that is absent from the saved answer")
+    scoring_weights = WEIGHTS if weights is None else weights
+    applicable_weight = sum(scoring_weights.values())
     assessed_weight = sum(
-        WEIGHTS[item.name] for item in evaluation.dimensions if item.score is not None
+        scoring_weights.get(item.name, 0)
+        for item in evaluation.dimensions
+        if item.score is not None
     )
     weighted_sum = sum(
-        item.score * WEIGHTS[item.name] for item in evaluation.dimensions if item.score is not None
+        item.score * scoring_weights.get(item.name, 0)
+        for item in evaluation.dimensions
+        if item.score is not None
     )
     return {
         **evaluation.model_dump(),
         "overall_score": round(weighted_sum / assessed_weight) if assessed_weight else None,
-        "assessment_coverage": assessed_weight / 100,
+        "assessment_coverage": assessed_weight / applicable_weight,
         "assessment_status": "complete"
-        if assessed_weight == 100
+        if assessed_weight == applicable_weight
         else "partial"
         if assessed_weight
         else "insufficient",
         "rubric_version": RUBRIC_VERSION,
-        "limitations": ["部分维度未评估"] if assessed_weight < 100 else [],
+        "limitations": ["部分维度未评估"] if assessed_weight < applicable_weight else [],
     }
