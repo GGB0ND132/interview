@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import random
+import re
 import secrets
 import sqlite3
 from collections import Counter
@@ -257,11 +258,23 @@ def assess(evaluation: ModelEvaluation, answer: str, stage: str) -> dict[str, An
     for dimension in adjusted.dimensions:
         if dimension.name in ignored:
             dimension.score = None
+            dimension.answer_quote = ""
+            dimension.reason = "此环节不适用该维度"
     weights = {
         key: value for key, value in STAGE_WEIGHTS.get(stage, WEIGHTS).items() if key not in ignored
     }
     result = feedback(adjusted, answer, weights=weights)
     result["rubric_version"] = f"interview_{stage}_v1"
+    if stage == "technical" and re.search(
+        r"(?:我(?:不会|不知道|不清楚)(?:[，。,.!！?？]|解释|回答|其中|该|这)|^(?:不会|不知道|不清楚)[，。,.!！?？]?$)",
+        answer.strip(),
+    ):
+        result.update(
+            evidence_status="observed",
+            evidence_reason="用户明确陈述本题的知识缺口，不等于掌握；不为促使答对继续追问",
+            followup=None,
+            knowledge_gap=True,
+        )
     return result
 
 

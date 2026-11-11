@@ -504,6 +504,43 @@ def test_report_uses_behavior_and_experience_weights_with_applicable_coverage(tm
         assert all(g["feedback"]["assessment_coverage"] == 1 for g in report["groups"])
 
 
+def test_inapplicable_dimensions_do_not_require_a_fabricated_answer_quote(tmp_path):
+    class InapplicableQuote(InterviewEvaluator):
+        def evaluate(self, *, question, answer):
+            result = super().evaluate(question=question, answer=answer)
+            if question["stage"] == "introduction":
+                result.dimensions[0].score = None
+                result.dimensions[0].answer_quote = "不适用"
+            return result
+
+    with TestClient(
+        create_app(database_path=tmp_path / "inapplicable.sqlite3", evaluator=InapplicableQuote())
+    ) as client:
+        ready(client)
+        session = start(client)
+        answer(client, session)
+        assert refresh(client, session)["phase"] == "stage_transition"
+
+
+def test_explicit_unknown_is_not_followed_by_pressure_even_if_model_requests_it(tmp_path):
+    with TestClient(
+        create_app(database_path=tmp_path / "unknown-policy.sqlite3", evaluator=UnclearEvaluator())
+    ) as client:
+        ready(client)
+        session = start(client)
+        report = run_remaining(
+            client, session, technical_text="这道题我不会，具体不知道其中的工作机制和边界。"
+        )
+        assert report["completeness"] == "complete"
+        assert len(report["groups"]) == len(session["plan"]["questions"])
+        assert all(g["followups"] == 0 for g in report["groups"])
+        assert all(
+            g["feedback"]["knowledge_gap"]
+            for g in report["groups"]
+            if g["question"]["stage"] == "technical"
+        )
+
+
 @pytest.mark.parametrize("violation", ["quote", "question", "competency"])
 def test_ungrounded_or_wrong_topic_proposals_cannot_become_followups(tmp_path, violation):
     class InvalidFollowup(UnclearEvaluator):

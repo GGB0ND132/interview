@@ -153,13 +153,26 @@ def main() -> None:
             with ThreadPoolExecutor(max_workers=min(5, len(cases))) as executor:
                 pending = {executor.submit(run_case, client, case, answers): case for case in cases}
                 for future in as_completed(pending):
-                    record["cases"].append(future.result())
+                    try:
+                        record["cases"].append(future.result())
+                    except Exception as exc:
+                        record["cases"].append(
+                            {
+                                "case": pending[future],
+                                "passed": False,
+                                "failure_type": type(exc).__name__,
+                            }
+                        )
+                        print(f"FAIL: {pending[future]} ({type(exc).__name__})", flush=True)
         record["passed"] = all(case["passed"] for case in record["cases"])
     finally:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(
             json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
+    assert record["passed"], (
+        "Some live cases failed; inspect saved case statuses and server sessions"
+    )
     print(f"PASS: {len(record['cases'])} real-model interview cases; evidence={args.output}")
 
 

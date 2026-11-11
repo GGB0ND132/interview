@@ -79,7 +79,7 @@ class Dimension(BaseModel):
     name: Literal["accuracy", "completeness", "relevance", "structure", "specificity"]
     score: int | None = Field(ge=0, le=100, strict=True)
     reason: str = Field(min_length=1, max_length=2000)
-    answer_quote: str = Field(min_length=1, max_length=5000)
+    answer_quote: str = Field(max_length=5000)
 
 
 class Followup(BaseModel):
@@ -116,10 +116,12 @@ def feedback(
     evaluation: ModelEvaluation, answer: str, *, weights: dict[str, int] | None = None
 ) -> dict[str, Any]:
     evaluation = ModelEvaluation.model_validate(evaluation.model_dump())
-    for item in evaluation.dimensions:
-        if not item.answer_quote.strip() or item.answer_quote not in answer:
-            raise ValueError("Model quoted text that is absent from the saved answer")
     scoring_weights = WEIGHTS if weights is None else weights
+    for item in evaluation.dimensions:
+        if item.name in scoring_weights and (
+            not item.answer_quote.strip() or item.answer_quote not in answer
+        ):
+            raise ValueError("Model quoted text that is absent from the saved answer")
     applicable_weight = sum(scoring_weights.values())
     assessed_weight = sum(
         scoring_weights.get(item.name, 0)

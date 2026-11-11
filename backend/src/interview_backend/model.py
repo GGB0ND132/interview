@@ -40,6 +40,7 @@ INTERVIEW_PROMPT = """
 observed 表示已有足够材料可判断，无论对错，不表示掌握；含糊、无具体信息为 insufficient。
 明确说明不会及具体未知点可 observed 并记录知识缺口；不要反复施压让其答对。
 开场不评 accuracy 或 completeness；行为和真实经历不评 accuracy，不核实个人成果真实性。
+对上述不适用维度，score=null、answer_quote="" 即可，不为不适用项编造回答引文；其余维度仍须精确引用。
 反问不评 accuracy 或 completeness。假设情境必须按假设评价，不冒充真实项目。
 如 insufficient 且有澄清价值，可输出 followup={text,answer_quote,purpose,question_code,competency_id}，否则 followup=null。
 question_code 和 competency_id 必须与 current_turn 相同。
