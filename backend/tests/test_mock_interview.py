@@ -541,6 +541,39 @@ def test_explicit_unknown_is_not_followed_by_pressure_even_if_model_requests_it(
         )
 
 
+@pytest.mark.parametrize(
+    "score,quote,phase",
+    [
+        (None, "", "stage_transition"),
+        (None, "不存在的引文", "evaluation_failed"),
+        (75, "", "evaluation_failed"),
+    ],
+)
+def test_unassessed_dimensions_can_omit_quotes_but_scores_and_nonempty_quotes_stay_checked(
+    tmp_path, score, quote, phase
+):
+    class NullableQuote(InterviewEvaluator):
+        def evaluate(self, *, question, answer):
+            result = super().evaluate(question=question, answer=answer)
+            if question["stage"] == "technical":
+                result.dimensions[0].score = score
+                result.dimensions[0].answer_quote = quote
+                result.evidence_status = "insufficient"
+            return result
+
+    with TestClient(
+        create_app(database_path=tmp_path / "nullable.sqlite3", evaluator=NullableQuote())
+    ) as client:
+        ready(client)
+        session = start(client)
+        for _ in range(2):
+            answer(client, session)
+            session = next_group(client, refresh(client, session))
+        assert session["current_turn"]["stage"] == "technical"
+        answer(client, session)
+        assert refresh(client, session)["phase"] == phase
+
+
 @pytest.mark.parametrize("violation", ["quote", "question", "competency"])
 def test_ungrounded_or_wrong_topic_proposals_cannot_become_followups(tmp_path, violation):
     class InvalidFollowup(UnclearEvaluator):

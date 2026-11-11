@@ -118,6 +118,8 @@ def feedback(
     evaluation = ModelEvaluation.model_validate(evaluation.model_dump())
     scoring_weights = WEIGHTS if weights is None else weights
     for item in evaluation.dimensions:
+        if item.score is None and not item.answer_quote:
+            continue
         if item.name in scoring_weights and (
             not item.answer_quote.strip() or item.answer_quote not in answer
         ):

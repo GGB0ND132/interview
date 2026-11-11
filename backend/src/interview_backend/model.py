@@ -29,6 +29,7 @@ SYSTEM_PROMPT = """你是中文面试练习评价器。仅按给定题目、版�
 dimensions 恰有 accuracy、completeness、relevance、structure、specificity 各一次。
 每项有 name、score (0–100 整数或 null)、reason (中文简短可核验理由)、answer_quote (当前回答的精确非空子串)。
 answer_quote 用一个短的原文片段即可；必须逐字复制，保留其中的标点和 Markdown 符号，不转述、不拼接、不加省略号。
+无法评价且 score=null 时允许 answer_quote=""；有分数必须给精确非空引文。不要为无法评价的维度编造引文。
 strengths 和 improvements 各为 1–5 条中文字符串。即使回答错误，也要引用当前实际回答。
 不输出 overall_score，不虚构引用，不输出推理过程。
 """

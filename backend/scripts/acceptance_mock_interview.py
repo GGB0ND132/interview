@@ -155,7 +155,7 @@ def main() -> None:
                 for future in as_completed(pending):
                     try:
                         record["cases"].append(future.result())
-                    except Exception as exc:
+                    except (AssertionError, TimeoutError, httpx.HTTPError) as exc:
                         record["cases"].append(
                             {
                                 "case": pending[future],
