@@ -1,0 +1,193 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "status": "pending_human_review",
+  "samples": [
+    {
+      "code": "Q-0322",
+      "topic": "MCP、A2A 与工具协议",
+      "candidate_sha256": "cca7233c9d3d492871d8187d3c867a125f8a8ffa571eb2a3f15ab47a158cedba",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-2426",
+      "topic": "MCP、A2A 与工具协议",
+      "candidate_sha256": "d8640a9b81dc1979fcbbedcc93d3268949a9650f145681a594edb2ff68507d8b",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-0624",
+      "topic": "Skills 能力系统",
+      "candidate_sha256": "aac363af1efdb1dce0a890be2d330348965565fc52b184ea26898f20cd4a2cd1",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-1768",
+      "topic": "Skills 能力系统",
+      "candidate_sha256": "53fed9d9345ace6cb7be61af9b8e6ba42e761464e0fd2f8e815ef17c9e281902",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-4460",
+      "topic": "工作流、状态与执行恢复",
+      "candidate_sha256": "c6c3579b5d1f011ad1ba1d92bd1c5f065ec5cbafc221d90805125f12b8494f69",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-0019",
+      "topic": "工作流、状态与执行恢复",
+      "candidate_sha256": "0e309a9816a8577115ba1195b5b5f085b4e16b48609e567df40d6e3db4b68940",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-2075",
+      "topic": "多 Agent 编排与协作",
+      "candidate_sha256": "6ad0d03728aed716c542d233d130371b76cce314ab2d539dd5dda803630c937a",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-3486",
+      "topic": "多 Agent 编排与协作",
+      "candidate_sha256": "7aa96c0915d6ae47167b4d98d300a9f7b9100619979feae81f7e5d89f27dd941",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-0977",
+      "topic": "Agent 框架与 Harness",
+      "candidate_sha256": "472e8e8918c3bc9dde4442213b457713bc2761a8fbbf170ebe87490e03d40500",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-1085",
+      "topic": "Agent 框架与 Harness",
+      "candidate_sha256": "f54aed867b63c4b190cdbe35d2aec3254310639e46988c585a1f17a45f7adbc7",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    },
+    {
+      "code": "Q-0897",
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "candidate_sha256": "fa530eda4c1188164f5a4fe49a9e1de071723c5a68484ccd7df87ce88c7e9b6d",
+      "actor_type": "human",
+      "reviewer": "",
+      "reviewed_at": "",
+      "materials": [
+        {
+          "locator": "",
+          "version": "",
+          "checked_excerpt": ""
+        }
+      ],
+      "findings": "",
+      "conclusion": "pending"
+    }
+  ]
+}

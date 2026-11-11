@@ -1,0 +1,666 @@
+{
+  "review_scope": "full_content",
+  "reviewer": "content_protocols_workflow",
+  "actor_type": "agent",
+  "reviewed_at": "2026-11-10T00:54:32+08:00",
+  "re_review_note": "Four maintainer revisions were read in full and rechecked against the already fetched official materials; samples contain current candidate hashes. Original findings remain below as resolved audit history.",
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "candidate_file": "backend/src/interview_backend/agent_topics_second_half.json",
+  "candidate_digest_method": "interview_backend.topic_pack.candidate_digest; executed with backend/.venv/Scripts/python.exe against each entire question object",
+  "scope": {
+    "competency_ids": [
+      "agent_protocols",
+      "agent_workflow_recovery"
+    ],
+    "expected_count": 20,
+    "actual_reviewed_count": 20,
+    "protocol_count": 15,
+    "workflow_count": 5
+  },
+  "counts": {
+    "approved": 20,
+    "changes_required": 0,
+    "uncertain": 0
+  },
+  "sources_checked": {
+    "local": [
+      {
+        "locator": "backend/src/interview_backend/agent_topics_second_half.json",
+        "version": "agent-basics-06-v1; each complete answer and rubric read",
+        "checked_excerpt": "20 scoped questions; candidate digests recorded per entire question; no formal database or paid model accessed."
+      },
+      {
+        "locator": "backend/src/interview_backend/mianstack_snapshot.json",
+        "version": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "checked_excerpt": "At initial review, scoped ready answers Q0019,Q0140,Q0416,Q0872,Q1664,Q2266,Q2537 compared equal to snapshot full bodies. Subsequent Q0416/Q0872/Q1664 maintainer edits are explicitly marked and the source snapshot is unchanged; Q0140 answer body stays original, only project rubric changed. Preserving original does not establish technical correctness."
+      },
+      {
+        "locator": "backend/content/agent-topics-second-half.md",
+        "version": "06-editorial-v1",
+        "checked_excerpt": "ready 题直接保留快照正文，下列仅提供本项目评分点。每条评分点是语义要点，不要求关键词逐字命中；允许正确的不同实现和没有相关项目经历的诚实回答。Read all 20 scoped blocks."
+      },
+      {
+        "locator": "backend/content/agent-answer-sources.json",
+        "version": "06-editorial-v1",
+        "checked_excerpt": "mcp.version=2025-06-18; status=editorial_reading_list_not_independently_verified_citations; note states ready answers preserve original and rubrics are project-authored."
+      }
+    ],
+    "official": [
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "When a party wants to receive progress updates for a request, it includes a `progressToken` in the request metadata. The receiver MAY then send progress notifications. Progress notifications MUST stop after completion. Sequence: progress notifications, then Method response."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "Resources in MCP are designed to be application-driven, with host applications determining how to incorporate context based on their needs. Each resource is uniquely identified by a URI. Implementations are free to expose resources through any interface pattern."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/prompts.md",
+        "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+        "checked_excerpt": "Prompts are designed to be user-controlled, meaning they are exposed from servers to clients with the intention of the user being able to explicitly select them for use. Clients can discover available prompts, retrieve their contents, and provide arguments."
+      },
+      {
+        "locator": "https://agentskills.io/specification.md",
+        "version": "Agent Skills specification; unversioned live documentation HTTP read 2026-11-10",
+        "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. scripts/: Optional executable code; references/: Optional documentation; assets/: Optional templates, resources. The SKILL.md file must contain YAML frontmatter followed by Markdown content. allowed-tools is experimental; support may vary between implementations."
+      },
+      {
+        "locator": "https://www.anthropic.com/research/building-effective-agents",
+        "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+        "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+        "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+        "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+        "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+        "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+        "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+        "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+      },
+      {
+        "locator": "https://www.postgresql.org/docs/18/ddl-constraints.html",
+        "version": "PostgreSQL 18 constraints documentation; HTTP read 2026-11-10",
+        "checked_excerpt": "A primary key constraint indicates that a column, or group of columns, can be used as a unique identifier for rows ... unique and not null. A foreign key constraint specifies that the values in a column (or a group of columns) must match the values appearing in some row of another table ... referential integrity."
+      },
+      {
+        "locator": "https://agentclientprotocol.com/overview/introduction.md",
+        "version": "Agent Client Protocol introduction; unversioned live page HTTP read 2026-11-10",
+        "checked_excerpt": "The Agent Client Protocol (ACP) standardizes communication between code editors/IDEs and coding agents and is suitable for both local and remote scenarios. Local agents run as sub-processes ... JSON-RPC over stdio. Full support for remote agents is a work in progress."
+      },
+      {
+        "locator": "https://agentcommunicationprotocol.dev/introduction/welcome.md",
+        "version": "Agent Communication Protocol welcome; unversioned live page HTTP read 2026-11-10",
+        "checked_excerpt": "ACP is now part of A2A under the Linux Foundation! The Agent Communication Protocol (ACP) is an open protocol for agent interoperability ... connecting AI agents, applications, and humans. ... standardized RESTful API ... synchronous and asynchronous communication, streaming interactions, long running tasks."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/upstash/context7/master/README.md",
+        "version": "master resolved via GitHub API to 6e68ffcbad0e23cf4fa8c11795ce9e551aeef19b; HTTP read 2026-11-10",
+        "checked_excerpt": "MCP Tools: resolve-library-id: query (required), libraryName (required). query-docs: libraryId (required), query (required), language (optional). Community-contributed projects: cannot guarantee accuracy, completeness, or security of all library documentation."
+      }
+    ],
+    "limitations": [
+      "Official links embedded in original long answers other than the materials explicitly recorded here were not all visited; no claim of exhaustive external link verification.",
+      "Anthropic /engineering/building-effective-agents returned HTTP 403; the original /research/building-effective-agents was then successfully read and its retrieved excerpts are recorded.",
+      "An initial durable-execution.md request resolved to Persistence documentation; idempotency was separately verified from the successfully retrieved Functional API page.",
+      "Context7 contract checked against retrieved upstream README and GitHub master SHA, not a live authenticated tools/list invocation."
+    ]
+  },
+  "issues": [
+    {
+      "id": "protocol-version-0416",
+      "status": "resolved",
+      "resolution": "Full v2 maintainer_edited answer read; initialize/notifications/initialized, tools/list/call and optional HTTP session now use 2025-06-18; no server/discover or removed-handshake claim remains.",
+      "codes": [
+        "Q-0416"
+      ],
+      "severity": "high",
+      "finding": "2026-07-28 discovery/initialization/session model contradicts fixed MCP2025-06-18 baseline.",
+      "minimal_fix": "Use initialize + notifications/initialized; capability negotiation then tools/list; remove server/discover/new no-session claims and update official citations.",
+      "requires_human": false
+    },
+    {
+      "id": "protocol-version-0872",
+      "status": "resolved",
+      "resolution": "Full v2 maintainer_edited answer read; POST+GET, handshake, optional session/event replay and explicit cancellation match retrieved 2025-06-18 transport/lifecycle; complete rubric retained and suitable.",
+      "codes": [
+        "Q-0872"
+      ],
+      "severity": "high",
+      "finding": "Wrong baseline for POST/GET, handshake, session, resumability and disconnection cancellation semantics.",
+      "minimal_fix": "Use 2025-06-18 POST+GET, required initialization, optional session and Last-Event-ID replay; explicit cancellation notification; retain correct stdio/config guidance.",
+      "requires_human": false
+    },
+    {
+      "id": "rubric-scope-0140",
+      "status": "resolved",
+      "resolution": "Full v2 answer and revised rubric read; final scoring criterion now asks budget and failure exits rather than unexplained side-effect retry design.",
+      "codes": [
+        "Q-0140"
+      ],
+      "severity": "medium",
+      "finding": "Mandatory side-effect retry criterion is outside basic comparison prompt and not explained by reference answer.",
+      "minimal_fix": "Replace final rubric with choosing by predictability/cost/acceptance and setting budget/failure exits.",
+      "requires_human": false
+    },
+    {
+      "id": "citation-version-1664",
+      "status": "resolved",
+      "resolution": "Full v2 maintainer_edited answer read; coherent Tool/MCP/Skill comparison now cites 2025-06-18 Tools plus Agent Skills specification and makes no unsupported newer protocol claims.",
+      "codes": [
+        "Q-1664"
+      ],
+      "severity": "low",
+      "finding": "Tools citation uses 2026-07-28 although body does not need those new semantics.",
+      "minimal_fix": "Update the cited official Tools revision to 2025-06-18 and record maintainer edit.",
+      "requires_human": false
+    }
+  ],
+  "coverage_notes": [
+    {
+      "topic": "MCP、A2A 与工具协议",
+      "finding": "All 15 assigned protocol questions reviewed, but no dedicated A2A Agent Card/discovery or task/message/artifact lifecycle question exists; only Q7077 mentions A2A in protocol-disambiguation context. This is a coverage observation, not a fabricated missing source question or an individual incorrect-answer finding.",
+      "action": "Do not claim full A2A conceptual coverage solely from the topic name; adding questions is outside this read-only review scope."
+    }
+  ],
+  "human_required_for_findings": false,
+  "publication_attestation": "Agent content review only; actor_type is agent throughout. No human review created, no publication or formal database mutation performed.",
+  "samples": [
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "0e309a9816a8577115ba1195b5b5f085b4e16b48609e567df40d6e3db4b68940",
+      "code": "Q-0019",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.postgresql.org/docs/18/ddl-constraints.html",
+          "version": "PostgreSQL 18 constraints documentation; HTTP read 2026-11-10",
+          "checked_excerpt": "A primary key constraint indicates that a column, or group of columns, can be used as a unique identifier for rows ... unique and not null. A foreign key constraint specifies that the values in a column (or a group of columns) must match the values appearing in some row of another table ... referential integrity."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "已完整阅读会话/消息表字段、排序、并发分配、工具调用关联、分支与恢复及三条rubric。主键/外键/会话内唯一顺序与消息语义正确；明确MAX(seq)+1并发风险、访问范围、流式合并及历史不等于检查点。评分按语义接受等效稳定排序实现，未发现实质技术或公平性问题。source_original与固定快照正文一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "63bc4f17237c66c68239254cf53cc2ff8c8d76259988dd610c910fc26f95a796",
+      "candidate_sha256": "c86b329dec1d562cc95f4759c3be0c4e12a3a614d5ad333b8d0e2e71b383add0",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0140",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        }
+      ],
+      "findings": "已完整复核v2正文及rubric。正文正确区分固定代码路径与模型动态组织动作，支持分支/循环、混合结构及预算退出；第3评分点已改为根据可预测性成本和验收需求选择并设置预算及失败出口，去除了原先题外且正文未解释的副作用重试要求。问题已解决，无额外人工判断需要。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "cca7233c9d3d492871d8187d3c867a125f8a8ffa571eb2a3f15ab47a158cedba",
+      "code": "Q-0322",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "When a party wants to receive progress updates for a request, it includes a `progressToken` in the request metadata. The receiver MAY then send progress notifications. Progress notifications MUST stop after completion. Sequence: progress notifications, then Method response."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案及rubric正确区分SSE承载JSON-RPC消息、可选progress通知、最终tools/call结果和模型token流；没有将content数组误作任意增量结果协议。规范没有为tools/call定义通用文本分块完成语义，按具体契约处理的边界适当。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "01200e20d69d10cb01de71dfab7336758f86e1d0d5c141d4b57d29068feafe17",
+      "candidate_sha256": "d6898c2ce52a1189c22491fe7c4dbeb2c0fd4f660a280144cfdadb42d3d707cb",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0416",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。已统一2025-06-18，正确描述initialize/notifications/initialized、tools/list与tools/call，宿主/客户端/服务端职责、三类能力及权限边界准确，HTTP会话表述为可选。不再出现server/discover或已移除初始化的错误基准。原问题已解决，来源编辑声明清楚。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "b3aeaa9c65d2ee2184820b582f9aa58214b98d6447baccb7ec5ae44f3ce4773f",
+      "candidate_sha256": "53cbe76466d564edefff021bf479a23495efc56c1bdf8cd6f50efe5330eec9c4",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0872",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。两种标准传输、旧HTTP+SSE区分、本地配置与HTTP认证均正确；POST/GET及405、initialize/initialized、后续版本头、可选Mcp-Session-Id且返回后携带、可选事件ID与Last-Event-ID、断流不等于取消并显式notifications/cancelled，均与已获取2025-06-18官方规范一致。正确保留外部副作用和真实业务核验边界。原问题已解决。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "6bf6b7bbc640054c0ef5fd47d86956304539085dedbe1b57a0c9a1bfe94fd5fe",
+      "candidate_sha256": "1d99fd38b20f4ab58178cef00aff55aeb903e0ace76b06556e4388c9de70f60d",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-1664",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://agentskills.io/specification.md",
+          "version": "Agent Skills specification; unversioned live documentation HTTP read 2026-11-10",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. scripts/: Optional executable code; references/: Optional documentation; assets/: Optional templates, resources. The SKILL.md file must contain YAML frontmatter followed by Markdown content. allowed-tools is experimental; support may vary between implementations."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。Tool动作、MCP接入、Skill指导资源及组合关系明确，初始化和Tools/Resources/Prompts对齐2025-06-18，不把加载Skill当作执行或授权成功。已将依据明确为2025-06-18 Tools和Agent Skills通用规范，移除原2026-07-28引用漂移，问题解决。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "f52f2af0bd9387e488c767f857e7416c624ff88fbf826fb9040d77a6258405f1",
+      "code": "Q-2266",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification.md",
+          "version": "Agent Skills specification; unversioned live documentation HTTP read 2026-11-10",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. scripts/: Optional executable code; references/: Optional documentation; assets/: Optional templates, resources. The SKILL.md file must contain YAML frontmatter followed by Markdown content. allowed-tools is experimental; support may vary between implementations."
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        }
+      ],
+      "findings": "完整正文和rubric覆盖四者职责、订单异常组合示例、工作流状态与循环、Skill与子Agent区别；明确业务约束必须落实至工作流或服务端。无“Skill必然有JSON接口”或“有循环即自治”错误，基础评分与题意一致。原文与快照一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "d8640a9b81dc1979fcbbedcc93d3268949a9650f145681a594edb2ff68507d8b",
+      "code": "Q-2426",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "When a party wants to receive progress updates for a request, it includes a `progressToken` in the request metadata. The receiver MAY then send progress notifications. Progress notifications MUST stop after completion. Sequence: progress notifications, then Method response."
+        }
+      ],
+      "findings": "完整答案/rubric主动区分模型消息与运行事件层次，正确保存关联调用ID、角色、状态和顺序；没有把某厂商role或某运行框架事件集称作统一标准。系统/开发者表述为接口中常见类别，结合厂商差异限定合理；评分允许等效协议术语。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "81c5d6c6a3ca5ed39e1c5e303716a130bcd6a12e70f0af19d90aea3e24f008ad",
+      "code": "Q-2537",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "完整正文/rubric覆盖目标、上下文、决策、工具动作、观察及停止条件。具体区分“最受欢迎且有库存”与“最受欢迎那款是否有货”，没有擅改用户目标；真实结果回填、调用关联、失败和预算、未知副作用先核查均正确。ReAct表述为常见实现而非唯一流程。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "216db01a84be44e530d31cafb25b501325b4e778564bfcd4d4aa28ef7ec4bf9c",
+      "code": "Q-2639",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric与2025-06-18 initialize/能力协商、tools/list、tools/call、结果回填链路相符；天气事实来自真实天气服务，协议与宿主职责区分准确；凭证、地点歧义、时间和失败边界合理。此题与修订前Q0416/Q0872矛盾的根因在后两题版本，非本题。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "dea0b2fde0910148fe5b8c30540235a6059aab579674ea00f97f4f6157d03dc8",
+      "code": "Q-2920",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        }
+      ],
+      "findings": "完整答案/rubric正确解释stdio子进程、stdout协议消息与stderr日志、旧HTTP+SSE双向通道及2025-06-18 Streamable HTTP；未将SSE与远程协议全部等同，版本、认证、断线检查适当。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "f013e67317bac7d365ef598222ca8e8446e1e3274fb87318e148fdac5175aaaa",
+      "code": "Q-3257",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Resources in MCP are designed to be application-driven, with host applications determining how to incorporate context based on their needs. Each resource is uniquely identified by a URI. Implementations are free to expose resources through any interface pattern."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/prompts.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Prompts are designed to be user-controlled, meaning they are exposed from servers to clients with the intention of the user being able to explicitly select them for use. Clients can discover available prompts, retrieve their contents, and provide arguments."
+        }
+      ],
+      "findings": "完整答案/rubric区分业务可执行能力与标准接入协议，说明无需MCP亦可调用工具、单服务可暴露多个工具和其他能力。没有以协议接入推导权限或幂等已实现，题意覆盖及评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "4fbbe40c33737edf14d23cfe7f9584a29b7d60cecc5c2fa0eb943d6c4c70e430",
+      "code": "Q-3784",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        }
+      ],
+      "findings": "完整答案/rubric说明schema减少适配、输入输出与契约验证，版本/认证/错误/取消/幂等等跨系统边界。提到返回结构是统一契约可以约定的内容，不错误宣称MCP每个工具必须提供outputSchema；结构合法与业务语义/授权的区别正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "10dd7b19fe916736416bfa789f2aba950f7bccf175f60b64778fc3d336e56eaa",
+      "code": "Q-3795",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        }
+      ],
+      "findings": "完整答案/rubric按文件、仓库、数据库、浏览器、搜索及业务动作分类，不保证某名字就有能力；tools/list契约、维护版本、最小权限与真实业务核验正确。题面允许类别举例，无需强制候选人背特定供应商名。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "812a56e39c94bdcf54713a68faa3db0e56c331bd4df0713f3937b741553a16eb",
+      "code": "Q-4113",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric未指认某个未经核实小红书实现，只列“可能”功能并要求具体仓库版本及tools/list，未虚构成功或用户授权。模型意图与服务端执行、只读与发布评论写入分界正确。interview_suitable=false合理，因此不会以未指定产品的经历题强制评分；不需要人工提供某仓库即可认可当前边界答案。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "3e9151921e24ae2d1370f19b77791cdf3e11a08833d2397641ff81020ae49487",
+      "code": "Q-4240",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric准确说明普通业务HTTP API与MCP JSON-RPC能力交互的层次、HTTP承载和服务端封装关系；初始化说法符合2025-06-18。直接固定API集成的选型、业务校验与权限责任正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "db444d615f4873b7a6913e4e31b9fb2c19629b9a947926dee41c66a0f29fa78b",
+      "code": "Q-4456",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Resources in MCP are designed to be application-driven, with host applications determining how to incorporate context based on their needs. Each resource is uniquely identified by a URI. Implementations are free to expose resources through any interface pattern."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/prompts.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Prompts are designed to be user-controlled, meaning they are exposed from servers to clients with the intention of the user being able to explicitly select them for use. Clients can discover available prompts, retrieve their contents, and provide arguments."
+        }
+      ],
+      "findings": "完整答案/rubric正确解释工具操作、URI资源与提示模板及典型控制方，并说明不强制宿主交互模式。Resources官方措辞application-driven，答案application-controlled是等义概括；三类不是权限等级或可信度等级的边界准确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "c6c3579b5d1f011ad1ba1d92bd1c5f065ec5cbafc221d90805125f12b8494f69",
+      "code": "Q-4460",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "完整答案/rubric区分流程组织、图表示与循环，图可分支并行/回路，循环也可普通程序实现。正确说明检查点不保证外部副作用恰好一次，恢复须幂等键或先查结果，预算停止不表示业务完成；与已取得Functional API幂等章节一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "a972cca26c8df1571198f19bec825070f4621b6c8458673eab00bf8b635f5d49",
+      "code": "Q-7077",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://agentclientprotocol.com/overview/introduction.md",
+          "version": "Agent Client Protocol introduction; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "The Agent Client Protocol (ACP) standardizes communication between code editors/IDEs and coding agents and is suitable for both local and remote scenarios. Local agents run as sub-processes ... JSON-RPC over stdio. Full support for remote agents is a work in progress."
+        },
+        {
+          "locator": "https://agentcommunicationprotocol.dev/introduction/welcome.md",
+          "version": "Agent Communication Protocol welcome; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "ACP is now part of A2A under the Linux Foundation! The Agent Communication Protocol (ACP) is an open protocol for agent interoperability ... connecting AI agents, applications, and humans. ... standardized RESTful API ... synchronous and asynchronous communication, streaming interactions, long running tasks."
+        }
+      ],
+      "findings": "完整答案/rubric正确区分Agent Client Protocol（编辑器与编码Agent）及Agent Communication Protocol（Agent互操作）；后者官方已注明并入A2A，答案使用“曾用于”并要求核对后续归属，没有作错误的当前归属或自动兼容声明。无需死背发布者或未经指明版本，按通信两端和契约区分的评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "56d1cc1da084dcedf1824e31f3be16c5957addde103dca10b0fadc650d821422",
+      "code": "Q-9127",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/upstash/context7/master/README.md",
+          "version": "master resolved via GitHub API to 6e68ffcbad0e23cf4fa8c11795ce9e551aeef19b; HTTP read 2026-11-10",
+          "checked_excerpt": "MCP Tools: resolve-library-id: query (required), libraryName (required). query-docs: libraryId (required), query (required), language (optional). Community-contributed projects: cannot guarantee accuracy, completeness, or security of all library documentation."
+        }
+      ],
+      "findings": "完整答案/rubric允许诚实未用过，interview_suitable=false，避免奖励虚构经历。真实获取官方README的resolve-library-id与query-docs参数契约，支持先解库ID再按问题检索的机制；答案不写死工具名，正确要求实际schema、目标依赖版本和返回片段核对。读取资料不等于代码验证、不将检索文本升级指令均合理。",
+      "conclusion": "approved"
+    }
+  ]
+}

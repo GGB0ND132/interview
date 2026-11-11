@@ -1,0 +1,3348 @@
+{
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "review_policy": "agent_full",
+  "scope_competency_ids": [
+    "agent_frameworks_harness",
+    "agent_gui",
+    "agent_multi_agent",
+    "agent_protocols",
+    "agent_skills",
+    "agent_workflow_recovery"
+  ],
+  "source_count": 115,
+  "prepared_count": 58,
+  "unprepared_count": 57,
+  "validation_passed_count": 58,
+  "rejected_count": 0,
+  "reviewed_count": 58,
+  "agent_reviewed_count": 58,
+  "human_reviewed_count": 0,
+  "eligible_for_release_count": 58,
+  "published_now_count": 58,
+  "available_count": 115,
+  "topics": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "competency_id": "agent_loop",
+      "selected_for_release": false,
+      "source_count": 17,
+      "source_ready_count": 3,
+      "prepared_count": 0,
+      "unprepared_count": 17,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 17
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "competency_id": "agent_application_architecture",
+      "selected_for_release": false,
+      "source_count": 18,
+      "source_ready_count": 4,
+      "prepared_count": 0,
+      "unprepared_count": 18,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 18
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "competency_id": "agent_planning",
+      "selected_for_release": false,
+      "source_count": 8,
+      "source_ready_count": 1,
+      "prepared_count": 0,
+      "unprepared_count": 8,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 8
+    },
+    {
+      "topic": "上下文工程",
+      "competency_id": "agent_context_engineering",
+      "selected_for_release": false,
+      "source_count": 2,
+      "source_ready_count": 0,
+      "prepared_count": 0,
+      "unprepared_count": 2,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 2
+    },
+    {
+      "topic": "记忆系统",
+      "competency_id": "agent_memory",
+      "selected_for_release": false,
+      "source_count": 6,
+      "source_ready_count": 1,
+      "prepared_count": 0,
+      "unprepared_count": 6,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 6
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "competency_id": "agent_tool_calling",
+      "selected_for_release": false,
+      "source_count": 6,
+      "source_ready_count": 0,
+      "prepared_count": 0,
+      "unprepared_count": 6,
+      "validation_passed_count": 0,
+      "rejected_count": 0,
+      "reviewed_count": 0,
+      "reviewed_codes": [],
+      "blockers": [
+        "INCOMPLETE_TOPIC_PACK",
+        "FULL_AGENT_REVIEW_REQUIRED"
+      ],
+      "available_count": 6
+    },
+    {
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "selected_for_release": true,
+      "source_count": 15,
+      "source_ready_count": 3,
+      "prepared_count": 15,
+      "unprepared_count": 0,
+      "validation_passed_count": 15,
+      "rejected_count": 0,
+      "reviewed_count": 15,
+      "reviewed_codes": [
+        "Q-0322",
+        "Q-0416",
+        "Q-0872",
+        "Q-1664",
+        "Q-2426",
+        "Q-2639",
+        "Q-2920",
+        "Q-3257",
+        "Q-3784",
+        "Q-3795",
+        "Q-4113",
+        "Q-4240",
+        "Q-4456",
+        "Q-7077",
+        "Q-9127"
+      ],
+      "blockers": [],
+      "available_count": 15
+    },
+    {
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "selected_for_release": true,
+      "source_count": 13,
+      "source_ready_count": 7,
+      "prepared_count": 13,
+      "unprepared_count": 0,
+      "validation_passed_count": 13,
+      "rejected_count": 0,
+      "reviewed_count": 13,
+      "reviewed_codes": [
+        "Q-0378",
+        "Q-0379",
+        "Q-0624",
+        "Q-0852",
+        "Q-0871",
+        "Q-0935",
+        "Q-0976",
+        "Q-1247",
+        "Q-1768",
+        "Q-2095",
+        "Q-2864",
+        "Q-3169",
+        "Q-7091"
+      ],
+      "blockers": [],
+      "available_count": 13
+    },
+    {
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "selected_for_release": true,
+      "source_count": 5,
+      "source_ready_count": 4,
+      "prepared_count": 5,
+      "unprepared_count": 0,
+      "validation_passed_count": 5,
+      "rejected_count": 0,
+      "reviewed_count": 5,
+      "reviewed_codes": [
+        "Q-0019",
+        "Q-0140",
+        "Q-2266",
+        "Q-2537",
+        "Q-4460"
+      ],
+      "blockers": [],
+      "available_count": 5
+    },
+    {
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "selected_for_release": true,
+      "source_count": 8,
+      "source_ready_count": 4,
+      "prepared_count": 8,
+      "unprepared_count": 0,
+      "validation_passed_count": 8,
+      "rejected_count": 0,
+      "reviewed_count": 8,
+      "reviewed_codes": [
+        "Q-0022",
+        "Q-0361",
+        "Q-0382",
+        "Q-2075",
+        "Q-3486",
+        "Q-3487",
+        "Q-3748",
+        "Q-3749"
+      ],
+      "blockers": [],
+      "available_count": 8
+    },
+    {
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "selected_for_release": true,
+      "source_count": 16,
+      "source_ready_count": 3,
+      "prepared_count": 16,
+      "unprepared_count": 0,
+      "validation_passed_count": 16,
+      "rejected_count": 0,
+      "reviewed_count": 16,
+      "reviewed_codes": [
+        "Q-0048",
+        "Q-0798",
+        "Q-0977",
+        "Q-1085",
+        "Q-1268",
+        "Q-2343",
+        "Q-3287",
+        "Q-3588",
+        "Q-3687",
+        "Q-3696",
+        "Q-4112",
+        "Q-4923",
+        "Q-4924",
+        "Q-4925",
+        "Q-5078",
+        "Q-7004"
+      ],
+      "blockers": [],
+      "available_count": 16
+    },
+    {
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "competency_id": "agent_gui",
+      "selected_for_release": true,
+      "source_count": 1,
+      "source_ready_count": 0,
+      "prepared_count": 1,
+      "unprepared_count": 0,
+      "validation_passed_count": 1,
+      "rejected_count": 0,
+      "reviewed_count": 1,
+      "reviewed_codes": [
+        "Q-0897"
+      ],
+      "blockers": [],
+      "available_count": 1
+    }
+  ],
+  "validation_items": [
+    {
+      "index": 0,
+      "code": "Q-0019",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 1,
+      "code": "Q-0022",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 2,
+      "code": "Q-0048",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 3,
+      "code": "Q-0140",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 4,
+      "code": "Q-0322",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 5,
+      "code": "Q-0361",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 6,
+      "code": "Q-0378",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 7,
+      "code": "Q-0379",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 8,
+      "code": "Q-0382",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 9,
+      "code": "Q-0416",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 10,
+      "code": "Q-0624",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 11,
+      "code": "Q-0798",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 12,
+      "code": "Q-0852",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 13,
+      "code": "Q-0871",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 14,
+      "code": "Q-0872",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 15,
+      "code": "Q-0897",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 16,
+      "code": "Q-0935",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 17,
+      "code": "Q-0976",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 18,
+      "code": "Q-0977",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 19,
+      "code": "Q-1085",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 20,
+      "code": "Q-1247",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 21,
+      "code": "Q-1268",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 22,
+      "code": "Q-1664",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 23,
+      "code": "Q-1768",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 24,
+      "code": "Q-2075",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 25,
+      "code": "Q-2095",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 26,
+      "code": "Q-2266",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 27,
+      "code": "Q-2343",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 28,
+      "code": "Q-2426",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 29,
+      "code": "Q-2537",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 30,
+      "code": "Q-2639",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 31,
+      "code": "Q-2864",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 32,
+      "code": "Q-2920",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 33,
+      "code": "Q-3169",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 34,
+      "code": "Q-3257",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 35,
+      "code": "Q-3287",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 36,
+      "code": "Q-3486",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 37,
+      "code": "Q-3487",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 38,
+      "code": "Q-3588",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 39,
+      "code": "Q-3687",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 40,
+      "code": "Q-3696",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 41,
+      "code": "Q-3748",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 42,
+      "code": "Q-3749",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 43,
+      "code": "Q-3784",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 44,
+      "code": "Q-3795",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 45,
+      "code": "Q-4112",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 46,
+      "code": "Q-4113",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 47,
+      "code": "Q-4240",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 48,
+      "code": "Q-4456",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 49,
+      "code": "Q-4460",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 50,
+      "code": "Q-4923",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 51,
+      "code": "Q-4924",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 52,
+      "code": "Q-4925",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 53,
+      "code": "Q-5078",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 54,
+      "code": "Q-7004",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 55,
+      "code": "Q-7077",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 56,
+      "code": "Q-7091",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    },
+    {
+      "index": 57,
+      "code": "Q-9127",
+      "accepted": true,
+      "reasons": [
+        {
+          "code": "VALIDATED",
+          "message": "内容结构、分类与固定来源校验通过"
+        }
+      ],
+      "version": 1,
+      "action": "imported"
+    }
+  ],
+  "review_errors": [],
+  "human_reviews": [],
+  "review_records": [
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "0e309a9816a8577115ba1195b5b5f085b4e16b48609e567df40d6e3db4b68940",
+      "code": "Q-0019",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.postgresql.org/docs/18/ddl-constraints.html",
+          "version": "PostgreSQL 18 constraints documentation; HTTP read 2026-11-10",
+          "checked_excerpt": "A primary key constraint indicates that a column, or group of columns, can be used as a unique identifier for rows ... unique and not null. A foreign key constraint specifies that the values in a column (or a group of columns) must match the values appearing in some row of another table ... referential integrity."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "已完整阅读会话/消息表字段、排序、并发分配、工具调用关联、分支与恢复及三条rubric。主键/外键/会话内唯一顺序与消息语义正确；明确MAX(seq)+1并发风险、访问范围、流式合并及历史不等于检查点。评分按语义接受等效稳定排序实现，未发现实质技术或公平性问题。source_original与固定快照正文一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "63bc4f17237c66c68239254cf53cc2ff8c8d76259988dd610c910fc26f95a796",
+      "candidate_sha256": "c86b329dec1d562cc95f4759c3be0c4e12a3a614d5ad333b8d0e2e71b383add0",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0140",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        }
+      ],
+      "findings": "已完整复核v2正文及rubric。正文正确区分固定代码路径与模型动态组织动作，支持分支/循环、混合结构及预算退出；第3评分点已改为根据可预测性成本和验收需求选择并设置预算及失败出口，去除了原先题外且正文未解释的副作用重试要求。问题已解决，无额外人工判断需要。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "cca7233c9d3d492871d8187d3c867a125f8a8ffa571eb2a3f15ab47a158cedba",
+      "code": "Q-0322",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "When a party wants to receive progress updates for a request, it includes a `progressToken` in the request metadata. The receiver MAY then send progress notifications. Progress notifications MUST stop after completion. Sequence: progress notifications, then Method response."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案及rubric正确区分SSE承载JSON-RPC消息、可选progress通知、最终tools/call结果和模型token流；没有将content数组误作任意增量结果协议。规范没有为tools/call定义通用文本分块完成语义，按具体契约处理的边界适当。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "01200e20d69d10cb01de71dfab7336758f86e1d0d5c141d4b57d29068feafe17",
+      "candidate_sha256": "d6898c2ce52a1189c22491fe7c4dbeb2c0fd4f660a280144cfdadb42d3d707cb",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0416",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。已统一2025-06-18，正确描述initialize/notifications/initialized、tools/list与tools/call，宿主/客户端/服务端职责、三类能力及权限边界准确，HTTP会话表述为可选。不再出现server/discover或已移除初始化的错误基准。原问题已解决，来源编辑声明清楚。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "b3aeaa9c65d2ee2184820b582f9aa58214b98d6447baccb7ec5ae44f3ce4773f",
+      "candidate_sha256": "53cbe76466d564edefff021bf479a23495efc56c1bdf8cd6f50efe5330eec9c4",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-0872",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。两种标准传输、旧HTTP+SSE区分、本地配置与HTTP认证均正确；POST/GET及405、initialize/initialized、后续版本头、可选Mcp-Session-Id且返回后携带、可选事件ID与Last-Event-ID、断流不等于取消并显式notifications/cancelled，均与已获取2025-06-18官方规范一致。正确保留外部副作用和真实业务核验边界。原问题已解决。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "previous_candidate_sha256": "6bf6b7bbc640054c0ef5fd47d86956304539085dedbe1b57a0c9a1bfe94fd5fe",
+      "candidate_sha256": "1d99fd38b20f4ab58178cef00aff55aeb903e0ace76b06556e4388c9de70f60d",
+      "re_reviewed_at": "2026-11-10T00:54:32+08:00",
+      "code": "Q-1664",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://agentskills.io/specification.md",
+          "version": "Agent Skills specification; unversioned live documentation HTTP read 2026-11-10",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. scripts/: Optional executable code; references/: Optional documentation; assets/: Optional templates, resources. The SKILL.md file must contain YAML frontmatter followed by Markdown content. allowed-tools is experimental; support may vary between implementations."
+        }
+      ],
+      "findings": "已完整复核v2 maintainer_edited答案及rubric。Tool动作、MCP接入、Skill指导资源及组合关系明确，初始化和Tools/Resources/Prompts对齐2025-06-18，不把加载Skill当作执行或授权成功。已将依据明确为2025-06-18 Tools和Agent Skills通用规范，移除原2026-07-28引用漂移，问题解决。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "f52f2af0bd9387e488c767f857e7416c624ff88fbf826fb9040d77a6258405f1",
+      "code": "Q-2266",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification.md",
+          "version": "Agent Skills specification; unversioned live documentation HTTP read 2026-11-10",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. scripts/: Optional executable code; references/: Optional documentation; assets/: Optional templates, resources. The SKILL.md file must contain YAML frontmatter followed by Markdown content. allowed-tools is experimental; support may vary between implementations."
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        }
+      ],
+      "findings": "完整正文和rubric覆盖四者职责、订单异常组合示例、工作流状态与循环、Skill与子Agent区别；明确业务约束必须落实至工作流或服务端。无“Skill必然有JSON接口”或“有循环即自治”错误，基础评分与题意一致。原文与快照一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "d8640a9b81dc1979fcbbedcc93d3268949a9650f145681a594edb2ff68507d8b",
+      "code": "Q-2426",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/progress.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "When a party wants to receive progress updates for a request, it includes a `progressToken` in the request metadata. The receiver MAY then send progress notifications. Progress notifications MUST stop after completion. Sequence: progress notifications, then Method response."
+        }
+      ],
+      "findings": "完整答案/rubric主动区分模型消息与运行事件层次，正确保存关联调用ID、角色、状态和顺序；没有把某厂商role或某运行框架事件集称作统一标准。系统/开发者表述为接口中常见类别，结合厂商差异限定合理；评分允许等效协议术语。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "81c5d6c6a3ca5ed39e1c5e303716a130bcd6a12e70f0af19d90aea3e24f008ad",
+      "code": "Q-2537",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "Building effective agents; published 2024-12-19, live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows are systems where LLMs and tools are orchestrated through predefined code paths. Agents ... LLMs dynamically direct their own processes and tool usage. During execution ... gain ground truth from the environment at each step (such as tool call results or code execution). Include stopping conditions such as a maximum number of iterations."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/messages.md",
+          "version": "LangChain Python Messages; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "AI messages can contain tool calls. Tool messages are used to pass the results of a single tool execution back to the model. tool_call_id: The ID of the tool call that this message is responding to. Must match the ID of the tool call in the AIMessage. Content supports provider-native structures and content blocks."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "完整正文/rubric覆盖目标、上下文、决策、工具动作、观察及停止条件。具体区分“最受欢迎且有库存”与“最受欢迎那款是否有货”，没有擅改用户目标；真实结果回填、调用关联、失败和预算、未知副作用先核查均正确。ReAct表述为常见实现而非唯一流程。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "216db01a84be44e530d31cafb25b501325b4e778564bfcd4d4aa28ef7ec4bf9c",
+      "code": "Q-2639",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric与2025-06-18 initialize/能力协商、tools/list、tools/call、结果回填链路相符；天气事实来自真实天气服务，协议与宿主职责区分准确；凭证、地点歧义、时间和失败边界合理。此题与修订前Q0416/Q0872矛盾的根因在后两题版本，非本题。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "dea0b2fde0910148fe5b8c30540235a6059aab579674ea00f97f4f6157d03dc8",
+      "code": "Q-2920",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        }
+      ],
+      "findings": "完整答案/rubric正确解释stdio子进程、stdout协议消息与stderr日志、旧HTTP+SSE双向通道及2025-06-18 Streamable HTTP；未将SSE与远程协议全部等同，版本、认证、断线检查适当。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "f013e67317bac7d365ef598222ca8e8446e1e3274fb87318e148fdac5175aaaa",
+      "code": "Q-3257",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Resources in MCP are designed to be application-driven, with host applications determining how to incorporate context based on their needs. Each resource is uniquely identified by a URI. Implementations are free to expose resources through any interface pattern."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/prompts.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Prompts are designed to be user-controlled, meaning they are exposed from servers to clients with the intention of the user being able to explicitly select them for use. Clients can discover available prompts, retrieve their contents, and provide arguments."
+        }
+      ],
+      "findings": "完整答案/rubric区分业务可执行能力与标准接入协议，说明无需MCP亦可调用工具、单服务可暴露多个工具和其他能力。没有以协议接入推导权限或幂等已实现，题意覆盖及评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "4fbbe40c33737edf14d23cfe7f9584a29b7d60cecc5c2fa0eb943d6c4c70e430",
+      "code": "Q-3784",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        }
+      ],
+      "findings": "完整答案/rubric说明schema减少适配、输入输出与契约验证，版本/认证/错误/取消/幂等等跨系统边界。提到返回结构是统一契约可以约定的内容，不错误宣称MCP每个工具必须提供outputSchema；结构合法与业务语义/授权的区别正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "10dd7b19fe916736416bfa789f2aba950f7bccf175f60b64778fc3d336e56eaa",
+      "code": "Q-3795",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        }
+      ],
+      "findings": "完整答案/rubric按文件、仓库、数据库、浏览器、搜索及业务动作分类，不保证某名字就有能力；tools/list契约、维护版本、最小权限与真实业务核验正确。题面允许类别举例，无需强制候选人背特定供应商名。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "812a56e39c94bdcf54713a68faa3db0e56c331bd4df0713f3937b741553a16eb",
+      "code": "Q-4113",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric未指认某个未经核实小红书实现，只列“可能”功能并要求具体仓库版本及tools/list，未虚构成功或用户授权。模型意图与服务端执行、只读与发布评论写入分界正确。interview_suitable=false合理，因此不会以未指定产品的经历题强制评分；不需要人工提供某仓库即可认可当前边界答案。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "3e9151921e24ae2d1370f19b77791cdf3e11a08833d2397641ff81020ae49487",
+      "code": "Q-4240",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "The initialization phase MUST be the first interaction between client and server. The client MUST initiate this phase by sending an `initialize` request. After successful initialization, the client MUST send an `initialized` notification."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "This transport uses HTTP POST and GET requests. Disconnection SHOULD NOT be interpreted as the client cancelling its request. To cancel, the client SHOULD explicitly send an MCP CancelledNotification. Server MAY attach SSE event id; resume uses HTTP GET and Last-Event-ID. A server MAY assign an Mcp-Session-Id at initialization."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        }
+      ],
+      "findings": "完整答案/rubric准确说明普通业务HTTP API与MCP JSON-RPC能力交互的层次、HTTP承载和服务端封装关系；初始化说法符合2025-06-18。直接固定API集成的选型、业务校验与权限责任正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "db444d615f4873b7a6913e4e31b9fb2c19629b9a947926dee41c66a0f29fa78b",
+      "code": "Q-4456",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "To discover available tools, clients send a `tools/list` request. To invoke a tool, clients send a `tools/call` request. Tool definition: inputSchema; outputSchema: Optional JSON Schema defining expected output structure. Servers MUST validate all tool inputs and implement proper access controls."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Resources in MCP are designed to be application-driven, with host applications determining how to incorporate context based on their needs. Each resource is uniquely identified by a URI. Implementations are free to expose resources through any interface pattern."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/prompts.md",
+          "version": "MCP 2025-06-18; HTTP read 2026-11-10",
+          "checked_excerpt": "Prompts are designed to be user-controlled, meaning they are exposed from servers to clients with the intention of the user being able to explicitly select them for use. Clients can discover available prompts, retrieve their contents, and provide arguments."
+        }
+      ],
+      "findings": "完整答案/rubric正确解释工具操作、URI资源与提示模板及典型控制方，并说明不强制宿主交互模式。Resources官方措辞application-driven，答案application-controlled是等义概括；三类不是权限等级或可信度等级的边界准确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "c6c3579b5d1f011ad1ba1d92bd1c5f065ec5cbafc221d90805125f12b8494f69",
+      "code": "Q-4460",
+      "topic": "工作流、状态与执行恢复",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "LangGraph Python documentation; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Workflows have predetermined code paths and are designed to operate in a certain order. Agents are dynamic and define their own processes and tool usage. Example: StateGraph nodes and conditional edges build a workflow. LangGraph offers persistence and streaming when building agents and workflows."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/functional-api.md",
+          "version": "LangGraph Python Functional API; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "Resume does not continue from the exact line where execution stopped. Execution returns to a checkpoint boundary and replays forward. A task that started but did not finish may run again, so use idempotency keys or check existing results before writing."
+        }
+      ],
+      "findings": "完整答案/rubric区分流程组织、图表示与循环，图可分支并行/回路，循环也可普通程序实现。正确说明检查点不保证外部副作用恰好一次，恢复须幂等键或先查结果，预算停止不表示业务完成；与已取得Functional API幂等章节一致。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "a972cca26c8df1571198f19bec825070f4621b6c8458673eab00bf8b635f5d49",
+      "code": "Q-7077",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://agentclientprotocol.com/overview/introduction.md",
+          "version": "Agent Client Protocol introduction; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "The Agent Client Protocol (ACP) standardizes communication between code editors/IDEs and coding agents and is suitable for both local and remote scenarios. Local agents run as sub-processes ... JSON-RPC over stdio. Full support for remote agents is a work in progress."
+        },
+        {
+          "locator": "https://agentcommunicationprotocol.dev/introduction/welcome.md",
+          "version": "Agent Communication Protocol welcome; unversioned live page HTTP read 2026-11-10",
+          "checked_excerpt": "ACP is now part of A2A under the Linux Foundation! The Agent Communication Protocol (ACP) is an open protocol for agent interoperability ... connecting AI agents, applications, and humans. ... standardized RESTful API ... synchronous and asynchronous communication, streaming interactions, long running tasks."
+        }
+      ],
+      "findings": "完整答案/rubric正确区分Agent Client Protocol（编辑器与编码Agent）及Agent Communication Protocol（Agent互操作）；后者官方已注明并入A2A，答案使用“曾用于”并要求核对后续归属，没有作错误的当前归属或自动兼容声明。无需死背发布者或未经指明版本，按通信两端和契约区分的评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_protocols_workflow",
+      "reviewed_at": "2026-11-10T00:53:00+08:00",
+      "candidate_sha256": "56d1cc1da084dcedf1824e31f3be16c5957addde103dca10b0fadc650d821422",
+      "code": "Q-9127",
+      "topic": "MCP、A2A 与工具协议",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/upstash/context7/master/README.md",
+          "version": "master resolved via GitHub API to 6e68ffcbad0e23cf4fa8c11795ce9e551aeef19b; HTTP read 2026-11-10",
+          "checked_excerpt": "MCP Tools: resolve-library-id: query (required), libraryName (required). query-docs: libraryId (required), query (required), language (optional). Community-contributed projects: cannot guarantee accuracy, completeness, or security of all library documentation."
+        }
+      ],
+      "findings": "完整答案/rubric允许诚实未用过，interview_suitable=false，避免奖励虚构经历。真实获取官方README的resolve-library-id与query-docs参数契约，支持先解库ID再按问题检索的机制；答案不写死工具名，正确要求实际schema、目标依赖版本和返回片段核对。读取资料不等于代码验证、不将检索文本升级指令均合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "88d63802e6e3a6b27ce8fe5d350e4aba7757666cbd5ec9c3cc715edfbbb03c55",
+      "code": "Q-0022",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "main_agent = create_deep_agent(model=model, system_prompt=..., tools=[generate_markdown, convert_md_to_pdf, read_file_content], checkpointer=InMemorySaver(), subagents=[database_query_agent, network_search_agent, knowledge_base_agent]). config = {\"configurable\": {\"thread_id\": session_id}}. main_agent.astream forwards task subagent_type/description and progress through monitor."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/subagents/database_query_agent.py ; network_search_agent.py ; knowledge_base_agent.py ; requirements.txt",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c; deepagents==0.5.7",
+          "checked_excerpt": "All three dictionaries define name, description, system_prompt and tools, without a model override. Database tools are list_sql_tables/get_table_data/execute_sql_query; network tools contain internet_search; knowledge tools contain get_assistant_list/create_ask_delete. requirements.txt pins deepagents==0.5.7, langgraph==1.1.10 and langchain==1.2.17."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/tools/db_tools.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "execute_sql_query(query) passes query directly to cursor.execute(query). The comment explicitly says the chapter relies on prompt constraints for read-only queries and production should restrict SELECT/SHOW at the tool layer. get_db_config sets autocommit=True. get_table_data constructs SELECT * FROM {table_name} LIMIT 100 and recommends a production allowlist."
+        },
+        {
+          "locator": "https://files.pythonhosted.org/packages/fd/bb/c1c68ad0ca96cdddd601e7fca0f274be202411378af6da76a35f0e4a1b66/deepagents-0.5.7-py3-none-any.whl!deepagents/middleware/subagents.py",
+          "version": "deepagents 0.5.7 official PyPI wheel; metadata fetched from https://pypi.org/pypi/deepagents/0.5.7/json",
+          "checked_excerpt": "_EXCLUDED_STATE_KEYS includes messages, todos, structured_response, skills_metadata, skills_load_errors, memory_contents. _validate_and_prepare_state creates a new dict from other runtime.state fields and sets subagent_state['messages']=[HumanMessage(content=description)] (lines 420-426). Return Command includes other result state plus ToolMessage(content, tool_call_id=tool_call_id) (lines 399-417)."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已将参考研搜项目与固定真实源码逐项对照：三个自定义业务专家、主方文件工具、同模型继承、thread_id和InMemorySaver均吻合；真实SQL直接执行的风险也已如实说明。题首明确为参考示例；rubric接受真实项目或明确假设，不奖励虚构经历，也不强制同一种框架。上下文隔离收益、调度成本、依赖并行和权限落实覆盖题意。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "189d14695ef4a2b48f6f972069c7c4480d86ac13323a584e287e61f9caef1dd8",
+      "code": "Q-0361",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "路由、主管工作者、并行、交接与评价修订是可组合的控制模式；答案正确区分共享状态与控制权结构，并未把所有多阶段提示都定义为独立Agent。rubric以模式、输入输出/合并和成本/停止条件为语义要点，允许不同合理模式及单Agent基线。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "3011bf40635a02722d0198d5d30f859ab83f24471bd72b4418713d32fa4cbe45",
+      "code": "Q-0378",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "SKILL.md入口、必需元信息、可选目录和渐进加载均符合开放规范；文本指导与真实工具/权限明确区分。正文说明只有SKILL.md也可构成技能，未把脚本或特定宿主扩展列为必需；评分点覆盖概念而不依赖产品接口。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "498fef2ad24f0665e1abce8e758b40360f2618d6235a60c0d1e56d8a849726bc",
+      "code": "Q-0379",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/architecture.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "MCP follows a client-host-server architecture. Host manages clients, connection permissions, security policies, authorization, LLM integration and context aggregation. Each client maintains one server connection. Servers expose resources, tools and prompts and may be local processes or remote services; capability negotiation determines available features."
+        }
+      ],
+      "findings": "初审源答案末条采用2026-07-28 MCP架构引用，与本题包2025-06-18基准不一致；主Agent已将该题改为maintainer_edited、content_version=agent-basics-06-v2。复核新全文：提示设计、Skill任务包和MCP协议职责清楚，Tools/Resources/Prompts与2025架构吻合，权限和实际结果由执行环境落实。原语义rubric仍覆盖正确组合关系，没有新增版本细节评分要求。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "df4aeed5dc647ccf3ed1d3df10098304f7cd5901f81e3fc667ceda4613e6aa80",
+      "code": "Q-0382",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "main_agent = create_deep_agent(model=model, system_prompt=..., tools=[generate_markdown, convert_md_to_pdf, read_file_content], checkpointer=InMemorySaver(), subagents=[database_query_agent, network_search_agent, knowledge_base_agent]). config = {\"configurable\": {\"thread_id\": session_id}}. main_agent.astream forwards task subagent_type/description and progress through monitor."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/subagents/database_query_agent.py ; network_search_agent.py ; knowledge_base_agent.py ; requirements.txt",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c; deepagents==0.5.7",
+          "checked_excerpt": "All three dictionaries define name, description, system_prompt and tools, without a model override. Database tools are list_sql_tables/get_table_data/execute_sql_query; network tools contain internet_search; knowledge tools contain get_assistant_list/create_ask_delete. requirements.txt pins deepagents==0.5.7, langgraph==1.1.10 and langchain==1.2.17."
+        },
+        {
+          "locator": "https://files.pythonhosted.org/packages/fd/bb/c1c68ad0ca96cdddd601e7fca0f274be202411378af6da76a35f0e4a1b66/deepagents-0.5.7-py3-none-any.whl!deepagents/middleware/subagents.py",
+          "version": "deepagents 0.5.7 official PyPI wheel; metadata fetched from https://pypi.org/pypi/deepagents/0.5.7/json",
+          "checked_excerpt": "_EXCLUDED_STATE_KEYS includes messages, todos, structured_response, skills_metadata, skills_load_errors, memory_contents. _validate_and_prepare_state creates a new dict from other runtime.state fields and sets subagent_state['messages']=[HumanMessage(content=description)] (lines 420-426). Return Command includes other result state plus ToolMessage(content, tool_call_id=tool_call_id) (lines 399-417)."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已读研搜固定源码及其依赖deepagents0.5.7官方wheel，确认该环境用委派描述重建子消息历史、其他状态字段另行传递并关联ToolMessage返回。答案另行标明当前文档fork>=0.7.13 Beta，未把新功能错误归给0.5.7参考实现；不将独立上下文等同权限或进程隔离，适用条件与成本评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "aac363af1efdb1dce0a890be2d330348965565fc52b184ea26898f20cd4a2cd1",
+      "code": "Q-0624",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        }
+      ],
+      "findings": "正确区分模型自动匹配的不确定性、宿主显式激活/路由与后续工具执行。显式调用在宿主实现时可确保技能内容被选择/注入，答案末句同时指出加载不保证脚本、权限和业务成功，整体未将自然语言当确定性执行。rubric检查触发、显式入口/评估与最终结果三个层次。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "06521456c310ee7d422a6044612d26b13285213caba9de71237bc05e869259bf",
+      "code": "Q-0852",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        }
+      ],
+      "findings": "元信息、SKILL.md正文、按需资源三层及时机与规范一致；没有把三层说成三个必填文件或要求用户逐步确认。候选筛选、元数据和脚本输出仍占成本的说明合理；评分没有强制固定token阈值或检索Top-K。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "3c5d627dc06ceb87a8727e0b13609781c43e7c33a97e51b9cc2a6fdad1246e86",
+      "code": "Q-0871",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "手工目录、从文档/轨迹提炼、脚本封装、模板和复用适配均为可行创建途径，并说明最终仍需目标宿主可发现的技能包。没有误把注册普通函数等同Agent Skills；明确验证格式、依赖、触发及实际结果，rubric允许多种途径。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "aaa67d4c436d4d87650ed509ad6a0013fef30c3dff2b2372703c4424c60a5862",
+      "code": "Q-0935",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        }
+      ],
+      "findings": "题首明确为表格分析使用经历答法示例，因此后续第一人称不冒充本项目已运行的事实。显式选择、任务匹配、读正文/资源、调用工具和核对产物链路正确；DeepAgents分层加载已实读官方文档。评分关注实际使用方法，未强制个人有特定平台经历。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "22813156c683a44db4fb8585a3db7e29bdc3bec3585833cbd646e186941fb70c",
+      "code": "Q-0976",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "完整核查必需name/description、目录同名、YAML frontmatter+Markdown及相对资源路径，示例api-test-design满足格式。正文标题、脚本、目录与测试规模被正确表述为按任务选用；授权范围与路径/执行限制落在程序。rubric以输入输出、资源依赖、代表任务验证为语义标准。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "90dab812b44342ab16fd024e870e3ecfad9d92961b06b5a9ead4ebd3f5fb97e8",
+      "code": "Q-1247",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/architecture.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "MCP follows a client-host-server architecture. Host manages clients, connection permissions, security policies, authorization, LLM integration and context aggregation. Each client maintains one server connection. Servers expose resources, tools and prompts and may be local processes or remote services; capability negotiation determines available features."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "Resources share context such as files, database schemas or application-specific information, uniquely identified by URI. Resources are application-driven; the host determines context inclusion, and the protocol does not mandate a particular interaction model. Clients discover via resources/list and retrieve contents via resources/read. This baseline does not define a universal Skill install/discovery/activation API."
+        }
+      ],
+      "findings": "初审发现源答案加入面向2026-07-28的新Skills扩展，超出本题包MCP2025-06-18基准且扩展站点本次403；没有将该链接记为已验证。主Agent已改为maintainer_edited、v2并移除新扩展断言。复核新全文与2025 Resources/Architecture实文：资源可暴露文件，宿主解释为Skill仍需识别/校验/加载，基线没有统一Skill安装激活保证；协议与任务知识的区分以及rubric均正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "53fed9d9345ace6cb7be61af9b8e6ba42e761464e0fd2f8e815ef17c9e281902",
+      "code": "Q-1768",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "明确要求按真实配置回答、没用过则说明，假设示例也被标明。把资料/编辑脚本与已安装运行Skill分开，避免把题包或本项目能力虚构为事实；触发、依赖、输入输出和验收评分点公平覆盖经历题的可验证部分。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "6ad0d03728aed716c542d233d130371b76cce314ab2d539dd5dda803630c937a",
+      "code": "Q-2075",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        }
+      ],
+      "findings": "将Agent Team作为通用协作组织术语而非唯一协议，适合该题未限定产品的问法。职责、消息/共享产物、冲突、预算和真实执行边界覆盖协作设计；上下文隔离不保证共享工作区权限隔离的限制正确，评分未要求某一产品API。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "5b6725d2b534f3d38315c4cc2816b8755fee04c6ac8a4e6ea307e48ea425c5d8",
+      "code": "Q-2095",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://cursor.com/docs/context/rules",
+          "version": "live official Cursor Rules docs fetched 2026-11-10",
+          "checked_excerpt": "Rule Type: Always Apply applies to every chat; Apply Intelligently is chosen by the agent based on description; Apply to Specific Files matches a pattern; Apply Manually is activated by @-mention. alwaysApply, description and globs determine inclusion. Thus Rules are not universally always loaded and the host controls scope/activation."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "官方Cursor规则实际既有Always、文件匹配、模型选择也有手动触发，答案以“通常”和“作用范围/优先级/触发依赖宿主”限定持续约束，未宣称所有Rules永远加载。Rules与Skill可组合、不能代替安全执行边界，rubric接受具体宿主的正确差异。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "94c8ffad7686416ea25f4d1d5499ecf9df1e4f82c51e7a1fc33ff97cf2918a4b",
+      "code": "Q-2864",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "文件格式支持发现/索引/加载/校验的结论符合规范与实现指南，准确说明入口、元数据、正文和可选目录。明确格式合法不证明内容正确、执行成功或各宿主扩展兼容；三条评分覆盖结构与边界且不要求私有格式。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "451350d7d162b84f7825c6e1ca4767582b577fd05c167193b9c3acf5223450ea",
+      "code": "Q-3169",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        }
+      ],
+      "findings": "题面skills.md可能含混，答案先澄清Agent Skills通用入口为SKILL.md，未把任意清单当标准。必需元数据、目录匹配、正文与可选资源职责准确；正文依赖、失败、验收是编写建议，不被说成格式必填标题，评分按语义核查。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "7aa96c0915d6ae47167b4d98d300a9f7b9100619979feae81f7e5d89f27dd941",
+      "code": "Q-3486",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        }
+      ],
+      "findings": "正确把多Agent定义为多个有局部行动选择的执行单元而非多种模型或多段提示。任务分工、上下文、输入输出/证据和成本一致性问题完整覆盖基础题；允许同一模型、多种编排与单Agent更合适的判断。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "867b5f78ffbbf74ecf608fb7f9e131a73299ce063a9007c4bf6480f109610e15",
+      "code": "Q-3487",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "context_mode: Literal['isolated','snapshot']='isolated' (line 761). Snapshot adds retained history and summary as background at dispatch; the child retains its role/tools and later parent turns are not synced (lines 863-868). After delegation validation, before child setup: ParentContextSnapshot.from_state(runtime.state) for snapshot mode (lines 909-911). Tool-required execution context, authorization identity, thread/run IDs and uploads are handled separately."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/context_snapshot.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "from_state captures retained messages and summary_text, excluding parent system instructions/hidden framework messages (lines 97-117). Only retained completed call-result pairs are emitted as 'Historical tool calls (not executed by you)' (lines 118-161). to_message uses fresh json.loads containers in HumanMessage(name='parent_context_snapshot') (lines 174-176). The system note says historical instructions cannot override current scope and later parent messages do not sync."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/executor.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "Initial messages append SystemMessage for the child's assembled prompt, then self.context_snapshot.to_message() when present, then HumanMessage(content=task_content) (lines 1588-1599). The state contains these messages. Parent runtime state required by tools is passed through separately using fresh containers (lines 1601 onward)."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/agents/middlewares/subagent_limit_middleware.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "Counts task calls in the last AIMessage, counts prior delegations for current run_id, computes remaining_total and allowed_task_calls=min(max_concurrent, remaining_total), and drops extra task calls from the message (lines 133-154). When remaining_total==0 it appends the stop message (lines 167-172); no queue is created."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已实读DeerFlow固定提交四份关键源码：isolated默认、snapshot捕获时点、summary_text与保留历史、过滤系统/隐藏注入、已完成工具历史、独立HumanMessage容器、消息顺序均吻合；限额按当前run账本与单轮上限裁去调用并非排队。答案区分模型历史、角色工具、共享运行状态与后续更正，rubric没有把任一种继承方式绝对化。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "0637207a0736344d642dc84aefbb6dfc472fa77eb5ba5b6bfc8f505ef2865e83",
+      "code": "Q-3748",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "context_mode: Literal['isolated','snapshot']='isolated' (line 761). Snapshot adds retained history and summary as background at dispatch; the child retains its role/tools and later parent turns are not synced (lines 863-868). After delegation validation, before child setup: ParentContextSnapshot.from_state(runtime.state) for snapshot mode (lines 909-911). Tool-required execution context, authorization identity, thread/run IDs and uploads are handled separately."
+        }
+      ],
+      "findings": "主方负责目标/调度/验收/汇总，子方完成范围明确的局部任务并交回证据/产物，符合官方orchestrator-worker和固定委派契约。输入依赖与独立并行、共享写入责任、总预算与取消升级均合理；不接受子方无证据成功自述的评分点公允。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "4eb16e0cfadc6f54cd02f4dd6a8456e97b879baa4e37c60a9090cdce819508c2",
+      "code": "Q-3749",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "准确区分独立受委派执行单元与可复用任务知识资源包；两者可组合，Skill文本中的委派描述不会自行启动新执行单元。选择依据是探索隔离/独立工作与知识流程复用，权限/共享状态由宿主管理；三条rubric不依赖具体框架。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "f51f140ba6fab48176e9d49e9ae13d5957afce5427c7be2522816bd433c1ee45",
+      "code": "Q-7091",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "Few-shot以少量输入输出例子引导模式/格式，Skill以可复用目录组织说明、示例和资源；官方规范也明确正文可含输入输出示例，因此二者可包含而不互斥。工具执行和持续状态不由示例自动产生，技能步骤也非确定性执行保证；rubric对概念、组合和验证三个层次公平。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "65d035493b6dfbb4d9c3b16d3d5e35e5af1ca57b82fc8d5a5c8f8c201a649417",
+      "code": "Q-0048",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0048",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：执行环境与模型决策的分工。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/effective-harnesses-for-long-running-agents",
+          "version": "2025-11-26；HTTP 200",
+          "checked_excerpt": "progress across multiple context windows；Environment management；实际正文讨论逐步验证、任务清单和测试。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "getActiveTools(): string[]；getAllTools(): ToolInfo[]；setActiveTools；codemode/deferred 工具未激活时仍可从 codemode 脚本调用。"
+        },
+        {
+          "locator": "https://docs.temporal.io/activity-definition",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Temporal recommends that Activities be idempotent. Activities should be designed to be safely executed multiple times."
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致，已独立复核而非因 source_original 自动通过。模型生成决策、Harness 执行工具及状态/权限/预算/反馈的分工正确；明确提示词不构成权限、恢复不等于回滚、最终回答不等于业务验收。三条评分点覆盖题意且是语义要点，不限定框架实现。正文的教程及全部二级参考链接未逐一核验，不把它们计为已访问材料。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "79970581815114fdd3c0ea7f7d0aeb555d2d7e4ac70d89c58df063c64a2c3944",
+      "code": "Q-0798",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0798",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：固定查询与动态补查。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致。答案承认普通后端可以多步/分支，也能通过 API 暴露 Agent，避免把 API 和 Agent 当互斥产品；只有开放语义和证据驱动决策值得引入 Agent。参考场景明确为假设，没有编造经历。三条评分点与比较题一致，不强制所有任务使用 Agent。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "fa530eda4c1188164f5a4fe49a9e1de071723c5a68484ccd7df87ce88c7e9b6d",
+      "code": "Q-0897",
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0897",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：界面观察与动作反馈。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200；原 Anthropic docs URL 的官方目标文档",
+          "checked_excerpt": "agent loop；tool_use/tool_result；screenshot、left_click、type；Human confirmation；页面/图像指令可能造成 prompt injection。"
+        },
+        {
+          "locator": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Claude analyzes the tool results；coordinate scaling；截图缩放后点击坐标需映射，动作回执与截图分别返回。"
+        }
+      ],
+      "findings": "完整答案和三条 rubric 已全量复核。观察—选择动作—执行—再观察的循环正确；支持截图及界面结构，不把某一供应商协议当 GUI Agent 的定义。焦点、布局、分辨率和延迟属于合理失败因素；以任务状态验收、限制权限与预算、按授权处理敏感动作以及不信任网页指令均有覆盖。固定源和候选本主题各只有 1 题是来源数量事实，不构成本题技术缺陷。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "472e8e8918c3bc9dde4442213b457713bc2761a8fbbf170ebe87490e03d40500",
+      "code": "Q-0977",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-0977",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：低代码链路与定制限制。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.dify.ai/en/home",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200，原 introduction URL 重定向至本页",
+          "checked_excerpt": "官方首页包括 Workflow & Chatflow、Publish、Logs、Knowledge、Model Providers、Tools。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/coze-dev/coze-studio/main/README.md",
+          "version": "Coze Studio 官方 main README，2026-11-10 实取；未锁 commit；HTTP 200",
+          "checked_excerpt": "Build, publish, and manage agent；workflows, knowledge bases；Plugins；API and SDK。"
+        }
+      ],
+      "findings": "模型/工作流/工具/知识检索/发布的共性描述与两方官方资料吻合，明确具体功能随版本和部署变化，未把开源 Studio 与云版逐项等同。假设检索流程标明为假设，区分节点配置成功和业务结果正确。rubric 与编辑稿总则明确允许未使用者诚实解释，不要求虚构经历；无内容修订项。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "f54aed867b63c4b190cdbe35d2aec3254310639e46988c585a1f17a45f7adbc7",
+      "code": "Q-1085",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-1085",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：endpoint、消息格式与兼容范围。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/completions/methods/create",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "官方 curl 示例使用 /v1/completions 与 prompt，而非 messages。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Responses uses input and output arrays of typed Items."
+        }
+      ],
+      "findings": "准确区分 Chat Completions 的 messages、旧 Completions 的 prompt 与 Responses 的 typed items；/chat/completions 是相对 API base 的端点表达，不是漏掉版本号的错误。可选参数以模型与兼容实现支持为前提，未宣称兼容全部能力。要求说明项目实际端点但允许未接入者诚实说明，三条评分点可公平覆盖不同实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "e0704b983f6df5c07713a7fd3fbcbb2a3c85f25efde3ca2319932c920f9964d6",
+      "code": "Q-1268",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-1268",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模型接入方式与部署归属。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/production-best-practices",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Avoid exposing the API keys in your code or in public repositories."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        }
+      ],
+      "findings": "接入分类为部署/调用方式，答案同时指出 SDK 通常仍调用远端 API，不误作互斥底层协议。真实服务、模型、认证与调用链、服务端凭证、超时响应和自部署约束覆盖原题；未接入可明确说明，没有要求编造经验。评分点不限定托管供应商或部署方案。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "9f3a11df568d5ca534527b5359e90783586bda3a63033e553728966e9d87b85d",
+      "code": "Q-2343",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-2343",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：节点依赖、分支与执行状态。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        },
+        {
+          "locator": "https://docs.temporal.io/activity-definition",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "Temporal recommends that Activities be idempotent. Activities should be designed to be safely executed multiple times."
+        }
+      ],
+      "findings": "Workflow 的节点输入输出、依赖、分支与程序控制定义正确；可包含模型或 Agent 节点而不等于全自治。并行前提写为独立且输入齐备是合理简化；超时、重试、取消与验收覆盖运行状态。检查点不保证外部写入恰好一次，幂等/去重/状态查询建议正确，评分点未要求某个编排器。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "e40b2e457b20f9fb2a2234adcba6840c1ffd92f793cef1d10f1ae0ea67418a89",
+      "code": "Q-3287",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3287",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：扩展入口、注册与运行验证。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "getActiveTools(): string[]；getAllTools(): ToolInfo[]；setActiveTools；codemode/deferred 工具未激活时仍可从 codemode 脚本调用。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/runner.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "emitContext 使用 structuredClone；过滤 system；接收 handlerResult?.messages；随后 restoreSystemMessages。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": ".pi/extensions/ 是项目扩展目录；项目配置在 trust 授予后加载；手工改资源后执行 /reload。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/ai/src/types.ts",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "UserMessage: role: \"user\"; content: string | (TextContent | ImageContent)[]; timestamp: number。"
+        }
+      ],
+      "findings": "全文与固定快照 ready 正文逐字一致。实际取到声明 commit 的源码，包名/1.4.0 版本、ExtensionAPI 默认入口、registerCommand 的 args/ctx、工具查询/切换、context 的消息返回及 UserMessage 字段均符实。源码确认 context 过滤并恢复系统消息，示例复制消息不改原数组；重复开启保留原工具集，off 恢复且停用插入逻辑。项目 trust、--extension、无需单独编译和 /reload 有官方依据。正文明确 codemode/deferred 可绕过活动集合，未虚称沙箱；reload/分支时实例状态丢失亦已说明。操作题评分需要实际加载/触发/退出证据属题意；本次仅做源码内容核验，未启动 Pi 或付费模型，不把源码吻合说成真实运行通过。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "22c4100750e5fb868cbe277d73219e548b82f7feaee0371bed83c88abbc1c756",
+      "code": "Q-3588",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3588",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：请求构造、模型调用与响应。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "POST /chat/completions；messages: array of ChatCompletionMessageParam；stream: optional boolean。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/function-calling",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Execute function calls and append results；示例关联 tool_call_id 后再次发送上下文。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/production-best-practices",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；实际打开文档",
+          "checked_excerpt": "Avoid exposing the API keys in your code or in public repositories."
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/error-codes.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "APITimeoutError；AuthenticationError；429 - Rate limit reached for requests；文档分别说明原因和应对。"
+        }
+      ],
+      "findings": "服务端 SDK/HTTP 构造请求、认证、模型与上下文、普通/流响应、校验输出的链路正确。工具建议—应用执行—关联结果回传的区别准确；超时/限流/格式错误及副作用重试边界可迁移到不同 API。三条评分点覆盖实践题核心，不要求特定 SDK 或关键词。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "c63a2f95cbc3e99df8755dcc51fd08b3d5e2a6fbc36f1be7df86f346837f94fe",
+      "code": "Q-3687",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3687",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：Java 模型应用与组件封装。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.langchain4j.dev/intro/",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "integrating LLMs into Java applications；AI Services；Prompt templates；chat memory；Tools (function calling)；RAG。"
+        }
+      ],
+      "findings": "模型、聊天记忆、提示模板、工具、检索及 AI Services 与官方功能列表一致；明确适合 Java/Spring 技术栈，简单一次调用不必引入整框架。没有保证框架自动解决检索正确性、数据库权限或可靠恢复。rubric 按技术栈、任务与版本能力判断，不要求展示并未拥有的项目。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "51cba0c9a0574bde0d15747e9a00cf9089b4dbf3ec7b9ee83cffd92418c54289",
+      "code": "Q-3696",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-3696",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：组合流程与下一步控制方式。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/runnables/base.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "RunnableSequence：the output of one is the input of the next；支持 | 组合以及 sync、async、batch。"
+        },
+        {
+          "locator": "https://www.anthropic.com/research/building-effective-agents",
+          "version": "2024-12-19；HTTP 200",
+          "checked_excerpt": "Workflows: predefined code paths. Agents: dynamically direct their own processes and tool usage."
+        }
+      ],
+      "findings": "模板—模型—解析器的组合有固定版本源码证据；区分历史 Chain 类与 Runnable/LCEL 的说法避免把旧接口作为永久 API。固定组合由程序控制、Agent 根据观察选动作的比较准确；复杂恢复可另用图式编排，不承诺所有链自动恢复。三条评分覆盖调用流程与边界，允许不同正确实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "4ad8a86d93dfdbf4412d55a90c5296460078666194300a1d7bd63c7d254fc2f7",
+      "code": "Q-4112",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4112",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：官方模块理解与最小实践。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.spring.io/spring-ai/reference/",
+          "version": "官方页面显示 Spring AI 2.0.2；2026-11-10 实取；HTTP 200",
+          "checked_excerpt": "Model API；ChatClient API；Auto Configuration and Starters；Chat Conversation Memory and Retrieval Augmented Generation。"
+        }
+      ],
+      "findings": "Spring AI 的模型 API、ChatClient、消息/提示、工具、向量存储/检索和 Spring 自动配置与官方结构吻合。参考答案明确未读过不虚构，并把具体版本、provider、装配配置交给实际依赖验证；rubric 首条允许未阅读的诚实回答，按编辑稿总则不能要求未读者捏造版本。该经历题为 interview_suitable=false，未误作所有面试者必备经历。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "7e6c66ebbb5123303bec48affa047e47872f6c0a325875a4ffea561d22487aef",
+      "code": "Q-4923",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4923",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：生成接口与嵌入接口。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/llms.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseLLM(BaseLanguageModel[str], ABC): It should take in a prompt and return a string."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/chat_models.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseChatModel(BaseLanguageModel[AIMessage], ABC)；invoke 接受 str、消息列表或 PromptValue，stream 输出 BaseMessageChunk。"
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/integrations/embeddings/index.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "fixed-length vector；embed_documents(texts: List[str]) → List[List[float]]；embed_query。"
+        }
+      ],
+      "findings": "LLM 文本生成、Chat Model 消息生成、Embedding 向量表示三种抽象与固定源码/官方文档一致。答案额外说明适配器可能接受多种输入，避免把 Chat Model 只接受消息列表当绝对 API 限制。文档/查询向量须模型与维度兼容；切换 embedding 通常需要重算索引的判断正确，未声称仅维度相同就可通用。三条评分针对用途和契约，不绑定 provider。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "065b4687e27bfb870fed2e254b8b4e706b713960edf4c0ccc59c7df62a72bb8d",
+      "code": "Q-4924",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4924",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模型配置与调用链。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langchain/models.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "model.invoke；专用 provider integration packages；Invoke 输入消息并输出消息，Stream 实时产生输出。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/language_models/chat_models.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "BaseChatModel(BaseLanguageModel[AIMessage], ABC)；invoke 接受 str、消息列表或 PromptValue，stream 输出 BaseMessageChunk。"
+        },
+        {
+          "locator": "https://developers.openai.com/api/docs/guides/error-codes.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "APITimeoutError；AuthenticationError；429 - Rate limit reached for requests；文档分别说明原因和应对。"
+        }
+      ],
+      "findings": "provider 集成包、服务端地址/模型/凭证、Chat Model、invoke、stream/异步、消息块合并的流程与源码/文档吻合。创建实例与真正请求上游区分明确；流式和工具消息要求依据具体模型支持。未虚构固定导入路径或一段版本无关的运行代码，评分允许正确的实际 provider 实现。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "ca3c56e7fda9690996cdd05d329f5d2aae99501101cf4acdb557314a92ae23b5",
+      "code": "Q-4925",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-4925",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：模板变量与消息组装。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/prompt.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "PromptTemplate.from_template(\"Say {foo}\")；prompt.format(foo=\"bar\")；不可信 Jinja2 模板有执行风险。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/chat.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "ChatPromptTemplate.from_messages；带 system/human 角色模板；invoke、format_messages 和 partial 方法存在。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/langchain-ai/langchain/langchain-core%3D%3D1.0.0/libs/core/langchain_core/prompts/base.py",
+          "version": "langchain-core==1.0.0 tag；HTTP 200",
+          "checked_excerpt": "missing variables；escape it with double curly braces；invoke 返回 PromptValue；partial 绑定变量。"
+        }
+      ],
+      "findings": "PromptTemplate、ChatPromptTemplate、format、format_messages、invoke、partial 均在固定 langchain-core 1.0.0 源码存在，答案称对应接口而未要求所有类都共享全部方法。变量校验、花括号转义和保留角色契约正确；将用户数据作为参数不会自动提供权限/注入防护，答案已明确此边界。修改模板保留版本/回归样例是合理工程建议，rubric 不强制唯一写法。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "ed6dcef2b9980eeac0a34507f436a13b11a1ed3c2d13853780b0bf08f2266474",
+      "code": "Q-5078",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-5078",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：扩展包装与能力组合。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://code.claude.com/docs/en/plugins.md",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "A Claude Code plugin is a directory of skills, agents, hooks, MCP servers, or other components."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "官方文档，2026-11-10 实际 HTTP 读取；非版本锁定；HTTP 200",
+          "checked_excerpt": "SKILL.md；Optional directories: scripts/, references/, assets/；Progressive disclosure。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        }
+      ],
+      "findings": "插件作为宿主定义的安装/分发单位、可组合 Skills/MCP/命令/钩子与 UI 的说明正确，未伪造跨宿主统一格式。官方 Claude Code 插件目录证明组合关系，Agent Skills 规范证明指导与资源结构，Pi 扩展源码证明宿主运行边界。加载、认证与真正任务成功分开核查合理；三条评分不把安装本身当业务成功。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_frameworks_gui",
+      "reviewed_at": "2026-11-10T00:54:00+08:00",
+      "candidate_sha256": "79a222d5b4e92bc97877ca3ab61ddc3fd774a71504b848b7c1ab4b7ab1276500",
+      "code": "Q-7004",
+      "topic": "Agent 框架与 Harness",
+      "materials": [
+        {
+          "locator": "backend/src/interview_backend/mianstack_snapshot.json#files.Q-7004",
+          "version": "MianStack b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+          "checked_excerpt": "原题 focus：编码 Harness 与按需扩展。 已读取其题面、元数据与完整现存正文。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/package.json",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "\"name\": \"@earendil-works/pi-coding-agent\", \"version\": \"1.4.0\"；description 包括 read、bash、edit、write 和会话管理。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": "export default function (pi: ExtensionAPI)；registerCommand；pi --extension ./hello.ts；jiti 无需单独编译。"
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/earendil-works/pi/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md",
+          "version": "commit 58c0b02ce552adab76014e7ed712ab7981359aa8；HTTP 200",
+          "checked_excerpt": ".pi/extensions/ 是项目扩展目录；项目配置在 trust 授予后加载；手工改资源后执行 /reload。"
+        }
+      ],
+      "findings": "固定 Pi 仓库实证其 CLI 文件/命令工具、会话及扩展入口的基本构成。答案要求指出所指仓库与版本而不将某版本 API 永久化；明确未使用者可仅有概念了解，符合公平评分。权限/预算被列作评估 Harness 职责的维度，没有宣称默认具备强制沙箱或某种固定审批能力。",
+      "conclusion": "approved"
+    }
+  ],
+  "publication": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+    "committed": true,
+    "accepted_count": 58,
+    "rejected_count": 0,
+    "imported_count": 58,
+    "unchanged_count": 0,
+    "available_count": 115,
+    "topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 15,
+      "Skills 能力系统": 13,
+      "工作流、状态与执行恢复": 5,
+      "多 Agent 编排与协作": 8,
+      "Agent 框架与 Harness": 16,
+      "GUI、Computer Use 与多模态 Agent": 1
+    },
+    "items": [
+      {
+        "index": 0,
+        "code": "Q-0019",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 1,
+        "code": "Q-0022",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 2,
+        "code": "Q-0048",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 3,
+        "code": "Q-0140",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 4,
+        "code": "Q-0322",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 5,
+        "code": "Q-0361",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 6,
+        "code": "Q-0378",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 7,
+        "code": "Q-0379",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 8,
+        "code": "Q-0382",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 9,
+        "code": "Q-0416",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 10,
+        "code": "Q-0624",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 11,
+        "code": "Q-0798",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 12,
+        "code": "Q-0852",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 13,
+        "code": "Q-0871",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 14,
+        "code": "Q-0872",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 15,
+        "code": "Q-0897",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 16,
+        "code": "Q-0935",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 17,
+        "code": "Q-0976",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 18,
+        "code": "Q-0977",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 19,
+        "code": "Q-1085",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 20,
+        "code": "Q-1247",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 21,
+        "code": "Q-1268",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 22,
+        "code": "Q-1664",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 23,
+        "code": "Q-1768",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 24,
+        "code": "Q-2075",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 25,
+        "code": "Q-2095",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 26,
+        "code": "Q-2266",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 27,
+        "code": "Q-2343",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 28,
+        "code": "Q-2426",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 29,
+        "code": "Q-2537",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 30,
+        "code": "Q-2639",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 31,
+        "code": "Q-2864",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 32,
+        "code": "Q-2920",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 33,
+        "code": "Q-3169",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 34,
+        "code": "Q-3257",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 35,
+        "code": "Q-3287",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 36,
+        "code": "Q-3486",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 37,
+        "code": "Q-3487",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 38,
+        "code": "Q-3588",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 39,
+        "code": "Q-3687",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 40,
+        "code": "Q-3696",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 41,
+        "code": "Q-3748",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 42,
+        "code": "Q-3749",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 43,
+        "code": "Q-3784",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 44,
+        "code": "Q-3795",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 45,
+        "code": "Q-4112",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 46,
+        "code": "Q-4113",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 47,
+        "code": "Q-4240",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 48,
+        "code": "Q-4456",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 49,
+        "code": "Q-4460",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 50,
+        "code": "Q-4923",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 51,
+        "code": "Q-4924",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 52,
+        "code": "Q-4925",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 53,
+        "code": "Q-5078",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 54,
+        "code": "Q-7004",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 55,
+        "code": "Q-7077",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 56,
+        "code": "Q-7091",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      },
+      {
+        "index": 57,
+        "code": "Q-9127",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "imported"
+      }
+    ],
+    "publication_id": "55d425b3-4066-4c94-8157-286437d8f64e"
+  },
+  "complete": true
+}

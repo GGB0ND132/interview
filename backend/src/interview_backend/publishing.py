@@ -207,7 +207,14 @@ class Publishing:
             )
         return source
 
-    def review(self, request: PublicationRequest, *, publish: bool) -> dict[str, Any]:
+    def review(
+        self,
+        request: PublicationRequest,
+        *,
+        publish: bool,
+        restorations: dict[str, int] | None = None,
+        human_reviews: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
         duplicates = Counter(
             item.get("code") for item in request.questions if isinstance(item.get("code"), str)
         )
@@ -265,11 +272,23 @@ class Publishing:
                 ).fetchone()
                 version = 1
                 unchanged = False
+                if restorations and (
+                    previous is None
+                    or previous["status"] != "disabled"
+                    or previous["version"] != restorations.get(candidate.code)
+                ):
+                    result["reasons"] = [{"code": "STATE_CONFLICT", "message": "停用题版本已变化"}]
+                    continue
                 if previous is not None:
                     error = None
                     if previous["pack_id"] != PACK_ID:
                         error = ("ID_CONFLICT", "题号已属于另一题包")
-                    elif previous["status"] == "disabled":
+                    elif previous["status"] == "disabled" and not (
+                        restorations
+                        and restorations.get(candidate.code) == previous["version"]
+                        and candidate.content_version
+                        != json.loads(previous["payload"])["content_version"]
+                    ):
                         error = ("QUESTION_DISABLED", "已停用题不可通过重新导入恢复")
                     else:
                         versions = db.execute(
@@ -320,6 +339,7 @@ class Publishing:
                             json.dumps(payload, ensure_ascii=False),
                         ),
                     )
+            eligible_pool = self.store.filter_quality(db, PACK_ID, pool.values())
             report = {
                 "pack_id": PACK_ID,
                 "source_commit": COMMIT,
@@ -328,10 +348,12 @@ class Publishing:
                 "rejected_count": sum(not item["accepted"] for item in results),
                 "imported_count": sum(item.get("action") == "imported" for item in results),
                 "unchanged_count": sum(item.get("action") == "unchanged" for item in results),
-                "available_count": len(pool),
-                "topic_counts": topic_counts(pool.values()),
+                "available_count": len(eligible_pool),
+                "topic_counts": topic_counts(eligible_pool),
                 "items": results,
             }
+            if human_reviews is not None:
+                report["human_reviews"] = human_reviews
             if publish:
                 report["publication_id"] = str(uuid4())
                 if report["imported_count"]:

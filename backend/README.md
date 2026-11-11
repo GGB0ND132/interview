@@ -12,7 +12,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 2；现有 schema 1 自动迁移，保留原题与会话。MianStack 示例不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 3；现有 schema 1/2 自动迁移，保留原题与会话。MianStack 示例与 06 候选题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
@@ -75,7 +75,7 @@ uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-liv
 | `GET /maintenance/questions/{code}` | 维护者读取完整题目/答案/来源及全部版本 |
 | `POST /maintenance/questions/{code}/disable` | 正文 `{"expected_version":1,"reason":"发现答案错误"}`；停用当前版本，新抽题不回退旧版本 |
 
-请求格式为 `{"questions":[...]}`，单批 1–500 项。完整可调用示例在 `src/interview_backend/mianstack_example.json`，包含 Q-0058、Q-0140 的原文答案与本项目编写的评分点。源文件快照（另含 Q-0597）在 `mianstack_snapshot.json`。示例发布不声称已经完成 05/06 的主题人工抽查。
+请求格式为 `{"questions":[...]}`，单批 1–500 项。完整可调用示例在 `src/interview_backend/mianstack_example.json`，包含 Q-0058、Q-0140 的原文答案与本项目编写的评分点。`mianstack_snapshot.json` 经 06 扩充为固定版本全部 115 道 Agent 基础题。示例发布不声称已经完成 05/06 的主题人工抽查。
 
 ```powershell
 $batch = Get-Content -LiteralPath src/interview_backend/mianstack_example.json -Raw -Encoding utf8
@@ -110,3 +110,9 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。本批 `first_half_review.json` 已记录明确的 `independent_agent_first` 策略及真实审核，后续加 `--publish` 可发布到指定数据库；内容变更、失败或未完成扩大复查时仍拒绝。人审与 Agent 字段分别保存，不把 Agent 记录冒充人审。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 通用维护 API 仍是底层维护入口。
 
 运行服务确认连接目标后，可用 `uv run --locked python -X utf8 scripts/release_first_half.py --database data/practice.sqlite3 --base-url http://127.0.0.1:8000 --output ../docs/verification/05-live-release.json` 执行上述审核门槛发布和持久化 HTTP 验收。它会发布、重复发布并创建六个未作答练习，不提交答案、不调用模型；输出文件只在全部检查通过后保存。仅适用于当前前六主题 57 题的独立目标库。
+
+## 06：后六主题内容与质量维护
+
+后六主题 58 题（16 原文、5 维护者修订、37 补答）已通过三个独立子 Agent 全量审核和正式发布；6 处问题修正并复核后无未决项，GUI 唯一来源题已全量核查。显式 `--review-policy agent_full --scope second-half` 使用真实 Agent 身份及完整内容哈希审批；默认 `human_sample` 保留，人工模板不代填。06 工作区的本地持久化实例为 API 8001、前端 5174，继承 05 已发布的 57 题后，该实例全部 12 主题实际可抽 115；05 原服务不受影响。详见 [在线发布与验收](../docs/verification/06-live-release.md)、[题包说明](../docs/content-baseline/agent-topics-06/README.md) 和 [内容审核](../docs/verification/06-content-review.md)。main 已合并 05 与 06 的候选源码；各工作区的本地数据库不会随 Git 合并自动复制或发布，可用数以连接目标的实际接口为准。
+
+06 增加 schema 3 的题目隔离、主题暂停及版本绑定的更正/扩大抽查/恢复接口。已知错题先停用，同主题重复错误暂停评分（错误类别可以不同），纠正并复查后才能恢复；暂停或隔离同时影响抽题与进行中的模型评分，用户回答保留。普通 03 发布仍不允许绕过停用；须先登记该版本质量问题，再经 `/maintenance/topic-quality/{competency_id}/corrections` 人工核查后提交新版本，扩大复查完成前仍隔离。完整请求格式与边界见上述说明。

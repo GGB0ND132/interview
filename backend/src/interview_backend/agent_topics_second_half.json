@@ -1,0 +1,1976 @@
+{
+  "questions": [
+    {
+      "code": "Q-0019",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "对话 Agent 的会话表和消息表应该如何设计？",
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[对话 Agent 的会话表和消息表应该如何设计？](https://mianstack.com/question/q-0019)\n\n## 核心回答\n\n可以先用**会话表保存一次对话的元信息，消息表保存对话中的具体内容**，两者是一对多关系。\n\n- **会话表**：`id`、所属用户 `user_id`、标题、会话状态、创建时间和最后活跃时间。\n- **消息表**：`id`、`conversation_id`、会话内顺序号 `seq`、角色 `role`、内容 `content`、生成状态，以及创建和更新时间。\n- **Agent扩展信息**：按需要保存本次执行的 `run_id`、工具调用与结果的关联、模型和用量等；图片、文件可以用内容块和附件引用表示。\n\n关键约束是消息必须归属有效会话，读取时校验用户访问范围，消息有稳定顺序，并能分清完整回复、生成中、失败和取消。普通线性对话先做好这两张表；编辑重生成、分支或复杂工具执行，再增加对应结构。\n\n## 展开说明\n\n### 1. 会话表描述“这段对话是谁的”\n\n`id` 是会话主键，`user_id` 关联会话拥有者；标题方便列表展示；状态可表示正常、归档等产品生命周期。`created_at` 记录创建时间，`last_active_at` 支持按最近活动列出会话。若需要区分标题修改与新消息活动，也可以单独保留 `updated_at`。\n\n只有系统支持多个 Agent、共享会话或多租户时，才进一步增加 Agent 配置关联、成员或租户等信息。字段来源应来自实际需求，不必默认每个聊天产品都有群聊和企业租户。\n\n会话标识只是定位键，不是访问凭证。服务端仍应根据登录身份检查会话归属或成员权限，不能因为请求带了一个合法 ID 就返回内容。\n\n### 2. 消息既要保存内容，也要保存语义\n\n`id` 用于稳定定位一条消息；`conversation_id` 关联会话；`seq` 表示会话内的展示或追加顺序。`role` 表示用户、助手、工具结果等语义，内容则可用文本加结构化内容块保存。纯文本场景不必一开始就拆消息内容表，但结构应留得下图片、文件和工具调用。\n\n助手输出可能包含文本和多个工具请求；工具结果需要关联到原调用，例如在支持该字段的适配层保存 `tool_call_id`。不能只留下“查询成功”这段文字，也不能靠返回先后来猜它属于哪个调用。\n\n`status` 可以表示生成中、完成、失败或取消，必要时保存简短错误信息。模型、Token 用量、完成原因等可作为扩展元数据保存，实际值来自调用结果。`run_id` 用于关联一次执行，一次会话可以有多次执行；消息表不需要承担全部执行状态。\n\n内部结构要和模型接口做适配。不同厂商可能使用消息角色、内容块或独立调用 item，不能把某一家协议的角色枚举当作所有模型的通用标准。需要回传的原始协议字段也应妥善保存，避免只存展示文本后无法继续工具交互。\n\n### 3. 顺序、约束和查询要配套\n\n消息主键唯一，`conversation_id` 可用外键保证引用有效，并给 `(conversation_id, seq)` 加唯一约束。会话历史按顺序号读取，分页时用顺序号作为游标；相应复合索引可以支持“查某会话的某段消息”。会话列表则按用户和最近活跃时间设计索引，具体是否被使用要看实际查询与执行计划。\n\n时间戳可能相同，也可能受并发和不同服务时钟影响，所以不宜只靠 `created_at` 确定稳定顺序。顺序号可在事务中锁定会话计数或通过原子更新分配，不能在并发请求里各自执行 `MAX(seq)+1` 就直接插入。唯一约束负责兜住冲突，冲突后仍要有明确处理方式。\n\n插入消息与更新会话活跃时间需要保持一致。客户端可能重复提交同一条用户消息，可以增加客户端消息标识并做适当唯一约束，实现重复请求去重；它和模型工具调用 ID、外部操作幂等键是不同概念。\n\n### 4. 用一轮工具交互解释怎样落库\n\n假设用户询问天气：先保存用户消息；模型提出天气工具调用时，保存带调用信息的助手消息；工具执行完成后保存关联的结果；最后保存助手回复。这些记录都属于同一会话，可通过 `run_id` 关联本次执行。\n\n流式回复通常保持同一消息 ID，在生成过程中合并片段，按批次或最终结果更新内容和状态，不必每个 Token 都作为一条普通消息插入。若业务需要断线续传，可以另外记录有顺序的流式事件或阶段快照。生成中断时保留实际已有内容并标记取消或失败，避免把半段回复伪装成完整答案。\n\n读取历史用于展示，和选择历史送给模型也要区分。界面可分页查看完整记录，模型上下文则按预算选择近期消息、摘要及必要原文；摘要保存覆盖到哪条消息，不能用一段摘要直接覆盖所有历史而失去定位。\n\n## 常见追问\n\n### 编辑问题、重新生成回复怎样设计？\n\n如果需要保留多个版本，可以增加 `parent_message_id`、分支或版本信息，让新回复挂到相应用户消息上，并明确当前展示和继续对话使用哪条路径。父消息还应属于同一会话。没有这些需求时，线性顺序即可，不必先实现整棵消息树。\n\n### system消息需要每轮重复存一份吗？\n\n不一定。应用指令可以由配置和版本管理，在执行记录中保存所用版本；确需重放时保存必要快照。客户端传入的普通文本不能因为声称自己是`system`，就获得系统指令的权限。\n\n### 存下消息就能恢复Agent吗？\n\n可以恢复对话展示及部分上下文，但完整续跑还可能需要当前节点、待执行调用、检查点和外部操作状态。消息历史与执行恢复各有职责，不能看到最后一条消息就盲目重做所有动作。\n\n## 对应教程\n\n- [记忆与对话历史](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/16-%E8%AE%B0%E5%BF%86%E4%B8%8E%E5%AF%B9%E8%AF%9D%E5%8E%86%E5%8F%B2%EF%BC%88%E5%90%ABRedis%E5%9F%BA%E7%A1%80%EF%BC%89.md)：从按会话读历史、拼入提示、调用模型到写回消息，理解存储需要支撑什么读写路径。关系表的字段、约束和分页是这条主线的具体设计选择。\n\n## 参考资料\n\n- 国内：[JavaGuide：MySQL索引详解](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/database/mysql/mysql-index.md)：依据文中复合索引与排序的说明，设计正文中按会话读取历史、按最近活动列出会话的查询索引。\n- 国内：[ranxi2001：工具调用与消息语义](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-basic/05-tool-calling-basics/index.md)：借鉴用户、助手调用和工具结果的语义区分，解释消息表为何需要角色字段及工具调用关联。\n- 国内：[WeThinkIn：Agent平台运行标识](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/07_%E4%BC%81%E4%B8%9A%E7%BA%A7Agent%E5%B9%B3%E5%8F%B0%E4%B8%8E%E4%BA%A7%E5%93%81%E8%90%BD%E5%9C%B0%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：参考会话与单次执行的标识划分，说明正文中 run_id 的用途，以及消息历史不能替代完整执行状态的原因。\n- 国外：[PostgreSQL：Constraints](https://www.postgresql.org/docs/18/ddl-constraints.html)：依据主键、唯一约束、外键和自引用的定义，说明正文中消息标识、会话内顺序与分支引用的数据库约束。\n- 国外：[LangChain：Messages](https://docs.langchain.com/oss/python/langchain/messages)：借鉴内容块、工具结果配对和流式片段的消息语义，说明正文中结构化内容、调用关联及同一消息内合并片段的设计。",
+      "rubric": [
+        "设计会话与消息的一对多关系及归属校验",
+        "用稳定序号和调用标识保存消息顺序与工具配对",
+        "区分历史消息与运行检查点并考虑幂等和中断状态"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0019",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0019.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0019.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0022",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "你的项目采用单 Agent 还是多 Agent，分别承担什么职责？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[你的项目采用单 Agent 还是多 Agent，分别承担什么职责？](https://mianstack.com/question/q-0022)\n\n## 深度研搜（Python）\n\n### 核心回答\n\n下面以一个整合公开资料、企业数据库和内部知识库的研搜助手为参考示例。\n\n项目采用**主从式多 Agent**：一个主智能体统一面对用户，配置三个自定义业务专家子智能体，按信息来源分工。后端使用 `Python` 和 `FastAPI`，`DeepAgents` 负责主从调度，底层由 `LangGraph` 承接执行状态；大模型负责理解问题、选择调用和整理结果，`Tavily`、`MySQL`、`RAGFlow` 分别提供真实信息。\n\n- **主智能体**：理解目标、拆分任务、选择专家，拿到结果后判断是否还缺信息，最后汇总回答。读取上传文件、生成 `Markdown` 和转换 `PDF` 由它调用文件工具完成。\n- **网络搜索子智能体**：通过 `Tavily` 搜索公开网页，补充最新公开信息。\n- **数据库查询子智能体**：先确认表和字段，再生成、执行 `SQL`，获取结构化业务数据。\n- **`RAGFlow` 子智能体**：选择合适的知识库助手，查询企业内部的非结构化文档。\n\n例如新能源团队研究某类电池的技术路线与量产进展，主智能体把政策和竞品公告查询交给网络助手，把相关业务统计交给数据库助手，把内部产品资料查询交给 `RAGFlow` 助手；结果回来后统一解释，再按要求生成文件。拆开的主要原因是三类数据源的工具、查询步骤和上下文不同，能把各领域的细节留在子任务里；代价是多了调度、信息交接和模型调用开销。若需求只有单一知识库问答，一个 Agent 配检索工具通常就足够。\n\n### 展开说明\n\n#### 选型的依据是任务边界，而不是模型数量\n\n这个例子按信息来源拆分，因为“查公开网页”“查业务表”“查内部文档”的处理过程不同。数据库助手需要表结构和查询结果，网络助手需要网页与搜索记录，把这些原始材料都放进主智能体会挤占上下文，也容易让它混淆工具用途。\n\n子智能体在自己的上下文中选择工具、读取反馈并完成局部任务，主智能体主要接收结果。它和“一个 Agent 挂很多工具”的区别，在于存在独立的任务执行边界；给几次模型调用换上角色名称，并不能体现这种分工。\n\n多 Agent 也不要求多种模型。这个参考实现通过统一配置创建模型，三个业务子智能体没有覆盖 `model`，因此沿用主智能体的模型。职责差异来自提示词、工具集合和任务上下文。需要进一步控制成本时，可以评估给不同角色配置不同模型，但要比较工具调用、结果质量、延迟和费用，而不是默认小模型一定适合 Worker。\n\n#### 一次调用如何完成交接\n\n主智能体根据子智能体的能力描述，利用框架的 `task` 工具下发子目标和必要背景。例如给数据库助手的任务应包含统计对象、时间范围和指标口径；给知识库助手的任务应说明要核实哪项产品或制度信息。子智能体执行后把结果交回主智能体，由主智能体决定补查还是汇总，子智能体不分别给用户输出三份最终答案。\n\n数据库查询与文档查询只有在输入已经齐备、互不依赖时才适合并行。如果要先查出产品型号，再检索对应内部资料，就必须先完成前一步。接口采用异步执行、流式推送进度，也不代表每个子任务都会自动并行。\n\n#### 角色分工与权限控制要分别落实\n\n配置不同工具集合可以缩小角色的业务范围，但实际权限仍由工具和数据源执行。例如数据库场景应使用只读账号、查询校验、行数和执行时间限制，不能把“只查询”的提示词当作数据库权限。该参考代码的自定义 `SQL` 工具直接执行传入语句，进一步加固属于后续工程工作。\n\n示例使用 `thread_id` 关联会话，用 `InMemorySaver` 保存进程内状态。它有助于同一会话持续执行；若要在服务重启后恢复任务，还需要持久化检查点和产物记录。`WebSocket` 用于推送进度，不承担这些状态的持久化。\n\n### 常见追问\n\n#### 为什么不用一个 Agent，把三个数据源都做成工具？\n\n完全可以作为简单版本。若请求主要落在同一领域，工具选择稳定，单 Agent 的成本和排障负担更小。拆分的理由应是领域上下文、工具选择或独立执行已有明确需求；用相同任务比较成功率、来源准确性、延迟和 Token 消耗，才能判断拆分是否值得。\n\n#### 主智能体和子智能体用相同模型，为什么还算多 Agent？\n\n模型是能力底座，Agent 是围绕目标、指令、上下文和工具组织起来的执行单元。同一个模型可以驱动多个独立子任务；反过来，先后调用两个不同模型，也不自动构成多 Agent 协作。\n\n#### 子智能体返回的结果互相矛盾怎么办？\n\n先比较数据来源、时间范围和统计口径，判断是否确实在回答同一件事。例如数据库返回实际销售记录，内部文档描述计划销量，两者不能直接互相覆盖。主智能体应保留各自依据，补查能验证分歧的证据，仍无法确认时在最终结果中说明缺口。\n\n### 对应教程\n\n- [深度研搜：项目总览与工程初始化](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/8-%E9%A1%B9%E7%9B%AE%E6%80%BB%E8%A7%88%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%88%9D%E5%A7%8B%E5%8C%96.md)：查看主智能体、三个业务专家和信息来源的对应关系，以及从查询到文件交付的完整流程。\n- [深度研搜：主智能体搭建与异步执行](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/13-%E4%B8%BB%E6%99%BA%E8%83%BD%E4%BD%93%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C.md)：查看文件工具为何由主智能体持有，以及主从组装、会话标识和流式执行如何连接。\n- [深度研搜配套源码：主智能体组装](https://github.com/didilili/deepsearch-agents/blob/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py)：对照 `tools`、`subagents` 和 `checkpointer` 的实际配置，区分业务角色与框架提供的运行能力。\n\n### 参考资料\n\n- 国内：[JavaGuide：多 Agent 协作系统设计](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/multi-agent.md)：借鉴文中对独立执行边界的划分，解释正文中多 Agent 与多阶段 Prompt Chain 的区别及拆分的代价。\n- 国内：[zero2Agent：多智能体协作：角色分工、通信机制与冲突仲裁](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/06-multi-agent-collab/index.md)：参考角色分工与结构化交付的设计，说明正文中子 Agent 如何接收必要背景、交付结果，以及单 Agent 与多 Agent 的选型条件。\n- 国内：[Datawhale：第六章 框架开发实践](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter6/%E7%AC%AC%E5%85%AD%E7%AB%A0%20%E6%A1%86%E6%9E%B6%E5%BC%80%E5%8F%91%E5%AE%9E%E8%B7%B5.md)：借鉴软件开发团队与图式编排案例，区分正文中的角色职责设计和执行顺序安排。\n- 国内：[zero2Agent：记忆与上下文](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/04-memory-context/index.md)：参考运行状态、模型上下文和记忆的分工，解释正文中会话标识、检查点与文件产物为什么需要分别管理。\n- 国外：[LangChain：Deep Agents Subagents](https://docs.langchain.com/oss/python/deepagents/subagents)：依据子智能体委派、上下文隔离及模型配置约定，解释正文中不同角色为何可以使用同一模型。\n- 国外：[Anthropic：How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)：借鉴主研究者拆分方向、子代理独立取证后汇总的实践，说明正文中并行研究的适用条件与协调成本。",
+      "rubric": [
+        "依据真实项目或明确假设说明单多 Agent 选型",
+        "给出职责输入输出和交接汇总",
+        "比较上下文隔离收益与成本故障并避免虚构经历"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0022",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0022.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0022.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0048",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何理解 Agent 中 Harness 的作用？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[如何理解 Agent 中 Harness 的作用？](https://mianstack.com/question/q-0048)\n\n## 核心回答\n\nAgent 中的 **Harness 是围绕模型搭建的执行系统**，负责把模型的判断转成实际操作，再把操作结果反馈给模型。模型主要负责理解任务、推理和选择动作；Harness 负责提供上下文、执行工具、维护状态，并落实权限、预算和验证规则。\n\n可以从四项职责理解它：\n\n1. **准备上下文**：组织任务要求、历史消息和相关资料，控制每次调用给模型看什么。\n2. **执行动作**：提供工具和运行环境，校验调用参数与权限，执行后返回真实结果或错误。\n3. **管理过程**：维护任务状态，限制循环次数、时间和成本，并按任务需要保存恢复点。\n4. **验证与反馈**：通过测试、业务规则和执行日志判断结果是否达标，失败时让模型修正或转人工处理。\n\n例如查询两座城市的天气，模型可以决定调用哪个工具、传什么城市；真正发起查询、处理超时、回传温度和检查结果是否齐全的，是 Harness。它的作用是让 Agent 能持续、可控地完成任务，而不只是生成一段看起来合理的回答。\n\n## 展开说明\n\n### 模型生成调用请求，Harness 才真正执行\n\n以“比较北京和上海今天谁更热”为例，运行过程可以这样拆：\n\n1. Harness 把用户问题、天气工具说明和必要的历史消息交给模型。\n2. 模型生成查询城市的工具调用请求。Harness 检查工具是否存在、参数是否符合约定，以及当前任务是否有调用权限。\n3. 工具执行查询，返回城市、温度、时间等数据；如果请求超时，就回传明确的失败信息。\n4. Harness 把工具结果交给模型，模型据此比较并生成回答。如果只查到一座城市，系统应继续补查或明确说明缺少数据。\n\n这里的关键是：**模型说“查到了”，不等于工具真的执行成功；生成了最终回答，也不等于任务已经满足验收条件。** Harness 要让模型的动作、外部执行结果和最终结论能够对应起来。\n\n### 提示词、上下文工程和 Harness 分别解决什么\n\n提示词主要说明目标、规则和输出要求；上下文工程负责挑选、组织模型当前需要的信息；Harness 还要负责信息之外的执行、状态、约束和反馈。它们会配合使用，并不是互相替代的三个产品。\n\n例如在提示词里写“只读查询”，可以帮助模型选择正确动作；真正限制数据库账号只能读取数据，仍要靠工具接口和权限系统。类似地，写“完成后测试”只是行为要求，提供测试环境、执行测试并读取退出码，才形成可检查的反馈。\n\nHarness 也不等于某一个框架。框架可以提供循环、检查点和中间件，但具体业务的权限判断、验收标准和恢复策略，仍需接入这些能力。\n\n### 长任务为什么需要状态和恢复机制\n\n长任务会遇到上下文容量有限、工具失败、进程中断或重复执行。只保留聊天记录，下一轮可能不知道哪些步骤真正完成、哪些操作只尝试过。\n\n因此应把关键状态单独保存，例如当前目标、已完成步骤、产物位置和验证结果；上下文太长时，保留关键事实并按需读取原始材料。恢复时先检查当前环境与记录是否一致，再继续未完成部分。\n\n状态恢复不等于外部操作自动回滚。例如一次写入已经成功，只是响应丢失，恢复后直接重试可能造成重复写入。这类动作还要结合幂等键、操作状态查询或业务补偿设计。\n\n循环控制也不能只靠模型主动停下。Harness 应设置最大步数、总耗时或成本预算，并识别连续相同错误、重复调用等无进展情况；达到边界后停止、降级或交给人工处理。\n\n### 怎样判断 Harness 是否有效\n\n先明确任务成功条件，再检查它解决了什么失败。例如天气比较要核对两地数据是否齐全、时间是否符合要求，而不是只检查回答是否流畅。\n\n保留每轮模型调用、工具参数、执行结果、错误和耗时，能够区分失败来自模型选错动作、参数错误、外部服务异常，还是状态恢复有问题。改动工具说明、上下文策略或模型后，用同一批代表性任务回归，比较任务成功、越权拦截、恢复表现和资源开销。\n\n系统复杂度应跟任务匹配。简单任务可能只需要清晰的输入、少量工具和结果校验；多步骤、有写入副作用或需要跨会话继续的任务，再补持久化、审批和恢复机制。\n\n## 递进追问\n\n### Harness 和 Evaluation Harness 有什么区别？\n\nAgent Harness 主要负责让模型在环境中执行任务；Evaluation Harness 主要负责提供评测任务、可控环境和评分逻辑，判断 Agent 的表现。两者可以共用执行日志和测试工具，但“能运行”和“能可靠评价”是不同职责。\n\n### 模型越来越强，Harness 还需要吗？\n\n更强的模型可能减少复杂提示、格式修补和过度规划等辅助逻辑，但工具执行、身份权限、外部状态、资源预算和结果验收仍需要系统实现。应通过回归测试精简已无收益的机制，同时保留实际业务需要的约束。\n\n### 如果 Agent 一直重试同一个失败，先改模型吗？\n\n先看执行记录：错误是否可读、参数是否稳定错误、工具是否缺少必要能力，以及系统有没有检测无进展。参数错误应给出字段级反馈；短暂服务故障可以有限重试；权限不足或确定性业务错误则应停止或换路径。只有确认模型持续误判这些反馈，才进一步考虑调整提示或模型。\n\n## 对应教程\n\n- [《从零构建 AI 智能体》第 21 章：Agent 智能体](https://github.com/didilili/ai-agents-from-zero/blob/main/21-Agent%E6%99%BA%E8%83%BD%E4%BD%93.md)：其中关于执行循环、运行时状态、checkpointer 和过程观察的讲解，帮助理解模型之外为什么需要一套持续执行系统；本文进一步补充权限、预算与验收职责。\n- [第 27 章：Skills 技能与 AI 编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/main/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：其中关于脚本分工与安全边界的说明，帮助区分“把规则写进 Skill”和“由工具权限、沙箱及业务机制实际执行约束”。\n\n## 参考资料\n\n- 国内：[JavaGuide：Harness 是什么？Harness Engineering 六层架构与 Agent 工程实践](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/harness-engineering.md)：借鉴文中对模型执行能力缺口的分析，说明正文中 Harness 对上下文、工具、状态与验证的职责。\n- 国内：[AgentGuide：Agent Harness Engineering](https://github.com/adongwanai/AgentGuide/blob/663d91056d20823e2a2084b8e6a88c7706e8aa85/docs/02-tech-stack/27-agent-harness-engineering.md)：参考执行循环、参数校验、预算和日志的设计，说明正文中 Harness 的运行控制，并区分 Agent Harness 与评测系统。\n- 国内：[ranxi2001：概念考察——Harness Engineering、Context Engineering 与前沿范式](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/15-agent-concepts/index.md)：采用约束、增强和验证的分析角度，解释正文中 Harness 超出提示词的职责及其与上下文工程的配合。\n- 国外：[LangChain：The Anatomy of an Agent Harness](https://www.langchain.com/blog/the-anatomy-of-an-agent-harness)：依据模型与外部执行系统的分工，说明正文中文件、工具、执行环境及反馈机制为何由 Harness 补足。\n- 国外：[Anthropic：Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)：借鉴进度记录、任务清单与逐步验证的长任务实践，说明正文中持久状态和明确完成条件的作用。",
+      "rubric": [
+        "区分模型决策与 Harness 执行运行系统",
+        "覆盖上下文工具状态预算权限和反馈",
+        "说明可观测可恢复与业务验证需实际实现"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0048",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0048.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0048.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0140",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "Workflow 和 Agent 有什么区别？",
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[Workflow 和 Agent 有什么区别？](https://mianstack.com/question/q-0140)\n\n## 核心回答\n\nWorkflow 和 Agent 的主要区别是**谁来组织任务的执行过程**。\n\n- **Workflow** 由开发者预先设计主要步骤和转移规则，模型可以在节点里做分类、生成或评价。它也能分支、并行和循环，只是这些处理路径由程序约束。\n- **Agent** 由模型结合目标和执行反馈，持续决定使用什么工具、还需要查什么、何时结束。程序仍会限制它的工具、权限和调用预算。\n\n例如写一份市场报告，按预设来源检索、生成、审核，属于工作流；如果需要模型发现资料冲突后，判断应该补查哪个时间段、换什么来源，就适合引入 Agent。前者更容易约束路径和排查问题，后者能处理难以提前列全的调查过程，但也增加了成本和执行的不确定性。\n\n实际项目可以组合使用：工作流控制固定步骤和审核，Agent 处理其中需要根据新证据调整行动的部分。\n\n## 同一份市场报告，可以怎样实现？\n\n以“小米 SU7 市场分析报告”为例，假设要求覆盖产品价格、用户反馈和竞品对比。\n\n**用 Workflow：** 程序规定先检索指定来源，再生成草稿，然后检查三项内容是否齐全；缺哪一项，就按预设规则补查对应材料，最后审核输出。模型可以判断“竞品价格这一项不完整”，但后面进入哪个补查节点、最多执行几轮，由开发者设计的控制结构决定。\n\n**用 Agent：** 给模型报告目标、可用工具和执行边界，由它判断当前最缺什么。假设搜索结果中两份价格资料相互冲突，模型先查发布日期和车型版本；发现材料来自不同时间，就补查同一时点的价格。资料齐了但草稿难读，下一步可能直接重排结构，不再继续搜索。关键在于反馈改变了调查动作。\n\n这两种实现针对同一份报告需求，资料冲突是假设情形。区别在于**开发者是否预先规定了主要处理路径，还是让模型围绕目标持续组织行动**。例如“模型分类后从三条预设路线里选一条”，通常仍算路由工作流；把调查过程交给模型，让它决定接着查证、换工具或结束，才更接近这里讨论的 Agent。实际系统的自主程度可以介于两端。\n\n| 比较项       | Workflow                         | Agent                                |\n| ------------ | -------------------------------- | ------------------------------------ |\n| 控制方式     | 预先设计步骤与转移规则           | 模型在允许范围内决定动作和继续条件   |\n| 更合适的任务 | 输入类别、输出要求、处理路线稳定 | 后续调查依赖中间证据，难以列全路线   |\n| 主要代价     | 新情况可能要补节点和规则         | 路径更易变化，可能重复查找或提前结束 |\n| 验证重点     | 节点结果、分支、回退及异常出口   | 还要看工具选择、无效循环和任务总成本 |\n\n这里的“路径由程序约束”，不代表每次输出都相同。工作流节点里如果调用模型，生成内容或分类结果仍可能变化；预设的“评价后修改”循环也能根据反馈纠错。因此，输出有变化或会纠错，都不足以单独证明系统是 Agent，仍要看主要行动怎样被选择和组织。\n\n## 固定流程里，怎样放入动态调查？\n\n仍以这份报告为例，可以把**报告要求确认、资料验收、写作和最终审核**固定下来，只把“根据已有证据补查资料”交给 Agent。模型能在调查阶段决定搜索词、来源和补查顺序，但不能因为自己宣布调查完成，就跳过后面的验收。\n\n```mermaid\nflowchart TD\n    S[确认报告范围与验收要求] --> A\n    subgraph I[动态调查阶段]\n        A{模型依据证据决定下一步} -- 继续查证 --> T[执行搜索或读取工具]\n        T -- 结果回填 --> A\n    end\n    A -- 提交材料 --> G{按约定检查材料}\n    G -- 满足要求 --> W[撰写报告并审核]\n    G -- 仍有缺口 --> H[返回缺口或交人工处理]\n    A -- 缺信息且无法推进 --> H\n    A -. 应用触发预算上限 .-> H\n```\n\n交接时应返回**已核验的事实、对应来源、数据时间与版本，以及未解决的问题**，而不只是一段“调查已完成”。比如两条价格仍来自不同车型或日期，就不能直接交给写作节点当作同口径数据；能用字段规则检查的先由程序检查，需要判断证据是否支撑结论的再交给评价节点或人工。\n\n这里有两个不同的判断：Agent 决定“是否还要继续查”，外层流程决定“这些材料能否进入下一步”。预算耗尽时带着缺口退出，也属于受控结束，不代表任务通过验收。这样既保留动态调查能力，又能定位问题究竟出在检索、证据整理还是写作阶段。\n\n## 追问\n\n**用了 `LangGraph`，是不是就是 Agent？**\n\n不是。`LangGraph` 的 State 保存资料和草稿，Node 执行检索或写作，Edge 控制去向，它可以承载上述两种实现。框架解决“怎么组织执行”，系统把多少决策权交给模型，才决定它的行为特点。\n\n**模型能拆分子任务，就一定是 Agent 吗？**\n\n不能只看有没有“规划”。例如模型根据主题列出三到五个章节，程序把各章分派给同一种写作节点，全部完成后统一汇总，这仍可以是“规划、分发、汇总”的工作流：章节数量和内容可变，主要执行结构仍由程序规定。若调查者还能根据工具反馈持续改变查证动作，再进一步讨论这一部分的自主程度。面试中应讲清楚**模型具体控制了什么、哪些步骤仍由程序保证**，而不是只凭“有规划”给整个系统贴标签。\n\n**单 Agent、多 Agent 又怎么区分？**\n\n这是另一维度。单 Agent 可以使用多个工具；多 Agent 进一步拆分角色、上下文和调度职责。比如研搜项目由主智能体统筹网络、数据库、知识库三个助手，拿到结果后再判断是否继续查。这样做适合各角色需要独立上下文或不同工具权限的情况，但也增加交接和汇总成本。多个模型固定并行写作再汇总，整体仍可能主要是工作流；只是复用模板、检查清单时，单 Agent 加按需加载的 Skills 就可能够用。\n\n**如果需求既有固定步骤，又经常出现新情况，怎么选？**\n\n先保留固定骨架，把无法穷举的部分开放给 Agent。例如报告格式和发布审核固定，中间调查允许动态选工具。再拿同一组报告任务比较：结论有没有依据、是否漏项、需要多少人工修改、总耗时和费用如何。只有动态部分带来实际收益才扩大范围，并为它设置调用预算和失败出口；耗尽轮数意味着需要退出或接管，不意味着报告合格。\n\n## 对应教程\n\n- [LCEL 与链式调用：4.1](https://didilili.github.io/ai-agents-from-zero/#/15-LCEL与链式调用)：顺序、分支和并行都属于可预先编排的方式。\n- [LangGraph 概述：1.2～1.4](https://didilili.github.io/ai-agents-from-zero/#/22-LangGraph概述与快速入门)：报告场景及状态、节点、边。\n- [深度研搜项目总览：2.3～3.3](https://didilili.github.io/ai-agents-from-zero/#/实战项目-深度研搜/8-项目总览与工程初始化)：一主三从怎样分工和回收结果。\n\n## 参考资料\n\n- 国内：[小林面试笔记：Workflow、Agent、Tools 的概念与区别](https://xiaolinnote.com/ai/agent/3_workflow_tools.html)：参考三者可相互嵌套的解释，把“固定骨架加动态节点”展开为有明确交接与验收的报告流程；预设路径不等于模型输出完全确定。\n- 国内：[JavaGuide：AI Agent 核心概念](https://javaguide.cn/ai/agent/agent-basis.html)：参考读取状态、选择动作、写回结果的运行循环，说明调查动作怎样随新证据改变，以及预算退出与任务完成的区别。\n- 国内：[AgentScope：Routing](https://doc.agentscope.io/zh_CN/tutorial/workflow_routing.html)：结合结构化分类和工具调用两种路由实现，说明局部节点的实现方式不能单独决定整个系统属于 Workflow 还是 Agent。\n- 国内：[Datawhale：智能体经典范式构建](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F%E6%9E%84%E5%BB%BA.md)：参考 ReAct 的动作、观察和循环上限，解释工具返回必须进入后续决策，而非只完成一次任务拆分。\n- 国外：[Anthropic：Building effective agents](https://www.anthropic.com/research/building-effective-agents)：采用预设流程与动态控制的架构区分，以及组合使用、按任务收益增加复杂度的思路；编排者动态拆分子任务的示例也说明“有规划”不足以单独分类。\n- 国外：[LangGraph：Workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents)：结合路由、编排者与工作节点、评价改进循环的实现，对比“任务内容可变”与“主要执行结构预设”，并核对框架可承载两类系统。",
+      "rubric": [
+        "区分代码预设路径和模型动态选择步骤",
+        "说明可在工作流中组合 Agent 节点",
+        "根据可预测性成本和验收需求选择并设置预算及失败出口"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0140",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0140.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0140.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0322",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "MCP 工具返回结果是否支持流式传输？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "要区分传输层流式消息、进度通知和工具业务结果增量。MCP 2025-06-18 的 Streamable HTTP 可以用 SSE 返回服务端消息；工具调用一般仍以与请求 ID 配对的 JSON-RPC 结果或错误结束，服务端也可发送关联进度通知。SSE 连接不意味着每个 tools/call 都支持把工具结果拆成任意文本块，更不等于模型 token 流。客户端需核对协议版本、传输、工具输出契约、进度支持及断线处理；没有声明增量能力时按最终结果消费，不能把中途进度当最终成功。",
+      "rubric": [
+        "区分传输流与工具结果增量",
+        "解释请求结果配对和进度通知",
+        "根据协议版本和工具契约判断支持范围"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0322",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0322.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0322.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0361",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "多 Agent 协作有哪些常见模式？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[多 Agent 协作有哪些常见模式？](https://mianstack.com/question/q-0361)\n\n## 核心回答\n\n多Agent常见协作方式包括**顺序流水线、并行分工、Router分流、主管—工作者、Handoff交接，以及评价—修订循环**。区分它们要看谁决定下一步、任务依赖、上下文如何交付和谁负责最终结果；共享状态是数据协作方式，Agent Team是组织描述，不能仅凭名字判断控制结构。\n\n例如报告任务可以先定问题，再并行调查不同方向，最后归并审核。外层是工作流，调查者内部仍可自主调用工具；多Agent不一定全程自由聊天，也不一定都要并行。\n\n## 常用模式与适用条件\n\n顺序模式适合上游产物明确成为下游输入，例如草稿、审阅、修改，控制简单但耗时累加。并行模式适合相互独立的研究或审查方向，需要归并策略、共同截止时间及部分失败处理。\n\nRouter依据请求选择专家，适合领域边界较清晰的场景；未知或多意图请求需要澄清或组合处理。主管—工作者由主Agent动态拆任务、调用子Agent并综合结果，适合无法提前确定全部子任务的研究，但主Agent也可能成为调度和上下文瓶颈。\n\nHandoff是把会话控制权交给另一个Agent，由接手者继续服务；主管调用子Agent时，控制权通常回到主管。评价—修订循环用于有明确评价条件的迭代；讨论或辩论模式可以暴露分歧，但意见更多不保证结论更正确，应让证据决定收敛。\n\n## 共享状态、团队和主子结构怎样比较\n\n共享状态表示角色通过公共任务字段或黑板协作，不意味着所有人共享完整消息历史。主子结构表示控制权与任务层级，子Agent也可以通过共享状态提交结果。团队模式可能采用主管，也可能通过消息和调度器协商，需要继续说明实际控制与通信机制。\n\n因此，一个系统完全可以“主管分派、工作者并行、共享任务状态、结构化结果归并”。这些维度可以组合，不能把它们当成互斥的三个框架。\n\n## 选型时看什么\n\n任务能否独立、是否需要不同工具与权限、跨角色传递是否会丢信息，以及拆分后是否确实提高质量或降低耗时。高度耦合、频繁同步同一上下文的任务，可能单Agent更合适。用相同任务比较成功、成本、延迟、重复工作和失败恢复，再决定是否保留多角色。\n\n## 常见追问\n\n**怎样防止互相转交停不下来？** 明确任务归属和完成条件，运行时限制转交、重复动作与预算，缺少新证据时调整方案或结束为未完成，不能靠不断增加角色解决。\n\n## 对应教程\n\n- [26-LangGraph多智能体与A2A](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/26-LangGraph%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E4%B8%8EA2A.md)：回看Supervisor、Handoff、Router与应用内协作。\n\n## 参考资料\n\n- 国内：[JavaGuide：多Agent协作系统设计](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/multi-agent.md)：借鉴编排模式与任务契约，说明正文中控制权、任务依赖和结果交付如何影响协作模式选型。\n- 国内：[zero2Agent：多Agent通信与共享状态](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/06-multi-agent-collab/index.md)：依据角色隔离与共享状态的区分，说明正文中不同协作方式需要的通信与状态规则。\n- 国内：[WeThinkIn：编码Agent与技能资源](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/02_%E7%BC%96%E7%A0%81Agent%E4%B8%8EAgentOS%E5%B7%A5%E7%A8%8B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：借鉴子 Agent 与技能资源的边界，说明正文中独立执行者的任务划分与拆分条件。\n- 国外：[Anthropic：Multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)：借鉴主管委派、子代理独立调查后汇总的实践，说明正文中并行研究的收益及通信成本。\n- 国外：[LangGraph：Workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents)：依据路由与动态工作者模式的区别，说明正文中预先固定分流和运行时拆分任务的差别。",
+      "rubric": [
+        "说明路由主从并行专家或交接等协作模式",
+        "说明任务依赖输入输出和结果合并",
+        "比较单 Agent 基线和多 Agent 的协调成本与停止条件"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0361",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0361.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0361.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0378",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何理解 Agent Skill？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[如何理解 Agent Skill？](https://mianstack.com/question/q-0378)\n\n## 核心回答\n\nAgent Skill 是把一类任务的执行方法整理成可复用的技能包，通常包括任务说明、操作步骤和输出要求，还可以附带脚本、参考资料与模板。Agent 在遇到相关任务时加载这些内容，再使用已有工具完成工作。\n\n以常见的 Agent Skills 格式为例，技能目录的入口是 `SKILL.md`：元信息描述名称和适用场景，正文说明怎样执行。系统可以先提供少量元信息，匹配任务后加载正文，需要时再读取资源或运行脚本。这种按需展开的方式，让一套较完整的工作方法可以复用，同时减少每次都塞入全部资料的开销。\n\n例如“面试题答案编写”Skill 可以规定怎样查证资料、组织核心回答、处理图示和检查来源；真正的检索、读文件和生成内容，由 Agent 结合工具执行。\n\n## 一个技能包里包含什么？\n\n`SKILL.md` 一般有两部分：前面的 `YAML` 元信息提供 `name`、`description` 等字段；后面的 `Markdown` 正文写适用条件、步骤、必要约束和交付要求。描述应帮助系统判断何时使用，正文应给出足够具体的方法，而不是只有“高质量完成任务”。\n\n辅助目录按需要设置，不要求全部存在：\n\n- `references/` 保存较长的领域资料、接口说明或检查规则，正文指出何时查阅。\n- `scripts/` 放适合交给程序完成的重复或确定性操作，例如提取文档结构、检查文件格式。\n- `assets/` 放模板、样例或交付所需资源。\n\n按照开放格式，最小技能可以只有一个 `SKILL.md`。具体产品支持的额外配置、目录约定和触发方式可能不同，需要以运行环境为准。\n\n## 为什么采用渐进式加载？\n\n如果每次都把所有技能、长篇手册和脚本全文放进提示词，会占据上下文，并增加模型选择相关规则的难度。因此常见实现分三层：先发现技能，再加载执行方法，最后取用本任务所需的材料。\n\n```mermaid\n%%{init: {\"themeVariables\":{\"fontSize\":\"16px\"},\"flowchart\":{\"nodeSpacing\":16,\"rankSpacing\":30,\"padding\":10}}}%%\nflowchart TD\n    A[\"元信息<br/>名称、用途和适用场景\"] --> B{\"本任务是否需要该技能？\"}\n    B -->|需要，或用户明确指定| C[\"读取 SKILL.md 正文<br/>执行步骤与交付要求\"]\n    B -->|不需要| D[\"继续处理当前任务\"]\n    C --> E[\"按步骤判断所需资源\"]\n    E --> F[\"按需读取参考资料、模板<br/>或使用工具运行脚本\"]\n    F --> G[\"检查结果并交付\"]\n```\n\n图中最后一层不是“所有文件再读一遍”。例如格式校验脚本可以由运行环境直接执行，模型主要处理执行结果；需要排错时也可能读取脚本源码。加载正文会消耗上下文，脚本输出也可能很长，所以渐进式加载并不意味着没有 token 成本。\n\n## Skill 怎样转化成实际能力？\n\n仍以答案编写为例：用户提出一道题，Agent 识别到适用的技能，读取规定的研究和写作方法；需要资料时调用搜索或文件工具；按模板写出答案；再根据规则核对事实、来源与图示。可复用的是任务方法和配套资源，执行质量仍取决于模型、工具、资料及规则本身。\n\n因此，Skill 文件里写“查询数据库”，不会自动安装数据库工具、配置账号或授予访问权限。运行环境要提供相应能力并控制执行范围；缺少能力时，应处理这个实际缺口。单纯的写作技能，也可以主要使用模型和参考文件完成任务，不必附带可执行脚本。\n\n## 追问\n\n**Skill 与 Tool、`MCP` 有什么区别？**\n\nTool 封装一个具体操作，例如查询订单；Skill 记录怎样完成一类任务，可能安排多次工具调用；`MCP` 是连接工具和上下文的一种协议。一个 Skill 可以指导 Agent 使用 `MCP` 提供的工具，也可以使用普通函数或文件工具，没有必须依次经过的固定层级。\n\n**Skill 与一段提示词有什么关系？**\n\n技能正文包含提示与指令，但技能包还提供了发现入口、任务组织方式和可选资源，方便按需调用、维护和复用。它不直接更新模型权重。把长提示词原封不动搬成文件，如果没有清楚的适用条件、可执行步骤和验证方法，仍然难以稳定复用。\n\n**怎样判断一个 Skill 写得好？**\n\n选取应该触发、无需触发和缺少依赖的真实任务，检查是否选对技能、是否按需取用资料、能否完成关键步骤、交付物是否符合要求，以及失败时能否说明缺口。评估应关注任务结果与成本，不能只看文件多或描述长。\n\n## 对应教程\n\n- [Skills 技能与 AI 编程工具实践：1 Skill 概念、3 文件结构、4 渐进式加载](https://didilili.github.io/ai-agents-from-zero/#/27-Skills技能与AI编程工具实践)：可复用技能包、入口文件和三层加载方式。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills](https://javaguide.cn/ai/agent/skills.html)：参考技能的定位与内容组织方式，说明 Skill 与工具、MCP 分别负责什么。\n- 国内：[zero2Agent：Skill 的渐进式加载](https://github.com/ranxi2001/zero2Agent/blob/main/learn-claude-code/05-skill-loading/index.md)：借鉴按需展开技能内容的讲解，解释渐进式加载如何减少每次输入的材料量；具体加载与保留方式取决于运行环境。\n- 国内：[Hello-Agents：如何写出好的 Skill](https://github.com/datawhalechina/hello-agents/blob/main/Extra-Chapter/Extra08-如何写出好的Skill.md)：结合技能目录、适用描述和执行步骤的示例，说明怎样把一类任务整理成可复用的 Skill。\n- 国外：[Anthropic：Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)：依据技能包和渐进式加载的原始介绍，说明任务说明、参考资料与配套代码为什么可以放在同一个技能目录中。\n- 国外：[Agent Skills：开放格式规范](https://agentskills.io/specification)：依据开放格式规范，说明 `SKILL.md` 的必需元信息，以及脚本、参考资料等可选目录的组织方式。",
+      "rubric": [
+        "说明 Skill 封装可复用工作知识和执行流程",
+        "识别说明文件及按需资源的职责",
+        "区分加载指导与执行工具或权限控制"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0378",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0378.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0378.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0379",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "Skill、提示词工程与 MCP 有什么区别和联系？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "提示词工程关注怎样组织指令、上下文、示例和输出约束，帮助模型理解某次任务；Skill 把某类任务的知识、步骤和资源组织成可复用的技能包，可能包含提示示例、参考文档和脚本，宿主按需加载；MCP 则规定宿主客户端与外部能力服务器的接入交互，按 MCP 2025-06-18 可发现和调用 Tools、读取 Resources、获取 Prompts。三者可以配合：提示说明本次目标，Skill 指导工作方法，宿主通过 MCP 连接执行所需工具。Skill 不等于一个新的执行 Agent，MCP 也不是替模型编写业务决策的提示模板；提示写得好、Skill 已加载或 MCP 已连接，都不能证明实际任务完成。工具权限、参数校验、预算和最终结果验证须由宿主及业务系统落实。具体 Skill 触发与加载方式依赖所用产品，不应把某个宿主的惯例称为通用协议保证。依据：https://agentskills.io/specification 和 https://modelcontextprotocol.io/specification/2025-06-18/architecture 。",
+      "rubric": [
+        "区分提示词表达 Skill 组织能力 MCP 接入协议",
+        "解释三者可以组合使用",
+        "说明工作流程文本不保证实际动作和结果"
+      ],
+      "answer_origin": "maintainer_edited",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0379",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0379.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0379.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0382",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "SubAgent 是什么，适用于哪些场景？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[SubAgent 是什么，适用于哪些场景？](https://mianstack.com/question/q-0382)\n\n## 核心回答\n\nSubAgent 是**由主 Agent 委派、负责一个明确子目标的 Agent 执行单元**。它可以有专门的指令、工具和上下文，在内部多步调用工具、根据反馈继续处理，再把结果交回主 Agent；主 Agent 负责协调和最终交付。这里的“子”描述任务关系，不要求使用不同的大模型，也不要求另起一个进程。\n\n它主要适合三类场景：一是子任务会产生大量搜索、文件或日志中间结果，主任务只需要结论和证据；二是不同领域需要不同工具和处理规则；三是多个方向可以相对独立地探索，再统一汇总。\n\n例如研搜系统将公开网络信息、企业结构化数据、内部知识库查询分别交给三个业务专家，主 Agent 收集结果后组织回答和生成文件。若只是一次简单查询，或者各步骤必须频繁共享全部中间状态，直接调用工具或使用单 Agent 往往更合适，拆分后的通信与归并也要计入成本。\n\n## 展开说明\n\n### 1. 和普通工具、工作流节点有什么区别\n\n工具提供一个明确的调用接口，例如搜索网页、读取文件或执行计算；SubAgent 在任务内部还可以判断下一步、选择工具并迭代，直到达到子任务的结束条件。框架可以把这种委派包装成一个工具，所以主 Agent 调用它时看起来仍是一次 `Tool Calling`，但内部执行的是一个 Agent 流程。\n\n工作流节点则是编排单元，节点里既可以是普通函数，也可以调用模型、工具或完整 Agent。把流程拆成三个节点，或者给三次模型调用起不同名字，并不自动等于三个能独立处理子目标的专家。\n\n在常见的主子委派模式中，主 Agent 把任务交出去，接回结果后继续处理用户请求；若把会话控制权转给另一个 Agent 继续直接服务用户，则更接近 Handoff。两者的会话和结果归属不同。\n\n### 2. 一次委派需要说明什么\n\n一个可执行的子任务，至少应说明目标、相关背景、范围、允许使用的能力、期望结果和停止条件。结果最好包含结论、证据位置、未解决事项与必要的产物引用，而不是只有一句“已完成”。\n\n以研搜为参考，[主 Agent 源码](https://github.com/didilili/deepsearch-agents/blob/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py)通过 `subagents` 注册了网络搜索、数据库查询和 `RAGFlow` 三个自定义业务专家；主 Agent 自己保留文件读取、`Markdown` 生成和 `PDF` 转换工具。三个专家分别配置名称、职责描述、系统提示词和业务工具，查询过程有不同的能力范围。\n\n主 Agent 通过 `task` 工具指定 `subagent_type` 和任务 `description`。前者选择专家，后者说明这次具体要完成什么；专家配置里的职责描述，则帮助主 Agent 判断什么时候适合委派。以“调研某行业并生成 `PDF`”为例，主 Agent 可以将公开资料检索交给网络专家，接回信息后整理 `Markdown`，再调用 `PDF` 转换工具，完成交付。\n\n在这一参考环境的 `DeepAgents` 运行时中，子 Agent 用本次任务描述开始自己的消息历史，完成结果作为与委派调用关联的工具消息返回。可共享的状态字段另有传递规则，因此“没有复制整段父对话”也不等于“所有状态绝不共享”。生产设计可以进一步把任务 ID、输入版本、截止时间和验收条件纳入委派契约。\n\n### 3. 哪些任务值得拆，哪些不值得\n\n**值得拆的关键是子目标能独立完成，并且交回有限结果。** 例如主 Agent 在规划代码改动时，让一个子 Agent 查找某接口的调用位置，交付文件路径、行号和依赖关系；大量文件读取过程不必长期占用主窗口。不同资料来源的独立调研，也适合分别探索后汇总。\n\n若每一步都依赖另一个 Agent 尚未完成的中间推断，子任务需要不停同步，拆分就容易增加延迟、遗漏和重复工作。多个角色读取同一份材料、输出几段相似总结，也未必提供足够收益。应在同一批任务上比较结果质量、完整耗时、总 Token、重试和失败处理成本，而不能只看主 Agent 的窗口变短了。\n\n拆分后还要控制共享写入。可以把代码修改、发消息、发布文件等动作交给明确的执行者，其他专家提供分析和建议；并行分支若修改同一资源，需要额外的冲突与版本处理。返回摘要也要保留关键条件和来源，主 Agent 应检查缺失、矛盾及验收结果后再使用。\n\n## 常见追问\n\n### 子 Agent 一定有完全独立的上下文吗？\n\n独立任务上下文是常见设计，有助于减少无关历史和中间结果；具体继承多少内容取决于框架配置。当前 `DeepAgents` 文档默认使用 `isolated` 模式，也介绍可继承父对话的 `fork` 模式；后者是 0.7.13 起提供的 Beta 功能，使用前需要确认框架版本。需要独立探索时可传精简任务，需要接续父任务时可选择继承；不能只凭“SubAgent”这个名字推断其消息和状态全部隔离。\n\n### 有独立上下文，就有独立权限和安全沙箱吗？\n\n没有这种必然关系。上下文隔离控制模型看到什么，工具和底层凭据控制能访问什么，进程或容器等执行隔离控制运行范围。子 Agent 若拿到同一组高权限工具，仍可能访问同样的资源；需要由工具执行层和运行环境落实权限边界。\n\n### SubAgent 一定并行、一定更省 Token 吗？\n\n不一定。存在依赖时要顺序执行，独立任务才适合并发，具体还取决于调度实现。子 Agent 可以减少主窗口中的原始中间结果，但增加了任务描述、独立推理和结果汇总，系统总 Token 可能更高。是否值得拆，应看实际任务收益和整体成本。\n\n### SubAgent 和 A2A 是什么关系？\n\nSubAgent 描述主子任务组织方式；`A2A` 提供独立 Agent 服务之间交换任务、消息和产物的互操作规范。同进程中的主子委派可以直接由框架调用，需要跨服务协作时再考虑网络接口或 `A2A`，不能把两者当作同一个概念。详见[A2A 协作](/question/q-0110/)。\n\n## 对应教程\n\n- [深度研搜：主智能体搭建与异步执行](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/13-%E4%B8%BB%E6%99%BA%E8%83%BD%E4%BD%93%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%89%A7%E8%A1%8C.md)：阅读三个业务专家的职责、`subagents` 注册、主 Agent 文件工具和 `task` 调用识别，理解一次委派如何回到最终回答与文件交付。\n\n## 参考资料\n\n- 国内：[JavaGuide：多 Agent 系统](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/multi-agent.md)：参考独立执行者与 Prompt Chain 的区别、Supervisor 和 Handoff 的控制权，以及角色拆分的条件，明确 SubAgent 的任务关系。\n- 国内：[zero2Agent：多 Agent 协作中的 SubAgent 设计](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/06-multi-agent-collab/index.md)：参考将大量中间搜索交给子任务、只返回结论与证据的场景，解释上下文管理收益；历史继承仍需按具体框架理解。\n- 国内：[WeThinkIn：Agent 设计模式与工作流编排](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/03_Agent%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%BC%96%E6%8E%92%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：参考角色输入输出、停止条件、共享写入责任和协作代价，说明拆分后还要解决哪些工程问题。\n- 国外：[LangChain：Subagents](https://docs.langchain.com/oss/python/deepagents/subagents)：依据 DeepAgents 委派配置、`task` 工具及默认隔离与可选继承模式，说明正文中的具体框架行为；其中 `fork` 是 0.7.13 起提供的 Beta 功能。\n- 国外：[Anthropic：How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system)：借鉴主代理分派独立方向、子代理探索后汇总的实践及目标、边界、输出约定，说明正文中适用任务与协调成本。",
+      "rubric": [
+        "说明子 Agent 的委派目标上下文和工具边界",
+        "列出独立研究等适合分工的场景",
+        "说明结果交付及重复调用延迟和权限成本"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0382",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0382.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0382.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0416",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "MCP 的本质与作用是什么？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "MCP（Model Context Protocol）统一宿主与外部工具、上下文服务之间的交互，使不同应用复用客户端/服务器接入方式。模型本身不会因为“有 MCP”就直接执行操作：宿主创建 MCP client，与 server 通信，由宿主决定提供哪些能力和如何授权执行，服务器再实现具体业务。本文以 MCP 2025-06-18 为基准，连接后先发送 initialize 协商协议版本和能力，成功后客户端发送 notifications/initialized；tools/list 发现具体工具，tools/call 调用工具并取得关联结果。Resources 提供可读取的上下文，Prompts 提供参数化提示模板，三者不是不同的权限等级。标准化解决重复适配和能力发现问题，不保证技术事实正确、认证成功或副作用幂等。stdio 适合本地进程；Streamable HTTP 面向 HTTP 端点，具体认证、可选会话和事件流仍需按版本与实现核对。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 。",
+      "rubric": [
+        "说明 MCP 统一上下文和工具的客户端服务端交互",
+        "区分协议标准化与具体工具业务实现",
+        "说明权限认证和工具执行仍由宿主及服务端负责"
+      ],
+      "answer_origin": "maintainer_edited",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0416",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0416.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0416.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0624",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Skill 能否保证每次需要时都被调用？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "不能仅靠 Skill 名称和描述保证模型每次自动选用。自然语言触发受任务表述、上下文、宿主发现机制和模型判断影响，既可能漏触发也可能误触发。可以改进名称描述、适用与不适用条件，给出代表任务并测试触发率；需要强制执行的流程由用户显式调用或宿主路由和执行器保证，并检查步骤与产物。即使成功加载 Skill，脚本可能失败、工具可能缺失、权限可能不足，所以要分别观察发现、加载、执行及最终业务结果，而不是把提示文本当确定性控制。",
+      "rubric": [
+        "明确自动选择不保证每次触发",
+        "提出显式调用路由和代表任务评估",
+        "区分加载执行权限与最终结果"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0624",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0624.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0624.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0798",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "为什么普通接口查询不能完全替代 Agent？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[为什么普通接口查询不能完全替代 Agent？](https://mianstack.com/question/q-0798)\n\n## 核心回答\n\n**固定、明确的查询，普通接口就可以完成；Agent 的价值是围绕目标，根据中间结果决定下一步。** 比如“查订单状态”直接调用接口即可，而“排查订单迟迟没发货的原因，并给出下一步处理建议”，可能需要结合订单、库存、物流和业务规则继续查证。\n\n两者也不是同一层面的概念：API 是调用能力的接口，Agent 是一种任务决策与执行方式。Agent 可以调用普通 API，自己也可以通过 API 对外提供服务。普通后端程序同样能实现多步流程；如果规则足以覆盖需求，就应优先用程序或 Workflow。\n\n只有当用户目标表达多样、下一步依赖实时证据，且模型的语义理解和动态判断有实际价值时，我才会加 Agent，并用状态、权限、预算和结果校验限制它的执行范围。\n\n## 展开说明\n\n### 1. 普通查询解决什么，任务决策还缺什么？\n\n查询接口通常接收明确参数，返回约定数据。调用方已经知道要查什么、参数从哪里来、结果如何使用。复杂业务接口也可以聚合多个系统并处理分支，并不局限于“一次查一张表”。\n\n开放任务中，这些问题可能在请求开始时尚不确定：缺哪些参数、应该先查哪类数据、当前结果是否足够、是否需要追问或换一条路线。Agent 可以把自然语言目标转换为动作，并根据反馈继续判断。但数据读取、业务写入和权威校验仍应交给接口及其背后的系统。\n\n### 2. 用一个补充资料的参考场景说明\n\n假设系统要根据已有申请资料，向客户补问缺失信息。固定方案可以由后端查询缺项，再按规则选择模板发送；如果这些规则已经充分覆盖场景，使用接口和工作流即可。\n\n若客户的回答是自然语言，还会出现“这个材料我之前交过”“地址刚变更了”等情况，系统就可能需要理解含义、核对已有资料、决定下一项追问。Agent 可以承担这部分语义判断，循环执行“读取任务状态—选择问题或查询工具—接收反馈—检查是否完成”。客户回复仍须绑定到正确的任务与问题，避免把其他申请的答案写进来。\n\n最终资料是否满足业务条件，由既有规则和业务系统判定。Agent 不能仅凭自己的总结绕过校验，也不能把“已经发出问题”当作“资料已经补齐”。这只是说明分工的参考方案，具体项目应按真实职责展开。\n\n### 3. 新需求怎样在 API、Workflow 与 Agent 之间选择？\n\n先看现有接口和固定规则能否满足验收标准。若只是参数提取困难，可以用一次模型调用把自然语言转成结构化参数，再走确定流程；不一定需要持续的 Agent Loop。\n\n若流程顺序和分支明确，用后端或工作流组织。若需要根据新证据动态选择查询、追问和分析方向，可以把 Agent 放在这些节点，保留其余确定流程。\n\n最后用同一组任务比较完成质量、错误类型、延迟、调用成本与维护工作。Agent 增加了模型判断和循环开销，只有它解决的输入变化或开放决策值得这些成本，选型才成立。\n\n## 常见追问\n\n### 我用代码写很多 if/else，也能实现，为什么要 Agent？\n\n能稳定覆盖需求就可以这样做。Agent 主要帮助应对难以事先穷举的语义输入和证据路径，但它也会判断失误。应比较扩展规则的维护成本与模型方案的评测、执行控制成本，而不是把代码分支多当成必须使用 Agent 的理由。\n\n### 给查询接口加一层大模型，就是 Agent 吗？\n\n不一定。自然语言转参数、固定查询、格式化输出，可以只是一个带模型节点的流程。通常所说的工具型 Agent，还会根据运行时反馈决定后续动作或结束；是否用某个框架、有没有长期记忆，都不是必要判据。\n\n### 普通 API 能不能对外提供和 Agent 一样的效果？\n\n可以。`HTTP` 等接口形式不限制后端内部实现。如果后端已经实现了目标理解、状态管理、动态工具选择和反馈循环，它本身就承担了 Agent 的运行职责。因此比较时要看内部任务逻辑，不能只看调用入口是不是 API。\n\n## 对应教程\n\n- [Agent 智能体](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/21-Agent%E6%99%BA%E8%83%BD%E4%BD%93.md)：区分工具的能力封装与 Agent 的运行决策，用工具反馈循环和 Workflow 选型解释两者怎样组合。\n\n## 参考资料\n\n- 国内：[JavaGuide：AI Agent 基础](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/agent-basis.md)：借鉴固定业务流程与证据驱动排查的比较，说明正文中动态判断适合放入哪些节点及其成本。\n- 国内：[zero2Agent：架构设计](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/01-architecture-design/index.md)：依据设计时流程与运行时工具选择的区别，说明正文中 Agent 和 Workflow 的控制边界。\n- 国内：[WeThinkIn：AI Agent 基础](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/01_AIGC%E6%97%B6%E4%BB%A3AI%20Agent%E5%9F%BA%E7%A1%80%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：依据工具选择、参数、反馈、失败处理和目标验证的流程，说明正文中查询接口如何接入任务闭环。\n- 国外：[Anthropic：Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)：采用预定义工作流与模型动态决策的划分，说明正文中何时值得增加 Agent 的复杂度。\n- 国外：[LangChain：Agents](https://docs.langchain.com/oss/python/langchain/agents)：依据模型、工具与运行循环的关系，说明正文中 Agent 如何依靠已有函数和接口执行动作。",
+      "rubric": [
+        "区分固定接口查询与动态多步目标完成",
+        "说明 Agent 可调用普通接口但不替代数据源",
+        "承认简单确定任务直接接口更合适并比较成本可靠性"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0798",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0798.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0798.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0852",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Skill 的渐进式披露是什么？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[Skill 的渐进式披露是什么？](https://mianstack.com/question/q-0852)\n\n## 核心回答\n\nSkill的渐进式披露是**先让Agent发现“有哪些能力”，任务匹配后再读“怎么做”，执行中才加载所需细节**。它把能力发现与详细内容分开，减少无关说明长期占据上下文，也让同一个Agent可以管理更多专业方法。\n\n常见组织是名称与描述、`SKILL.md`正文、按需引用的资料和脚本三层。这里的“层”描述信息加载时机，不是要求技能必须拆成三个文件，也不是让用户一步步确认。\n\n## 各层分别加载什么\n\n第一层是轻量元数据。宿主发现技能目录后，把名称和准确的触发描述提供给模型，帮助判断适用任务。描述应说清场景与边界；“通用专家，什么都能做”会让路由失去区分度。\n\n第二层是完整操作说明。命中后读取`SKILL.md`正文，获得方法、前提、步骤、异常处理和产物要求。触发技能通常意味着加载指令，不一定是直接调用一个名为Skill的函数，更不等于所有宿主都使用同一种`JSON`接口。\n\n第三层是执行所需资源。正文引用专题资料、模板、示例和脚本，Agent只读取当前分支需要的文件。脚本可以通过宿主提供的执行能力运行，模型主要消费结果；这并不意味着执行没有资源成本，也不意味着加载技能就自动获得更多权限。\n\n## 一个例子\n\n假设有一个`CSV`分析Skill。目录描述只说“分析`CSV`的字段质量、统计分布和异常记录”；读取正文后知道如何检查数据和组织报告；任务需要时间序列分析时才读取相应说明，必要时运行已有统计脚本。\n\n只做字段检查就不必把时间序列、绘图、导出等全部材料注入本轮。脚本结果返回样本与统计摘要，原始大文件保留可回查引用，避免大量数据反复进入上下文。\n\n## 工具或技能很多时怎么办\n\n元数据本身也有成本。数量增加后，可先按身份、可用性和任务范围筛选，再进行关键词或语义召回，将少量候选交给模型判断。候选数量应由召回质量与预算评估，不能认为固定Top-20或某个Token数普遍最优。\n\n错误路由可能让后续永远看不到正确技能，因此要允许扩大候选、拒绝不匹配或进行必要澄清。技能版本与资源引用要一起维护，避免入口描述更新了，正文仍指向旧脚本。\n\n## 它不保证什么\n\n渐进披露减少上下文噪声，但不能保证模型一定选对、一定执行或一定成功。仍需验证触发与不触发样例、资源加载、关键步骤和最终产物。技术亮点是**把发现、理解和执行资源分开，让能力扩展与上下文预算能够同时管理**。\n\n## 对应教程\n\n- [27-Skills技能与AI编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：理解元数据、SKILL.md及可选资源的加载顺序。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：采用元数据、正文与资源的分层，说明正文中发现、选择和执行阶段分别提供哪些技能内容。\n- 国内：[zero2Agent：渐进式披露与Skill/Workflow](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/01-architecture-design/index.md)：依据按阶段取用材料的机制，区分正文中能力发现和执行内容加载的职责。\n- 国内：[Datawhale：上下文工程](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter9/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B.md)：借鉴上下文按需检索的思路，解释正文中全量加载技能为何会增加噪声。\n- 国外：[Agent Skills：Specification](https://agentskills.io/specification)：依据开放规范的技能目录与渐进加载约定，说明正文中各层内容及文件的职责。\n- 国外：[Anthropic：Equipping agents with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)：借鉴实际技能和配套脚本示例，说明正文中资源按需读取与脚本执行结果如何配合。",
+      "rubric": [
+        "区分启动发现元数据与选中后读取完整说明",
+        "按任务需要加载脚本参考和资产",
+        "说明按需读取控制上下文但不等于无限节省或免除核验"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0852",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0852.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0852.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0871",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "除自然语言描述外，还有哪些创建 Skill 的方式？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[除自然语言描述外，还有哪些创建 Skill 的方式？](https://mianstack.com/question/q-0871)\n\n## 核心回答\n\n除了“用自然语言让AI帮我写”，还可以**手工编写、从现有资料提炼、从成功任务轨迹抽取、封装已有代码流程，以及复用现有技能再适配**。这些是不同的形成途径，最终都需要变成宿主能发现和加载的技能包。\n\n若讨论Agent Skills常见文件形式，核心是带元数据的`SKILL.md`，可附资料、模板和脚本。并不是只要注册一个函数就自动创建了这种Skill；有些业务平台将可执行模块也叫Skill，应先说清所用定义。\n\n## 几种具体方式\n\n**直接写技能文件。** 手工创建目录，描述适用场景、步骤、边界和产物，复杂细节放到引用文件。适合已经清楚做法、希望稳定复用的任务，内容不必由模型生成。\n\n**由文档或模板转换。** 从团队操作手册、检查清单、报告范例或接口文档中提炼方法，保留必要术语、输入条件和验证方式。原始资料不是整篇复制进正文；要去掉无关背景，并为细节留引用。\n\n**从演示与历史轨迹抽取。** 利用一次或多次实际任务中的工具调用、修正和最终产物，识别稳定步骤与异常分支。把具体账号、路径等替换成参数；确认哪些探索是必要的，避免把偶然成功路径固化成规则。\n\n**封装已有脚本与工作流。** 将确定性计算、格式处理和接口适配放到代码里，`SKILL.md`解释何时用、如何传参、失败如何理解及如何检查结果。脚本负责稳定执行，指令负责方法和上下文，二者配合。\n\n**复用并适配现有技能。** 从团队仓库或公开来源取得技能后，核对适用条件、依赖、工具与宿主支持，修改项目路径、术语和测试样例。相同文件结构不代表所有环境都能原样运行，脚本与外部服务尤其需要检查。\n\n辅助生成器可以帮助搭建目录、检查元数据或从样例起草，但它是创建工具，不是另一种自动保证正确的技能机制。创建完成后还需要被目标宿主发现或注册，加载规则与具体产品有关。\n\n## 怎样判断创建成功\n\n先验证名称和描述是否能在正确任务中被发现，并用相近但不适用的请求检查误触发；再验证正文步骤和引用资源能否完成任务。包含代码时实际运行关键路径，输出按业务标准检查，不能只确认文件能解析。\n\n例如已有“整理`CSV`报表”的`Python`脚本，可以补充输入格式、字段规则、错误说明、报告模板和结果核对，形成可复用技能。技术亮点在于**把已有知识与执行资产组织成可发现、可组合、可验证的方法**，而不是生成一段更长的Prompt。\n\n## 对应教程\n\n- [27-Skills技能与AI编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：掌握手工技能目录及可选脚本资源的组织。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：采用技能与工具的职责划分，说明正文中文件技能包和业务函数的差别。\n- 国内：[zero2Agent：渐进式披露与Skill/Workflow](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/01-architecture-design/index.md)：借鉴流程与资源按需组织的方法，说明正文中已有资料如何转成可执行方法。\n- 国内：[WeThinkIn：编码Agent与技能资源](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/02_%E7%BC%96%E7%A0%81Agent%E4%B8%8EAgentOS%E5%B7%A5%E7%A8%8B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：依据技能资源和子 Agent 的职责边界，说明正文中选择封装层次的条件。\n- 国外：[Agent Skills：Specification](https://agentskills.io/specification)：依据 SKILL.md 及可选目录规范，说明正文中最终技能包需要的结构。\n- 国外：[Anthropic：Equipping agents with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)：借鉴说明、参考资料与脚本配合的实例，说明正文中如何从既有资产创建技能。",
+      "rubric": [
+        "说明可以手工编写目录说明与配套脚本",
+        "说明模板生成转换已有流程等创建方式",
+        "最终检查文件结构依赖并通过实际任务验证"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0871",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0871.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0871.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0872",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "MCP 与客户端有哪些通信方式，如何配置？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "本题按 MCP 2025-06-18 区分两种标准传输。stdio 由宿主启动本地服务器进程，通过 stdin/stdout 交换 JSON-RPC 消息，日志写 stderr；客户端配置通常需要可执行 command、args 和必要环境变量，字段格式按具体客户端确认。Streamable HTTP 使用单一 MCP 端点，客户端以 POST 发送 JSON-RPC，请求可得到 JSON 或 SSE 响应，GET 可建立服务端事件流；不提供 GET 流时服务器可返回 405。HTTP 配置通常需要 URL、传输类型和认证方式，不应把凭证写入共享配置。旧 HTTP+SSE 使用分开的 SSE 接收端点和消息 POST 端点，是 2024-11-05 的历史方式，不能与 Streamable HTTP 混称。2025-06-18 两种传输均先 initialize 协商，再 notifications/initialized；HTTP 后续请求应携带协商后的 MCP-Protocol-Version。服务器可在初始化时返回 Mcp-Session-Id，返回后客户端后续请求必须携带。SSE 重放是可选能力；提供事件 ID 时客户端可通过 GET 与 Last-Event-ID 尝试续传。断开连接不应被解释为取消请求，要取消应显式发送 notifications/cancelled，外部已发生的副作用也不会自动撤销。最后需验证实际工具发现和调用结果，不能仅凭服务器在线判断成功。参考：https://modelcontextprotocol.io/specification/2025-06-18/basic/transports 和 https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle 。",
+      "rubric": [
+        "区分本地 stdio 与远程 HTTP 传输",
+        "说明旧 HTTP SSE 与 Streamable HTTP 的版本区别",
+        "按客户端实际支持配置命令环境或服务地址并验证调用"
+      ],
+      "answer_origin": "maintainer_edited",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0872",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0872.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0872.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0897",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "GUI Agent 是什么？",
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "competency_id": "agent_gui",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "GUI Agent 通过屏幕图像、界面结构或其他多模态观察理解当前应用，再选择点击、输入、滚动等操作，并在操作后重新观察结果。它适合缺少可用 API、需要跨图形界面完成的任务，但容易受布局变化、遮挡、焦点、分辨率与延迟影响。应以任务状态而非一次点击回执判断成功，限制可操作范围和预算，敏感或不可逆动作按授权确认。截图中的网页和文档是不可信数据，不能自动变成系统指令；如果已有稳定 API，通常更容易做确定性校验。",
+      "rubric": [
+        "描述观察决策动作再观察的界面循环",
+        "解释使用场景和布局焦点等不确定性",
+        "校验业务成功并控制权限注入及敏感动作"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0897",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0897.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0897.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0935",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "在实际工作或对话中如何使用 Skill？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[在实际工作或对话中如何使用 Skill？](https://mianstack.com/question/q-0935)\n\n## 核心回答\n\n下面以**表格分析与报告生成**给出一份使用经历答法示例。\n\n我会在对话里提供源表、统计口径和期望报告，再指定报表分析 `Skill`，或者由宿主按任务描述匹配。技能加载后，Agent 先检查字段、缺失值和数据范围，按需读取指标说明与模板，再调用工具运行计算并生成报告。我主要用它固定重复任务的处理顺序和交付格式。\n\n例如处理门店月报，我会明确销售额按已支付订单统计，退款单独列出，要求报告说明趋势和异常。完成后我核对关键总额能否与源表对上、异常是否有对应明细，以及文件是否真实生成并能打开；不会仅凭一段像报告的回复判断任务完成。\n\n如果报告把退款归错月份，我会先查指标口径和计算结果，随后把“退款日期缺失时先补条件”的规则加入技能，再对照同一输入检查。`Skill` 提供可复用方法，文件读取、计算和产物生成仍由工具执行，缺失的数据不能由技能替用户猜。\n\n## 一次对话中实际发生什么\n\n1. **给任务。** 例如“分析这份门店月报，销售额按已支付订单计算，退款单独列出，输出趋势和异常说明”。文件路径或附件是输入，统计口径是约束，报告是目标。\n2. **选技能。** 通常先把可用技能的名称和描述放入上下文，模型判断是否相关；也可通过宿主支持的显式入口指定。指定了技能还要确认它适合本次文件与任务，不适用的步骤不能机械执行。\n3. **读说明并执行。** 正文规定先检查字段、缺失值与数据范围，再计算指标，最后填写报告。指标定义和模板按需读取；脚本可以重复执行固定计算，避免每次临时生成一套口径。\n4. **核对产物。** 检查报告所用数据范围是否正确，关键总额能否与源表对上，异常结论有没有对应明细，文件是否真实生成且能打开。若缺少退款日期等关键字段，先补条件，不把猜测写进最终指标。\n\n并非每次都要把技能全部资料塞给模型。`Deep Agents` 使用技能摘要、正文和附带资源的分层加载；`AgentScope` 也展示了注册技能描述并让 Agent 读取说明的方式。两者体现相同思路，但接入接口不同。\n\n## 使用中怎样定位问题\n\n**没命中技能**：检查是否被宿主扫描、描述是否覆盖用户表达、同名或相近技能是否造成歧义。先确认运行时真的看到了它，再调整描述。\n\n**命中了却没按步骤做**：检查正文是否只写“认真分析”这类愿望，是否给出了必要输入、处理顺序、异常分支与完成条件。常见的改法是增加具体条件，例如“缺少日期列时先询问，不生成时间趋势”。\n\n**步骤执行了但报告错误**：查工具结果、计算口径和文件内容。技能能规定校验流程，不能保证每次判断正确；可机械核对的金额、行数与必填字段应交给程序检查。\n\n## 追问\n\n**每次都要显式指定技能吗？**\n\n不一定。描述清楚且宿主支持自动发现时，可以由模型匹配；对稳定流程，也可以使用宿主支持的固定加载方式。两者都要检查实际加载和结果，不能只凭“使用了某技能”的文字判断。\n\n**一次对话能用多个技能吗？**\n\n可以，例如先做表格计算，再按统一报告规范写作。但要明确数据与中间文件怎样交接，避免两个技能对同一指标或输出格式给出冲突要求。\n\n**什么情况下不值得用技能？**\n\n一次性的简单改写、宿主本身已能可靠处理的小动作，通常直接给清晰要求即可。重复出现的专业口径、模板和失败处理，才更值得沉淀。\n\n## 对应教程\n\n- [第 27 章：Skills 技能与 AI 编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：回看目录结构、渐进式加载、触发测试及代码审查示例。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills 是什么？和 Prompt、MCP 到底差在哪？](https://javaguide.cn/ai/agent/skills.html)：借鉴报表分析链路，区分用户请求、技能加载和工具执行在一次对话中的职责。\n- 国内：[Datawhale：如何写出好的 Skill](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/Extra-Chapter/Extra08-%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BA%E5%A5%BD%E7%9A%84Skill.md)：采用脚本、参考资料、模板各自用途，组织报表计算与报告生成的交接。\n- 国内：[AgentScope：Agent Skill](https://doc.agentscope.io/tutorial/task_agent_skill.html)：采用技能需要注册并具备读取工具的机制，解释未命中时先检查可发现性。\n- 国内：[小林：MCP 和 Agent Skill 的区别是什么？](https://xiaolinnote.com/ai/tools/10_mcp_vs_skill.html)：借鉴技能指导步骤、工具完成动作的协作关系，说明一次任务可以组合多个工具。\n- 国外：[Anthropic：Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)：采用观察实际轨迹再调整技能的方法，说明命中问题与执行质量问题应分开排查。\n- 国外：[LangChain：Deep Agents Skills](https://docs.langchain.com/oss/python/deepagents/skills)：核对摘要、正文与资源的分层读取，以及显式加载与任务匹配的区别。",
+      "rubric": [
+        "根据任务匹配或显式选择 Skill",
+        "读取说明并按需使用资源脚本",
+        "验证产物和失败情况而不声称所有宿主触发一致"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0935",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0935.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0935.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0976",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何编写 Skill，有什么规范流程？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[如何编写 Skill，有什么规范流程？](https://mianstack.com/question/q-0976)\n\n## 核心回答\n\n编写 Skill，是把一类任务中可复用的方法整理成**能被发现、按步骤执行、结果可检查的能力包**。我会按下面的顺序做：\n\n1. **选定任务和成功标准**：明确处理什么输入、输出什么结果，先用实际例子找出需要补充的业务知识和步骤。\n2. **写好触发描述**：在 `SKILL.md` 的元数据里给出清楚的名称和适用场景，让 Agent 能判断什么时候使用。\n3. **写可执行的正文**：说明输入要求、默认步骤、工具或资源用法、结果格式，以及缺信息或执行失败时怎样处理。\n4. **按需拆资源**：长资料放参考文件，稳定操作可封装脚本，模板放资源目录；主文件写清何时使用它们。\n5. **在目标宿主验证并迭代**：分别检查该不该触发、是否按流程执行、产物是否符合要求，再根据具体失败调整。\n\n简单任务从一个清楚的 `SKILL.md` 开始就够了，不需要一开始搭完整平台或堆很多目录。\n\n## 展开说明\n\n### 1. 从真实任务提取方法，先确定输入和产物\n\n例如设计一个“接口测试用例生成”Skill，可以先取一份接口说明和一个有代表性的需求，明确希望得到正常、边界和异常用例。每条用例至少应能说明前置条件、输入、操作和预期结果，预期结果要对应接口或业务规则。\n\n观察普通提示下有哪些问题：是漏掉边界值、不知道业务口径，还是输出格式不便执行？Skill 针对这些缺口补充规则，比写一整套泛泛的“测试专家”介绍更有用。\n\n任务范围也要清楚。设计测试用例和运行自动化测试是相关但不同的任务；如果本次只要求设计用例，就不应顺带调用真实业务接口或修改测试环境。\n\n### 2. 元数据解决“什么时候用”，正文解决“具体怎么做”\n\n按 Agent Skills 格式，一个目录至少包含 `SKILL.md`，文件以 `YAML` frontmatter 开头，必需字段是 `name` 和 `description`，后接 `Markdown` 指令。名称要符合命名约定并与目录名一致；正文没有统一必填标题，组织清楚即可。\n\n下面是放在 `api-test-design/SKILL.md` 中的精简设计示例：\n\n```markdown\n---\nname: api-test-design\ndescription: 根据接口文档或需求设计测试用例。用户要求生成、补全或审查接口测试用例时使用。\n---\n\n# 接口测试用例设计\n\n1. 阅读输入的接口说明，提取参数、约束和业务规则。\n2. 按正常、边界和异常场景设计用例，标明各自验证的规则。\n3. 缺少业务口径时列出待确认项，避免自行编造预期结果。\n4. 输出用例编号、前置条件、输入、操作、预期结果和依据。\n5. 检查重复项、遗漏的必要约束，以及预期结果是否有依据。\n```\n\n更复杂时，再补充如何处理多接口依赖、怎样使用模板、哪些失败可以重试。指令应给出默认方法和必要分支，例如“解析不到表格时保留原文件并说明缺口”，比“保证解析高质量”更便于执行。\n\n### 3. 资源有明确用途，操作由实际工具执行\n\n长字段说明、业务规则和案例可以放在 `references/`，输出模板放在 `assets/`，稳定的数据整理或格式检查可放在 `scripts/`；这些目录都不是必需的。\n\n主文件需要写明“何时读哪份参考资料、何时运行哪个脚本、输入和结果是什么”。相对路径从 Skill 目录解析，不能假定模型会主动遍历所有附件。脚本还要说明依赖、参数、错误输出以及是否会修改文件。\n\nSkill 提供方法，模型据此提出工具调用，宿主执行工具并返回结果。对于必须严格执行的校验，适合用程序实现；对于需要根据内容作判断的步骤，保留相应决策空间。不要用加长提示词替代真实执行逻辑。\n\n### 4. 既验证触发，也验证最终行为\n\n先确认宿主能发现正确目录、解析元数据，并在需要时加载正文和资源。再用少量有代表性的输入检查：明确要求设计用例、隐含地要求补齐测试覆盖，以及只解释接口而不需要生成用例的情况。\n\n产物检查则回到成功标准：是否覆盖必要规则、预期结果有无依据、格式能否被下游使用。遇到问题，区分选错 Skill、说明不清、资源未读、脚本失败和模型执行偏差，针对原因修改，不只是不断加“必须”。\n\n修改后回看原失败样例及相近场景，记录版本和变更，避免修好一个输入却损坏其他任务。跨宿主使用时，还要确认工具名、目录发现、资源访问和依赖环境确实兼容。\n\n## 常见追问\n\n### Skill 和写一个长 Prompt 有什么不同？\n\nSkill 仍依赖提示指令，但增加了可发现的元数据、可复用的目录及按需资源。模型通常先看到能力描述，任务需要时才读取完整方法。关键收益是任务知识能够独立组织和复用，具体加载机制由宿主实现。\n\n### 文件写入、删除型 Skill 怎样避免误操作？\n\n正文先明确操作对象和范围，但可靠限制要落到执行程序：把操作类型和目标路径作为明确参数，校验实际解析后的路径及授权范围，限制进程或文件系统可访问的资源。重要操作还可先生成具体变更清单或采用可恢复处理。提示词和 Skill 名称本身不构成文件系统隔离。\n\n### 一定要包含脚本、固定章节和很多测试吗？\n\n不需要。格式规范主要约束元数据和目录，正文围绕任务需要组织。纯写作或审查任务可能只有说明与样例；涉及稳定转换和严格校验时，脚本才更有价值。验证规模也应与复杂度和风险相称，重点是用代表性输入确认行为。\n\n## 对应教程\n\n- [Skills 技能与 AI 编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：回看正文应包含的信息、资源引用与触发测试，练习把一句笼统目标写成能执行的任务说明。\n- [研搜：中间件机制与 Skills 配置](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/7-%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%9C%BA%E5%88%B6%E4%B8%8ESkills%E9%85%8D%E7%BD%AE.md)：通过实际配置路径和表情翻译描述，理解写好文件后还需要让宿主发现并加载它。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：采用触发描述、执行正文与配套资源的分工，说明正文中 Skill 如何把任务方法交给 Agent。\n- 国内：[ranxi2001：Skills 与 Claude Code 模块化技能系统](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-survey/11-skills-claudecode/index.md)：借鉴代码审查步骤、结果格式和自定义加载器示例，说明正文中执行步骤的写法及技能发现读取的验证。\n- 国内：[ranxi2001：Skill 输入输出与工具管理](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/02-tool-management/index.md)：依据输入输出兼容与宿主执行职责，说明正文中中间结果、缺信息处理和程序校验的边界。\n- 国外：[Agent Skills：格式规范](https://agentskills.io/specification)：依据必需元数据、命名约定、正文与可选目录，说明正文中技能格式的标准要求及任务自选内容。\n- 国外：[Anthropic：Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)：借鉴简洁度、任务自由度与迭代方法，说明正文中如何从代表性失败补足最小必要指令并观察效果。",
+      "rubric": [
+        "先定义适用场景输入输出和验收",
+        "组织说明参考脚本与依赖边界",
+        "用代表任务验证触发和执行后迭代版本"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0976",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0976.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0976.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-0977",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "是否使用过 Dify、Coze 等低代码平台？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "先如实说明是否使用过 Dify、Coze，以及实际版本、部署方式和做过的流程。未使用过也可以从文档解释：这类平台通常提供模型接入、工作流编排、工具、知识检索与应用发布，但具体功能随版本和产品版本变化。可用“输入问题、检索、模型生成、返回来源”的假设流程说明节点和数据传递，再说明凭证、检索质量、运行日志、失败重试和持久化需要验证。不能把画好流程或平台显示成功当作端到端业务正确，也不应编造项目经验。",
+      "rubric": [
+        "诚实说明经验与明确版本",
+        "解释平台节点数据流和模型工具集成",
+        "验证真实结果日志检索与故障而非只看配置"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-0977",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-0977.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0977.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-1085",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "项目的 OpenAI 兼容接口采用什么请求格式，是否是 Completion 格式？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "OpenAI 兼容通常指服务支持部分相同接口与 JSON 契约，并不意味着所有新功能都兼容。若使用 Chat Completions，一般向 /chat/completions 发送 model、messages 和可选的 tools、temperature、stream 等字段，messages 携带 role 与内容；旧 Completions 的 /completions 使用 prompt，不能混称同一种请求。Responses 又有不同的输入与输出 item 契约。回答应以项目真实端点和版本为准，检查错误码、工具调用结构及流式响应，不展示密钥，也不编造项目正在使用哪个接口。",
+      "rubric": [
+        "区分 Chat Completions messages 与旧 Completions prompt",
+        "核对真实端点模型工具流式契约",
+        "说明兼容实现范围不同且保护凭证"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-1085",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-1085.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-1085.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-1247",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "MCP 与 Skill 有什么区别？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "MCP 解决应用怎样用统一协议连接外部上下文和可调用能力；Skill 解决某类任务怎样组织知识、步骤、脚本和验收方法。MCP 服务器提供的 Tool 可以由多个应用复用，Skill 则可把这些工具组合进可重复执行的任务方法；两者不是互斥选择。以本题采用的 MCP 2025-06-18 为准，Resources 可以暴露宿主可读取的文件或其他上下文。如果宿主把取得的文件用作 Skill，还要自行识别技能包、检查目录和元信息，并依 Agent Skills 格式加载；读取资源不等于该基线协议已经提供统一的 Skill 安装、发现或激活机制。一个不使用 MCP 的应用也能加载本地 Skill，一个 MCP 客户端也可以完全不使用 Skill。加载任务指导不自动产生工具权限，连接服务器也不证明业务调用成功，仍要检查真实结果。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/resources 、https://modelcontextprotocol.io/specification/2025-06-18/architecture 和 https://agentskills.io/specification 。",
+      "rubric": [
+        "区分 MCP 服务接入和 Skill 任务知识",
+        "说明 Skill 可调用 MCP 工具",
+        "指出任一机制都不能取代执行层权限和结果检查"
+      ],
+      "answer_origin": "maintainer_edited",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-1247",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-1247.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-1247.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-1268",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "项目通过模型 API 还是其他方式接入大模型？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "项目可通过托管模型 HTTP API、官方或兼容 SDK、低代码平台封装，或自部署推理服务接入大模型；SDK 本质上常仍调用远端 API。应说明真实使用的服务、模型标识、接口契约、认证方式和调用链，未接入就明确说明。服务端保存密钥，设置超时和重试，并校验响应与工具调用；自部署还需评估模型许可、硬件、并发和运维。接入方式不代表模型质量，需用真实任务比较结果、延迟、费用与隐私边界。",
+      "rubric": [
+        "区分托管 API SDK 平台与自部署",
+        "如实说明项目调用链和认证",
+        "覆盖响应校验超时成本并避免编造接入"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-1268",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-1268.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-1268.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-1664",
+      "content_version": "agent-basics-06-v2",
+      "prompt": "MCP、Skill 和 Tool 三者有什么区别？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Tool 是具有输入输出契约的可执行能力，例如读文件或查天气；模型提出工具调用后，仍由宿主校验参数、权限并真正执行。MCP 是客户端与服务器之间的标准接入协议，2025-06-18 规定初始化、能力发现、Tools、Resources 和 Prompts 等交互；一个 MCP server 可以暴露多个工具，应用内函数也可直接当 Tool，不要求使用 MCP。Skill 是可复用的任务指导与资源包，例如一个包含 SKILL.md、参考资料和脚本的文档处理流程；它告诉 Agent 何时以及怎样组织动作，不会单凭加载文本就自动获得执行能力或权限。三者可以组合：Agent 读取 Skill，再借助 MCP 发现并调用具体工具，最后检查真实产物。不要把工具业务功能、接入协议和工作方法混成同一层，也不要认为其中任何一个能代替宿主权限或结果验收。依据：https://modelcontextprotocol.io/specification/2025-06-18/server/tools 和 https://agentskills.io/specification 。",
+      "rubric": [
+        "区分工具执行动作与 Skill 工作指导",
+        "说明 MCP 作为工具和上下文的接入协议",
+        "说明三者可组合但不互相替代权限控制"
+      ],
+      "answer_origin": "maintainer_edited",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-content-review-v2"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-1664",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-1664.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-1664.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-1768",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "项目中有哪些 Skill？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "应按实际项目回答有哪些 Skill，没有使用就明确说明，而不是复述假项目。可用一个假设示例解释：文档处理 Skill 提供输入格式、操作步骤、可调用脚本和版式验收；代码审查 Skill 提供审查范围、标准、输出格式与检查命令。列举时要说清目录与版本、何时触发、依赖哪些工具、输入输出及如何验证结果。对于本项目，参考资料和编辑脚本本身不自动等于已经安装并运行的 Skill，需根据真实配置确认。",
+      "rubric": [
+        "基于真实配置说明或明确假设",
+        "解释具体 Skill 的触发输入输出和工具依赖",
+        "说明结果验收且不虚构项目经历"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-1768",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-1768.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-1768.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2075",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "你对 Agent Team 有哪些了解？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Agent Team 通常指多个有明确职责和执行上下文的 Agent 围绕共同目标协作，不是统一协议或保证性能的标准产品。常见组织包括主协调者分派专家、路由到合适角色、独立子任务并行以及有条件交接。需要定义任务契约、消息或共享产物、写入责任、结果证据、预算、取消和冲突处理。适合确有独立工作边界的任务；顺序依赖强或规模小的任务可能用单 Agent 更可靠。不能因为角色多就保证结论正确，也不能把上下文隔离当作文件或权限隔离。",
+      "rubric": [
+        "定义共同目标和独立职责而非单一产品",
+        "解释交接通信产物和冲突治理",
+        "比较并行收益与协调成本及共享状态风险"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2075",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2075.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2075.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2095",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Skills 与 Rules 有什么区别？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Rules 通常用于给某个工作区、文件范围或会话施加持续适用的约束，例如代码规范、测试命令和操作边界；Skills 组织特定任务的可复用知识、流程、脚本与资源，按需选用。两者都可能以文本影响 Agent，但加载范围、优先级与触发方式由宿主决定，不能把某个产品的目录和规则层级推广到所有系统。规则可要求完成任务前执行某个 Skill，Skill 执行仍须遵守适用指令和真实权限；安全隔离必须由执行环境落实。",
+      "rubric": [
+        "对比持续约束与按任务使用的能力包",
+        "指出加载优先级和作用范围依赖宿主",
+        "说明互补关系及文本不等于权限隔离"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2095",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2095.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2095.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2266",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Tool、Skill、Workflow 和 Agent 各承担什么职责，有何区别？",
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[Tool、Skill、Workflow 和 Agent 各承担什么职责，有何区别？](https://mianstack.com/question/q-2266)\n\n## 核心回答\n\n四者可以按职责区分：**Tool提供具体动作，Skill提供完成一类任务的方法与资源，Workflow控制流程和状态，Agent根据当前目标与反馈决定下一步。** 它们常组合使用，不是互相替代的四种产品。\n\n例如诊断订单异常：查订单、查日志是Tool；“按时间线核对订单状态、支付与库存”的诊断方法可以封装成Skill；固定的接单、诊断、确认与处理流程由Workflow管理；Agent在诊断阶段根据证据选择工具、调整调查方向并生成结论。\n\n## 各自解决什么问题\n\nTool通常有名称、描述、参数结构和执行返回值。模型生成调用请求，应用执行函数或远端API，再把结果回传；工具以接口交付某项能力，整体任务何时调用它，仍由编排流程或Agent决定。\n\nSkill以可发现的说明、步骤、领域知识及可选脚本、模板构成能力包。它告诉Agent如何处理某类工作，可以调用多个Tool，也可以只指导写作或分析。遵循Agent Skills格式时以`SKILL.md`为入口；Skill不必有统一的`JSON`输入输出接口，也不会自动增加工具权限。\n\nWorkflow由代码或图定义状态、依赖、条件分支、等待和失败处理。它可以包含循环，也能在某个节点运行Agent；“有循环”不意味着就脱离了工作流。\n\nAgent包含模型决策、运行循环和状态，通过观察结果继续行动。它可以使用Skill作为方法、Tool作为动作，也能被Workflow约束在一个业务阶段内。\n\n## 怎样选与组合\n\n步骤稳定、必须按顺序发生的业务动作适合由Workflow落实，例如先检查订单状态再决定是否创建退款。探索方向取决于中间证据时，适合Agent处理；可复用的分析方法抽成Skill；重复且确定性的计算交给Tool或脚本。\n\nSkill中写“必须先检查再退款”，只能引导模型；若业务要求绝不能跳过检查，还应由工作流或服务端状态校验实现。反过来，工作流节点也可以复用，不必为了复用就把所有节点改名为Skill。\n\n## 常见追问\n\n**Skill等于子Agent吗？** 不等于。Skill通常是当前Agent按需加载的能力资源；子Agent有独立执行上下文和任务生命周期。一个子Agent可以加载多个Skill。\n\n**一切都做成Agent是否更灵活？** 会增加调用、调度与验证成本。已有规则能稳定处理的路径，保持代码控制更容易验证。\n\n## 对应教程\n\n- [21-Agent智能体](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/21-Agent%E6%99%BA%E8%83%BD%E4%BD%93.md)：回看Tool作为能力与Agent作为决策者的区别。\n- [27-Skills技能与AI编程工具实践](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/27-Skills%E6%8A%80%E8%83%BD%E4%B8%8EAI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%AE%9E%E8%B7%B5.md)：回看技能包、工具和子Agent的职责边界。\n\n## 参考资料\n\n- 国内：[JavaGuide：Agent Skills](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/skills.md)：依据执行链路与 Skill 入口的职责，区分正文中的方法资源、调用能力及连接协议。\n- 国内：[zero2Agent：渐进式披露与Skill/Workflow](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/01-architecture-design/index.md)：采用 Skill 与 Workflow 的比较，区分正文中的固定状态流转和可复用任务知识。\n- 国内：[WeThinkIn：编码Agent与技能资源](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/02_%E7%BC%96%E7%A0%81Agent%E4%B8%8EAgentOS%E5%B7%A5%E7%A8%8B%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：依据子 Agent 与 Skills 的边界，说明正文中独立执行上下文和方法资源包的不同职责。\n- 国外：[Agent Skills：Specification](https://agentskills.io/specification)：依据正文与资源的开放约定，说明正文中 Skill 格式为何没有统一业务函数签名。\n- 国外：[Anthropic：Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)：采用工作流与自主 Agent 的控制权区分，说明正文中各能力如何组合选型。",
+      "rubric": [
+        "分别说明 Tool 动作 Skill 指导 Workflow 路径 Agent 决策",
+        "用任务说明四者组合",
+        "区分职责组织与权限及实际成功"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2266",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2266.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2266.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2343",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Workflow 是什么，如何组织执行流程？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Workflow 是把任务拆成具有输入输出和执行关系的步骤，由代码或编排器控制流转。例如先校验用户输入，再检索文档，按是否有可靠结果分支，调用模型并检查输出。组织时定义节点状态、依赖、条件、超时、重试、取消和成功标准；仅互不依赖且输入已齐备的节点适合并行。长任务可在检查点持久化状态，但外部写操作要用幂等键、去重或查询确认避免恢复后重复执行。工作流可包含模型或 Agent 节点，固定流程不需要强行改成全自治系统。",
+      "rubric": [
+        "描述步骤输入输出依赖和分支",
+        "组织错误预算与可观察的完成标准",
+        "解释检查点恢复不等于外部副作用恰好一次"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2343",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2343.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2343.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2426",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Agent 交互消息分哪些类型？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "“Agent 消息类型”需先指明层次。在模型对话接口中，常见有系统或开发者指令、用户输入、助手文本或工具调用，以及关联调用 ID 的工具结果；不同接口也可能用独立内容项表示图片、推理摘要和调用。在运行系统中，还会有任务派发、进度、检查点、取消、成功和失败事件。内部应保存角色、内容、顺序、关联 ID 和状态，并适配所用模型或协议；不能把某厂商的 role 枚举当成所有 Agent 的统一标准，也不能把工具返回内容提升为高优先级指令。",
+      "rubric": [
+        "指明对话消息与运行事件两个层次",
+        "说明助手工具请求与工具结果的关联",
+        "强调厂商协议差异和内容信任边界"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2426",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2426.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2426.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2537",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Agent 的基本工作流程是什么？",
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[Agent 的基本工作流程是什么？](https://mianstack.com/question/q-2537)\n\n## 核心回答\n\nAgent 的基本流程是：接收目标，组织当前上下文，由模型判断下一步；需要外部信息或操作时提出工具调用，运行程序执行工具并把结果回填；模型再根据新观察继续、调整或结束。\n\n`ReAct` 是常见实现，强调推理、行动和观察交替。模型负责决定“下一步做什么”，宿主或框架负责执行动作、保存状态并驱动下一轮。结束既要看任务完成条件，也要看步数、时间、费用等运行限制；不能一直循环，也不能把一句“完成了”直接当成功。\n\n例如查询“最受欢迎的耳机是否有货”，先搜索并取得产品标识，再查询该产品库存，最后根据两次真实结果回答。第二步依赖第一步得到的标识，不能凭模型猜一个产品名直接查。\n\n## 循环中的状态与反馈\n\n初始上下文至少包括目标、约束、可用工具说明和必要历史。每轮模型可以直接回答、提出工具请求，或者说明缺少关键条件。\n\n工具请求需要有工具名与结构化参数；执行端检查工具是否存在、参数是否有效及操作是否允许，再执行。返回值不只包含业务内容，还应表达成功、失败或尚未确认的状态。\n\n运行程序把工具结果与原请求关联，写入当前状态。下一轮模型据此决定补查、换路线还是结束。`LangChain` 中常见表现是含 `tool_calls` 的 `AIMessage`、对应的 `ToolMessage` 和最终回答；其他框架的消息格式可能不同。即使不显示完整推理文字，这条反馈循环仍然存在。\n\n看图时重点关注左侧回路：工具结果会成为下一轮判断的依据。\n\n![Agent工作循环：接收输入和上一轮结果，模型判断是否行动，宿主执行工具后将观察结果带回下一轮](../assets/questions/Q-2537/agent-loop-tutorial-e0caa44234.webp)\n\n图源：[AI Agents from Zero 第21章](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/images/21/21-4-1-1.png)。图中的“行动”由宿主执行工具；是否结束还要核对任务完成条件与运行预算，不能只看模型声称完成。\n\n## 用一个有条件的例子理解\n\n用户要求“找最受欢迎且有库存的无线耳机”：\n\n1. 搜索工具返回候选及排序依据。\n2. Agent 提取当前第一名的产品标识，调用库存工具。\n3. 若第一名缺货，就继续检查后续候选，而不是照抄第一名结果。\n4. 找到符合条件的商品后，返回候选、库存查询依据和适用时间；没有符合条件的结果则说明未找到。\n\n如果改成“最受欢迎的那一款有没有货”，第一名缺货时应直接告知缺货，不能擅自换成第二名。目标中的条件决定怎样继续，这也是状态与用户约束需要保留的原因。\n\n## 什么情况下停止\n\n- 信息足够或动作完成后，按验收条件检查并返回结果。\n- 缺少决定结果的参数时，保存进度并请求补充。\n- 工具持续失败、重复动作没有新信息或达到预算时，停止并说明当前进度与未完成部分。\n\n对于有外部副作用的动作，返回成功还应核对业务状态；超时则可能是结果未知，需要先查实际结果，再决定是否重试。\n\n## 追问\n\n**每次都必须先生成一份完整计划吗？**\n\n不需要。简单任务可以逐步判断，复杂任务可以先拆计划再执行；也可以在固定工作流中只让部分节点做动态决策。\n\n**怎么避免死循环？**\n\n设置明确运行预算，记录重复工具和参数，判断观察是否带来进展。达到阈值后反馈失败原因或请求补条件，而不只让模型自行反思。\n\n**有长期记忆才算 Agent 吗？**\n\n不是。最小系统只需维护当前任务状态并完成动作反馈；跨会话记忆根据业务需求增加。\n\n## 对应教程\n\n- [第 21 章：Agent 智能体](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/21-Agent%E6%99%BA%E8%83%BD%E4%BD%93.md)：回看模型、工具、状态和运行循环，以及 classic 与 create_agent 的分工。\n- [产品搜索与库存查询示例](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/%E6%A1%88%E4%BE%8B%E4%B8%8E%E6%BA%90%E7%A0%81-2-LangChain%E6%A1%86%E6%9E%B6/12-agent/AgentReact.py)：观察搜索、提取产品标识、查库存，以及工具消息回填的完整过程。\n\n## 参考资料\n\n- 国内：[JavaGuide：AI Agent 核心概念详解](https://javaguide.cn/ai/agent/agent-basis.html)：采用目标、工具、状态与反馈循环的划分，解释每轮如何把观察带入下一步。\n- 国内：[Datawhale：智能体经典范式构建](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F%E6%9E%84%E5%BB%BA.md)：采用推理、行动、观察交替的主线，组织有条件搜索与库存查询例子。\n- 国内：[小林：Agent 推理模式有哪些？ReAct 是啥？](https://xiaolinnote.com/ai/agent/5_react.html)：采用模型做决策、程序驱动循环的分工，纠正模型自动执行动作的误解。\n- 国内：[AgentScope：Create ReAct Agent](https://doc.agentscope.io/tutorial/quickstart_agent.html)：借鉴工具请求与结果关联、迭代上限和运行控制，说明循环不仅是连续生成文本。\n- 国外：[Anthropic：Building effective agents](https://www.anthropic.com/research/building-effective-agents)：采用环境反馈、清晰成功条件和复杂度取舍，说明结果检查与动态执行的边界。\n- 国外：[LangChain：Agents](https://docs.langchain.com/oss/python/langchain/agents)：核对工具请求、工具结果消息及后续模型调用的关系，说明现代消息形式不要求展示完整推理。",
+      "rubric": [
+        "说明目标状态决策动作观察的循环",
+        "将工具请求与真实执行结果关联",
+        "设置停止条件预算和错误重试边界"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2537",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2537.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2537.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2639",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "以调用天气 App 为例，说明 Agent 如何通过 MCP 调用工具。",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "先由宿主连接提供天气能力的 MCP server，完成初始化和能力协商，通过 tools/list 读取天气工具名称、说明及输入 schema。用户问杭州天气后，模型提出地点日期等参数，宿主校验参数和权限，再由 MCP client 发送 tools/call。服务器调用实际天气服务，返回数据或明确错误；宿主关联请求并把真实结果交给模型整理为用户回复。MCP 不提供天气事实，也不让模型直接执行网络请求。需要处理地点歧义、凭证、超时、限流、结果时间与数据来源；服务器可用不等于某次天气查询成功。",
+      "rubric": [
+        "描述初始化发现工具调用返回的完整链路",
+        "区分模型决策宿主执行和天气业务服务",
+        "处理参数权限和失败并使用真实返回结果"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2639",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2639.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2639.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2864",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Skill 文件格式有什么意义？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "约定 Skill 文件格式有助于宿主发现、索引、加载和校验技能，让作者与使用方对名称、描述和说明正文有一致预期。Agent Skills 使用目录中的 SKILL.md，YAML frontmatter 描述名称和用途，Markdown 正文给操作指导，可附 scripts、references 和 assets。元数据可先用于发现，正文与资源按需加载。格式只提供组织与互操作基础，不证明内容正确，也不保证所有宿主都支持扩展字段、脚本或相同的触发规则；安装后仍需验证兼容性和任务结果。",
+      "rubric": [
+        "解释格式对发现校验互操作的作用",
+        "描述 SKILL.md 元数据正文与可选资源",
+        "区分格式合法和执行质量及宿主兼容性"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2864",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2864.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2864.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-2920",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "MCP 中 SSE 与 stdio 有什么区别？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "stdio 适合宿主启动本地子进程，通过标准输入输出交换 JSON-RPC 消息，诊断日志不应污染 stdout。旧版 HTTP+SSE 通过 HTTP 发送客户端消息、用 SSE 通道接收服务器消息，常见于远程部署。MCP 2025-06-18 使用 Streamable HTTP，可通过 HTTP POST 返回 JSON 或 SSE，并按需建立 SSE 流；不能把旧版双端点配置当成所有远程 MCP 的现行方式。选型还要核对客户端支持、进程生命周期、认证、网络暴露及断线语义，传输方式本身不保证业务安全或结果正确。",
+      "rubric": [
+        "说明 stdio 的本地进程与标准流",
+        "解释旧 HTTP SSE 的方向及远程用途",
+        "区分 Streamable HTTP 并考虑认证和兼容性"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-2920",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-2920.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-2920.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3169",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "skills.md 包含哪些结构和内容？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "先确认所问的规范。通用 Agent Skills 的入口文件名是 SKILL.md，不能把任意 skills.md 清单自动视作同一格式。典型结构是目录名与技能匹配，入口包含 YAML frontmatter 的 name、description 等规范字段，正文说明适用场景、前置条件、步骤、输入输出、失败处理和验收。可选 scripts、references、assets 存放可执行工具与按需材料；敏感凭证不应写进技能包。宿主扩展字段需要查具体版本，正文应自足并准确链接资源。",
+      "rubric": [
+        "纠正或澄清 skills.md 与 SKILL.md 的区别",
+        "说明元数据正文和配套目录职责",
+        "包括依赖失败验收及宿主字段兼容性"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3169",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3169.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3169.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3257",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Tool 与 MCP 有什么区别？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Tool 是可执行能力及其输入输出契约，例如查天气或读文件；模型通常提出工具名和参数，由宿主实际执行。MCP 是让客户端以统一方式发现和调用服务器能力的协议，除了 tools 还定义 resources 和 prompts 等交互。工具可以是应用内函数、HTTP 服务或通过 MCP 暴露，使用 Tool 并不要求使用 MCP；同一个 MCP server 也可提供多个工具。接入协议统一不代表工具业务逻辑、权限或幂等性已经实现，仍需校验参数并检查执行结果。",
+      "rubric": [
+        "区分执行能力和接入协议",
+        "说明不使用 MCP 也可以调用工具",
+        "说明 MCP 暴露多类能力且不替代业务校验"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3257",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3257.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3257.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3287",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "展示 Pi 的自定义 Extension 配置。",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[展示 Pi 的自定义 Extension 配置。](https://mianstack.com/question/q-3287)\n\n## Pi（TypeScript）\n\n### 核心回答\n\n可以用一个 `/inspect` 扩展展示完整配置：默认导出函数接收 `ExtensionAPI`，注册命令切换检查工具集，再注册 `context` 事件处理器，为当轮模型输入补一条阶段说明。下面示例采用 `@earendil-works/pi-coding-agent 1.4.0` 的接口，`/inspect off` 会恢复进入前的工具集合。[扩展入口与加载方式](https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md#L13)。\n\n### 最小扩展文件\n\n将文件保存为项目中的 `.pi/extensions/inspect.ts`：\n\n```typescript\nimport type { UserMessage } from \"@earendil-works/pi-ai\";\nimport type { ExtensionAPI } from \"@earendil-works/pi-coding-agent\";\n\nexport default function inspectExtension(pi: ExtensionAPI) {\n  let previousTools: string[] | undefined;\n  const upgradeTask = {\n    targetVersion: \"3.0（示例）\",\n    compatibility: \"保留旧接口入口；列出必须修改的调用点\"\n  };\n\n  pi.registerCommand(\"inspect\", {\n    description: \"切换检查阶段；/inspect off 恢复原工具集\",\n    handler: async (args, ctx) => {\n      if (args.trim() === \"off\") {\n        if (previousTools) pi.setActiveTools(previousTools);\n        previousTools = undefined;\n        ctx.ui.notify(\"已退出检查阶段\", \"info\");\n        return;\n      }\n      previousTools ??= pi.getActiveTools();\n      const available = new Set(pi.getAllTools().map((tool) => tool.name));\n      pi.setActiveTools([\"read\", \"grep\", \"find\", \"ls\"].filter((name) => available.has(name)));\n      ctx.ui.notify(`检查工具：${pi.getActiveTools().join(\", \")}`, \"info\");\n    }\n  });\n\n  pi.on(\"context\", (event) => {\n    if (!previousTools) return;\n    const notice: UserMessage = {\n      role: \"user\",\n      content: `[inspect 阶段说明] 目标 SDK 版本：${upgradeTask.targetVersion}；兼容约束：${upgradeTask.compatibility}。当前只检查代码并提出建议，不修改文件或执行命令。`,\n      timestamp: Date.now()\n    };\n    const messages = [...event.messages];\n    const at = messages.at(-1)?.role === \"user\" ? messages.length - 1 : messages.length;\n    messages.splice(at, 0, notice);\n    return { messages };\n  });\n}\n```\n\n这里用了三个具体入口：\n\n- `registerCommand()` 注册 `/inspect`，命令回调保存原工具集合，再选取已注册的 `read`、`grep`、`find`、`ls`；重复开启不会覆盖最初保存的集合。\n- `setActiveTools()` 改变向模型声明的活动工具；`getAllTools()` 用于排除当前环境中不存在的工具名。它切换的是工具集合，不是重新注册工具。\n- `on(\"context\", ...)` 在模型请求前返回新的消息列表，把明确标识的阶段说明放在最后一条用户问题之前。原历史数组没有被改写，当前问题也仍在末尾。[API 与事件类型](https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts#L1625)、[context 事件执行](https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/runner.ts#L1305)。\n\n`context` 处理的是不含系统消息的对话列表，运行器会恢复系统提示和工具状态；示例没有调用持久化消息 API，只为当轮输入补充说明。`previousTools` 是扩展实例内状态，若要支持重新加载和会话分支切换，需要另行保存并恢复这份状态。\n\n`upgradeTask` 用示例值展示目标版本和兼容约束怎样进入当轮消息；业务接入时应从当前升级任务装载这些字段，切换任务或迁移分支后重新绑定，避免沿用上个任务的约束。阶段消息只补充模型输入，代码是否兼容仍由实际调用点和测试结果判断。\n\n### 怎样加载和触发\n\n项目扩展在授予项目信任后加载；开发时也可以显式指定文件：\n\n```bash\npi --extension ./.pi/extensions/inspect.ts\n```\n\n不需要为这个本地 `TypeScript` 文件单独打包。修改文件后，可在交互会话中执行 `/reload` 重新加载。[项目扩展目录](https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/configuration.md#L25)。\n\n验证时可按三个观察点检查：\n\n1. 输入 `/inspect`，界面应显示本环境可用的检查工具名；命令本身不需要发起模型请求。\n2. 触发一次 `context` 事件时，返回列表增加一条阶段说明，原问题保持末尾，传入的历史列表保持原样。可以先用模拟事件检查，不必调用模型。\n3. 再次输入 `/inspect` 后执行 `/inspect off`，应恢复第一次进入前的工具集合；退出后 `context` 钩子不再增加说明。\n\n单文件转译只能检查可转译性，模拟 API 能检查命令与事件逻辑；完整依赖类型检查、真实加载和模型行为需要分别验证。`import type` 在转译后会被移除，不会成为运行时模块导入。\n\n### 工具集合与执行权限的区别\n\n这个示例定制了模型看到的工具和当前任务阶段，并不提供操作系统沙箱。该版本的 `codemode`、`deferred` 工具即使不在活动集合中，仍可能由 codemode 脚本调用；需要约束真实动作时，还应按工具调用入口和执行环境设置相应策略。[工具暴露与活动集合](https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/src/core/extensions/types.ts#L500)。\n\n### 参考资料\n\n- 国内：[JavaGuide：Harness Engineering](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/harness-engineering.md)：参考工具和钩子由运行系统提供的分工，将阶段说明与真正改变工具集合的代码分开。\n- 国内：[zero2Agent：工具管理](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/02-tool-management/index.md)：参考按任务阶段选择本轮工具定义，解释注册工具与激活工具的区别。\n- 国内：[Spring AI Alibaba：Hooks 和 Interceptors](https://java2ai.com/en/docs/frameworks/agent-framework/tutorials/hooks/)：参考在模型调用前通过钩子调整上下文的组织；示例接口采用 `Pi` 自身的事件 API。\n- 国内：[WeThinkIn：Agent Harness 工程](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/08_Agent_Harness_Engineering%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：参考任务动作、运行环境和预期结果分别定义，为工具集合、消息变化与退出恢复设置独立观察点。\n- 国外：[TypeScript：Modules Reference](https://www.typescriptlang.org/docs/handbook/modules/reference.html#type-only-imports-and-exports)：依据类型导入被擦除的规则，说明示例的接口类型与运行时模块加载不同。\n- 国外：[TypeScript：isolatedModules](https://www.typescriptlang.org/tsconfig/isolatedModules.html)：依据单文件转译的限制，区分转译检查、完整类型检查与实际运行验证。",
+      "rubric": [
+        "指明实际 Pi 版本与扩展入口加载方式",
+        "展示命令工具或事件注册及配置数据流",
+        "验证真实加载触发和退出恢复且不把工具可见性当系统沙箱"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3287",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3287.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3287.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3486",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何理解 Multi-Agent？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Multi-Agent 是多个具备各自目标或角色、上下文和行动选择的执行单元协同完成任务。它们可以使用同一个模型，也可以用不同模型；仅把一次提示分成若干段不必然构成多 Agent。设计时明确谁规划、谁执行、谁验证，子任务需要哪些输入、返回什么证据，以及失败和矛盾如何汇总。独立研究或领域工具边界清晰时可能受益，但会增加通信、调用成本、延迟和一致性问题；应与单 Agent 基线比较任务成功率再决定。",
+      "rubric": [
+        "说明多个执行单元不要求多个不同模型",
+        "解释分工上下文和结果交付",
+        "比较单 Agent 基线与多 Agent 通信一致性成本"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3486",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3486.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3486.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3487",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "子 Agent 是否使用父 Agent 的全部上下文？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "> 在面栈阅读：[子 Agent 是否使用父 Agent 的全部上下文？](https://mianstack.com/question/q-3487)\n\n## 核心回答\n\n**不一定，取决于宿主怎样构造子 Agent 的输入，以及框架的继承配置。** 子 Agent 有自己的模型调用与执行上下文，常见做法是只传子任务和必要材料；有些框架也支持复制父 Agent 当时的会话历史，帮助它接续已有工作。\n\n需要分别确认四件事：\n\n- **传入哪些历史**：只有任务描述，还是还包含已保留消息、摘要、文件或证据引用。\n- **角色与工具如何配置**：历史继承不意味着父 Agent 的系统提示、全部工具和权限也一同继承。\n- **是否持续同步**：启动时的快照只代表派发时的信息，父 Agent 后续收到的更正通常需要另行传递。\n- **返回什么**：主 Agent 通常接收结论、缺口和产物引用，子 Agent 的全部探索过程不必重新塞回主窗口。\n\n判断具体项目时，应看调用参数和子 Agent 的初始消息，而不是根据“用了子 Agent”就断言全部共享或完全没有历史。\n\n## 怎样选择传递范围\n\n独立检索、局部代码分析等任务，可以传一个自足的任务包：子目标、相关约束、必要证据或文件位置、完成条件和返回格式。大量原文放在可访问的产物中，需要时再读。这样能控制重复输入与无关信息，也让角色分工更清楚。\n\n如果任务是在接续父 Agent 已经排查过的问题，关键要求与失败尝试分散在多轮历史里，只给一句任务容易遗漏条件，这时可传一份选定历史或快照。代价是输入变大，并带入旧假设、过期决定或与当前职责无关的材料；应把它标明为背景，并明确最新任务范围。\n\n上下文隔离也不等于文件系统或业务状态隔离。多个 Agent 仍可能访问同一工作区、数据库或产物，需要另外约定哪些对象可读、谁负责修改，以及新版本怎样通知接收者。\n\n## DeerFlow（Python）\n\n这一版 `DeerFlow` 的普通 `task` 委派提供两种 `context_mode`：默认 `isolated`，只用当前委派任务作为对话输入；显式选择 `snapshot` 时，再附带父会话的保留历史和摘要。子 Agent 仍使用自己的角色、工具配置和执行链路。\n\n### 快照复制什么，何时复制\n\n`task` 校验委派类型与允许范围后，在子 Agent 初始化前调用 `ParentContextSnapshot.from_state(...)`。快照读取派发当时的 `summary_text` 与仍保留的对话消息，过滤父系统消息和框架注入等内容，再序列化为独立数据。\n\n因此，父会话若已经压缩，子 Agent 得到的是当前保留内容与摘要，不会恢复所有被压缩掉的原始消息。快照也不会因为父状态后来发生变化而自动更新；重新构建子消息时使用独立容器，不与父消息或兄弟任务共用可变历史。\n\n### 历史作为背景，当前任务单独传入\n\n子 Agent 初始输入的顺序是：自己的 `SystemMessage`、名为 `parent_context_snapshot` 的背景 `HumanMessage`，然后是当前任务的 `HumanMessage`。背景里保留用户要求、已知决定和观察，但不提升为子 Agent 的系统指令。\n\n父 Agent 已完成的工具调用会与保留结果匹配后，以“历史工具调用”的文本进入背景；尚未取得对应结果的调用不作为可重放操作传入。这样既能解释过去查到了什么，又避免子 Agent 把父方调用、回执或历史动作误认为自己本次已经执行的结果。\n\n### 怎样使用两种模式\n\n任务目标和资料位置已经明确时，选 `isolated`，减少重复携带父会话。接续复杂排障、需要理解多轮更正或失败尝试时，选 `snapshot`，同时在任务中指出当前要解决的部分。\n\n为避免多轮规划不断追加子任务，`SubagentLimitMiddleware` 在模型返回后统计本条消息的 `task` 调用，并结合委派账本中当前 `run_id` 的已用次数，只保留单次上限与本次运行剩余额度共同允许的调用。超出部分被裁去，不会转成等待队列；总量耗尽则附加限额说明，要求主 Agent 基于已有结果收敛。委派限额与是否传入父会话快照是独立控制。[委派限额实现](https://github.com/bytedance/deer-flow/blob/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/agents/middlewares/subagent_limit_middleware.py#L124-L181)。\n\n两种模式都不等于复制父 Agent 的全部运行状态。工具所需的工作区、线程或上传文件信息可由宿主另外传入，这与复制聊天历史是两条路径。父方后来出现新要求时，需要明确补充或重新派发；子任务完成后，再将报告与产物交回父 Agent 汇总。\n\n## 对应教程\n\n- [深度研搜第 1 章：DeepAgents 基础与核心概念](https://github.com/didilili/ai-agents-from-zero/blob/main/%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE-%E6%B7%B1%E5%BA%A6%E7%A0%94%E6%90%9C/1-DeepAgents%E5%9F%BA%E7%A1%80%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5.md)：参考第 4.3 节主智能体委派、子智能体独立执行并回传结果的分工；具体历史继承按本项目配置说明。\n\n## 参考资料\n\n- 国内：[JavaGuide：多 Agent 协作系统设计](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/multi-agent.md)：参考任务契约、角色状态与产物交付的分工，组织必要输入及结果回传，避免用完整对话代替清楚的委派要求。\n- 国内：[Onefly / zero2Agent：多 Agent 协作](https://github.com/ranxi2001/zero2Agent/blob/0c0eb7693105d281b146bb98f3a7f30da6f1ceea/learn-agent-interview/06-multi-agent-collab/index.md)：借鉴私有执行上下文与结构化交付的区别，说明大量工具过程为何可留在子 Agent，以及主窗口接收结果摘要的作用。\n- 国内：[WeThinkIn：Agent 设计模式与工作流编排高频考点](https://github.com/WeThinkIn/AIGC-Interview-Book/blob/275fdf1eeb65e3b233081d3b8e74ff5d8eeb2e03/AI%20Agent%E5%9F%BA%E7%A1%80/03_Agent%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%BC%96%E6%8E%92%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9.md)：参考角色输入输出、停止条件和写入责任的划分，解释独立窗口与共享文件状态为何分别管理。\n- 国内：[Datawhale：第九章 上下文工程](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter9/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B.md)：参考 `ContextBuilder` 按相关性和预算选择材料的实现，说明子任务输入应围绕当前目标取舍，而非机械复制全部资料。\n- 国外：[LangChain：Subagents](https://docs.langchain.com/oss/python/deepagents/subagents)：依据独立与历史继承模式的配置说明，解释“子 Agent 一定拿不到父历史”为何不是通用结论；`DeerFlow` 的快照范围以其实现为准。\n- 国外：[Anthropic：How we built our multi-agent research system](https://www.anthropic.com/research/multi-agent-research-system)：参考目标、输出格式和任务边界的委派要求，以及摘要和产物引用回传方式，解释上下文完整度与通信成本的取舍。\n- 国内：[DeerFlow：固定版本委派工具](https://github.com/bytedance/deer-flow/blob/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py)：项目答法中的模式选择与捕获时点以此为依据；[快照构造](https://github.com/bytedance/deer-flow/blob/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/context_snapshot.py)与[子任务执行器](https://github.com/bytedance/deer-flow/blob/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/executor.py)核对消息范围、工具历史与初始消息顺序。",
+      "rubric": [
+        "不将全历史继承或完全隔离绝对化",
+        "说明宿主按配置传任务必要材料或快照",
+        "区分历史工具权限与共享工作区并传递后续更正"
+      ],
+      "answer_origin": "source_original",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3487",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3487.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3487.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "ready"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3588",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "应用如何调用大模型？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "应用把用户输入、系统指令和必要上下文按目标服务的接口组织成请求，经服务端 SDK 或 HTTP 客户端发送，读取普通或流式响应，校验后展示或继续工具循环。需配置服务地址、模型、认证、超时和资源预算；密钥不交给浏览器。若返回工具调用，应用校验权限参数、实际执行并把关联结果回传，而不是把调用建议当执行结果。网络超时、限流和格式错误需保留用户输入并明确失败；副作用操作不能盲目重试。具体消息字段与输出契约按所用 API 版本确认。",
+      "rubric": [
+        "说明输入上下文请求响应和服务端密钥管理",
+        "解释工具建议与执行回传循环",
+        "校验错误超时和重试边界并依据实际协议"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3588",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3588.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3588.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3687",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "LangChain4j 解决了哪些问题，适合哪些场景？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "LangChain4j 为 Java 应用提供语言模型、聊天记忆、提示模板、工具调用和检索等集成抽象，并可用 AI Services 接口组织应用调用，减少各供应商两两适配代码。适合已有 Java 或 Spring 技术栈、需要把 LLM 与业务工具或文档检索组合的项目；简单一次 HTTP 调用不一定需要整个框架。具体支持能力要按依赖版本和 provider 检查，框架不负责保证检索答案正确、数据库权限或任务可靠恢复。选型需检查可观测性、测试方式、扩展成本和部署约束。",
+      "rubric": [
+        "说明 Java 模型工具检索等集成抽象",
+        "结合技术栈与任务复杂度讨论适用性",
+        "强调版本能力权限质量仍需应用验证"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3687",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3687.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3687.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3696",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "LangChain 中的 Chain 是什么，如何组织调用流程？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "LangChain 的 Chain 表示把若干可组合步骤连接成调用流程，例如提示模板接聊天模型再接输出解析器。不同版本有旧的 Chain 类和以 Runnable 或 LCEL 表达的组合，代码需按锁定版本编写。步骤之间应约定输入输出，支持需要的分支、批处理或流式处理；复杂有状态恢复可另外使用图式编排。固定 Chain 的执行路径主要由程序定义，Agent 则可让模型根据观察动态选动作，不能把所有 Chain 都叫 Agent；错误、预算和副作用仍需应用处理。",
+      "rubric": [
+        "用模板模型解析器解释链式输入输出",
+        "说明版本相关 Runnable 等组合方式",
+        "区分固定 Chain 与动态 Agent 及状态恢复责任"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3696",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3696.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3696.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3748",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "主 Agent 与子 Agent 的职责如何划分？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "主 Agent 负责理解用户目标、拆分任务、提供必要背景和完成条件、调度依赖，并核对证据后汇总对外结果；子 Agent 在限定范围内选择工具和完成局部任务，返回结论、依据、产物位置和未解决问题。交接应明确约束、数据权限、版本和谁负责写入共享文件。独立子任务可并行，存在输入依赖则按顺序执行。主 Agent 不能把子 Agent 的成功自述当业务事实，应核对关键结果，并设置总预算、取消与升级机制。",
+      "rubric": [
+        "明确主方目标调度验证和子方局部执行",
+        "定义交接输入输出证据及写入责任",
+        "处理依赖冲突预算且不盲信子方结论"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3748",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3748.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3748.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3749",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "子 Agent 与 Skill 的区别是什么？",
+      "topic": "多 Agent 编排与协作",
+      "competency_id": "agent_multi_agent",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "子 Agent 是一次可委派的独立执行单元，通常有自己的任务、上下文、工具选择和返回结果；Skill 是指导某类任务的知识与资源包，加载后并不必然新建执行单元。主 Agent 或子 Agent 都可使用 Skill，Skill 也可指导何时委派，但文本中的“创建专家”不等于运行器真的启动了子任务。选择 Skill 适合复用流程与专业知识，选择子 Agent 适合隔离大量探索或分派独立工作；二者的权限与共享状态仍由宿主管理。",
+      "rubric": [
+        "区分执行单元和知识资源包",
+        "说明两者可组合而非互斥",
+        "按任务隔离和知识复用选择并核对真实运行"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3749",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3749.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3749.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3784",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Agent 的标准化接口（如统一的 Tool Schema 规范）对跨系统集成有什么价值？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "统一 Tool Schema 能把名称、用途、参数类型、必填字段和返回结构约定下来，减少每个模型与业务系统两两适配的成本，并支持工具发现、参数校验和契约测试。跨系统仍需处理协议版本、类型表达差异、认证、错误码、超时、取消及有副作用调用的幂等性。schema 合法只能说明格式符合约定，不能证明业务语义正确、用户有权限或操作一定安全；工具说明与返回数据也可能带有不可信内容，需要执行层落实约束。",
+      "rubric": [
+        "解释标准化降低适配成本的机制",
+        "列出输入输出校验及版本错误处理",
+        "区分结构合法与权限语义正确"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3784",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3784.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3784.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-3795",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "常见 MCP 工具有哪些，如何按场景选择？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "常见类别包括文件系统、代码仓库、数据库、浏览器自动化、搜索与业务系统工具。选型先明确任务所需数据和动作，再查看服务器实际提供的工具 schema、维护来源、版本兼容和认证方式。例如只查文档用检索或资源读取，读业务数据用只读数据库接口，需要操作网页才选择浏览器能力。应以最小权限、可追溯结果、延迟成本、网络部署和故障行为评估，并用实际任务验证。不能根据工具名称推断能力，也不能认为接入数量越多越好。",
+      "rubric": [
+        "按数据动作场景分类举例",
+        "核对实际工具契约与维护版本",
+        "比较权限可靠性成本并实测业务结果"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-3795",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-3795.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3795.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4112",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "是否阅读过 Spring AI 官方开发文档，重点了解哪些模块？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "这是一道文档阅读经历题，应如实说明读过的版本与模块；未读过不能虚构。可据官方模块结构解释 Spring AI 在 Spring 应用中提供模型 API、ChatClient、提示与消息、工具调用、向量存储与检索等集成，并利用依赖注入和配置管理组织服务。重点应与项目实际目标关联，例如如何选择模型、注入凭证、设计工具边界、过滤检索和追踪调用。阅读过文档或接通接口不等于掌握全部模块，具体配置、自动装配和 provider 支持须按依赖版本验证。",
+      "rubric": [
+        "允许未阅读的诚实回答且指出版本",
+        "说明相关模块和 Spring 集成",
+        "围绕真实需求验证配置调用和边界"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4112",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4112.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4112.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4113",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "小红书 MCP 希望让大模型完成哪些任务？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "“小红书 MCP”不是协议规定的唯一产品，需先给出具体仓库、版本和授权范围，再确认实际 tools/list。常见产品可能封装内容搜索、笔记读取、评论或发布等动作，但不能据名称保证这些能力全部存在。模型负责把用户目标转成工具请求，客户端和服务器负责执行，并向模型返回真实结果。应区分只读查询与发布评论等写入动作，核查账号权限、平台规则、敏感数据和人工确认要求；缺少具体实现时说明能力待核实，不编造某个工具已经成功执行。",
+      "rubric": [
+        "指出同名实现能力需按具体版本核实",
+        "区分模型请求与服务端业务执行",
+        "区分读写权限并避免保证未验证功能"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4113",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4113.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4113.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4240",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "MCP 与普通 API 或 HTTP API 有什么区别？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "普通 HTTP API 通常围绕具体业务定义路径、参数、认证和响应；MCP 在客户端与服务器之间规定初始化、能力发现，以及 tools、resources、prompts 等统一交互，消息基于 JSON-RPC。HTTP 可以是 MCP 的传输方式，MCP server 也可能在内部调用普通业务 API，因此两者不是互斥关系。MCP 便于宿主复用接入方式，但不自动把任意 API 变成可靠工具，仍需业务封装、参数校验、权限、错误处理和结果核对。小型固定集成也可直接调用 API，无须为了 Agent 强行增加协议层。",
+      "rubric": [
+        "区分业务接口和标准交互协议",
+        "说明 HTTP 可承载 MCP 且服务器可封装 API",
+        "解释适配收益和额外工程责任"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4240",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4240.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4240.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4456",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "MCP 的 Tools、Resources 和 Prompts 分别是什么，职责有何区别？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "MCP 的 Tools 暴露可调用操作，常由模型提出调用意图、宿主执行，例如查库存；Resources 暴露可按 URI 读取的上下文数据，例如文档或日志，由应用决定如何呈现和送入上下文；Prompts 提供可发现、可填参的提示模板，通常由用户选择。规范用 model-controlled、application-controlled、user-controlled 描述典型控制方式，但实际界面与授权策略仍由宿主实现。三类能力不等同于三种权限级别，读取内容与工具结果都不能被直接当作更高优先级指令。",
+      "rubric": [
+        "分别说明 Tools Resources Prompts 的职责",
+        "举例并说明典型控制方",
+        "区分能力类型与权限或内容可信度"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4456",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4456.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4456.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4460",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "AI 系统中的 Workflow、Graph 和 Loop 有什么关系？",
+      "topic": "工作流、状态与执行恢复",
+      "competency_id": "agent_workflow_recovery",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Workflow 描述任务从输入到结果的执行组织，Graph 用节点、边和共享状态表示这种控制与数据关系；Loop 表示重复执行直到条件满足或预算耗尽。一个工作流可以用有向图实现，图中可有分支、并行和循环；Loop 也可以用普通程序循环实现。模型只在指定节点做决策时系统仍可能主要是固定工作流，图框架本身不等于自治 Agent。执行恢复需要持久化状态与检查点，有副作用节点还需幂等键或先查询结果，不能从图节点重跑推断外部操作只执行一次。",
+      "rubric": [
+        "解释 Workflow Graph Loop 的不同抽象层次",
+        "说明图或循环不自动构成自治 Agent",
+        "解释检查点恢复预算和外部副作用幂等"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4460",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4460.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4460.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4923",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "LangChain 中的 LLM、Chat Model 和 Embedding 模型抽象有何区别？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "在 LangChain 的抽象中，传统 LLM 接口通常以字符串提示生成文本，Chat Model 以消息序列交互并返回聊天消息或工具调用等内容；Embedding 模型把文本映射为向量，用于相似检索和聚类等，不能直接当聊天答案。某些适配器允许多种输入形式，不代表底层模型和协议相同。选择时看模型能力、接口契约和目标任务，并保持文档与查询向量的模型及维度兼容；生成模型切换与 embedding 模型切换影响不同，后者通常需重建索引。",
+      "rubric": [
+        "区分文本生成消息交互和向量表示",
+        "按输出和用途选择抽象",
+        "解释向量模型维度兼容及更换后重建索引需求"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4923",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4923.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4923.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4924",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何通过 LangChain 接入语言模型并生成回复？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "先锁定 LangChain 与模型 provider 集成包版本，在服务端配置 API 地址、模型和凭证，创建相应 Chat Model，再用 invoke 传入消息或模板生成的消息并读取响应内容。需要实时显示时使用该模型支持的 stream 或异步接口，并按消息块规则合并；工具调用和普通文本要分开处理。最小验证包括真实响应、认证失败、限流、超时和格式不兼容；凭证不能写进代码。无需为一次生成强行创建 Agent，也不能因实例创建成功就宣称上游调用成功。",
+      "rubric": [
+        "说明 provider 依赖配置模型消息调用与输出",
+        "区分 invoke 流式和工具消息",
+        "验证真实上游及失败并保护凭证"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4924",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4924.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4924.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-4925",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "如何在 LangChain 中创建、修改并填充提示模板？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "可使用 PromptTemplate 表达字符串模板，或 ChatPromptTemplate 表达带角色的消息模板，用显式变量名声明输入。运行时通过模板的 format、format_messages 或 invoke 等对应接口填值，具体方法以锁定版本为准；更改模板应保留版本并重新跑代表样例。提前绑定常量可用 partial 等机制，业务代码校验变量是否齐备。用户数据应作为参数填入而非直接拼成高优先级指令；模板格式化不提供权限或注入防护，复杂花括号和输出 schema 需要转义及实际测试。",
+      "rubric": [
+        "区分字符串模板与消息模板及变量",
+        "说明填充修改版本和缺变量检查",
+        "区分参数数据和指令并注意转义与注入边界"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-4925",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-4925.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4925.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-5078",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Agent 插件与 Skills、MCP 等扩展能力有何关系？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "插件通常是某个宿主对扩展的打包与安装单位，可能同时包含 Skills、MCP server 配置、命令、钩子或 UI；它没有跨所有产品统一的内容格式。Skill 提供任务指导与资源，MCP 统一外部能力接入，宿主负责发现、调用和权限执行。安装插件不代表其中所有工具已经可调用或上游认证成功，要分别验证组件加载、凭证、协议兼容和实际任务。插件更新还应锁定来源版本并检查依赖与权限变化，不能根据包名推断扩展能力。",
+      "rubric": [
+        "将插件作为依赖宿主的打包安装扩展单位",
+        "区分 Skill MCP 与宿主的职责",
+        "分别验证安装加载认证和业务成功"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-5078",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-5078.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-5078.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-7004",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "是否了解 Pi Coding Agent？",
+      "topic": "Agent 框架与 Harness",
+      "competency_id": "agent_frameworks_harness",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Pi Coding Agent 是一种可扩展的编码 Agent 工具，通常围绕模型、文件与命令等能力、会话状态及可扩展运行时组织开发任务。回答需给出所指仓库和版本，不能把同名产品或某版本的接口当永久通用事实。可从工具执行、上下文与会话、扩展入口、模型适配、权限和预算解释其 Harness 职责；若没有实际使用，应说明仅有概念了解。比较产品时看真实任务成功率、可观测性、扩展成本与约束执行，而不是只比较默认提示词。",
+      "rubric": [
+        "说明编码 Agent 与运行系统的基本构成",
+        "核对仓库版本并诚实说明经验",
+        "从工具状态扩展验证评估而非编造固定 API"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-7004",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-7004.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-7004.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-7077",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "ACP 协议在 AI 领域有哪些不同指代，应如何区分？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "ACP 是重名缩写，必须结合全称、发布方、文档版本和接入对象区分。Agent Client Protocol 面向编辑器等客户端与编码 Agent 的通信；Agent Communication Protocol 曾用于不同 Agent 系统之间的交互，后续项目归属和兼容性应查相应发布记录。它们不能因为都叫 ACP 就直接互通，也不能与 MCP 或 A2A 互换。回答或设计集成时应说明连接哪两端、消息和任务生命周期、能力协商、传输与认证，再按目标实现做契约测试；不知道具体指代时先询问上下文。",
+      "rubric": [
+        "明确 ACP 缩写存在不同协议指代",
+        "按全称发布方版本和通信两端区分",
+        "拒绝仅凭缩写判断互通并核对契约"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-7077",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-7077.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-7077.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-7091",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "Skill 与 Few-shot 提示有什么区别？",
+      "topic": "Skills 能力系统",
+      "competency_id": "agent_skills",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "Few-shot 提示通过少量输入输出示例帮助模型理解模式、格式和判断边界，通常随某次提示提供；Skill 是可复用的任务知识包，可包含说明、示例、参考资料和脚本，并由宿主按需加载。Few-shot 可以作为 Skill 正文的一部分，两者不是互斥技术。前者不天然具备工具执行和持续状态，后者也不会因为包含步骤就保证严格执行。选用时看是否只需说明输出模式，还是需要可维护的流程与资源；都要通过代表任务检查泛化和失败情况。",
+      "rubric": [
+        "对比示例引导与可复用任务包",
+        "说明 Skill 可包含 Few-shot",
+        "区分提示引导和确定性执行并提出验证"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-7091",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-7091.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-7091.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": true,
+      "status": "candidate"
+    },
+    {
+      "code": "Q-9127",
+      "content_version": "agent-basics-06-v1",
+      "prompt": "你是否使用过 Context7 MCP？",
+      "topic": "MCP、A2A 与工具协议",
+      "competency_id": "agent_protocols",
+      "difficulty": "easy",
+      "stage": "technical",
+      "answer": "这是一道经历题，应先如实说明是否用过，不能用参考答案虚构项目。未用过也可解释已知机制：Context7 的 MCP 能力通常先解析库标识，再按所需库和问题查询文档，具体工具名和参数以当前服务的 schema 为准。使用时应约束目标库与版本，读取返回片段，核对是否对应实际依赖；遇到无结果、限流或版本不符应说明缺口并回到官方文档。调用了文档工具不等于代码已验证，仍需类型检查或运行测试；不应把检索结果无条件当系统指令。",
+      "rubric": [
+        "接受未使用过的诚实回答且不奖励虚构经历",
+        "解释库标识版本和文档查询过程",
+        "核对检索结果并区分资料获取与代码验证"
+      ],
+      "answer_origin": "agent_generated",
+      "generation": {
+        "author": "Codex (ticket 06 editorial draft; human review pending)",
+        "generated_at": "2026-11-10",
+        "model": "Codex (runtime model identifier not recorded)",
+        "revision": "06-editorial-v1"
+      },
+      "answer_refs": [],
+      "source": {
+        "original_id": "Q-9127",
+        "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "path": "questions/Q-9127.md",
+        "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-9127.md",
+        "license": "MIT",
+        "attribution": "Copyright (c) 2026 didilili",
+        "answer_status": "pending"
+      },
+      "interview_suitable": false,
+      "status": "candidate"
+    }
+  ]
+}

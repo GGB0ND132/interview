@@ -1,0 +1,20 @@
+{
+  "version": "06-content-review-v2",
+  "status": "editorial_reading_list_with_separate_agent_verification_records",
+  "note": "下列为编辑依据目录，逐题关键技术资料已由三组独立 Agent 核查，实际片段与结论见 docs/verification/06-content-*-review.json；不声称所有延伸链接均已访问，用户端 answer_refs 保持为空。当前16题保留原文，5题标记 maintainer_edited，37题补答；6题内容版本v2、52题v1，所有评分点由本项目编写。Agent 核查不冒充人工审核。",
+  "sources": {
+    "mcp": {"version": "2025-06-18", "url": "https://modelcontextprotocol.io/specification/2025-06-18", "review_focus": "传输层 SSE、tools/call 最终结果与 progress notification 的区别；能力类型不是权限级别"},
+    "skills": {"version": "Agent Skills specification; reading list 2026-11-10", "url": "https://agentskills.io/specification", "review_focus": "SKILL.md 文件名、元数据、按需资源、宿主差异；文本不保证执行"},
+    "messages": {"version": "API documentation; reading list 2026-11-10", "url": "https://platform.openai.com/docs/api-reference/chat/create", "review_focus": "messages、工具调用关联；Chat Completions、旧 Completions 与 Responses 契约不同"},
+    "workflow": {"version": "Building effective agents 2024-12-19", "url": "https://www.anthropic.com/research/building-effective-agents", "review_focus": "固定工作流和动态决策、环境反馈、停止条件；检查点不保证副作用恰好一次"},
+    "multi_agent": {"version": "How we built our multi-agent research system 2025-06-13", "url": "https://www.anthropic.com/engineering/multi-agent-research-system", "review_focus": "主从职责、必要上下文、证据和产物交接、协调成本"},
+    "harness": {"version": "MianStack pinned original answers and Pi 58c0b02ce552adab76014e7ed712ab7981359aa8", "url": "https://github.com/earendil-works/pi/blob/58c0b02ce552adab76014e7ed712ab7981359aa8/packages/coding-agent/docs/extensions.md", "review_focus": "运行系统与模型职责；工具可见性不等于沙箱；具体 API 按版本核验"},
+    "gui": {"version": "Computer use documentation; reading list 2026-11-10", "url": "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/computer-use-tool", "review_focus": "观察行动循环、焦点与坐标、注入和权限、业务结果检查"},
+    "acp": {"version": "Protocol names; reading list 2026-11-10", "url": "https://agentclientprotocol.com/", "related_url": "https://agentcommunicationprotocol.dev/", "review_focus": "同名缩写不同指代；项目归属和版本兼容不作未核实断言"},
+    "context7": {"version": "Repository documentation; reading list 2026-11-10", "url": "https://github.com/upstash/context7", "review_focus": "按实际 tools/list 和目标依赖版本检索，不虚构使用经历"},
+    "platforms": {"version": "Platform documentation; reading list 2026-11-10", "url": "https://docs.dify.ai/", "related_url": "https://www.coze.com/docs", "review_focus": "具体部署版本、节点输入输出、真实检索与运行日志"},
+    "langchain": {"version": "Python OSS docs; reading list 2026-11-10", "url": "https://docs.langchain.com/oss/python/langchain/overview", "review_focus": "按集成包版本核对模型、消息、Runnable、prompt template 接口"},
+    "langchain4j": {"version": "Documentation; reading list 2026-11-10", "url": "https://docs.langchain4j.dev/", "review_focus": "Java 集成、AI Services、provider 支持及应用边界"},
+    "spring_ai": {"version": "Reference documentation; reading list 2026-11-10", "url": "https://docs.spring.io/spring-ai/reference/", "review_focus": "模型 API ChatClient 工具与检索；不要编造阅读经历"}
+  }
+}

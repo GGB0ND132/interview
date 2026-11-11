@@ -1,0 +1,535 @@
+{
+  "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "questions": {
+    "Q-0019": {
+      "source_file_sha256": "f80059f813a7d9b20ff7db143f988ebb71ff2fc32e10dbb93c18df66524ea2e4",
+      "editorial_basis": [
+        "messages",
+        "workflow"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0022": {
+      "source_file_sha256": "53d339551b855353f2fac640f00ef06f0be249514dcaf5f80c812cf9ff48f851",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0048": {
+      "source_file_sha256": "066a8007842e816e0b56b332516af49c35e0d7353f38398e4f8a8ccbe3fa21d7",
+      "editorial_basis": [
+        "harness"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0140": {
+      "source_file_sha256": "874258809c7ae2609976ec91a543442a0067254177f7314478b3db30db26dd26",
+      "editorial_basis": [
+        "workflow"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0322": {
+      "source_file_sha256": "81e0bf3f5ec5e6d82b3d4fd354b2034e8d4fb2d4e4cd07a0e98eccca31f3ed71",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0361": {
+      "source_file_sha256": "9994fdd3d65ff2bac8088441bda402a934fd9f09831dea5957b5e9a3092b0923",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0378": {
+      "source_file_sha256": "f69c90f637c6d8962e0c8d58982992dbe2502c8e41454508c96e53f12d964ebd",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0379": {
+      "source_file_sha256": "f5c31d677730914803c2de8d7dfd6cbeaf1bcf32021c7fa2cc1424ff80c01ab5",
+      "editorial_basis": [
+        "skills",
+        "mcp"
+      ],
+      "answer_origin": "maintainer_edited",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0382": {
+      "source_file_sha256": "fa960c0025d2dc66a7635a0cb07268ccc195418c0f3e3c8c2af4ea262ac5b386",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0416": {
+      "source_file_sha256": "b9040b686162940f2de91d7eb5e64b5e623a838b934ff707136ad87734e412d4",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "maintainer_edited",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0624": {
+      "source_file_sha256": "76fbd0cd8d525cd9be4382b1153598fc23cb02c8d860c32fb0effc92f059f287",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0798": {
+      "source_file_sha256": "0d03a5944a8dbe585aa080ebf39cfd585fcc948ec5085a50864485497f8c206f",
+      "editorial_basis": [
+        "workflow"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0852": {
+      "source_file_sha256": "ffe3c56daecc0f17e9a85bb9e5270cf78629d16f24cea870da9d0ede0184eb69",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0871": {
+      "source_file_sha256": "4c28e18cb9cc034242e5327de32f945a3e1f34eb109ae56dc8d84c628d998c7a",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0872": {
+      "source_file_sha256": "f346abf7a3d1a3ff9c8a0a705d1989df4b90de5fc0aa6659ac4bd42860e26ee0",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "maintainer_edited",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0897": {
+      "source_file_sha256": "b3e39bb68577a8645f437666fe176d4a38bee24d2fd5392633b29d35c06284e3",
+      "editorial_basis": [
+        "gui"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0935": {
+      "source_file_sha256": "58bb0e2fdd9de787eb12c2d995fffd1f7fb90d9822a68039af694576f6010d37",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0976": {
+      "source_file_sha256": "2c48185007d303af836219a6a22e606cbf1946f6b8867d5e3b5183f1f70ea6ac",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-0977": {
+      "source_file_sha256": "d409a87765712dbdc18da5d3154f55caa4db64b25c161c03cf485519146adab4",
+      "editorial_basis": [
+        "platforms"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-1085": {
+      "source_file_sha256": "32ec4aa0eed6f495c683ca31b27918df01ac91277053ecb5980488faf23216a2",
+      "editorial_basis": [
+        "messages"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-1247": {
+      "source_file_sha256": "2c86fc04f3b845d9bb4203a4a4728023693d7a2d3025c6dc7f71d91cb9369978",
+      "editorial_basis": [
+        "skills",
+        "mcp"
+      ],
+      "answer_origin": "maintainer_edited",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-1268": {
+      "source_file_sha256": "5520c0d5775761c0a9d658fc5f1bb1d2cce4d18c5a11657fb964e2c35fd6d139",
+      "editorial_basis": [
+        "messages"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-1664": {
+      "source_file_sha256": "42e33cbe4980fb8b4d1aac40944727a7d355203d704b0b4cc5324dd2429e08a5",
+      "editorial_basis": [
+        "mcp",
+        "skills"
+      ],
+      "answer_origin": "maintainer_edited",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-1768": {
+      "source_file_sha256": "4a29acec11426e11d01aaab71a495eb6335b8017cc5b5ec85dde99e3bd1b8682",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2075": {
+      "source_file_sha256": "06d1b8b7de3f697f93ce899d716b86dd49c1ca3ff8b0bc2cf9a318b59ebb2bcb",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2095": {
+      "source_file_sha256": "dd170af9d4c786fd51132ae6635f06ca0423950d6525b6a0de9d1657985cbcbd",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2266": {
+      "source_file_sha256": "9c6eef924fc9ace4540ce3f56f17b36c1c120a2f4ff449e832d97701dd7515a5",
+      "editorial_basis": [
+        "skills",
+        "workflow"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2343": {
+      "source_file_sha256": "26e471a6d410d2cf56344f81dd17ec2d7c2b248667c9ed824ef940bbae328bb5",
+      "editorial_basis": [
+        "workflow"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2426": {
+      "source_file_sha256": "fc4a7c453aefe7bfd8acc49fe12768056b04cb4f2d6c322e19e4a199d3804ea5",
+      "editorial_basis": [
+        "messages"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2537": {
+      "source_file_sha256": "466aaf93fd3afe1db0ce782ffbdd6e5d29b0f9bc1362ec06e742ca3e584f7341",
+      "editorial_basis": [
+        "workflow"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2639": {
+      "source_file_sha256": "1608bb63d3046e4bed563cc8b4343058c842afd0ec6a65a49fb7df466d494f99",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2864": {
+      "source_file_sha256": "bd4e58d165ffbab1f2dda3e9677e489e0d6a9bfaf3ee05c9016df67afda9a62e",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-2920": {
+      "source_file_sha256": "843324c81c39fba208f3a3557f2ef6cf68aee47c3023f96b5c29d2570e093e78",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3169": {
+      "source_file_sha256": "84efc027ae10c5ec617df66c72fa872bc36a127d92deaf5de01a9abfad801b75",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3257": {
+      "source_file_sha256": "fd5685d6f442921d400d9f812ab390c432370bb7b6625538036ba3b36890dc39",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3287": {
+      "source_file_sha256": "9c7c4643f101c5018d90bc5053ddcfb9941a5a6d6daf91c85f0d8c25c77e3bd7",
+      "editorial_basis": [
+        "harness"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3486": {
+      "source_file_sha256": "c3c692728c029ba84135f409fecade4c2314991a28c229e1a784b1e511655ff4",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3487": {
+      "source_file_sha256": "3314d3ac29e3b335647f9e9b8dce01e49d05b9321b6f44ac191eb3314b975b0c",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "source_original",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3588": {
+      "source_file_sha256": "09d9aa389c4c71f624f7fb0d251f41d93ab0d5a84da611674d6d99121e944b17",
+      "editorial_basis": [
+        "messages"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3687": {
+      "source_file_sha256": "34772d7a67691e460933709c2e090b444d12a243b9a27c53c0833c066113a8b3",
+      "editorial_basis": [
+        "langchain4j"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3696": {
+      "source_file_sha256": "bb40f8ede75415b185a298a178016b2b5131dd7ea5fad9d116b3c2f0f8ae089e",
+      "editorial_basis": [
+        "langchain"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3748": {
+      "source_file_sha256": "5083daf2dae4be4a60d3b29cd9e736ce846d52371d59e45144ee716d96eb2667",
+      "editorial_basis": [
+        "multi_agent"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3749": {
+      "source_file_sha256": "d7cb8e0193c4bf02133e5183f22110142c4717e4c4613a76281de4b86f792279",
+      "editorial_basis": [
+        "multi_agent",
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3784": {
+      "source_file_sha256": "2188348953455433eca23001e17fd701e20cd49a994da4780bf00e7d4dc5072b",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-3795": {
+      "source_file_sha256": "13bc183325ea7df00e4ef420b456e0a724d9fa0550aede87750346dc0be7dc89",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4112": {
+      "source_file_sha256": "0aed985e87d33d73011b7c7361c5fc7b3487077ef6c37c3fa6b1b75c97fa1e33",
+      "editorial_basis": [
+        "spring_ai"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4113": {
+      "source_file_sha256": "f044174df125ec3409ae8b8b840dc3134fc7cd18a3641354a75b5e9617d4fce5",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4240": {
+      "source_file_sha256": "a430fe579723795260c11fe799555f212ab466b202fbec1aff1fcbe4b6f05315",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4456": {
+      "source_file_sha256": "cab232c55a6b0e46b9dde57727b92a6ce66ff47d115f1c3e18b7d9995ea1208f",
+      "editorial_basis": [
+        "mcp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4460": {
+      "source_file_sha256": "7ce973b9857ff7144fdff80a12d0d877851c63f98d4d7d0a00f9ce892d16c37c",
+      "editorial_basis": [
+        "workflow"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4923": {
+      "source_file_sha256": "8404b5a9a8b13b66ce135a3067d521a52e189f8a55d2dc5a0b9d6d2084267d83",
+      "editorial_basis": [
+        "langchain"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4924": {
+      "source_file_sha256": "47ccd3daa3548732ec4e0c2d05bc90a66310ed8d52a658af85ace4e3e0fcfe33",
+      "editorial_basis": [
+        "langchain"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-4925": {
+      "source_file_sha256": "2fade55edea09a09b19d95e1309e8fff700ae481049a907fc396fce8c532e5f7",
+      "editorial_basis": [
+        "langchain"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-5078": {
+      "source_file_sha256": "903e96f876d1b678aac4497160ab59fa048eebd4464156bb62f925eb39a8824b",
+      "editorial_basis": [
+        "skills",
+        "mcp",
+        "harness"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-7004": {
+      "source_file_sha256": "a7fa320781424e1d57c9cc74cd1e06b78d3d30275c3484332edb7628812d2c63",
+      "editorial_basis": [
+        "harness"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-7077": {
+      "source_file_sha256": "3db1f169367035b89fdd9253be3fefae64ca83bebfbdc66cd9f2ffe924a0582e",
+      "editorial_basis": [
+        "acp"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-7091": {
+      "source_file_sha256": "f65f96591363535570a44e19b7d30cdb46eb55c662957e7502e4da3ddec7ec81",
+      "editorial_basis": [
+        "skills"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    },
+    "Q-9127": {
+      "source_file_sha256": "ddfdf24173ad5bd2903ecdb0d87ffb0e6c4657faf28e22c7d6b5e8c0d95ceb90",
+      "editorial_basis": [
+        "context7"
+      ],
+      "answer_origin": "agent_generated",
+      "rubric_origin": "agent_generated",
+      "human_review": "pending"
+    }
+  }
+}

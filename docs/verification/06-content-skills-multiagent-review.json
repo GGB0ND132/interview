@@ -1,0 +1,702 @@
+{
+  "review_scope": "full_content",
+  "actor_type": "agent",
+  "reviewer": "content_skills_multiagent",
+  "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "candidate_artifact": "backend/src/interview_backend/agent_topics_second_half.json",
+  "competency_ids": [
+    "agent_skills",
+    "agent_multi_agent"
+  ],
+  "expected_review_count": 21,
+  "actual_review_count": 21,
+  "counts": {
+    "agent_skills": 13,
+    "agent_multi_agent": 8,
+    "approved": 21,
+    "changes_required": 0,
+    "uncertain": 0
+  },
+  "method": "逐题完整阅读prompt、answer、rubric及来源/版本元信息；9道最终保留source_original的答案逐字对照固定快照，其余与编辑稿核对。最初11道原文均匹配快照，但不据此自动批准；关键技术断言另用官方规范、官方依赖包或固定项目源码核查。candidate_sha256由backend/.venv Python直接调用interview_backend.topic_pack.candidate_digest生成。Q-0379/Q-1247按v2候选完整复核并更新hash。评分按编辑稿的语义准则，不要求关键词或虚构经历。",
+  "sources_checked": {
+    "scope": "核查以下关键原始材料；未声称逐条访问每道原答案全部延伸阅读链接。",
+    "materials": [
+      {
+        "locator": "https://agentskills.io/specification",
+        "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+        "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+      },
+      {
+        "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+        "version": "live official implementation guide fetched 2026-11-10",
+        "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+        "version": "live official DeepAgents docs fetched 2026-11-10",
+        "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+        "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+        "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+      },
+      {
+        "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+        "version": "live official docs fetched 2026-11-10",
+        "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py",
+        "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+        "checked_excerpt": "main_agent = create_deep_agent(model=model, system_prompt=..., tools=[generate_markdown, convert_md_to_pdf, read_file_content], checkpointer=InMemorySaver(), subagents=[database_query_agent, network_search_agent, knowledge_base_agent]). config = {\"configurable\": {\"thread_id\": session_id}}. main_agent.astream forwards task subagent_type/description and progress through monitor."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/subagents/database_query_agent.py ; network_search_agent.py ; knowledge_base_agent.py ; requirements.txt",
+        "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c; deepagents==0.5.7",
+        "checked_excerpt": "All three dictionaries define name, description, system_prompt and tools, without a model override. Database tools are list_sql_tables/get_table_data/execute_sql_query; network tools contain internet_search; knowledge tools contain get_assistant_list/create_ask_delete. requirements.txt pins deepagents==0.5.7, langgraph==1.1.10 and langchain==1.2.17."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/tools/db_tools.py",
+        "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+        "checked_excerpt": "execute_sql_query(query) passes query directly to cursor.execute(query). The comment explicitly says the chapter relies on prompt constraints for read-only queries and production should restrict SELECT/SHOW at the tool layer. get_db_config sets autocommit=True. get_table_data constructs SELECT * FROM {table_name} LIMIT 100 and recommends a production allowlist."
+      },
+      {
+        "locator": "https://files.pythonhosted.org/packages/fd/bb/c1c68ad0ca96cdddd601e7fca0f274be202411378af6da76a35f0e4a1b66/deepagents-0.5.7-py3-none-any.whl!deepagents/middleware/subagents.py",
+        "version": "deepagents 0.5.7 official PyPI wheel; metadata fetched from https://pypi.org/pypi/deepagents/0.5.7/json",
+        "checked_excerpt": "_EXCLUDED_STATE_KEYS includes messages, todos, structured_response, skills_metadata, skills_load_errors, memory_contents. _validate_and_prepare_state creates a new dict from other runtime.state fields and sets subagent_state['messages']=[HumanMessage(content=description)] (lines 420-426). Return Command includes other result state plus ToolMessage(content, tool_call_id=tool_call_id) (lines 399-417)."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py",
+        "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+        "checked_excerpt": "context_mode: Literal['isolated','snapshot']='isolated' (line 761). Snapshot adds retained history and summary as background at dispatch; the child retains its role/tools and later parent turns are not synced (lines 863-868). After delegation validation, before child setup: ParentContextSnapshot.from_state(runtime.state) for snapshot mode (lines 909-911). Tool-required execution context, authorization identity, thread/run IDs and uploads are handled separately."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/context_snapshot.py",
+        "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+        "checked_excerpt": "from_state captures retained messages and summary_text, excluding parent system instructions/hidden framework messages (lines 97-117). Only retained completed call-result pairs are emitted as 'Historical tool calls (not executed by you)' (lines 118-161). to_message uses fresh json.loads containers in HumanMessage(name='parent_context_snapshot') (lines 174-176). The system note says historical instructions cannot override current scope and later parent messages do not sync."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/executor.py",
+        "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+        "checked_excerpt": "Initial messages append SystemMessage for the child's assembled prompt, then self.context_snapshot.to_message() when present, then HumanMessage(content=task_content) (lines 1588-1599). The state contains these messages. Parent runtime state required by tools is passed through separately using fresh containers (lines 1601 onward)."
+      },
+      {
+        "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/agents/middlewares/subagent_limit_middleware.py",
+        "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+        "checked_excerpt": "Counts task calls in the last AIMessage, counts prior delegations for current run_id, computes remaining_total and allowed_task_calls=min(max_concurrent, remaining_total), and drops extra task calls from the message (lines 133-154). When remaining_total==0 it appends the stop message (lines 167-172); no queue is created."
+      },
+      {
+        "locator": "https://cursor.com/docs/context/rules",
+        "version": "live official Cursor Rules docs fetched 2026-11-10",
+        "checked_excerpt": "Rule Type: Always Apply applies to every chat; Apply Intelligently is chosen by the agent based on description; Apply to Specific Files matches a pattern; Apply Manually is activated by @-mention. alwaysApply, description and globs determine inclusion. Thus Rules are not universally always loaded and the host controls scope/activation."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/architecture.md",
+        "version": "MCP 2025-06-18",
+        "checked_excerpt": "MCP follows a client-host-server architecture. Host manages clients, connection permissions, security policies, authorization, LLM integration and context aggregation. Each client maintains one server connection. Servers expose resources, tools and prompts and may be local processes or remote services; capability negotiation determines available features."
+      },
+      {
+        "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+        "version": "MCP 2025-06-18",
+        "checked_excerpt": "Resources share context such as files, database schemas or application-specific information, uniquely identified by URI. Resources are application-driven; the host determines context inclusion, and the protocol does not mandate a particular interaction model. Clients discover via resources/list and retrieve contents via resources/read. This baseline does not define a universal Skill install/discovery/activation API."
+      }
+    ],
+    "local_materials": [
+      {
+        "locator": "backend/src/interview_backend/mianstack_snapshot.json",
+        "version": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+        "checked_excerpt": "最初11道source_original的完整正文与snapshot逐字相同；其后Q-0379/Q-1247明确改为maintainer_edited-v2，保留源快照不变。"
+      },
+      {
+        "locator": "backend/content/agent-topics-second-half.md",
+        "version": "06-editorial-v1 plus 06-content-review-v2",
+        "checked_excerpt": "每条评分点是语义要点，不要求关键词逐字命中；允许正确的不同实现和没有相关项目经历的诚实回答。21个题块均存在，rubric全部一致，12道最终补答/维护编辑答案与候选全文一致。"
+      },
+      {
+        "locator": "backend/content/agent-answer-sources.json",
+        "version": "06-editorial-v1 reading list, subsequently maintained by main agent",
+        "checked_excerpt": "清单自述editorial_reading_list_not_independently_verified_citations；Skill依据Agent Skills specification，MCP基准2025-06-18，multi_agent列Anthropic 2025-06-13文章。本报告只把实际取得材料列为已核查，不以清单本身证明外链内容。"
+      }
+    ],
+    "unavailable_materials": [
+      {
+        "locator": "https://www.anthropic.com/engineering/multi-agent-research-system",
+        "result": "HTTP 403; not treated as independently checked evidence"
+      },
+      {
+        "locator": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+        "result": "batch stopped on preceding Anthropic403; this article was not independently retrieved"
+      },
+      {
+        "locator": "https://skills.extensions.modelcontextprotocol.io/specification/stable/skills",
+        "result": "HTTP403 for page and .md; superseded claim removed from Q-1247-v2"
+      },
+      {
+        "locator": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/few-shot-prompting.md",
+        "result": "HTTP403; not cited as verified evidence"
+      },
+      {
+        "locator": "https://ai.google.dev/gemini-api/docs/prompting-strategies",
+        "result": "URLError; not cited as verified evidence"
+      }
+    ]
+  },
+  "issues": [
+    {
+      "id": "SM-01",
+      "codes": [
+        "Q-1247"
+      ],
+      "status": "resolved",
+      "severity": "medium",
+      "finding": "源答案新Skills扩展面向2026-07-28，与题包2025-06-18基准混用；扩展外链本次403不能当已核实依据。",
+      "resolution": "主Agent将v2维护答案限定MCP2025-06-18 Resources，可读取文件但宿主仍负责Skill识别与加载；移除统一安装激活或新扩展保证，明确maintainer_edited。已用2025官方Resources/Architecture复核新全文和rubric。",
+      "human_required": false
+    },
+    {
+      "id": "SM-02",
+      "codes": [
+        "Q-0379"
+      ],
+      "status": "resolved",
+      "severity": "low",
+      "finding": "源答案参考MCP2026-07-28架构，虽该URL已成功读取且核心区分正确，但基准与题包不统一。",
+      "resolution": "主Agent改写v2维护答案并引用MCP2025-06-18架构，保持Skill/提示词/MCP核心区分及原语义rubric；已复核新全文。",
+      "human_required": false
+    }
+  ],
+  "unresolved_issues": [],
+  "human_required": false,
+  "human_review_note": "这是Agent全量内容审查，不是actor_type=human的人工签署，也不授权正式发布；本范围没有必须由人补查或裁定的实质内容问题。",
+  "samples": [
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "88d63802e6e3a6b27ce8fe5d350e4aba7757666cbd5ec9c3cc715edfbbb03c55",
+      "code": "Q-0022",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "main_agent = create_deep_agent(model=model, system_prompt=..., tools=[generate_markdown, convert_md_to_pdf, read_file_content], checkpointer=InMemorySaver(), subagents=[database_query_agent, network_search_agent, knowledge_base_agent]). config = {\"configurable\": {\"thread_id\": session_id}}. main_agent.astream forwards task subagent_type/description and progress through monitor."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/subagents/database_query_agent.py ; network_search_agent.py ; knowledge_base_agent.py ; requirements.txt",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c; deepagents==0.5.7",
+          "checked_excerpt": "All three dictionaries define name, description, system_prompt and tools, without a model override. Database tools are list_sql_tables/get_table_data/execute_sql_query; network tools contain internet_search; knowledge tools contain get_assistant_list/create_ask_delete. requirements.txt pins deepagents==0.5.7, langgraph==1.1.10 and langchain==1.2.17."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/tools/db_tools.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "execute_sql_query(query) passes query directly to cursor.execute(query). The comment explicitly says the chapter relies on prompt constraints for read-only queries and production should restrict SELECT/SHOW at the tool layer. get_db_config sets autocommit=True. get_table_data constructs SELECT * FROM {table_name} LIMIT 100 and recommends a production allowlist."
+        },
+        {
+          "locator": "https://files.pythonhosted.org/packages/fd/bb/c1c68ad0ca96cdddd601e7fca0f274be202411378af6da76a35f0e4a1b66/deepagents-0.5.7-py3-none-any.whl!deepagents/middleware/subagents.py",
+          "version": "deepagents 0.5.7 official PyPI wheel; metadata fetched from https://pypi.org/pypi/deepagents/0.5.7/json",
+          "checked_excerpt": "_EXCLUDED_STATE_KEYS includes messages, todos, structured_response, skills_metadata, skills_load_errors, memory_contents. _validate_and_prepare_state creates a new dict from other runtime.state fields and sets subagent_state['messages']=[HumanMessage(content=description)] (lines 420-426). Return Command includes other result state plus ToolMessage(content, tool_call_id=tool_call_id) (lines 399-417)."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已将参考研搜项目与固定真实源码逐项对照：三个自定义业务专家、主方文件工具、同模型继承、thread_id和InMemorySaver均吻合；真实SQL直接执行的风险也已如实说明。题首明确为参考示例；rubric接受真实项目或明确假设，不奖励虚构经历，也不强制同一种框架。上下文隔离收益、调度成本、依赖并行和权限落实覆盖题意。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "189d14695ef4a2b48f6f972069c7c4480d86ac13323a584e287e61f9caef1dd8",
+      "code": "Q-0361",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "路由、主管工作者、并行、交接与评价修订是可组合的控制模式；答案正确区分共享状态与控制权结构，并未把所有多阶段提示都定义为独立Agent。rubric以模式、输入输出/合并和成本/停止条件为语义要点，允许不同合理模式及单Agent基线。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "3011bf40635a02722d0198d5d30f859ab83f24471bd72b4418713d32fa4cbe45",
+      "code": "Q-0378",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "SKILL.md入口、必需元信息、可选目录和渐进加载均符合开放规范；文本指导与真实工具/权限明确区分。正文说明只有SKILL.md也可构成技能，未把脚本或特定宿主扩展列为必需；评分点覆盖概念而不依赖产品接口。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "498fef2ad24f0665e1abce8e758b40360f2618d6235a60c0d1e56d8a849726bc",
+      "code": "Q-0379",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/architecture.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "MCP follows a client-host-server architecture. Host manages clients, connection permissions, security policies, authorization, LLM integration and context aggregation. Each client maintains one server connection. Servers expose resources, tools and prompts and may be local processes or remote services; capability negotiation determines available features."
+        }
+      ],
+      "findings": "初审源答案末条采用2026-07-28 MCP架构引用，与本题包2025-06-18基准不一致；主Agent已将该题改为maintainer_edited、content_version=agent-basics-06-v2。复核新全文：提示设计、Skill任务包和MCP协议职责清楚，Tools/Resources/Prompts与2025架构吻合，权限和实际结果由执行环境落实。原语义rubric仍覆盖正确组合关系，没有新增版本细节评分要求。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "df4aeed5dc647ccf3ed1d3df10098304f7cd5901f81e3fc667ceda4613e6aa80",
+      "code": "Q-0382",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/main_agent.py",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c",
+          "checked_excerpt": "main_agent = create_deep_agent(model=model, system_prompt=..., tools=[generate_markdown, convert_md_to_pdf, read_file_content], checkpointer=InMemorySaver(), subagents=[database_query_agent, network_search_agent, knowledge_base_agent]). config = {\"configurable\": {\"thread_id\": session_id}}. main_agent.astream forwards task subagent_type/description and progress through monitor."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/didilili/deepsearch-agents/075a5337d855192f8a14543fcbd3b71d7060ce2c/app/agent/subagents/database_query_agent.py ; network_search_agent.py ; knowledge_base_agent.py ; requirements.txt",
+          "version": "075a5337d855192f8a14543fcbd3b71d7060ce2c; deepagents==0.5.7",
+          "checked_excerpt": "All three dictionaries define name, description, system_prompt and tools, without a model override. Database tools are list_sql_tables/get_table_data/execute_sql_query; network tools contain internet_search; knowledge tools contain get_assistant_list/create_ask_delete. requirements.txt pins deepagents==0.5.7, langgraph==1.1.10 and langchain==1.2.17."
+        },
+        {
+          "locator": "https://files.pythonhosted.org/packages/fd/bb/c1c68ad0ca96cdddd601e7fca0f274be202411378af6da76a35f0e4a1b66/deepagents-0.5.7-py3-none-any.whl!deepagents/middleware/subagents.py",
+          "version": "deepagents 0.5.7 official PyPI wheel; metadata fetched from https://pypi.org/pypi/deepagents/0.5.7/json",
+          "checked_excerpt": "_EXCLUDED_STATE_KEYS includes messages, todos, structured_response, skills_metadata, skills_load_errors, memory_contents. _validate_and_prepare_state creates a new dict from other runtime.state fields and sets subagent_state['messages']=[HumanMessage(content=description)] (lines 420-426). Return Command includes other result state plus ToolMessage(content, tool_call_id=tool_call_id) (lines 399-417)."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已读研搜固定源码及其依赖deepagents0.5.7官方wheel，确认该环境用委派描述重建子消息历史、其他状态字段另行传递并关联ToolMessage返回。答案另行标明当前文档fork>=0.7.13 Beta，未把新功能错误归给0.5.7参考实现；不将独立上下文等同权限或进程隔离，适用条件与成本评分合理。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "aac363af1efdb1dce0a890be2d330348965565fc52b184ea26898f20cd4a2cd1",
+      "code": "Q-0624",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        }
+      ],
+      "findings": "正确区分模型自动匹配的不确定性、宿主显式激活/路由与后续工具执行。显式调用在宿主实现时可确保技能内容被选择/注入，答案末句同时指出加载不保证脚本、权限和业务成功，整体未将自然语言当确定性执行。rubric检查触发、显式入口/评估与最终结果三个层次。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "06521456c310ee7d422a6044612d26b13285213caba9de71237bc05e869259bf",
+      "code": "Q-0852",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        }
+      ],
+      "findings": "元信息、SKILL.md正文、按需资源三层及时机与规范一致；没有把三层说成三个必填文件或要求用户逐步确认。候选筛选、元数据和脚本输出仍占成本的说明合理；评分没有强制固定token阈值或检索Top-K。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "3c5d627dc06ceb87a8727e0b13609781c43e7c33a97e51b9cc2a6fdad1246e86",
+      "code": "Q-0871",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "手工目录、从文档/轨迹提炼、脚本封装、模板和复用适配均为可行创建途径，并说明最终仍需目标宿主可发现的技能包。没有误把注册普通函数等同Agent Skills；明确验证格式、依赖、触发及实际结果，rubric允许多种途径。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "aaa67d4c436d4d87650ed509ad6a0013fef30c3dff2b2372703c4424c60a5862",
+      "code": "Q-0935",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+          "version": "live official DeepAgents docs fetched 2026-11-10",
+          "checked_excerpt": "Skills package domain expertise, workflows, best practices, scripts, reference docs, and templates into reusable directories. The agent gets a summary on startup and reads files only when relevant. Supporting files load when instructions call for them. Supporting resources should be referenced in SKILL.md with what each contains and when to use it. Pass the top-level skills path in create_deep_agent(skills=...)."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        }
+      ],
+      "findings": "题首明确为表格分析使用经历答法示例，因此后续第一人称不冒充本项目已运行的事实。显式选择、任务匹配、读正文/资源、调用工具和核对产物链路正确；DeepAgents分层加载已实读官方文档。评分关注实际使用方法，未强制个人有特定平台经历。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "22813156c683a44db4fb8585a3db7e29bdc3bec3585833cbd646e186941fb70c",
+      "code": "Q-0976",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "完整核查必需name/description、目录同名、YAML frontmatter+Markdown及相对资源路径，示例api-test-design满足格式。正文标题、脚本、目录与测试规模被正确表述为按任务选用；授权范围与路径/执行限制落在程序。rubric以输入输出、资源依赖、代表任务验证为语义标准。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "90dab812b44342ab16fd024e870e3ecfad9d92961b06b5a9ead4ebd3f5fb97e8",
+      "code": "Q-1247",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/architecture.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "MCP follows a client-host-server architecture. Host manages clients, connection permissions, security policies, authorization, LLM integration and context aggregation. Each client maintains one server connection. Servers expose resources, tools and prompts and may be local processes or remote services; capability negotiation determines available features."
+        },
+        {
+          "locator": "https://modelcontextprotocol.io/specification/2025-06-18/server/resources.md",
+          "version": "MCP 2025-06-18",
+          "checked_excerpt": "Resources share context such as files, database schemas or application-specific information, uniquely identified by URI. Resources are application-driven; the host determines context inclusion, and the protocol does not mandate a particular interaction model. Clients discover via resources/list and retrieve contents via resources/read. This baseline does not define a universal Skill install/discovery/activation API."
+        }
+      ],
+      "findings": "初审发现源答案加入面向2026-07-28的新Skills扩展，超出本题包MCP2025-06-18基准且扩展站点本次403；没有将该链接记为已验证。主Agent已改为maintainer_edited、v2并移除新扩展断言。复核新全文与2025 Resources/Architecture实文：资源可暴露文件，宿主解释为Skill仍需识别/校验/加载，基线没有统一Skill安装激活保证；协议与任务知识的区分以及rubric均正确。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "53fed9d9345ace6cb7be61af9b8e6ba42e761464e0fd2f8e815ef17c9e281902",
+      "code": "Q-1768",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "明确要求按真实配置回答、没用过则说明，假设示例也被标明。把资料/编辑脚本与已安装运行Skill分开，避免把题包或本项目能力虚构为事实；触发、依赖、输入输出和验收评分点公平覆盖经历题的可验证部分。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "6ad0d03728aed716c542d233d130371b76cce314ab2d539dd5dda803630c937a",
+      "code": "Q-2075",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        }
+      ],
+      "findings": "将Agent Team作为通用协作组织术语而非唯一协议，适合该题未限定产品的问法。职责、消息/共享产物、冲突、预算和真实执行边界覆盖协作设计；上下文隔离不保证共享工作区权限隔离的限制正确，评分未要求某一产品API。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "5b6725d2b534f3d38315c4cc2816b8755fee04c6ac8a4e6ea307e48ea425c5d8",
+      "code": "Q-2095",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://cursor.com/docs/context/rules",
+          "version": "live official Cursor Rules docs fetched 2026-11-10",
+          "checked_excerpt": "Rule Type: Always Apply applies to every chat; Apply Intelligently is chosen by the agent based on description; Apply to Specific Files matches a pattern; Apply Manually is activated by @-mention. alwaysApply, description and globs determine inclusion. Thus Rules are not universally always loaded and the host controls scope/activation."
+        },
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "官方Cursor规则实际既有Always、文件匹配、模型选择也有手动触发，答案以“通常”和“作用范围/优先级/触发依赖宿主”限定持续约束，未宣称所有Rules永远加载。Rules与Skill可组合、不能代替安全执行边界，rubric接受具体宿主的正确差异。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "94c8ffad7686416ea25f4d1d5499ecf9df1e4f82c51e7a1fc33ff97cf2918a4b",
+      "code": "Q-2864",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "文件格式支持发现/索引/加载/校验的结论符合规范与实现指南，准确说明入口、元数据、正文和可选目录。明确格式合法不证明内容正确、执行成功或各宿主扩展兼容；三条评分覆盖结构与边界且不要求私有格式。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "451350d7d162b84f7825c6e1ca4767582b577fd05c167193b9c3acf5223450ea",
+      "code": "Q-3169",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        }
+      ],
+      "findings": "题面skills.md可能含混，答案先澄清Agent Skills通用入口为SKILL.md，未把任意清单当标准。必需元数据、目录匹配、正文与可选资源职责准确；正文依赖、失败、验收是编写建议，不被说成格式必填标题，评分按语义核查。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "7aa96c0915d6ae47167b4d98d300a9f7b9100619979feae81f7e5d89f27dd941",
+      "code": "Q-3486",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        }
+      ],
+      "findings": "正确把多Agent定义为多个有局部行动选择的执行单元而非多种模型或多段提示。任务分工、上下文、输入输出/证据和成本一致性问题完整覆盖基础题；允许同一模型、多种编排与单Agent更合适的判断。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "867b5f78ffbbf74ecf608fb7f9e131a73299ce063a9007c4bf6480f109610e15",
+      "code": "Q-3487",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "context_mode: Literal['isolated','snapshot']='isolated' (line 761). Snapshot adds retained history and summary as background at dispatch; the child retains its role/tools and later parent turns are not synced (lines 863-868). After delegation validation, before child setup: ParentContextSnapshot.from_state(runtime.state) for snapshot mode (lines 909-911). Tool-required execution context, authorization identity, thread/run IDs and uploads are handled separately."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/context_snapshot.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "from_state captures retained messages and summary_text, excluding parent system instructions/hidden framework messages (lines 97-117). Only retained completed call-result pairs are emitted as 'Historical tool calls (not executed by you)' (lines 118-161). to_message uses fresh json.loads containers in HumanMessage(name='parent_context_snapshot') (lines 174-176). The system note says historical instructions cannot override current scope and later parent messages do not sync."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/subagents/executor.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "Initial messages append SystemMessage for the child's assembled prompt, then self.context_snapshot.to_message() when present, then HumanMessage(content=task_content) (lines 1588-1599). The state contains these messages. Parent runtime state required by tools is passed through separately using fresh containers (lines 1601 onward)."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/agents/middlewares/subagent_limit_middleware.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "Counts task calls in the last AIMessage, counts prior delegations for current run_id, computes remaining_total and allowed_task_calls=min(max_concurrent, remaining_total), and drops extra task calls from the message (lines 133-154). When remaining_total==0 it appends the stop message (lines 167-172); no queue is created."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "已实读DeerFlow固定提交四份关键源码：isolated默认、snapshot捕获时点、summary_text与保留历史、过滤系统/隐藏注入、已完成工具历史、独立HumanMessage容器、消息顺序均吻合；限额按当前run账本与单轮上限裁去调用并非排队。答案区分模型历史、角色工具、共享运行状态与后续更正，rubric没有把任一种继承方式绝对化。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "0637207a0736344d642dc84aefbb6dfc472fa77eb5ba5b6bfc8f505ef2865e83",
+      "code": "Q-3748",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://docs.langchain.com/oss/python/langgraph/workflows-agents.md",
+          "version": "live official docs fetched 2026-11-10",
+          "checked_excerpt": "Routing workflows direct inputs to context-specific tasks. Parallelization runs multiple independent subtasks simultaneously or the same task multiple times. In orchestrator-worker configurations the orchestrator breaks down tasks, delegates to workers, and synthesizes worker outputs. Workers have their own state and outputs can be collected into shared state. Orchestrator-worker patterns are useful when subtasks cannot be predefined."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        },
+        {
+          "locator": "https://raw.githubusercontent.com/bytedance/deer-flow/60940ae9c528e5d740b27d058f2c5d80565a71b7/backend/packages/harness/deerflow/tools/builtins/task_tool.py",
+          "version": "60940ae9c528e5d740b27d058f2c5d80565a71b7",
+          "checked_excerpt": "context_mode: Literal['isolated','snapshot']='isolated' (line 761). Snapshot adds retained history and summary as background at dispatch; the child retains its role/tools and later parent turns are not synced (lines 863-868). After delegation validation, before child setup: ParentContextSnapshot.from_state(runtime.state) for snapshot mode (lines 909-911). Tool-required execution context, authorization identity, thread/run IDs and uploads are handled separately."
+        }
+      ],
+      "findings": "主方负责目标/调度/验收/汇总，子方完成范围明确的局部任务并交回证据/产物，符合官方orchestrator-worker和固定委派契约。输入依赖与独立并行、共享写入责任、总预算与取消升级均合理；不接受子方无证据成功自述的评分点公允。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "4eb16e0cfadc6f54cd02f4dd6a8456e97b879baa4e37c60a9090cdce819508c2",
+      "code": "Q-3749",
+      "topic": "多 Agent 编排与协作",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        },
+        {
+          "locator": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+          "version": "live official docs fetched 2026-11-10; fork requires deepagents>=0.7.13 and is Beta",
+          "checked_excerpt": "Subagents isolate detailed work and the main agent receives the final result. Do not use them for simple single-step tasks, when intermediate context is needed, or when overhead outweighs benefits. mode defaults to isolated (only delegated task); fork inherits the parent's conversation history and state. Subagent forking requires deepagents>=0.7.13 and is beta. Omit model to inherit the main agent's model. Tools inherit by default unless overridden."
+        }
+      ],
+      "findings": "准确区分独立受委派执行单元与可复用任务知识资源包；两者可组合，Skill文本中的委派描述不会自行启动新执行单元。选择依据是探索隔离/独立工作与知识流程复用，权限/共享状态由宿主管理；三条rubric不依赖具体框架。",
+      "conclusion": "approved"
+    },
+    {
+      "actor_type": "agent",
+      "reviewer": "content_skills_multiagent",
+      "reviewed_at": "2026-11-10T00:56:11.0931882+08:00",
+      "candidate_sha256": "f51f140ba6fab48176e9d49e9ae13d5957afce5427c7be2522816bd433c1ee45",
+      "code": "Q-7091",
+      "topic": "Skills 能力系统",
+      "materials": [
+        {
+          "locator": "https://agentskills.io/specification",
+          "version": "live official specification fetched 2026-11-10; page dateModified 2026-08-04",
+          "checked_excerpt": "A skill is a directory containing, at minimum, a SKILL.md file. The SKILL.md file must contain YAML frontmatter followed by Markdown content. name and description are required. name must match the parent directory name. Body content has no format restrictions; recommended sections include step-by-step instructions, examples of inputs and outputs, and common edge cases. Metadata loads at startup; instructions on activation; resources as needed. allowed-tools is experimental and support may vary."
+        },
+        {
+          "locator": "https://agentskills.io/client-implementation/adding-skills-support.md",
+          "version": "live official implementation guide fetched 2026-11-10",
+          "checked_excerpt": "Tell the model what skills exist without loading their full content. Include name, description, and optionally location. User-explicit activation commonly uses a slash command or mention syntax intercepted by the harness; syntax is up to the implementor. The harness handles lookup and injection so the model receives content without taking an activation action itself. Filesystem reads, a dedicated tool, or programmatic injection are alternatives."
+        }
+      ],
+      "findings": "Few-shot以少量输入输出例子引导模式/格式，Skill以可复用目录组织说明、示例和资源；官方规范也明确正文可含输入输出示例，因此二者可包含而不互斥。工具执行和持续状态不由示例自动产生，技能步骤也非确定性执行保证；rubric对概念、组合和验证三个层次公平。",
+      "conclusion": "approved"
+    }
+  ]
+}
