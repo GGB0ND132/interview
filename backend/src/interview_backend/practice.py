@@ -7,7 +7,7 @@ import sqlite3
 from typing import Any, cast
 from uuid import uuid4
 
-from . import mock_interview
+from . import jd, mock_interview
 from .contracts import (
     AvailabilityConfig,
     Config,
@@ -55,6 +55,11 @@ class Practice:
     def packs(self) -> list[dict[str, Any]]:
         with self.store.connect() as db:
             return [dict(row) for row in db.execute("SELECT * FROM role_packs ORDER BY id")]
+
+    def preview_jd(self, request: jd.AnalyzeJD) -> dict[str, Any]:
+        with self.store.connect(write=True) as db:
+            pool = self._pool(db, request.pack_id, SelectionCriteria(difficulty=request.difficulty))
+            return jd.preview(db, request, pool)
 
     def availability(self, pack_id: str, config: AvailabilityConfig) -> dict[str, Any]:
         with self.store.connect() as db:
@@ -167,6 +172,9 @@ class Practice:
             "submissions": [self._submission(item) for item in submissions],
             "available_actions": actions.get(row["phase"], []),
         }
+        mapping = jd.session_mapping(db, session_id)
+        if mapping is not None:
+            result["jd"] = mapping
         state = mock_interview.load(db, session_id)
         if state is not None:
             return mock_interview.decorate(result, state)
@@ -213,6 +221,10 @@ class Practice:
                 "INSERT INTO sessions(id,pack_id,pack_version,config_json,status,phase) VALUES (?,?,?,?,'draft','draft')",
                 (session_id, request.pack_id, version, request.config.model_dump_json()),
             )
+            if isinstance(request.config, MockConfig) and request.config.jd is not None:
+                jd.attach(
+                    db, session_id, request.config.jd, request.pack_id, request.config.difficulty
+                )
             return self._view(db, session_id)
 
     def start(self, session_id: str, revision: int) -> dict[str, Any]:

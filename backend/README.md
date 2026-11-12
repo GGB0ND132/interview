@@ -1,4 +1,4 @@
-# 试题练习、模拟面试与题库服务（工单 01、03、07）
+# 试题练习、模拟面试与题库服务（工单 01、03、07、09）
 
 Python 3.11+、FastAPI、SQLite。提供两道自编 Agent 基础技术样题的真实单题闭环，以及 MianStack 固定版本题目的逐题发布入口。自编样题与 MianStack 题包独立，后者初始可用数为 0，发布通过项后才可抽取。03 附带两道真实来源题验证发布机制；全部 115 道题的整理与每主题人工抽查属于 05/06。
 
@@ -12,7 +12,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 4；现有 schema 1/2/3 自动迁移，保留原题与会话。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 5；现有 schema 1/2/3/4 自动迁移，保留原题与会话。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
@@ -158,3 +158,31 @@ uv run python -X utf8 scripts/acceptance_mock_interview.py --base-url http://127
 ```
 
 脚本使用明确标注的合成候选人回答；完整路径技术回答取已发布参考文本，用于验证编排与真实模型连接，不代表模型评分质量基准或真实候选人水平。接口检查与边界见 [07 验证记录](../docs/verification/07-backend-mock-interview.md)。
+
+## 09：JD 文本确认与加权选题
+
+JD 是可选输入，仅在 `mock_interview` 生效；单题练习传 `jd` 返回 422。流程为：
+
+1. `POST /api/v1/jd-mappings`，正文 `{"pack_id":"pack_agent_basics_mianstack","text":"熟悉工具调用；熟悉 Kubernetes","difficulty":"easy"}`，返回 201、`id/revision=0/status=preview`、逐项 `requirements`。
+2. 用户核对 `text/competency_ids/coverage` 后调用 `POST /api/v1/jd-mappings/{id}/confirm`，正文 `{"expected_revision":0,"confirmed_requirement_ids":["requirement_1","requirement_2"]}`，返回 `revision=1/status=confirmed`。未勾选项不参与岗位匹配和模型情境；允许空列表表示全部拒绝。对无法映射但确属岗位要求的条目，也应保留确认以展示缺口。
+3. 创建会话时在 `config` 中附加 `"jd":{"mapping_id":"返回的 id","revision":1}`。其余创建、开始、回答、结束接口沿用 07；不传 `jd` 可直接练习。
+
+映射使用版本化、有限的明示词表 `agent_explicit_terms_v1`，不调用模型推测隐含能力。原文按行、句和并列要求分段，维护的完整主题名保留为一个片段；每项 `source_span.start/end` 为原始文本 **Unicode 码点**偏移（含 start、不含 end），`line` 从 1 起。浏览器若需切片可用 `Array.from(text).slice(start,end).join('')`，避免 UTF-16 与码点混淆。原文不改写，不确定或未识别内容留作 `unmapped_requirement`，需用户核对；这不是任意 JD 的语义理解或自动技术覆盖证明。React 前端与 ReAct 循环、通用 communication skills 与 Agent Skills 分开识别。
+
+`coverage` 返回当前题包、难度下每个映射能力的适合面试题数；至少两道合格已发布技术题才可成为主题候选。`no_published_questions` 表示当前筛选题池没有合格题，`insufficient_topic_questions` 表示不足两题。开始会话时按实时题库、停用/隔离/暂停和 `focus_competency_ids` 重新计算，预览计数不保证开始时仍可用。未覆盖 JD 不阻止从其他合格主题开始，但全局至少三个主题和通用环节门槛仍然有效。
+
+确认的能力在合格主题候选中权重为 **4**，其他为 **1**；重复提及不累加。先随机决定 3～4 个主题，再按权重不放回随机抽选，每个主题内继续随机选已发布主问题。权重不是必选承诺，也不改变题目评分权重。`plan` 保存 `seed/selection_algorithm/topic_candidates/topic_draws/selected_topics/candidate_pool/questions`：每轮记录随机值、剩余权重总数及结果，可用保存的种子重放。主题内的题目候选与版本保持原有快照；不会据 JD 创作主问题。
+
+会话在创建时固定已确认映射，后续再次确认不会改动旧会话；预览引用返回 `JD_NOT_CONFIRMED`，旧 revision 返回 `JD_REVISION_CONFLICT`，题包或难度不同返回 `JD_SCOPE_MISMATCH`。确认项不存在返回 400，重复项返回 422；所有失败均回滚。原始 JD 可持久化读取，只有确认片段进入模型 `confirmed_job_requirements`；技术题只带当前能力相关片段。系统提示明确其仅用于匹配和追问情境，不是技术正确性证据，不将其写入参考答案、评分点或引用。
+
+报告包含 `jd/jd_gaps/jd_coverage_status/plan`；缺口区分 `unmapped_requirement/topic_not_eligible/not_selected/insufficient_evidence`，保留原文和位置。`interview_completeness` 沿用 07，判断本场所选环节是否有可评价材料；综合 `completeness` 还要求所有确认 JD 项有覆盖。因而流程可为 `completed/coverage_satisfied`，而 JD 未覆盖时综合报告仍为 `partial`。`observed/covered` 是有可评价材料，不代表答对或掌握，JD 也不提高评分。
+
+可重复的接口验证：`uv run --locked pytest -q tests/test_jd_weighting.py`。独立库发布 05 技术题与 07 通用题后，启动服务并运行：
+
+```powershell
+uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url http://127.0.0.1:8009
+# 服务重启后只读取三场已保存报告，校验内容摘要，不再次调用模型：
+uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url http://127.0.0.1:8009 --verify-existing
+```
+
+前一命令会调用已配置真实模型并产生费用，使用合成候选人回答和明确的技术未知声明验证流程，不是题库内容或评分质量评测。09 只交付后端，10 的前端确认界面、JD 文件上传和其他个性化能力未在此实现。

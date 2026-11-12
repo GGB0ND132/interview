@@ -10,6 +10,7 @@ from fastapi import BackgroundTasks, FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from . import jd
 from .contracts import AvailabilityConfig, CreateSession, RevisionRequest, SubmitAnswer
 from .errors import PracticeError
 from .mock_catalog import publish_common
@@ -80,6 +81,20 @@ def create_app(
     @app.post("/api/v1/sessions")
     def create(request: CreateSession) -> JSONResponse:
         return response(service.create(request), status=201)
+
+    @app.post("/api/v1/jd-mappings")
+    def preview_jd(request: jd.AnalyzeJD) -> JSONResponse:
+        return response(service.preview_jd(request), status=201)
+
+    @app.get("/api/v1/jd-mappings/{mapping_id}")
+    def get_jd(mapping_id: str) -> JSONResponse:
+        with service.store.connect() as db:
+            return response(jd.read(db, mapping_id))
+
+    @app.post("/api/v1/jd-mappings/{mapping_id}/confirm")
+    def confirm_jd(mapping_id: str, request: jd.ConfirmJD) -> JSONResponse:
+        with service.store.connect(write=True) as db:
+            return response(jd.confirm(db, mapping_id, request))
 
     @app.post("/api/v1/maintenance/question-publications/preview")
     def preview_publication(request: PublicationRequest) -> JSONResponse:
