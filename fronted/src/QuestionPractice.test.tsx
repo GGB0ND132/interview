@@ -96,12 +96,33 @@ it('retains a failed problem report, blocks duplicate submits and confirms only 
   expect((screen.getByLabelText('问题说明') as HTMLTextAreaElement).value).toBe('准确性维度忽略了停止条件')
   await user.click(screen.getByRole('button', { name: '提交问题反馈' }))
   await user.click(screen.getByRole('button', { name: '正在提交反馈…' }))
+  expect(screen.getByRole('button', { name: '正在提交反馈…' }).getAttribute('aria-busy')).toBe('true')
+  expect(screen.getByLabelText('问题说明').closest('form')?.getAttribute('aria-busy')).toBe('true')
   expect(api.reportProblem).toHaveBeenCalledTimes(2)
   expect(screen.queryByText('已收到你的反馈，等待复核。')).toBeNull()
   await act(async () => pending.resolve({ id: 'report-1', session_id: 's1', turn_id: TURN.id, question_code: TURN.question_code, answer_version: 1, category: 'score', explanation: '准确性维度忽略了停止条件', status: 'open' }))
   expect(await screen.findByText('已收到你的反馈，等待复核。')).toBeTruthy()
   expect(screen.getByText('反馈编号：report-1')).toBeTruthy()
   expect(api.reportProblem).toHaveBeenLastCalledWith('s1', { turn_id: TURN.id, category: 'score', explanation: '准确性维度忽略了停止条件' })
+})
+
+it('maps server validation to the problem field and replaces help with the error', async () => {
+  const api = fakeApi()
+  api.reportProblem = createPracticeApi({ fetchImpl: (async () => new Response(JSON.stringify({ data: null, error: { code: 'VALIDATION_ERROR', message: '请求格式不符合契约', details: [{ field: ['body', 'explanation'], type: 'string_too_long' }] } }), { status: 422 })) as typeof fetch }).reportProblem
+  const user = userEvent.setup()
+  localStorage.setItem('ia-qp-session', 's1')
+  render(<QuestionPractice api={api} />)
+  await user.click(await screen.findByText('报告题目或评分问题'))
+  await user.type(screen.getByLabelText('问题说明'), '请复核此题')
+  await user.click(screen.getByRole('button', { name: '提交问题反馈' }))
+  expect(await screen.findByRole('alert')).toBeTruthy()
+  expect(screen.getByLabelText('问题说明').getAttribute('aria-invalid')).toBe('true')
+  expect(document.activeElement).toBe(screen.getByLabelText('问题说明'))
+  expect(screen.queryByText('请说明具体疑问及理由，最多 5000 字。')).toBeNull()
+  expect(screen.getByRole('link', { name: '问题说明须为 1–5000 字，不能只有空格。' })).toBeTruthy()
+  await user.type(screen.getByLabelText('问题说明'), '，补充具体依据')
+  expect((screen.getByLabelText('问题说明') as HTMLTextAreaElement).value).toBe('请复核此题，补充具体依据')
+  expect(document.activeElement).toBe(screen.getByLabelText('问题说明'))
 })
 
 function draft(): SessionView {

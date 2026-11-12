@@ -68,11 +68,19 @@ class Reports:
                     raise PracticeError("STATE_CONFLICT", "报错轮次不属于已保存题目")
                 question = json.loads(session["question_json"])
             submission = db.execute(
-                "SELECT id,status FROM submissions WHERE session_id=? AND turn_id=?",
+                "SELECT id,status,disposition,evaluation_json FROM submissions WHERE session_id=? AND turn_id=?",
                 (session_id, request.turn_id),
             ).fetchone()
             if request.category == "score" and (
-                submission is None or submission["status"] != "completed"
+                submission is None
+                or submission["status"] != "completed"
+                or not (
+                    submission["disposition"] == "blank_answer"
+                    or (
+                        submission["disposition"] == "answered"
+                        and submission["evaluation_json"] is not None
+                    )
+                )
             ):
                 raise PracticeError("STATE_CONFLICT", "尚无完成的评分可供报错")
             record = {

@@ -11,3 +11,6 @@
 .report-problem summary svg{vertical-align:middle;margin-right:8px}
 .problem-form,.report-receipt{display:grid;gap:16px;margin:8px 0 20px}
 .problem-form>.button{justify-self:start}
+.problem-errors{display:grid;gap:8px;padding:12px;border:1px solid var(--danger-fg);color:var(--danger-fg);background:var(--danger-bg)}
+.problem-errors a{text-decoration:underline}
+.problem-form .field-error{display:flex;align-items:center;gap:6px}

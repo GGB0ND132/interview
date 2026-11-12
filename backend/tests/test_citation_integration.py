@@ -1,9 +1,62 @@
 import httpx
+import pytest
 from fastapi.testclient import TestClient
-from test_mock_interview import InterviewEvaluator, answer, data, publish_technical, refresh, start
+from test_mock_interview import (
+    InterviewEvaluator,
+    answer,
+    data,
+    next_group,
+    publish_technical,
+    ready,
+    refresh,
+    start,
+)
 from test_provenance import EXCERPT, register
 
 from interview_backend.api import create_app
+
+
+@pytest.mark.parametrize(
+    "disposition,stage,text",
+    [
+        ("no_questions", "candidate_questions", ""),
+        ("no_experience", "experience", ""),
+        ("skipped", "introduction", ""),
+        ("answered", "candidate_questions", "没有问题"),
+        ("answered", "experience", "我没有项目经历"),
+    ],
+)
+def test_unscored_dispositions_allow_question_reports_but_reject_score_reports(
+    tmp_path, disposition, stage, text
+):
+    with TestClient(
+        create_app(database_path=tmp_path / "unscored.sqlite3", evaluator=InterviewEvaluator())
+    ) as client:
+        ready(client)
+        session = start(client, experience_mode="experience", max_followups_per_question=0)
+        while session["current_turn"]["stage"] != stage:
+            answer(client, session)
+            session = next_group(client, refresh(client, session))
+        target_turn = session["current_turn"]["id"]
+        answer(client, session, disposition, text=text)
+        session = refresh(client, session)
+        if session["status"] == "active":
+            data(
+                client.post(
+                    f"/api/v1/sessions/{session['session_id']}/finish",
+                    json={"expected_revision": session["revision"]},
+                )
+            )
+        body = {"turn_id": target_turn, "category": "score", "explanation": "本轮未评分"}
+        assert (
+            client.post(f"/api/v1/sessions/{session['session_id']}/reports", json=body).status_code
+            == 409
+        )
+        body["category"] = "question"
+        assert (
+            client.post(f"/api/v1/sessions/{session['session_id']}/reports", json=body).status_code
+            == 201
+        )
 
 
 class CitingEvaluator(InterviewEvaluator):

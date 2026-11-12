@@ -29,7 +29,7 @@ export default function MockInterviewReport({ api, report, questions, onBack }: 
           {group.feedback.limitations.map(text => <p className="meta-note" key={text}>{text}</p>)}
         </div>}
         <FeedbackSources provenance={group.feedback ?? group.submissions.at(-1)?.provenance} />
-        {report.turns.filter(turn => turn.group_id === group.id).slice(-1).map(turn => <ReportProblem key={turn.id} api={api} sessionId={report.session_id} turnId={turn.id} canReportScore={group.status === 'completed' && group.submissions.some(item => item.turn_id === turn.id && item.status === 'completed' && item.disposition !== 'skipped')} />)}
+        {report.turns.filter(turn => turn.group_id === group.id).slice(-1).map(turn => <ReportProblem key={turn.id} api={api} sessionId={report.session_id} turnId={turn.id} canReportScore={group.status === 'completed' && group.submissions.some(item => item.turn_id === turn.id && item.status === 'completed' && (item.disposition === 'blank_answer' || (item.disposition === 'answered' && !!item.feedback)))} />)}
       </article>)}</section>
     </div>
   </main>

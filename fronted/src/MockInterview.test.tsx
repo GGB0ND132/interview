@@ -51,6 +51,20 @@ it('opens citations and submits a report for the historical group in an ended in
   expect(calls.find(call => call.path === '/sessions/s1/reports')?.body).toEqual({ turn_id: 't2', category: 'score', explanation: '请复核此题组评分' })
 })
 
+it.each(['no_questions', 'no_experience', 'skipped', 'answered'])('offers only question reports for unscored %s records', async disposition => {
+  const user = userEvent.setup()
+  const { api } = server(path => {
+    if (path === '/sessions/s1') return { ...active, status: 'ended_early', phase: 'feedback_ready', available_actions: [] }
+    if (path === '/sessions/s1/report') return { ...partialReport, groups: [{ id: 'g1', question: active.plan.questions[0], status: 'completed', score: null, feedback: null, submissions: [{ ...submission, disposition, score: null, feedback: undefined }] }], turns: [opening] }
+    throw new Error(path)
+  })
+  localStorage.setItem('ia-mi-session', 's1')
+  render(<MockInterview api={api} />)
+  await user.click(await screen.findByText('报告题目或评分问题'))
+  expect(screen.getByRole('option', { name: '题目或参考答案有疑问' })).toBeTruthy()
+  expect(screen.queryByRole('option', { name: '评分有疑问' })).toBeNull()
+})
+
 afterEach(() => { localStorage.clear(); vi.restoreAllMocks() })
 
 const jdPreview = {

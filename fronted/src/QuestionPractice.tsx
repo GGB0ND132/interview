@@ -344,7 +344,7 @@ function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, o
       {session.phase === 'feedback_ready' && submission && <QuestionFeedback submission={submission} />}
       {session.phase === 'feedback_ready' && submission && turn && <>
         <FeedbackSources provenance={submission.feedback ?? submission.provenance} />
-        <ReportProblem key={`${session.session_id}-${turn.id}`} api={api} sessionId={session.session_id} turnId={turn.id} canReportScore={submission.status === 'completed' && submission.disposition !== 'skipped'} />
+        <ReportProblem key={`${session.session_id}-${turn.id}`} api={api} sessionId={session.session_id} turnId={turn.id} canReportScore={submission.status === 'completed' && (submission.disposition === 'blank_answer' || (submission.disposition === 'answered' && !!submission.feedback))} />
       </>}
       {(canAnswer || canSkip) && !processing && <p className="meta-note qp-submit-note">提交后立即返回本题反馈；空白提交记 0 分并计入均分，明确跳过不计分。</p>}
       {error && <p className="field-error" role="alert">{error}</p>}

@@ -210,17 +210,21 @@ export type SubmitResult = {
   idempotent_replay: boolean
 }
 
+type ValidationDetail = { field: (string | number)[]; type: string }
+
 export class ApiError extends Error {
   code: string
   retryable: boolean
   status: number
+  details: ValidationDetail[]
 
-  constructor(code: string, message: string, retryable: boolean, status: number) {
+  constructor(code: string, message: string, retryable: boolean, status: number, details: ValidationDetail[] = []) {
     super(message)
     this.name = 'ApiError'
     this.code = code
     this.retryable = retryable
     this.status = status
+    this.details = details
   }
 }
 
@@ -247,12 +251,13 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
       throw new ApiError('INVALID_RESPONSE', '练习服务返回了无法识别的响应', true, response.status)
     }
     if (!response.ok || body.error) {
-      const error = (body.error ?? {}) as { code?: string; message?: string; retryable?: boolean }
+      const error = (body.error ?? {}) as { code?: string; message?: string; retryable?: boolean; details?: ValidationDetail[] }
       throw new ApiError(
         error.code ?? 'REQUEST_FAILED',
         error.message ?? '请求失败',
         error.retryable ?? false,
         response.status,
+        error.details,
       )
     }
     return body.data as T
