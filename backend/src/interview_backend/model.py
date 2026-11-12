@@ -4,7 +4,7 @@ import json
 import os
 import re
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 import httpx
 
@@ -12,8 +12,15 @@ from .contracts import ModelEvaluation
 
 
 class ModelError(RuntimeError):
-    def __init__(self, message: str, code: str = "PROVIDER_UNAVAILABLE"):
+    def __init__(
+        self,
+        message: str,
+        code: str = "PROVIDER_UNAVAILABLE",
+        *,
+        stage: Literal["evaluation", "retrieval"] = "evaluation",
+    ):
         self.code = code
+        self.stage = stage
         super().__init__(message)
 
 
@@ -115,6 +122,12 @@ class HttpEvaluator:
                 return ModelEvaluation.model_validate_json(content)
         except httpx.TimeoutException as exc:
             raise ModelError("模型请求超时，回答已保留", "MODEL_TIMEOUT") from exc
+        except httpx.HTTPStatusError as exc:
+            if exc.response.status_code == 429:
+                raise ModelError(
+                    "模型服务限流，回答已保留，请稍后重试", "MODEL_RATE_LIMITED"
+                ) from exc
+            raise ModelError("模型服务暂时不可用，回答已保留") from exc
         except httpx.HTTPError as exc:
             # Never expose provider bodies, URLs, headers or credentials in a user response.
             raise ModelError("模型服务暂时不可用，回答已保留") from exc
