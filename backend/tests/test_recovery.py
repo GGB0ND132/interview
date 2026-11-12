@@ -258,6 +258,31 @@ def test_schema_four_unfinished_jobs_are_recovered_through_http(tmp_path, status
         assert data(client.get("/api/v1/jobs/legacy-job"))["status"] == "succeeded"
 
 
+def test_concurrent_schema_four_startups_restore_the_same_saved_session(tmp_path):
+    database = tmp_path / "concurrent-upgrade.sqlite3"
+    with TestClient(create_app(database_path=database)) as client:
+        session = start(client)
+    with sqlite3.connect(database) as legacy:
+        legacy.executescript(
+            "DROP TABLE jobs;"
+            "CREATE TABLE jobs (id TEXT PRIMARY KEY, submission_id TEXT NOT NULL UNIQUE REFERENCES submissions(id), status TEXT NOT NULL, phase TEXT NOT NULL, error_json TEXT);"
+            "PRAGMA user_version=4;"
+        )
+
+    def restore():
+        with TestClient(create_app(database_path=database)) as client:
+            return data(client.get(f"/api/v1/sessions/{session['session_id']}"))
+
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        with sqlite3.connect(database) as blocker:
+            # A separate writer holds the upgrade lock while service startups inspect the schema.
+            blocker.execute("BEGIN IMMEDIATE")
+            futures = [pool.submit(restore) for _ in range(4)]
+            time.sleep(0.3)
+            blocker.commit()
+        assert [future.result(timeout=10) for future in futures] == [session] * 4
+
+
 def tcp_server(database, port, entered):
     import uvicorn
 

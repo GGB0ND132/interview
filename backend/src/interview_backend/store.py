@@ -77,11 +77,20 @@ class Store:
                 )
                 version = 4
             if version == 4:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend").joinpath("migration_5.sql").read_text("utf-8")
-                    + "\nCOMMIT;"
-                )
+                db.execute("BEGIN IMMEDIATE")
+                # Another instance may have upgraded while we waited for the write lock.
+                current_version = db.execute("PRAGMA user_version").fetchone()[0]
+                if current_version == 4:
+                    script = (
+                        files("interview_backend").joinpath("migration_5.sql").read_text("utf-8")
+                    )
+                    # This migration contains simple statements only; executescript would
+                    # implicitly commit and release the lock protecting the version check.
+                    for statement in script.split(";"):
+                        if statement.strip():
+                            db.execute(statement)
+                elif current_version != 5:
+                    raise RuntimeError(f"Unsupported database schema version: {current_version}")
             elif version != 5:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
 
