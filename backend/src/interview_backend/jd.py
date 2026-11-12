@@ -91,12 +91,14 @@ def requirement_spans(text: str) -> Iterator[tuple[int, int]]:
     # Topic names contain list punctuation themselves; preserve those phrases.
     protected = [
         (match.start(), match.end())
-        for topic in [*TOPICS, "Plan and Execute"]
+        for topic in [*TOPICS, "Plan and Execute", "C++"]
         for match in re.finditer(re.escape(topic), text, re.IGNORECASE)
     ]
     start = 0
     for delimiter in re.finditer(
-        r"[\r\n；;。！？!?，,、]|\b(?:and|or)\b|以及|和|(?<!参)与|(?<!涉)及", text, re.IGNORECASE
+        r"[\r\n；;。！？!?，,、/+()（）]|\b(?:and|or)\b|以及|和|(?<!参)与|(?<!涉)及",
+        text,
+        re.IGNORECASE,
     ):
         if any(left <= delimiter.start() < right for left, right in protected):
             continue

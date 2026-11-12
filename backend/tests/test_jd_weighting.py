@@ -329,3 +329,24 @@ def test_mixed_known_and_unknown_requirements_do_not_hide_the_unsupported_part(t
         for requirement in preview["requirements"]:
             span = requirement["source_span"]
             assert text[span["start"] : span["end"]] == requirement["text"]
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["熟悉工具调用 + Kubernetes", "熟悉工具调用/Kubernetes", "熟悉工具调用（Kubernetes）"],
+)
+def test_unsupported_requirements_in_alternative_lists_survive_the_final_report(tmp_path, text):
+    with TestClient(
+        create_app(database_path=tmp_path / "lists.sqlite3", evaluator=InterviewEvaluator())
+    ) as client:
+        ready(client)
+        mapping = confirm(client, analyze(client, text))
+        session = start(client, jd=reference(mapping))
+        report = run_remaining(client, session)
+        unknown = next(r for r in report["jd_gaps"] if r["text"] == "Kubernetes")
+        assert unknown["gap_reason"] == "unmapped_requirement"
+        assert report["completeness"] == "partial"
+        span = unknown["source_span"]
+        assert text[span["start"] : span["end"]] == "Kubernetes"
+        cpp = analyze(client, "熟悉 C++ 和工具调用")
+        assert any(r["text"] == "熟悉 C++" for r in cpp["requirements"])
