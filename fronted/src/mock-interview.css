@@ -14,14 +14,14 @@
 .mi-gap-list { list-style: none; padding: 0; }
 .mi-gap-list li { padding: 16px 0; border-bottom: 1px solid var(--border-subtle); }
 .mi-gap-list p { margin-top: 8px; color: var(--text-secondary); }
-.mi-report-turn, .mi-group-feedback { margin-top: 24px; font-size: var(--fs-body-sm); line-height: var(--lh-body-sm); }
+.mi-report-turn, .mi-group-feedback { margin-top: 24px; font-size: var(--fs-body); line-height: var(--lh-body); }
 .mi-report h3 { font: 600 var(--fs-section)/var(--lh-section) var(--font-display); }
 .mi-report h4 { margin: 20px 0 8px; font-weight: 600; }
 .mi-group-feedback details { margin-top: 16px; }
 .mi-dimension { margin-bottom: 20px; }
 .mi-dimension blockquote { margin-top: 12px; border-left: 2px solid var(--accent); padding-left: 12px; }
+.mi-jump { font-size: var(--fs-meta); margin-bottom: 12px; }
 @media (max-width: 767px) {
   .mi-active .composer-area { max-height: 55dvh; overflow-y: auto; }
   .mi-active .answer-field { min-height: 88px; }
-  .mi-active .composer-area .meta-note { font-size: 12px; }
 }

@@ -3,7 +3,7 @@ import { LoaderCircle, Pause, Play } from 'lucide-react'
 import { ApiError, createPracticeApi } from './api'
 import type { Disposition, InterviewReport, Pack, PracticeApi, SessionView } from './api'
 import { useQuestionAvailability } from './useQuestionAvailability'
-import { competencyLabel, COVERAGE, STAGES } from './interview-labels'
+import { competencyLabel, COVERAGE, DISPOSITIONS, STAGES } from './interview-labels'
 import { Modal } from './components'
 import MockInterviewReport from './MockInterviewReport'
 import './question-availability.css'
@@ -45,12 +45,15 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   const [report, setReport] = useState<InterviewReport | null>(null)
   const [reportError, setReportError] = useState('')
   const [reportAttempt, setReportAttempt] = useState(0)
-  const bottom = useRef<HTMLDivElement>(null)
+  const scrollArea = useRef<HTMLDivElement>(null)
+  const following = useRef(true)
+  const [unread, setUnread] = useState(false)
 
   const accept = useCallback((view: SessionView) => {
     const previous = current.current
     if (previous?.session_id === view.session_id && previous.revision > view.revision) return
     const oldTurn = previous?.current_turn?.id
+    if (oldTurn !== view.current_turn?.id && !following.current) setUnread(true)
     if (oldTurn !== view.current_turn?.id || view.submissions.some(item => item.turn_id === oldTurn)) {
       setAnswer('')
       pendingAnswer.current = null
@@ -132,7 +135,19 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     return () => { cancelled = true }
   }, [api, sessionId, ended, reportAttempt])
 
-  useEffect(() => { bottom.current?.scrollIntoView?.({ block: 'end', behavior: 'smooth' }) }, [session?.revision])
+  function jumpToLatest() {
+    following.current = true
+    setUnread(false)
+    const scroll = scrollArea.current
+    scroll?.scrollTo({ top: scroll.scrollHeight, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+  }
+
+  useEffect(() => {
+    const scroll = scrollArea.current
+    if (scroll && scroll.clientHeight > 0 && following.current) {
+      scroll.scrollTo({ top: scroll.scrollHeight, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+    }
+  }, [session?.revision])
 
   async function run(operation: () => Promise<void>) {
     if (lock.current) return
@@ -194,6 +209,8 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     setAnswer('')
     setError('')
     setPaused(false)
+    following.current = true
+    setUnread(false)
     setSyncRequired(false)
     pendingAnswer.current = null
     setHistoryAttempt(value => value + 1)
@@ -213,7 +230,7 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
         {availability && !availability.can_start && <p className="field-error">必需环节或技术主题不足，请发布合格题目后刷新。</p>}
       </section>
       <p className="meta-note">面试过程中展示交流进度，详细评分和参考答案在结束后公开。</p>
-      <button className="button primary setup-submit" disabled={!availability?.can_start || busy || restoreFailed}>{busy ? '正在开始' : '开始模拟面试'}<Play size={16} /></button>
+      <button className="button primary setup-submit" aria-busy={busy} disabled={!availability?.can_start || busy || restoreFailed}>{busy ? '正在开始' : '开始模拟面试'}<Play size={16} aria-hidden="true" /></button>
     </form>}
     {error && <div className="qp-error" role="alert"><p>{error}</p>{(!packs.length || restoreFailed) && <button className="button secondary" onClick={() => { setBooting(true); setConnectionAttempt(value => value + 1) }}>重新连接</button>}</div>}
     <section className="qp-history"><div className="field-heading"><h2>最近模拟面试</h2><button className="text-link" disabled={busy} onClick={() => setHistoryAttempt(value => value + 1)}>刷新最近会话</button></div><p className="meta-note">显示服务端最近 20 条会话中的模拟面试，可继续交流或回看报告。</p>{historyError && <p role="alert" className="field-error">{historyError}</p>}{history.map(item => <button className="history-row qp-history-row" key={item.session_id} disabled={busy} onClick={() => void run(async () => { setReport(null); setReportError(''); setPaused(false); accept(await api.session(item.session_id)) })}><div><strong>{item.pack_title ?? 'Agent 基础档'}</strong><div className="history-sub"><span>{new Date(item.created_at).toLocaleString('zh-CN')}</span><span>{item.status === 'completed' ? '完整报告' : item.status === 'ended_early' ? '部分报告' : item.status === 'draft' ? '待开始' : '进行中'}</span></div></div><span>{isEnded(item) ? '查看报告' : '继续面试'}</span></button>)}</section>
@@ -227,32 +244,33 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   const canPause = !blocked && ['awaiting_answer', 'stage_transition', 'evaluation_failed'].includes(session.phase)
   return <main className="practice-active mi-active">
     <div className="practice-context"><strong>{session.pack_title ?? 'Agent 基础档'}</strong><div><button className="button ghost" disabled={busy || syncRequired || processing || !session.available_actions.includes('finish')} onClick={() => setEndOpen(true)}>结束面试</button></div></div>
-    <div className="practice-scroll"><div className="reading-column">
+    <div className="practice-scroll" ref={scrollArea} onScroll={event => { const scroll = event.currentTarget; following.current = scroll.scrollHeight - scroll.scrollTop - scroll.clientHeight < 64; if (following.current) setUnread(false) }}><div className="reading-column">
       <h1 className="visually-hidden">模拟面试进行中</h1>
+      <p className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{turn ? STAGES[turn.stage] : '准备开始'}，{processing ? '正在处理回答' : session.phase === 'stage_transition' ? '本组已记录，可以继续下一组' : session.phase === 'evaluation_failed' ? '评价未完成，可以重试' : paused ? '面试已暂停' : '等待你的操作'}</p>
       <div className="progress-meta"><span>{turn ? STAGES[turn.stage] : '准备开始'}</span><span>基础</span></div>
       <details className="mi-coverage"><summary>本场环节与能力覆盖</summary><p className="meta-note">已了解表示已有材料可评价，不等于掌握。</p><ul className="qp-stage-list">{session.coverage?.map(item => <li key={item.competency_id}><span>{competencyLabel(item.competency_id, session.plan?.questions ?? [])}</span><span>{COVERAGE[item.status]}</span></li>)}</ul></details>
       {(session.turns ?? []).map(item => <article className="question-block" key={item.id}>
         <h2>{item.kind === 'followup' ? '面试官追问' : STAGES[item.stage]}</h2><p>{item.text}</p>
-        {session.submissions.filter(submitted => submitted.turn_id === item.id).map(submitted => <div className="turn" key={submitted.id}><span className="meta-label">你的回答</span><p className="submitted-answer">{submitted.answer_text || ({ skipped: '已跳过', blank_answer: '空白提交', no_experience: '没有项目经历', no_questions: '没有问题', answered: '' }[submitted.disposition])}</p></div>)}
+        {session.submissions.filter(submitted => submitted.turn_id === item.id).map(submitted => <div className="turn" key={submitted.id}><span className="meta-label">你的回答</span><p className="submitted-answer">{submitted.answer_text || DISPOSITIONS[submitted.disposition]}</p></div>)}
       </article>)}
-      {processing && <p className="processing" role="status"><LoaderCircle className="spin" size={16} />回答已保存，正在整理本组交流。处理完成后可继续、暂停或结束。</p>}
-      {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>本组评价未完成</h2><p>{session.submissions.at(-1)?.error?.message ?? '你的回答已保存，可以重试或结束面试。'}</p><button className="button primary" disabled={blocked || !session.available_actions.includes('retry')} onClick={() => void advance('retry')}>重试评价</button></section>}
-      {session.phase === 'stage_transition' && <div className="mi-transition"><p>本组交流已记录，继续了解下一项能力。</p><button className="button primary" disabled={blocked || !session.available_actions.includes('next')} onClick={() => void advance('next')}>继续下一组</button></div>}
+      {processing && <p className="processing" role="status"><LoaderCircle className="spin" size={16} aria-hidden="true" />回答已保存，正在整理本组交流。处理完成后可继续、暂停或结束。</p>}
+      {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>本组评价未完成</h2><p>{session.submissions.at(-1)?.error?.message ?? '你的回答已保存，可以重试或结束面试。'}</p><button className="button primary" aria-busy={busy} disabled={blocked || !session.available_actions.includes('retry')} onClick={() => void advance('retry')}>重试评价</button></section>}
+      {session.phase === 'stage_transition' && <div className="mi-transition"><p>本组交流已记录，继续了解下一项能力。</p><button className="button primary" aria-busy={busy} disabled={blocked || !session.available_actions.includes('next')} onClick={() => void advance('next')}>继续下一组</button></div>}
       {session.phase === 'draft' && <button className="button primary" disabled={blocked || !session.available_actions.includes('start')} onClick={() => void advance('start')}>继续开始面试</button>}
       {error && <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" disabled={busy} onClick={() => void run(async () => accept(await api.session(session.session_id)))}>重新同步会话</button></div>}
-      <div ref={bottom} />
     </div></div>
     <div className="composer-area"><div className="composer-inner">
+      {unread && <button className="text-link mi-jump" onClick={jumpToLatest}>有新的交流，跳转到最新位置</button>}
       {busy && <p className="meta-note" role="status">正在同步本次操作，请稍候。</p>}
       {paused && <p role="status">面试已暂停，当前回答会保留。</p>}
       {session.available_actions.includes('answer') && <>
       <label htmlFor="mi-answer" className="composer-label">你的回答</label><textarea id="mi-answer" className="field answer-field" value={answer} maxLength={5000} disabled={blocked} onChange={event => setAnswer(event.target.value)} onKeyDown={event => { if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && !event.nativeEvent.isComposing) { event.preventDefault(); if (!blocked) void send('answered') } }} />
-      <div className="composer-toolbar"><span className="keyboard-hint">Ctrl + Enter 提交</span><div><span className="word-count">{answer.length} 字</span><button className="button primary" disabled={blocked || !answer.trim()} onClick={() => void send('answered')}>提交回答</button></div></div>
+      <div className="composer-toolbar"><span className="keyboard-hint">Ctrl + Enter 提交</span><div><span className="word-count">{answer.length} 字</span><button className="button primary" aria-busy={busy} disabled={blocked || !answer.trim()} onClick={() => void send('answered')}>提交回答</button></div></div>
       <div className="practice-actions mi-answer-actions"><button className="button ghost" disabled={blocked} onClick={() => void send('blank_answer')}>空白提交</button><button className="button ghost" disabled={blocked || !session.available_actions.includes('skip')} onClick={() => void send('skipped')}>跳过本轮</button>{turn?.stage === 'experience' && <button className="button ghost" disabled={blocked} onClick={() => void send('no_experience')}>没有项目经历</button>}{turn?.stage === 'candidate_questions' && <button className="button ghost" disabled={blocked} onClick={() => void send('no_questions')}>没有问题</button>}</div>
       <p className="meta-note">空白记 0 分；跳过不计分。评分与参考答案在结束后公开。</p>
       </>}
-      <div className="practice-actions">{paused ? <button className="button secondary" onClick={() => setPaused(false)}><Play size={16} />继续面试</button> : <button className="button ghost" disabled={!canPause} onClick={() => setPaused(true)}><Pause size={16} />暂停面试</button>}</div>
+      <div className="practice-actions">{paused ? <button className="button secondary" onClick={() => setPaused(false)}><Play size={16} aria-hidden="true" />继续面试</button> : <button className="button ghost" disabled={!canPause} onClick={() => setPaused(true)}><Pause size={16} aria-hidden="true" />暂停面试</button>}</div>
     </div></div>
-    <Modal open={endOpen} onOpenChange={setEndOpen} title="结束本次面试"><p className="body-copy">已提交的回答会保留；未提交的草稿不计入报告。提前结束会生成部分报告，列出未覆盖环节和信息缺口。</p><div className="dialog-actions"><button className="button secondary" onClick={() => setEndOpen(false)}>继续回答</button><button className="button primary" disabled={busy || syncRequired || !session.available_actions.includes('finish')} onClick={() => void advance('finish')}>结束并生成报告</button></div></Modal>
+    <Modal open={endOpen} onOpenChange={setEndOpen} title="结束本次面试"><p className="body-copy">已提交的回答会保留；未提交的草稿不计入报告。提前结束会生成部分报告，列出未覆盖环节和信息缺口。</p><div className="dialog-actions"><button className="button secondary" onClick={() => setEndOpen(false)}>继续回答</button><button className="button primary" aria-busy={busy} disabled={busy || syncRequired || !session.available_actions.includes('finish')} onClick={() => void advance('finish')}>结束并生成报告</button></div></Modal>
   </main>
 }

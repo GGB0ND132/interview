@@ -1,5 +1,5 @@
 import type { InterviewReport, PlannedQuestion } from './api'
-import { competencyLabel, COVERAGE, DIMENSIONS } from './interview-labels'
+import { competencyLabel, COVERAGE, DIMENSIONS, DISPOSITIONS } from './interview-labels'
 
 export default function MockInterviewReport({ report, questions, onBack }: { report: InterviewReport; questions: PlannedQuestion[]; onBack: () => void }) {
   return <main className="page-content report-page mi-report">
@@ -8,7 +8,7 @@ export default function MockInterviewReport({ report, questions, onBack }: { rep
     <div className="report-body">
       <section><h2>本场表现</h2><div className="mi-scores"><p>整体题组均分<strong>{report.average_score ?? '未评价'}</strong></p><p>技术题组均分<strong>{report.technical_average_score ?? '未评价'}</strong></p></div>
         <p className="meta-note">仅计算已完成且有分数的题组，追问不单独计分；空白记 0 分，跳过与未完成题组不计分。</p>
-        <p className="report-stats">{report.answered_count} 个计分题组 · {report.blank_count} 个空白 · {report.skipped_count} 个跳过</p>
+        <div className="report-stats"><span>{report.answered_count} 个计分题组</span><span>{report.blank_count} 个空白</span><span>{report.skipped_count} 个跳过</span></div>
         {report.limitations.map(text => <p className="meta-note" key={text}>{text}</p>)}
       </section>
       <section><h2>环节与能力覆盖</h2><p className="meta-note">已了解表示材料足以评价，不等于回答正确或已掌握。</p><ul className="qp-stage-list">{report.coverage.map(item => <li key={item.competency_id}><span>{competencyLabel(item.competency_id, questions)}</span><span>{COVERAGE[item.status]}</span></li>)}</ul></section>
@@ -16,7 +16,7 @@ export default function MockInterviewReport({ report, questions, onBack }: { rep
       <section><h2>题组回顾与问答</h2>{report.groups.map(group => <article className="answer-record" key={group.id}>
         <h3>{group.question.topic}</h3><p className="report-score">题组分数：{group.status === 'completed' ? group.score ?? '未评价' : '未完成，不计分'}</p>
         {group.feedback?.knowledge_gap === true && <p className="meta-note">已记录知识缺口，不代表掌握。</p>}
-        {report.turns.filter(turn => turn.group_id === group.id).map(turn => <div className="mi-report-turn" key={turn.id}><h4>{turn.kind === 'followup' ? '追问' : '主问题'}</h4><p>{turn.text}</p>{group.submissions.filter(item => item.turn_id === turn.id).map(item => <p className="submitted-answer" key={item.id}>{item.answer_text || ({ blank_answer: '空白提交', skipped: '已跳过，不计分', no_experience: '没有项目经历', no_questions: '没有反问', answered: '' }[item.disposition])}</p>)}</div>)}
+        {report.turns.filter(turn => turn.group_id === group.id).map(turn => <div className="mi-report-turn" key={turn.id}><h4>{turn.kind === 'followup' ? '追问' : '主问题'}</h4><p>{turn.text}</p>{group.submissions.filter(item => item.turn_id === turn.id).map(item => <p className="submitted-answer" key={item.id}>{item.answer_text || DISPOSITIONS[item.disposition]}</p>)}</div>)}
         {group.feedback && <div className="mi-group-feedback">
           <h4>值得保留</h4><ul>{group.feedback.strengths.map(text => <li key={text}>{text}</li>)}</ul>
           <h4>需要补充</h4><ul>{group.feedback.improvements.map(text => <li key={text}>{text}</li>)}</ul>
