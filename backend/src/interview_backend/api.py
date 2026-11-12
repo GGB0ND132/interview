@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+import logging
+import math
 import os
+import sqlite3
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from pathlib import Path
+from threading import Event, Thread
 from typing import Any
 from uuid import uuid4
 
@@ -27,14 +33,50 @@ def create_app(
     model_settings: ModelSettings | None = None,
     model_transport: httpx.BaseTransport | None = None,
     source_transport: httpx.BaseTransport | None = None,
+    job_lease_seconds: float | None = None,
 ) -> FastAPI:
     settings = model_settings or ModelSettings.from_env()
+    lease_seconds = (
+        max(150, settings.timeout * 2 + 30) if job_lease_seconds is None else job_lease_seconds
+    )
+    if not math.isfinite(lease_seconds) or lease_seconds <= 0:
+        raise ValueError("job_lease_seconds must be finite and positive")
     service = Practice(
         Store(database_path or Path(os.getenv("DATABASE_PATH", "data/practice.sqlite3"))),
         evaluator or HttpEvaluator(settings, model_transport),
         model_name="external_adapter" if evaluator else settings.model,
+        job_lease_seconds=lease_seconds,
     )
-    app = FastAPI(title="Interview Agent — practice and question publishing API", version="0.2.0")
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        stopped = Event()
+
+        def recover_jobs() -> None:
+            while not stopped.is_set():
+                try:
+                    for job_id in service.pending_jobs():
+                        if stopped.is_set():
+                            break
+                        service.evaluate(job_id)
+                except sqlite3.Error:
+                    # Never log user/provider data. A later scan can recover infrastructure failures.
+                    logging.getLogger(__name__).error("Job recovery scan failed; will retry")
+                stopped.wait(0.1)
+
+        worker = Thread(target=recover_jobs, name="evaluation-recovery", daemon=True)
+        worker.start()
+        try:
+            yield
+        finally:
+            stopped.set()
+            worker.join(timeout=1)
+
+    app = FastAPI(
+        title="Interview Agent — practice and question publishing API",
+        version="0.2.0",
+        lifespan=lifespan,
+    )
     publishing = Publishing(service.store, source_transport)
     quality = TopicQuality(publishing)
 
@@ -46,8 +88,15 @@ def create_app(
 
     @app.exception_handler(PracticeError)
     async def practice_error(request: Request, exc: PracticeError) -> JSONResponse:
+        error: dict[str, Any] = {
+            "code": exc.code,
+            "message": exc.message,
+            "retryable": exc.retryable,
+        }
+        if exc.code == "STATE_CONFLICT":
+            error["action"] = "refresh_session"
         return response(
-            error={"code": exc.code, "message": exc.message, "retryable": exc.retryable},
+            error=error,
             status=exc.status,
         )
 

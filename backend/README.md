@@ -147,7 +147,7 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 经历环节可提交 `disposition=no_experience, answer_text=""`，记录不适用并插入已发布假设情境；明确输入“我没有项目经历”等短声明也走这一分支。场景必须取得证据才可完整。反问环节可提交 `no_questions`，或明确输入“没有问题”，表示该环节已进行且无提问质量分数；这两个 disposition 用在其他环节返回 400。空白为 0 分、证据不足；跳过无分数、证据不足，两者不调用模型也不追问。
 
-在等待回答、题组切换或评价失败时，可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束。模型评价执行中返回 409，不中断远端请求；等待评价成功、超时或失败后操作。正式后台任务崩溃接管仍属于 15。
+在等待回答、题组切换或评价失败时，可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束。模型评价执行中返回 409，不中断远端请求；等待评价成功、超时或失败后操作。后台任务崩溃接管见下方 15。
 
 结束前，所有会话、历史和重复提交响应均隐藏详细分数与反馈，`GET /sessions/{id}/report` 返回 409。只有所需环节及本场优先能力都证据充分时以 `coverage_satisfied` 生成 `complete`、会话 `completed`；其他原因 `user_ended/safety_limit/question_pool_exhausted/key_evidence_insufficient` 一律为 `partial`、会话 `ended_early`，报告列出缺口与中文原因。报告保留完整问答、逐组反馈、整体组均分及独立技术均分；未完成组不计分，开场、行为、真实经历与反问按适用维度评价，不核实个人履历或伪造技术引用。项目采用 20/20/20/15/25 权重后排除不可核实的准确性，行为题适用四维各 25%，评分覆盖率分母只包含适用维度；评分维度为 null 不自动改变能力的观察状态。
 
@@ -158,3 +158,17 @@ uv run python -X utf8 scripts/acceptance_mock_interview.py --base-url http://127
 ```
 
 脚本使用明确标注的合成候选人回答；完整路径技术回答取已发布参考文本，用于验证编排与真实模型连接，不代表模型评分质量基准或真实候选人水平。接口检查与边界见 [07 验证记录](../docs/verification/07-backend-mock-interview.md)。
+
+## 15：会话恢复与失败重试
+
+双模式使用原有 `GET /api/v1/sessions/{id}`、`GET /sessions`、`GET /jobs/{id}` 与 `GET /sessions/{id}/report` 读取 SQLite 中的版本、题目快照、已提交回答、任务、评价与报告。schema 5 从旧版自动迁移，旧版未完成任务也会被接管。未提交的浏览器草稿属于 16。
+
+服务 ASGI lifespan 启动恢复线程，每 0.1 秒扫描待执行或租约过期的任务。请求的 BackgroundTasks 优先执行刚保存的任务，恢复扫描对新队列任务有 1 秒宽限期。运行任务领取租约和唯一执行令牌；写回时必须仍持有有效租约与令牌，评价、追问/阶段更新、报告状态在同一事务内提交。多个服务实例不会抢占尚未过期的任务；中断后至多等待剩余租约再接管，不要求重新提交答案。
+
+默认租约为 `max(150, MODEL_TIMEOUT_SECONDS * 2 + 30)` 秒。集成适配器可在 `create_app(job_lease_seconds=...)` 显式配置，必须是有限正数，且应长于适配器最长请求时间。租约不续期；超期调用可能再次请求外部服务，旧令牌不能写回。系统保证本地只有一份有效答案/评价/题目状态，不承诺远端模型只计费一次。应用应正常启用 lifespan（uvicorn 默认启用）。
+
+失败回答和原 job ID 保留，公开错误包括 `code/message/retryable/phase/action`：超时 `MODEL_TIMEOUT`、限流 `MODEL_RATE_LIMITED`、非法输出 `MODEL_OUTPUT_INVALID`；`phase=evaluation`、`action=retry`。外部适配器可用 `ModelError(..., stage="retrieval")` 定位检索失败。此依赖分支还没有 13 的在线检索实现，检索阶段通过受控外部适配器验证，不声称完成真实检索服务验收。失败不保存半成品反馈、不生成预设结果。
+
+用失败会话的 revision 调用 `POST /sessions/{id}/retry`；同一 revision 的重复/并发请求返回原 job ID，不新增回答、题目或反馈。已被后续重试覆盖的旧版本可能返回 409。其他并发版本冲突返回 `STATE_CONFLICT` 和 `action=refresh_session`，读取最新会话后再决定操作。`GET /jobs/{id}` 新增 `attempts`，表示领取执行次数。
+
+可复现的恢复验收：`uv run --extra dev pytest tests/test_recovery.py -q`。覆盖双模式真实进程退出、TCP 服务强制结束后接管、完整历史及报告二次重启一致、旧 schema 队列/运行任务迁移、五类失败重试及过期执行结果隔离。外部模型使用受控适配器，不调用收费模型或真实检索，详见 [15 验证记录](../docs/verification/15-backend-session-recovery.md)。
