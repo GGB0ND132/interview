@@ -86,7 +86,7 @@ class QuestionCandidate(BaseModel):
     rubric: list[str] = Field(min_length=1, max_length=30)
     answer_origin: Literal["source_original", "agent_generated", "maintainer_edited"]
     generation: GenerationMetadata | None = None
-    # Independently checked citations need the ticket-13 verification workflow.
+    # Citations enter through the separate evidence verification endpoint.
     answer_refs: list[dict[str, Any]] = Field(default_factory=list, max_length=0)
     source: SourceLocator
     interview_suitable: bool

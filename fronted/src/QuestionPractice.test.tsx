@@ -54,6 +54,56 @@ const FEEDBACK: Feedback = {
 
 const ANSWER = '模型先决定调用哪个工具，程序执行后把工具返回的结果交回模型，然后根据真实结果决定下一步。'
 
+it('opens the saved support excerpt separately from the original question location', async () => {
+  const api = fakeApi()
+  const user = userEvent.setup()
+  localStorage.setItem('ia-qp-session', 's1')
+  api.session.mockResolvedValue(ready({ feedback: {
+    ...FEEDBACK, answer_version: 3,
+    question_source: { source_id: 'original', locator: 'agent.md#L20-L30', url: 'https://github.com/example/questions' },
+    independent_references: [{ id: 'e1', title: 'Building effective agents', url: 'https://www.anthropic.com/research/building-effective-agents', excerpt: 'It is crucial for agents to gain ground truth from the environment.', claim: '根据环境反馈调整执行', checked_at: '2026-11-12', document_sha256: 'abc', reviewer: 'reviewer' }],
+  } }))
+  render(<QuestionPractice api={api} />)
+  await user.click(await screen.findByText('查看支持片段：Building effective agents'))
+  expect(screen.getByText('It is crucial for agents to gain ground truth from the environment.')).toBeTruthy()
+  expect(screen.getByText('根据环境反馈调整执行')).toBeTruthy()
+  expect(screen.getByText('agent.md#L20-L30')).toBeTruthy()
+  expect(screen.getByText('题库答案版本 3')).toBeTruthy()
+})
+
+it('keeps the published-answer score without promoting legacy links to evidence', async () => {
+  const api = fakeApi()
+  localStorage.setItem('ia-qp-session', 's1')
+  api.session.mockResolvedValue(ready({ feedback: { ...FEEDBACK, independent_references: [{ title: 'Unchecked document', url: 'https://example.com' }] } }))
+  render(<QuestionPractice api={api} />)
+  expect(await screen.findByText('74')).toBeTruthy()
+  expect(screen.getByText(/本次没有实际使用的已核验独立资料引用/)).toBeTruthy()
+  expect(screen.queryByText(/Unchecked document/)).toBeNull()
+})
+
+it('retains a failed problem report, blocks duplicate submits and confirms only the server receipt', async () => {
+  const api = fakeApi()
+  const user = userEvent.setup()
+  const pending = deferred<Awaited<ReturnType<PracticeApi['reportProblem']>>>()
+  api.reportProblem = vi.fn<PracticeApi['reportProblem']>().mockRejectedValueOnce(new Error('offline')).mockReturnValueOnce(pending.promise)
+  localStorage.setItem('ia-qp-session', 's1')
+  render(<QuestionPractice api={api} />)
+  await user.click(await screen.findByText('报告题目或评分问题'))
+  await user.selectOptions(screen.getByLabelText('问题类型'), 'score')
+  await user.type(screen.getByLabelText('问题说明'), '准确性维度忽略了停止条件')
+  await user.click(screen.getByRole('button', { name: '提交问题反馈' }))
+  expect(await screen.findByRole('alert')).toBeTruthy()
+  expect((screen.getByLabelText('问题说明') as HTMLTextAreaElement).value).toBe('准确性维度忽略了停止条件')
+  await user.click(screen.getByRole('button', { name: '提交问题反馈' }))
+  await user.click(screen.getByRole('button', { name: '正在提交反馈…' }))
+  expect(api.reportProblem).toHaveBeenCalledTimes(2)
+  expect(screen.queryByText('已收到你的反馈，等待复核。')).toBeNull()
+  await act(async () => pending.resolve({ id: 'report-1', session_id: 's1', turn_id: TURN.id, question_code: TURN.question_code, answer_version: 1, category: 'score', explanation: '准确性维度忽略了停止条件', status: 'open' }))
+  expect(await screen.findByText('已收到你的反馈，等待复核。')).toBeTruthy()
+  expect(screen.getByText('反馈编号：report-1')).toBeTruthy()
+  expect(api.reportProblem).toHaveBeenLastCalledWith('s1', { turn_id: TURN.id, category: 'score', explanation: '准确性维度忽略了停止条件' })
+})
+
 function draft(): SessionView {
   return {
     session_id: 's1',

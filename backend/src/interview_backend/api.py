@@ -17,7 +17,9 @@ from .errors import PracticeError
 from .mock_catalog import publish_common
 from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
+from .provenance import Evidence, EvidenceRequest
 from .publishing import DisableQuestion, PublicationRequest, Publishing
+from .reports import HandleReport, Reports, ReportStatus, UserReport
 from .resumes import MAX_UPLOAD_BYTES, ConfirmResume, Resumes, ResumeText
 from .store import Store
 from .topic_quality import QualityCorrection, QualityIncident, QualityResume, TopicQuality
@@ -30,17 +32,24 @@ def create_app(
     model_settings: ModelSettings | None = None,
     model_transport: httpx.BaseTransport | None = None,
     source_transport: httpx.BaseTransport | None = None,
+    evidence_transport: httpx.BaseTransport | None = None,
 ) -> FastAPI:
     settings = model_settings or ModelSettings.from_env()
+    store = Store(database_path or Path(os.getenv("DATABASE_PATH", "data/practice.sqlite3")))
+    evidence = Evidence(store, evidence_transport)
+    model = HttpEvaluator(settings, model_transport)
     service = Practice(
-        Store(database_path or Path(os.getenv("DATABASE_PATH", "data/practice.sqlite3"))),
-        evaluator or HttpEvaluator(settings, model_transport),
+        store,
+        evaluator or model,
+        evidence=evidence,
+        verifier=model,
         model_name="external_adapter" if evaluator else settings.model,
     )
     app = FastAPI(title="Interview Agent — practice and question publishing API", version="0.2.0")
     publishing = Publishing(service.store, source_transport)
     quality = TopicQuality(publishing)
     resumes = Resumes(service.store)
+    reports = Reports(service.store)
 
     def response(data: Any = None, *, error: Any = None, status: int = 200) -> JSONResponse:
         return JSONResponse(
@@ -139,6 +148,42 @@ def create_app(
     @app.get("/api/v1/maintenance/questions/{code}")
     def get_question_versions(code: str) -> JSONResponse:
         return response(publishing.question(code))
+
+    @app.post("/api/v1/maintenance/questions/{code}/evidence")
+    def register_evidence(code: str, request: EvidenceRequest) -> JSONResponse:
+        return response(evidence.register(code, request), status=201)
+
+    @app.get("/api/v1/maintenance/questions/{code}/evidence")
+    def question_evidence(code: str, answer_version: int = Query(ge=1)) -> JSONResponse:
+        return response({"items": evidence.references(code, answer_version)})
+
+    @app.get("/api/v1/maintenance/reports")
+    def list_reports(
+        status: ReportStatus | None = None,
+        page: int = Query(1, ge=1),
+        page_size: int = Query(20, ge=1, le=100),
+    ) -> JSONResponse:
+        return response(reports.list(status, page, page_size))
+
+    @app.get("/api/v1/maintenance/reports/{report_id}")
+    def get_report(report_id: str) -> JSONResponse:
+        return response(reports.view(report_id))
+
+    @app.post("/api/v1/maintenance/reports/{report_id}")
+    def handle_report(report_id: str, request: HandleReport) -> JSONResponse:
+        return response(reports.handle(report_id, request))
+
+    @app.post("/api/v1/sessions/{session_id}/reports")
+    def submit_report(session_id: str, request: UserReport) -> JSONResponse:
+        return response(reports.create(session_id, request), status=201)
+
+    @app.get("/api/v1/sessions/{session_id}/reports/{report_id}")
+    def session_report(session_id: str, report_id: str) -> JSONResponse:
+        return response(reports.view(report_id, session_id))
+
+    @app.get("/api/v1/maintenance/submissions/{submission_id}/provenance")
+    def submission_provenance(submission_id: str) -> JSONResponse:
+        return response(service.provenance(submission_id))
 
     @app.post("/api/v1/maintenance/questions/{code}/disable")
     def disable_question(code: str, request: DisableQuestion) -> JSONResponse:

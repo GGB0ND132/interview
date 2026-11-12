@@ -1,4 +1,4 @@
-# 试题练习、模拟面试与题库服务（工单 01、03、07、09）
+# 试题练习、模拟面试、题库与答案追溯服务
 
 Python 3.11+、FastAPI、SQLite。提供两道自编 Agent 基础技术样题的真实单题闭环，以及 MianStack 固定版本题目的逐题发布入口。自编样题与 MianStack 题包独立，后者初始可用数为 0，发布通过项后才可抽取。03 附带两道真实来源题验证发布机制；全部 115 道题的整理与每主题人工抽查属于 05/06。
 
@@ -31,7 +31,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 6；现有 schema 1/2/3/4/5 自动迁移，保留原题与会话。schema 6 兼容 09 的 JD 版 schema 5 和 11 的简历版 schema 5，保留已有映射、简历及会话快照，并补齐另一功能的表。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 7；现有 schema 1–6 自动迁移，保留原题与会话。兼容 13 的来源版 schema 4、07 的面试版 schema 4，以及 09/11 的两种 schema 5，保留已有引用、报错、JD、简历及会话快照。旧评分不重算，旧链接不追认为完整资料证据。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
@@ -61,7 +61,7 @@ uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --por
 7. `GET /sessions/{id}/report` 返回本题服务端均分、计分题数、空白/跳过数；`GET /sessions?page=1&page_size=20` 读取保存记录。单题报告不声称全岗位覆盖。
 8. 模型失败后答案仍可读取。`POST /sessions/{id}/retry` 使用当前 `expected_revision`，重试同一任务和答案，不新增记录。
 
-模型只提供五个维度的 0–100 整数或 null、理由、当前回答的精确引文和建议。服务端校验维度唯一、范围、引文子串，再按 `35/25/15/15/10` 权重计算分数，排除 null 后归一化；所有维度都为 null 时无分数。模型提供的总分忽略。超出题库答案的技术结论不确定判断；本项不接入运行时检索，不生成新主问题。
+模型提供五个维度的 0–100 整数或 null、理由、当前回答的精确引文和建议。服务端校验维度唯一、范围、引文子串，再按 `35/25/15/15/10` 权重计算分数，排除 null 后归一化；所有维度都为 null 时无分数。模型提供的总分忽略。13 增加实际使用的证据 ID 和答案范围外/版本争议的核查请求；只检索对应答案版本的已核验资料，无直接支持时相关维度保留判断，详见下节。
 
 ## 验证
 
@@ -82,7 +82,7 @@ uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-liv
 
 ## MianStack 发布（03）
 
-固定来源为 `didilili/mianstack@b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的 `questions/Q-*.md`，仅接受 `category=agent, level=基础`。12 个原始主题及能力 ID 映射见 `publishing.py` 的 `TOPICS`。不读取第三方题集或面经。自有题解 MIT 署名及完整许可见 `third_party/mianstack-LICENSE.txt`。原始正文中的资料链接未由本项目独立核对，不作为独立技术引用展示。03 发布入口只允许空 `answer_refs`，非空逐题拒绝；独立引用的保存与核验留给 13。01 已核对样题的独立引用保持原有行为。
+固定来源为 `didilili/mianstack@b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的 `questions/Q-*.md`，仅接受 `category=agent, level=基础`。12 个原始主题及能力 ID 映射见 `publishing.py` 的 `TOPICS`。不读取第三方题集或面经。自有题解 MIT 署名及完整许可见 `third_party/mianstack-LICENSE.txt`。原始正文中的资料链接未由本项目独立核对，不作为独立技术引用展示。03 发布入口仍只允许空 `answer_refs`，非空逐题拒绝；独立引用通过 13 的证据核验入口登记。01 样题中的旧链接元数据没有完整支持片段，须重新登记后才可作为独立引用展示。
 
 维护接口均有 `/api/v1` 前缀：
 
@@ -205,3 +205,10 @@ uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url htt
 ```
 
 前一命令会调用已配置真实模型并产生费用，使用合成候选人回答和明确的技术未知声明验证流程，不是题库内容或评分质量评测。09 只交付后端，10 的前端确认界面、JD 文件上传和其他个性化能力未在此实现。
+## 13：答案追溯、证据与用户报错
+
+每次作答（含空白、跳过、失败）保存答案版本与来源快照。普通反馈的 `independent_references` 只包含实际使用的已核验支持片段；原题定位单列 `question_source`，补答与生成元数据仅在维护接口可见。
+
+维护者通过 `POST /api/v1/maintenance/questions/{code}/evidence` 登记真实核对过的 claim、正文片段和最终文档 URL。超出答案范围或版本争议时，检索同题同答案版本的核验资料库并复查支持关系；无直接证据时不作确定新增判断。此功能不提供开放互联网搜索。
+
+用户通过 `POST /api/v1/sessions/{id}/reports` 提交题目或评分疑问，服务端绑定历史题目和答案版本。维护者从 `/api/v1/maintenance/reports` 查询与处理，再按已有停用/质量流程操作题目。完整请求、返回字段、迁移及验收见 [13 接口与验证记录](../docs/verification/13-provenance-and-reports.md)。

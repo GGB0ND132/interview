@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ArrowRight, BookOpenText, ExternalLink, FileText, LoaderCircle, Play, SkipForward } from 'lucide-react'
+import { ArrowRight, LoaderCircle, Play, SkipForward } from 'lucide-react'
+import { FeedbackSources, ReportProblem } from './FeedbackSources'
 import { ApiError, createPracticeApi } from './api'
 import { useQuestionAvailability } from './useQuestionAvailability'
 import './question-availability.css'
@@ -272,7 +273,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
     }
   }
 
-  if (session) return <PracticeRun session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
+  if (session) return <PracticeRun api={api} session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
 
   return <main className="page-content qp-setup">
     <div className="page-header"><h1>{mode === 'question_practice' ? '试题练习' : '模拟面试'}</h1><p>查看 Agent 基础档的实际可用题目与覆盖范围，再选择练习。</p></div>
@@ -313,7 +314,8 @@ const PHASES: Record<SessionView['phase'], string> = {
 
 type TurnKey = { turn: string; disposition: Submission['disposition']; text: string }
 
-function PracticeRun({ session, answer, setAnswer, busy, watching, error, onSend, onRetry, onLeave, bottomRef }: {
+function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, onSend, onRetry, onLeave, bottomRef }: {
+  api: PracticeApi
   session: SessionView
   answer: string
   setAnswer: (value: string) => void
@@ -340,6 +342,10 @@ function PracticeRun({ session, answer, setAnswer, busy, watching, error, onSend
       {session.phase === 'evaluating' && <div className="processing" role="status"><LoaderCircle size={16} className="spin" />回答已保存，正在生成反馈</div>}
       {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>评价未完成</h2><p>{submission?.error?.message ?? '模型评价暂时失败，你的回答已经保存。'}</p><button className="button primary" disabled={busy || watching} onClick={onRetry}>{watching ? '正在重试' : '重试评价'}</button></section>}
       {session.phase === 'feedback_ready' && submission && <QuestionFeedback submission={submission} />}
+      {session.phase === 'feedback_ready' && submission && turn && <>
+        <FeedbackSources provenance={submission.feedback ?? submission.provenance} />
+        <ReportProblem key={`${session.session_id}-${turn.id}`} api={api} sessionId={session.session_id} turnId={turn.id} canReportScore={submission.status === 'completed' && submission.disposition !== 'skipped'} />
+      </>}
       {(canAnswer || canSkip) && !processing && <p className="meta-note qp-submit-note">提交后立即返回本题反馈；空白提交记 0 分并计入均分，明确跳过不计分。</p>}
       {error && <p className="field-error" role="alert">{error}</p>}
       <div ref={bottomRef} />
@@ -368,8 +374,5 @@ function QuestionFeedback({ submission }: { submission: Submission }) {
     <h3>值得保留</h3>{feedback.strengths.map(item => <p className="body-copy" key={item}>{item}</p>)}
     <h3>需要补充</h3>{feedback.improvements.map(item => <p className="body-copy" key={item}>{item}</p>)}
     <details className="answer-details"><summary>参考答案 <ArrowRight size={16} /></summary>{feedback.reference_answer ? <p className="body-copy">{feedback.reference_answer}</p> : <p className="meta-note">本题未保存可展示的参考答案。</p>}</details>
-    <h3>来源</h3>
-    <p className="meta-note"><FileText size={14} aria-hidden="true" /> 题库答案版本 {String(feedback.answer_version ?? '—')}，来源 {String((feedback.question_source as { source_id?: string } | undefined)?.source_id ?? '—')}，评分表 {feedback.rubric_version}。</p>
-    {feedback.independent_references && feedback.independent_references.length > 0 && <ul className="qp-references">{feedback.independent_references.map(item => <li key={item.url}><a className="text-link" href={item.url} target="_blank" rel="noreferrer"><BookOpenText size={16} />{item.title}<ExternalLink size={14} /></a><span className="meta-note">{item.publisher}{item.heading ? ` · ${item.heading}` : ''}</span></li>)}</ul>}
   </section>
 }
