@@ -11,12 +11,13 @@ from collections import Counter
 from typing import Any
 from uuid import uuid4
 
+from . import jd
 from .contracts import WEIGHTS, MockConfig, ModelEvaluation, feedback
 from .errors import PracticeError
 from .mock_catalog import STAGES, common_questions
 from .store import Store
 
-MINIMUM_QUESTIONS_PER_TOPIC = 2
+MINIMUM_QUESTIONS_PER_TOPIC = jd.MINIMUM_QUESTIONS_PER_TOPIC
 IGNORED_DIMENSIONS = {
     "introduction": {"accuracy", "completeness"},
     "experience": {"accuracy"},
@@ -109,7 +110,9 @@ def plan(
     rng = random.Random(seed)
     pool = [q for q in pool if q["interview_suitable"]]
     eligible = eligible_topics(pool)
-    selected = rng.sample(eligible, rng.randint(3, min(4, len(eligible))))
+    mapping = jd.for_selection(jd.session_mapping(db, session_id), pool)
+    topic_candidates = jd.topic_candidates(eligible, pool, mapping)
+    selected, draws = draw_topics(rng, topic_candidates, rng.randint(3, min(4, len(eligible))))
     common = {q["stage"]: q for q in common_questions(db)}
     technical = []
     backups = {}
@@ -128,6 +131,10 @@ def plan(
     state: dict[str, Any] = {
         "seed": str(seed),
         "selected_topics": selected,
+        "selection_algorithm": "weighted_without_replacement_v1",
+        "topic_candidates": topic_candidates,
+        "topic_draws": draws,
+        "jd": mapping,
         "candidate_pool": [{"code": q["code"], "version": q["version"]} for q in pool],
         "questions": questions,
         "backups": backups,
@@ -158,6 +165,27 @@ def plan(
         state["coverage"]["scenario"]["status"] = "not_applicable"
     save(db, session_id, state)
     begin_group(db, session_id, state)
+
+
+def draw_topics(
+    rng: random.Random, candidates: list[dict[str, Any]], count: int
+) -> tuple[list[str], list[dict[str, Any]]]:
+    remaining = list(candidates)
+    selected = []
+    draws = []
+    for _ in range(count):
+        total = sum(item["weight"] for item in remaining)
+        value = rng.random()
+        threshold = value * total
+        for candidate in remaining:
+            threshold -= candidate["weight"]
+            if threshold < 0:
+                break
+        key = candidate["competency_id"]
+        selected.append(key)
+        draws.append({"random_value": value, "total_weight": total, "selected_topic": key})
+        remaining.remove(candidate)
+    return selected, draws
 
 
 def begin_group(db: sqlite3.Connection, session_id: str, state: dict[str, Any]) -> None:
@@ -203,15 +231,25 @@ def issue_turn(
     save(db, session_id, state)
 
 
+def public_plan(state: dict[str, Any]) -> dict[str, Any]:
+    result = {
+        key: state[key]
+        for key in ("seed", "selected_topics", "candidate_pool", "max_main_questions", "max_turns")
+    }
+    result["questions"] = [public_question(q) for q in state["questions"]]
+    for key in ("selection_algorithm", "topic_candidates", "topic_draws"):
+        if key in state:
+            result[key] = state[key]
+    return result
+
+
 def decorate(view: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
     view["mode"] = "mock_interview"
     view["current_turn"] = state["turns"][-1] if state["turns"] else None
     view["turns"] = state["turns"]
-    view["plan"] = {
-        key: state[key]
-        for key in ("seed", "selected_topics", "candidate_pool", "max_main_questions", "max_turns")
-    }
-    view["plan"]["questions"] = [public_question(q) for q in state["questions"]]
+    view["plan"] = public_plan(state)
+    if state.get("jd") is not None:
+        view["jd"] = state["jd"]
     view["coverage"] = [{"competency_id": key, **item} for key, item in state["coverage"].items()]
     view["stop_reason"] = state["stop_reason"]
     if view["status"] not in {"completed", "ended_early"}:
@@ -248,6 +286,12 @@ def evaluation_context(db: sqlite3.Connection, state: dict[str, Any]) -> tuple[d
         "remaining_followups": state["max_followups"] - group["followups"],
         "stage": question["stage"],
     }
+    if state.get("jd") is not None:
+        question["interview_context"]["confirmed_job_requirements"] = [
+            {"requirement_id": r["id"], "text": r["text"], "source_span": r["source_span"]}
+            for r in state["jd"]["requirements"]
+            if question["stage"] != "technical" or question["competency_id"] in r["competency_ids"]
+        ]
     return question, "\n".join(answers)
 
 
@@ -430,11 +474,19 @@ def report(
         and g["status"] == "completed"
         and g["score"] is not None
     ]
+    jd_coverage = jd.report_coverage(state.get("jd"), state["coverage"], state["selected_topics"])
+    interview_complete = state["stop_reason"] == "coverage_satisfied"
     return {
         "session_id": session_id,
         "status": "completed" if state["stop_reason"] == "coverage_satisfied" else "ended_early",
         "scoring_scope": "mock_interview_training",
-        "completeness": "complete" if state["stop_reason"] == "coverage_satisfied" else "partial",
+        "completeness": "complete"
+        if interview_complete and not jd_coverage["jd_gaps"]
+        else "partial",
+        "interview_completeness": "complete" if interview_complete else "partial",
+        "completeness_scope": "selected_interview_and_confirmed_jd",
+        **jd_coverage,
+        "plan": public_plan(state),
         "stop_reason": state["stop_reason"],
         "stop_reason_detail": STOP_REASONS[state["stop_reason"]],
         "average_score": round(sum(scores) / len(scores)) if scores else None,
@@ -465,5 +517,6 @@ def report(
         "limitations": [
             "训练评价不是招聘结论；经历与成果仅为候选人自述",
             "本场只覆盖所选技术主题，不代表全部岗位能力",
+            "JD 仅用于岗位要求匹配和追问情境，不是技术正确性证据；已观察不代表掌握",
         ],
     }

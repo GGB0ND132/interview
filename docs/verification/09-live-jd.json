@@ -1,0 +1,1590 @@
+{
+  "passed": true,
+  "checked_at": "2026-11-12T07:46:23.741871+00:00",
+  "base_url": "http://127.0.0.1:8009",
+  "model_calls": "real_configured_provider",
+  "candidate_answers": "synthetic; explicit technical knowledge gaps",
+  "availability": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "mock_interview",
+    "available_count": 48,
+    "topic_counts": {
+      "Agent 基础与运行循环": 16,
+      "Agent 应用架构与场景设计": 11,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 5,
+      "MCP、A2A 与工具协议": 0,
+      "Skills 能力系统": 0,
+      "工作流、状态与执行恢复": 0,
+      "多 Agent 编排与协作": 0,
+      "Agent 框架与 Harness": 0,
+      "GUI、Computer Use 与多模态 Agent": 0
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 17,
+        "interview_count": 16
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 18,
+        "interview_count": 11
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 8,
+        "interview_count": 8
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 2,
+        "interview_count": 2
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 6,
+        "interview_count": 6
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 6,
+        "interview_count": 5
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 0,
+        "interview_count": 0
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 0,
+        "interview_count": 0
+      }
+    ],
+    "can_start": true,
+    "missing": [],
+    "eligible_topic_count": 6,
+    "minimum_topic_count": 3,
+    "minimum_questions_per_topic": 2,
+    "stages": [
+      {
+        "id": "introduction",
+        "label": "开场",
+        "available_count": 1,
+        "ready": true
+      },
+      {
+        "id": "experience_or_scenario",
+        "label": "经历或假设情境",
+        "available_count": 2,
+        "ready": true
+      },
+      {
+        "id": "technical_topics",
+        "label": "技术",
+        "available_count": 48,
+        "ready": true
+      },
+      {
+        "id": "behavioral",
+        "label": "行为",
+        "available_count": 1,
+        "ready": true
+      },
+      {
+        "id": "candidate_questions",
+        "label": "候选人反问",
+        "available_count": 1,
+        "ready": true
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case": "without_jd",
+      "session_id": "358faaef-4b02-44fa-9cfa-911d388d6219",
+      "confirmed_mapping": null,
+      "plan": {
+        "seed": "10568565972925479197",
+        "selected_topics": [
+          "agent_context_engineering",
+          "agent_tool_calling",
+          "agent_planning"
+        ],
+        "candidate_pool": [
+          {
+            "code": "Q-0058",
+            "version": 1
+          },
+          {
+            "code": "Q-0062",
+            "version": 1
+          },
+          {
+            "code": "Q-0419",
+            "version": 1
+          },
+          {
+            "code": "Q-0561",
+            "version": 1
+          },
+          {
+            "code": "Q-0597",
+            "version": 1
+          },
+          {
+            "code": "Q-0883",
+            "version": 1
+          },
+          {
+            "code": "Q-0898",
+            "version": 1
+          },
+          {
+            "code": "Q-1009",
+            "version": 1
+          },
+          {
+            "code": "Q-1434",
+            "version": 1
+          },
+          {
+            "code": "Q-1555",
+            "version": 1
+          },
+          {
+            "code": "Q-1674",
+            "version": 1
+          },
+          {
+            "code": "Q-1675",
+            "version": 1
+          },
+          {
+            "code": "Q-1843",
+            "version": 1
+          },
+          {
+            "code": "Q-1909",
+            "version": 1
+          },
+          {
+            "code": "Q-2001",
+            "version": 1
+          },
+          {
+            "code": "Q-2007",
+            "version": 1
+          },
+          {
+            "code": "Q-2078",
+            "version": 1
+          },
+          {
+            "code": "Q-2186",
+            "version": 1
+          },
+          {
+            "code": "Q-2330",
+            "version": 1
+          },
+          {
+            "code": "Q-2466",
+            "version": 1
+          },
+          {
+            "code": "Q-2506",
+            "version": 1
+          },
+          {
+            "code": "Q-2507",
+            "version": 1
+          },
+          {
+            "code": "Q-2536",
+            "version": 1
+          },
+          {
+            "code": "Q-2612",
+            "version": 1
+          },
+          {
+            "code": "Q-2637",
+            "version": 1
+          },
+          {
+            "code": "Q-2659",
+            "version": 1
+          },
+          {
+            "code": "Q-2676",
+            "version": 1
+          },
+          {
+            "code": "Q-2797",
+            "version": 1
+          },
+          {
+            "code": "Q-2985",
+            "version": 1
+          },
+          {
+            "code": "Q-3003",
+            "version": 1
+          },
+          {
+            "code": "Q-3054",
+            "version": 1
+          },
+          {
+            "code": "Q-3168",
+            "version": 1
+          },
+          {
+            "code": "Q-3322",
+            "version": 1
+          },
+          {
+            "code": "Q-3323",
+            "version": 1
+          },
+          {
+            "code": "Q-3383",
+            "version": 1
+          },
+          {
+            "code": "Q-3456",
+            "version": 1
+          },
+          {
+            "code": "Q-3642",
+            "version": 1
+          },
+          {
+            "code": "Q-3921",
+            "version": 1
+          },
+          {
+            "code": "Q-3946",
+            "version": 1
+          },
+          {
+            "code": "Q-4188",
+            "version": 1
+          },
+          {
+            "code": "Q-4836",
+            "version": 1
+          },
+          {
+            "code": "Q-4837",
+            "version": 1
+          },
+          {
+            "code": "Q-4839",
+            "version": 1
+          },
+          {
+            "code": "Q-4896",
+            "version": 1
+          },
+          {
+            "code": "Q-5588",
+            "version": 1
+          },
+          {
+            "code": "Q-5711",
+            "version": 1
+          },
+          {
+            "code": "Q-7020",
+            "version": 1
+          },
+          {
+            "code": "Q-7196",
+            "version": 1
+          }
+        ],
+        "max_main_questions": 12,
+        "max_turns": 12,
+        "questions": [
+          {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          {
+            "code": "Q-7196",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "输入超过模型上下文窗口时，有哪些处理方式？"
+          },
+          {
+            "code": "Q-5588",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+          },
+          {
+            "code": "Q-0883",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "Function Calling 与完整 Agent 有什么区别？"
+          },
+          {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          }
+        ],
+        "selection_algorithm": "weighted_without_replacement_v1",
+        "topic_candidates": [
+          {
+            "competency_id": "agent_application_architecture",
+            "eligible_question_count": 11,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_context_engineering",
+            "eligible_question_count": 2,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_loop",
+            "eligible_question_count": 16,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_memory",
+            "eligible_question_count": 6,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_planning",
+            "eligible_question_count": 8,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_tool_calling",
+            "eligible_question_count": 5,
+            "weight": 1,
+            "matched_requirement_ids": []
+          }
+        ],
+        "topic_draws": [
+          {
+            "random_value": 0.19280726740199672,
+            "total_weight": 6,
+            "selected_topic": "agent_context_engineering"
+          },
+          {
+            "random_value": 0.8250702070438453,
+            "total_weight": 5,
+            "selected_topic": "agent_tool_calling"
+          },
+          {
+            "random_value": 0.9307535607876302,
+            "total_weight": 4,
+            "selected_topic": "agent_planning"
+          }
+        ]
+      },
+      "completeness": "complete",
+      "interview_completeness": "complete",
+      "jd_coverage_status": "not_provided",
+      "jd_gaps": [],
+      "stop_reason": "coverage_satisfied",
+      "groups": [
+        {
+          "question": {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          "score": 91,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          "score": 96,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-7196",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "输入超过模型上下文窗口时，有哪些处理方式？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-5588",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-0883",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "Function Calling 与完整 Agent 有什么区别？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          "score": 100,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          },
+          "score": 95,
+          "evidence_status": "observed"
+        }
+      ],
+      "report_sha256": "a3798727eb4df0b167c0f801b7aa3d0cac14f7e027b4a5169d975bb5d62adf67"
+    },
+    {
+      "case": "supported_jd",
+      "session_id": "c5cb78d8-417f-49e2-97c4-fed3a6dd5231",
+      "confirmed_mapping": {
+        "id": "e27934df-71ef-4935-a450-ac29ba763302",
+        "revision": 1,
+        "status": "confirmed",
+        "pack_id": "pack_agent_basics_mianstack",
+        "difficulty": "easy",
+        "text": "熟悉工具调用",
+        "mapping_version": "agent_explicit_terms_v1",
+        "requirements": [
+          {
+            "id": "requirement_1",
+            "text": "熟悉工具调用",
+            "source_span": {
+              "start": 0,
+              "end": 6,
+              "line": 1
+            },
+            "competency_ids": [
+              "agent_tool_calling"
+            ],
+            "coverage": [
+              {
+                "competency_id": "agent_tool_calling",
+                "topic": "工具调用与 Function Calling",
+                "eligible_question_count": 5,
+                "eligible": true,
+                "reason": null
+              }
+            ],
+            "gap_reason": null
+          }
+        ],
+        "confirmed_requirement_ids": [
+          "requirement_1"
+        ],
+        "usage": "job_matching_and_followup_context_only",
+        "limitations": [
+          "仅按明示词表提出映射，须用户核对确认；未识别文本保留为缺口"
+        ]
+      },
+      "plan": {
+        "seed": "18054369640470642567",
+        "selected_topics": [
+          "agent_tool_calling",
+          "agent_memory",
+          "agent_context_engineering",
+          "agent_planning"
+        ],
+        "candidate_pool": [
+          {
+            "code": "Q-0058",
+            "version": 1
+          },
+          {
+            "code": "Q-0062",
+            "version": 1
+          },
+          {
+            "code": "Q-0419",
+            "version": 1
+          },
+          {
+            "code": "Q-0561",
+            "version": 1
+          },
+          {
+            "code": "Q-0597",
+            "version": 1
+          },
+          {
+            "code": "Q-0883",
+            "version": 1
+          },
+          {
+            "code": "Q-0898",
+            "version": 1
+          },
+          {
+            "code": "Q-1009",
+            "version": 1
+          },
+          {
+            "code": "Q-1434",
+            "version": 1
+          },
+          {
+            "code": "Q-1555",
+            "version": 1
+          },
+          {
+            "code": "Q-1674",
+            "version": 1
+          },
+          {
+            "code": "Q-1675",
+            "version": 1
+          },
+          {
+            "code": "Q-1843",
+            "version": 1
+          },
+          {
+            "code": "Q-1909",
+            "version": 1
+          },
+          {
+            "code": "Q-2001",
+            "version": 1
+          },
+          {
+            "code": "Q-2007",
+            "version": 1
+          },
+          {
+            "code": "Q-2078",
+            "version": 1
+          },
+          {
+            "code": "Q-2186",
+            "version": 1
+          },
+          {
+            "code": "Q-2330",
+            "version": 1
+          },
+          {
+            "code": "Q-2466",
+            "version": 1
+          },
+          {
+            "code": "Q-2506",
+            "version": 1
+          },
+          {
+            "code": "Q-2507",
+            "version": 1
+          },
+          {
+            "code": "Q-2536",
+            "version": 1
+          },
+          {
+            "code": "Q-2612",
+            "version": 1
+          },
+          {
+            "code": "Q-2637",
+            "version": 1
+          },
+          {
+            "code": "Q-2659",
+            "version": 1
+          },
+          {
+            "code": "Q-2676",
+            "version": 1
+          },
+          {
+            "code": "Q-2797",
+            "version": 1
+          },
+          {
+            "code": "Q-2985",
+            "version": 1
+          },
+          {
+            "code": "Q-3003",
+            "version": 1
+          },
+          {
+            "code": "Q-3054",
+            "version": 1
+          },
+          {
+            "code": "Q-3168",
+            "version": 1
+          },
+          {
+            "code": "Q-3322",
+            "version": 1
+          },
+          {
+            "code": "Q-3323",
+            "version": 1
+          },
+          {
+            "code": "Q-3383",
+            "version": 1
+          },
+          {
+            "code": "Q-3456",
+            "version": 1
+          },
+          {
+            "code": "Q-3642",
+            "version": 1
+          },
+          {
+            "code": "Q-3921",
+            "version": 1
+          },
+          {
+            "code": "Q-3946",
+            "version": 1
+          },
+          {
+            "code": "Q-4188",
+            "version": 1
+          },
+          {
+            "code": "Q-4836",
+            "version": 1
+          },
+          {
+            "code": "Q-4837",
+            "version": 1
+          },
+          {
+            "code": "Q-4839",
+            "version": 1
+          },
+          {
+            "code": "Q-4896",
+            "version": 1
+          },
+          {
+            "code": "Q-5588",
+            "version": 1
+          },
+          {
+            "code": "Q-5711",
+            "version": 1
+          },
+          {
+            "code": "Q-7020",
+            "version": 1
+          },
+          {
+            "code": "Q-7196",
+            "version": 1
+          }
+        ],
+        "max_main_questions": 12,
+        "max_turns": 12,
+        "questions": [
+          {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          {
+            "code": "Q-5588",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+          },
+          {
+            "code": "Q-0062",
+            "version": 1,
+            "stage": "technical",
+            "topic": "记忆系统",
+            "competency_id": "agent_memory",
+            "prompt": "从使用体验看，有记忆和无记忆的 Agent 有什么区别？"
+          },
+          {
+            "code": "Q-7196",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "输入超过模型上下文窗口时，有哪些处理方式？"
+          },
+          {
+            "code": "Q-2186",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "TodoStore 的作用是什么？"
+          },
+          {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          }
+        ],
+        "selection_algorithm": "weighted_without_replacement_v1",
+        "topic_candidates": [
+          {
+            "competency_id": "agent_application_architecture",
+            "eligible_question_count": 11,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_context_engineering",
+            "eligible_question_count": 2,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_loop",
+            "eligible_question_count": 16,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_memory",
+            "eligible_question_count": 6,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_planning",
+            "eligible_question_count": 8,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_tool_calling",
+            "eligible_question_count": 5,
+            "weight": 4,
+            "matched_requirement_ids": [
+              "requirement_1"
+            ]
+          }
+        ],
+        "topic_draws": [
+          {
+            "random_value": 0.7690934284574132,
+            "total_weight": 9,
+            "selected_topic": "agent_tool_calling"
+          },
+          {
+            "random_value": 0.6545706118587764,
+            "total_weight": 5,
+            "selected_topic": "agent_memory"
+          },
+          {
+            "random_value": 0.4544958334657758,
+            "total_weight": 4,
+            "selected_topic": "agent_context_engineering"
+          },
+          {
+            "random_value": 0.8211308224435525,
+            "total_weight": 3,
+            "selected_topic": "agent_planning"
+          }
+        ]
+      },
+      "completeness": "complete",
+      "interview_completeness": "complete",
+      "jd_coverage_status": "covered",
+      "jd_gaps": [],
+      "stop_reason": "coverage_satisfied",
+      "groups": [
+        {
+          "question": {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          "score": 92,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          "score": 96,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-5588",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+          },
+          "score": 94,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-0062",
+            "version": 1,
+            "stage": "technical",
+            "topic": "记忆系统",
+            "competency_id": "agent_memory",
+            "prompt": "从使用体验看，有记忆和无记忆的 Agent 有什么区别？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-7196",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "输入超过模型上下文窗口时，有哪些处理方式？"
+          },
+          "score": 92,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-2186",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "TodoStore 的作用是什么？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          "score": 100,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          },
+          "score": 96,
+          "evidence_status": "observed"
+        }
+      ],
+      "report_sha256": "7b7c6b1432f93bae37441481d3c8c14c7815bfbb1fda89d60057ac48e081ad65"
+    },
+    {
+      "case": "unsupported_jd",
+      "session_id": "c9133423-a3c9-44a5-b658-5d9533cdaa88",
+      "confirmed_mapping": {
+        "id": "e0abeee4-bdae-43a2-83c4-c497a0506890",
+        "revision": 1,
+        "status": "confirmed",
+        "pack_id": "pack_agent_basics_mianstack",
+        "difficulty": "easy",
+        "text": "熟悉工具调用；熟悉 Kubernetes；熟悉 MCP",
+        "mapping_version": "agent_explicit_terms_v1",
+        "requirements": [
+          {
+            "id": "requirement_1",
+            "text": "熟悉工具调用",
+            "source_span": {
+              "start": 0,
+              "end": 6,
+              "line": 1
+            },
+            "competency_ids": [
+              "agent_tool_calling"
+            ],
+            "coverage": [
+              {
+                "competency_id": "agent_tool_calling",
+                "topic": "工具调用与 Function Calling",
+                "eligible_question_count": 5,
+                "eligible": true,
+                "reason": null
+              }
+            ],
+            "gap_reason": null
+          },
+          {
+            "id": "requirement_2",
+            "text": "熟悉 Kubernetes",
+            "source_span": {
+              "start": 7,
+              "end": 20,
+              "line": 1
+            },
+            "competency_ids": [],
+            "coverage": [],
+            "gap_reason": "unmapped_requirement"
+          },
+          {
+            "id": "requirement_3",
+            "text": "熟悉 MCP",
+            "source_span": {
+              "start": 21,
+              "end": 27,
+              "line": 1
+            },
+            "competency_ids": [
+              "agent_protocols"
+            ],
+            "coverage": [
+              {
+                "competency_id": "agent_protocols",
+                "topic": "MCP、A2A 与工具协议",
+                "eligible_question_count": 0,
+                "eligible": false,
+                "reason": "no_published_questions"
+              }
+            ],
+            "gap_reason": "topic_not_eligible"
+          }
+        ],
+        "confirmed_requirement_ids": [
+          "requirement_1",
+          "requirement_2",
+          "requirement_3"
+        ],
+        "usage": "job_matching_and_followup_context_only",
+        "limitations": [
+          "仅按明示词表提出映射，须用户核对确认；未识别文本保留为缺口"
+        ]
+      },
+      "plan": {
+        "seed": "9763861545053897741",
+        "selected_topics": [
+          "agent_application_architecture",
+          "agent_tool_calling",
+          "agent_planning",
+          "agent_context_engineering"
+        ],
+        "candidate_pool": [
+          {
+            "code": "Q-0058",
+            "version": 1
+          },
+          {
+            "code": "Q-0062",
+            "version": 1
+          },
+          {
+            "code": "Q-0419",
+            "version": 1
+          },
+          {
+            "code": "Q-0561",
+            "version": 1
+          },
+          {
+            "code": "Q-0597",
+            "version": 1
+          },
+          {
+            "code": "Q-0883",
+            "version": 1
+          },
+          {
+            "code": "Q-0898",
+            "version": 1
+          },
+          {
+            "code": "Q-1009",
+            "version": 1
+          },
+          {
+            "code": "Q-1434",
+            "version": 1
+          },
+          {
+            "code": "Q-1555",
+            "version": 1
+          },
+          {
+            "code": "Q-1674",
+            "version": 1
+          },
+          {
+            "code": "Q-1675",
+            "version": 1
+          },
+          {
+            "code": "Q-1843",
+            "version": 1
+          },
+          {
+            "code": "Q-1909",
+            "version": 1
+          },
+          {
+            "code": "Q-2001",
+            "version": 1
+          },
+          {
+            "code": "Q-2007",
+            "version": 1
+          },
+          {
+            "code": "Q-2078",
+            "version": 1
+          },
+          {
+            "code": "Q-2186",
+            "version": 1
+          },
+          {
+            "code": "Q-2330",
+            "version": 1
+          },
+          {
+            "code": "Q-2466",
+            "version": 1
+          },
+          {
+            "code": "Q-2506",
+            "version": 1
+          },
+          {
+            "code": "Q-2507",
+            "version": 1
+          },
+          {
+            "code": "Q-2536",
+            "version": 1
+          },
+          {
+            "code": "Q-2612",
+            "version": 1
+          },
+          {
+            "code": "Q-2637",
+            "version": 1
+          },
+          {
+            "code": "Q-2659",
+            "version": 1
+          },
+          {
+            "code": "Q-2676",
+            "version": 1
+          },
+          {
+            "code": "Q-2797",
+            "version": 1
+          },
+          {
+            "code": "Q-2985",
+            "version": 1
+          },
+          {
+            "code": "Q-3003",
+            "version": 1
+          },
+          {
+            "code": "Q-3054",
+            "version": 1
+          },
+          {
+            "code": "Q-3168",
+            "version": 1
+          },
+          {
+            "code": "Q-3322",
+            "version": 1
+          },
+          {
+            "code": "Q-3323",
+            "version": 1
+          },
+          {
+            "code": "Q-3383",
+            "version": 1
+          },
+          {
+            "code": "Q-3456",
+            "version": 1
+          },
+          {
+            "code": "Q-3642",
+            "version": 1
+          },
+          {
+            "code": "Q-3921",
+            "version": 1
+          },
+          {
+            "code": "Q-3946",
+            "version": 1
+          },
+          {
+            "code": "Q-4188",
+            "version": 1
+          },
+          {
+            "code": "Q-4836",
+            "version": 1
+          },
+          {
+            "code": "Q-4837",
+            "version": 1
+          },
+          {
+            "code": "Q-4839",
+            "version": 1
+          },
+          {
+            "code": "Q-4896",
+            "version": 1
+          },
+          {
+            "code": "Q-5588",
+            "version": 1
+          },
+          {
+            "code": "Q-5711",
+            "version": 1
+          },
+          {
+            "code": "Q-7020",
+            "version": 1
+          },
+          {
+            "code": "Q-7196",
+            "version": 1
+          }
+        ],
+        "max_main_questions": 12,
+        "max_turns": 12,
+        "questions": [
+          {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          {
+            "code": "Q-4188",
+            "version": 1,
+            "stage": "technical",
+            "topic": "Agent 应用架构与场景设计",
+            "competency_id": "agent_application_architecture",
+            "prompt": "Agent 解决什么问题，为什么选择 Agent 而不是直接调用大模型？"
+          },
+          {
+            "code": "Q-2659",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "如何理解 Agent 中的 Tool？"
+          },
+          {
+            "code": "Q-3323",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "DAG 与含循环图有什么区别，各自适合什么场景？"
+          },
+          {
+            "code": "Q-7020",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "Context Engineering 与 RAG 是什么关系？"
+          },
+          {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          }
+        ],
+        "selection_algorithm": "weighted_without_replacement_v1",
+        "topic_candidates": [
+          {
+            "competency_id": "agent_application_architecture",
+            "eligible_question_count": 11,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_context_engineering",
+            "eligible_question_count": 2,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_loop",
+            "eligible_question_count": 16,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_memory",
+            "eligible_question_count": 6,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_planning",
+            "eligible_question_count": 8,
+            "weight": 1,
+            "matched_requirement_ids": []
+          },
+          {
+            "competency_id": "agent_tool_calling",
+            "eligible_question_count": 5,
+            "weight": 4,
+            "matched_requirement_ids": [
+              "requirement_1"
+            ]
+          }
+        ],
+        "topic_draws": [
+          {
+            "random_value": 0.04248306497092791,
+            "total_weight": 9,
+            "selected_topic": "agent_application_architecture"
+          },
+          {
+            "random_value": 0.8897752705342534,
+            "total_weight": 8,
+            "selected_topic": "agent_tool_calling"
+          },
+          {
+            "random_value": 0.7974191201133257,
+            "total_weight": 4,
+            "selected_topic": "agent_planning"
+          },
+          {
+            "random_value": 0.2934309517532354,
+            "total_weight": 3,
+            "selected_topic": "agent_context_engineering"
+          }
+        ]
+      },
+      "completeness": "partial",
+      "interview_completeness": "complete",
+      "jd_coverage_status": "partial",
+      "jd_gaps": [
+        {
+          "id": "requirement_2",
+          "text": "熟悉 Kubernetes",
+          "source_span": {
+            "start": 7,
+            "end": 20,
+            "line": 1
+          },
+          "competency_ids": [],
+          "coverage": [],
+          "gap_reason": "unmapped_requirement"
+        },
+        {
+          "id": "requirement_3",
+          "text": "熟悉 MCP",
+          "source_span": {
+            "start": 21,
+            "end": 27,
+            "line": 1
+          },
+          "competency_ids": [
+            "agent_protocols"
+          ],
+          "coverage": [
+            {
+              "competency_id": "agent_protocols",
+              "topic": "MCP、A2A 与工具协议",
+              "eligible_question_count": 0,
+              "eligible": false,
+              "reason": "no_published_questions"
+            }
+          ],
+          "gap_reason": "topic_not_eligible"
+        }
+      ],
+      "stop_reason": "coverage_satisfied",
+      "groups": [
+        {
+          "question": {
+            "code": "Q-INTERVIEW-INTRODUCTION",
+            "version": 1,
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          },
+          "score": 86,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-SCENARIO",
+            "version": 1,
+            "stage": "scenario",
+            "topic": "经历或假设情境",
+            "competency_id": "scenario",
+            "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+          },
+          "score": 96,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-4188",
+            "version": 1,
+            "stage": "technical",
+            "topic": "Agent 应用架构与场景设计",
+            "competency_id": "agent_application_architecture",
+            "prompt": "Agent 解决什么问题，为什么选择 Agent 而不是直接调用大模型？"
+          },
+          "score": 84,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-2659",
+            "version": 1,
+            "stage": "technical",
+            "topic": "工具调用与 Function Calling",
+            "competency_id": "agent_tool_calling",
+            "prompt": "如何理解 Agent 中的 Tool？"
+          },
+          "score": 100,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-3323",
+            "version": 1,
+            "stage": "technical",
+            "topic": "规划、推理与任务执行",
+            "competency_id": "agent_planning",
+            "prompt": "DAG 与含循环图有什么区别，各自适合什么场景？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-7020",
+            "version": 1,
+            "stage": "technical",
+            "topic": "上下文工程",
+            "competency_id": "agent_context_engineering",
+            "prompt": "Context Engineering 与 RAG 是什么关系？"
+          },
+          "score": null,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-BEHAVIORAL",
+            "version": 1,
+            "stage": "behavioral",
+            "topic": "行为",
+            "competency_id": "behavioral",
+            "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+          },
+          "score": 100,
+          "evidence_status": "observed"
+        },
+        {
+          "question": {
+            "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+            "version": 1,
+            "stage": "candidate_questions",
+            "topic": "候选人反问",
+            "competency_id": "candidate_questions",
+            "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+          },
+          "score": 96,
+          "evidence_status": "observed"
+        }
+      ],
+      "report_sha256": "9dd3ab7e7b097006162dd7e2afaac449278877027b58f556974a2d9f99ea295d"
+    }
+  ],
+  "restart_verified_at": "2026-11-12T07:54:15.870845+00:00"
+}

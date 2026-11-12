@@ -35,12 +35,19 @@ class AvailabilityConfig(SelectionCriteria):
     max_main_questions: int = Field(default=12, ge=1, le=12, strict=True)
 
 
+class JDReference(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    mapping_id: str = Field(min_length=1, max_length=100)
+    revision: int = Field(ge=0, strict=True)
+
+
 class MockConfig(SelectionCriteria):
     mode: Literal["mock_interview"]
     max_followups_per_question: int = Field(default=2, ge=0, le=2, strict=True)
     feedback_timing: Literal["after_session"] = "after_session"
     experience_mode: Literal["experience", "scenario"] = "scenario"
     max_main_questions: int = Field(default=12, ge=1, le=12, strict=True)
+    jd: JDReference | None = None
 
 
 class CreateSession(RequestModel):
