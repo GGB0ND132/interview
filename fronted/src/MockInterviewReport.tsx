@@ -1,8 +1,9 @@
-import type { InterviewReport, PlannedQuestion } from './api'
+import type { InterviewReport, PlannedQuestion, PracticeApi } from './api'
+import { FeedbackSources, ReportProblem } from './FeedbackSources'
 import { competencyLabel, COVERAGE, DIMENSIONS, DISPOSITIONS } from './interview-labels'
 import { JDReportCoverage, JDSelection } from './JDCoverage'
 
-export default function MockInterviewReport({ report, questions, onBack }: { report: InterviewReport; questions: PlannedQuestion[]; onBack: () => void }) {
+export default function MockInterviewReport({ api, report, questions, onBack }: { api: PracticeApi; report: InterviewReport; questions: PlannedQuestion[]; onBack: () => void }) {
   return <main className="page-content report-page mi-report">
     <button className="text-link" onClick={onBack}>返回模拟面试入口</button>
     <div className="page-header"><h1>{report.completeness === 'complete' ? '完整面试报告' : '部分面试报告'}</h1><p>{report.stop_reason_detail}</p></div>
@@ -27,6 +28,8 @@ export default function MockInterviewReport({ report, questions, onBack }: { rep
           {group.feedback.reference_answer && <details><summary>查看参考答案</summary><p>{group.feedback.reference_answer}</p></details>}
           {group.feedback.limitations.map(text => <p className="meta-note" key={text}>{text}</p>)}
         </div>}
+        <FeedbackSources provenance={group.feedback ?? group.submissions.at(-1)?.provenance} />
+        {report.turns.filter(turn => turn.group_id === group.id).slice(-1).map(turn => <ReportProblem key={turn.id} api={api} sessionId={report.session_id} turnId={turn.id} canReportScore={group.status === 'completed' && group.submissions.some(item => item.turn_id === turn.id && item.status === 'completed' && (item.disposition === 'blank_answer' || (item.disposition === 'answered' && !!item.feedback)))} />)}
       </article>)}</section>
     </div>
   </main>

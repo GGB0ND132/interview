@@ -1,0 +1,16 @@
+.feedback-sources{margin-top:24px;line-height:var(--lh-body);overflow-wrap:anywhere}
+.feedback-sources h3{margin-bottom:8px}
+.feedback-sources h4{margin:20px 0 8px;font-size:var(--fs-ui)}
+.source-location{display:grid;gap:6px}
+.source-location>p:not(.meta-note),.source-url{font-size:var(--fs-meta);color:var(--text-secondary);overflow-wrap:anywhere}
+.saved-reference{padding:12px 0;border-bottom:1px solid var(--border-subtle)}
+.saved-reference summary,.report-problem summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--accent);font-size:var(--fs-ui)}
+.saved-reference p,.saved-reference blockquote{margin:8px 0}
+.saved-reference blockquote{white-space:pre-wrap;padding:12px 16px;background:var(--surface-sunken);border:1px solid var(--border-subtle);border-radius:var(--radius-sm)}
+.report-problem{margin-top:24px;border-top:1px solid var(--border-subtle)}
+.report-problem summary svg{vertical-align:middle;margin-right:8px}
+.problem-form,.report-receipt{display:grid;gap:16px;margin:8px 0 20px}
+.problem-form>.button{justify-self:start}
+.problem-errors{display:grid;gap:8px;padding:12px;border:1px solid var(--danger-fg);color:var(--danger-fg);background:var(--danger-bg)}
+.problem-errors a{text-decoration:underline}
+.problem-form .field-error{display:flex;align-items:center;gap:6px}

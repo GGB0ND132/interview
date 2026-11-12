@@ -26,6 +26,45 @@ function server(routes: (path: string, body: Record<string, unknown>) => unknown
   return { api, calls }
 }
 
+it('opens citations and submits a report for the historical group in an ended interview', async () => {
+  const user = userEvent.setup()
+  const feedback = {
+    dimensions: [], strengths: [], improvements: [], limitations: [], overall_score: 80,
+    answer_version: 2, question_source: { locator: 'saved-question.md#intro' },
+    independent_references: [{ id: 'e1', title: 'Saved source', url: 'https://docs.python.org/3/', excerpt: 'A saved and verified support passage.', claim: 'Saved conclusion', checked_at: '2026-11-12', document_sha256: 'abc' }],
+  }
+  const { api, calls } = server(path => {
+    if (path === '/sessions/s1') return { ...active, status: 'ended_early', phase: 'feedback_ready', available_actions: [] }
+    if (path === '/sessions/s1/report') return { ...partialReport, groups: [{ id: 'g1', question: active.plan.questions[0], status: 'completed', score: 80, feedback, submissions: [{ ...submission, feedback }, { ...submission, id: 'a2', turn_id: 't2', feedback }] }], turns: [opening, followup] }
+    if (path === '/sessions/s1/reports') return { id: 'report-mock', question_code: 'INTRO', answer_version: 2, status: 'open' }
+    throw new Error(path)
+  })
+  localStorage.setItem('ia-mi-session', 's1')
+  render(<MockInterview api={api} />)
+  await user.click(await screen.findByText('查看支持片段：Saved source'))
+  expect(screen.getByText('A saved and verified support passage.')).toBeTruthy()
+  await user.click(screen.getByText('报告题目或评分问题'))
+  await user.selectOptions(screen.getByLabelText('问题类型'), 'score')
+  await user.type(screen.getByLabelText('问题说明'), '请复核此题组评分')
+  await user.click(screen.getByRole('button', { name: '提交问题反馈' }))
+  expect(await screen.findByText('已收到你的反馈，等待复核。')).toBeTruthy()
+  expect(calls.find(call => call.path === '/sessions/s1/reports')?.body).toEqual({ turn_id: 't2', category: 'score', explanation: '请复核此题组评分' })
+})
+
+it.each(['no_questions', 'no_experience', 'skipped', 'answered'])('offers only question reports for unscored %s records', async disposition => {
+  const user = userEvent.setup()
+  const { api } = server(path => {
+    if (path === '/sessions/s1') return { ...active, status: 'ended_early', phase: 'feedback_ready', available_actions: [] }
+    if (path === '/sessions/s1/report') return { ...partialReport, groups: [{ id: 'g1', question: active.plan.questions[0], status: 'completed', score: null, feedback: null, submissions: [{ ...submission, disposition, score: null, feedback: undefined }] }], turns: [opening] }
+    throw new Error(path)
+  })
+  localStorage.setItem('ia-mi-session', 's1')
+  render(<MockInterview api={api} />)
+  await user.click(await screen.findByText('报告题目或评分问题'))
+  expect(screen.getByRole('option', { name: '题目或参考答案有疑问' })).toBeTruthy()
+  expect(screen.queryByRole('option', { name: '评分有疑问' })).toBeNull()
+})
+
 afterEach(() => { localStorage.clear(); vi.restoreAllMocks() })
 
 const jdPreview = {

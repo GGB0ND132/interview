@@ -56,7 +56,48 @@ export type Dimension = {
   answer_quote: string
 }
 
-export type Feedback = {
+export type QuestionSource = {
+  source_id?: string
+  url?: string
+  locator?: string
+  path?: string
+  revision?: string
+  original_id?: string
+  commit?: string
+  attribution?: string
+  license?: string
+  [key: string]: unknown
+}
+export type SavedReference = {
+  title: string
+  url: string
+  id?: string
+  excerpt?: string
+  claim?: string
+  checked_at?: string
+  document_sha256?: string
+  reviewer?: string
+  publisher?: string
+  heading?: string
+}
+export type AnswerProvenance = {
+  question_code?: string
+  answer_version?: number
+  question_source?: QuestionSource
+  independent_references?: SavedReference[]
+}
+export type UserReport = {
+  id: string
+  session_id: string
+  turn_id: string
+  question_code: string
+  answer_version: number
+  category: 'question' | 'score'
+  explanation: string
+  status: 'open' | 'in_review' | 'resolved' | 'dismissed'
+}
+
+export type Feedback = AnswerProvenance & {
   dimensions: Dimension[]
   strengths: string[]
   improvements: string[]
@@ -66,9 +107,6 @@ export type Feedback = {
   rubric_version: string
   limitations: string[]
   reference_answer?: string
-  answer_origin?: string
-  question_source?: Record<string, unknown>
-  independent_references?: { title: string; url: string; publisher?: string; heading?: string }[]
   requested_model?: string
   [key: string]: unknown
 }
@@ -83,6 +121,7 @@ export type Submission = {
   job_id: string | null
   score?: number | null
   feedback?: Feedback
+  provenance?: AnswerProvenance
   error?: { code: string; message: string; retryable: boolean }
 }
 
@@ -171,17 +210,21 @@ export type SubmitResult = {
   idempotent_replay: boolean
 }
 
+type ValidationDetail = { field: (string | number)[]; type: string }
+
 export class ApiError extends Error {
   code: string
   retryable: boolean
   status: number
+  details: ValidationDetail[]
 
-  constructor(code: string, message: string, retryable: boolean, status: number) {
+  constructor(code: string, message: string, retryable: boolean, status: number, details: ValidationDetail[] = []) {
     super(message)
     this.name = 'ApiError'
     this.code = code
     this.retryable = retryable
     this.status = status
+    this.details = details
   }
 }
 
@@ -208,12 +251,13 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
       throw new ApiError('INVALID_RESPONSE', '练习服务返回了无法识别的响应', true, response.status)
     }
     if (!response.ok || body.error) {
-      const error = (body.error ?? {}) as { code?: string; message?: string; retryable?: boolean }
+      const error = (body.error ?? {}) as { code?: string; message?: string; retryable?: boolean; details?: ValidationDetail[] }
       throw new ApiError(
         error.code ?? 'REQUEST_FAILED',
         error.message ?? '请求失败',
         error.retryable ?? false,
         response.status,
+        error.details,
       )
     }
     return body.data as T
@@ -266,6 +310,10 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
     job: (jobId: string) => request<Job>(`/jobs/${encodeURIComponent(jobId)}`),
     report: (sessionId: string) =>
       request<Report>(`/sessions/${encodeURIComponent(sessionId)}/report`),
+    reportProblem: (sessionId: string, body: { turn_id: string; category: UserReport['category']; explanation: string }) =>
+      request<UserReport>(`/sessions/${encodeURIComponent(sessionId)}/reports`, {
+        method: 'POST', body: JSON.stringify(body),
+      }),
     interviewReport: (sessionId: string) =>
       request<InterviewReport>(`/sessions/${encodeURIComponent(sessionId)}/report`),
     next: (sessionId: string, expectedRevision: number) =>
