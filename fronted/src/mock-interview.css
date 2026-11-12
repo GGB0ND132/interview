@@ -21,6 +21,19 @@
 .mi-dimension { margin-bottom: 20px; }
 .mi-dimension blockquote { margin-top: 12px; border-left: 2px solid var(--accent); padding-left: 12px; }
 .mi-jump { font-size: var(--fs-meta); margin-bottom: 12px; }
+.jd-preparation { border-top: 1px solid var(--border-subtle); padding-top: 28px; }
+.jd-preparation textarea { min-height: 140px; resize: vertical; }
+.jd-preview { margin-top: 24px; }
+.jd-preview section + section { margin-top: 24px; }
+.jd-preview h3 { font-weight: 600; }
+.jd-preparation p, .jd-report li { overflow-wrap: anywhere; }
+.jd-choice { display: flex; align-items: start; gap: 12px; cursor: pointer; min-height: 44px; padding: 10px 0; line-height: var(--lh-body); }
+.jd-choice input { width: 18px; height: 18px; margin-top: 3px; flex-shrink: 0; accent-color: var(--accent); }
+.jd-requirement-details { font-size: var(--fs-ui); line-height: var(--lh-body); }
+.jd-preview > p, .jd-preview > button { margin-top: 16px; }
+.jd-selection .qp-stage-list li { flex-wrap: wrap; gap: 8px 24px; }
+.jd-report details { margin-top: 20px; }
+.jd-report summary { cursor: pointer; padding: 8px 0; }
 @media (max-width: 767px) {
   .mi-active .composer-area { max-height: 55dvh; overflow-y: auto; }
   .mi-active .answer-field { min-height: 88px; }

@@ -10,14 +10,14 @@ const coverage = [{ competency_id: 'introduction', status: 'unobserved', group_i
 const active = { session_id: 's1', mode: 'mock_interview', pack_id: 'agent', pack_version: 1, pack_title: 'Agent 基础档', created_at: '2026-11-12T00:00:00Z', difficulty: 'easy', revision: 1, status: 'active', phase: 'awaiting_answer', current_turn: opening, turns: [opening], submissions: [], available_actions: ['answer', 'skip', 'finish'], coverage, plan: { selected_topics: ['tools', 'planning', 'memory'], max_main_questions: 12, max_turns: 36, questions: [{ code: 'INTRO', version: 1, stage: 'introduction', topic: '开场', competency_id: 'introduction', prompt: opening.text }] } }
 const submission = { id: 'a1', turn_id: 't1', client_submission_id: 'key', disposition: 'answered', answer_text: '我负责接口校验', status: 'completed', job_id: 'j1', score: 91, feedback: { reference_answer: '不能在进行中展示的参考答案', overall_score: 91 } }
 
-function server(routes: (path: string, body: Record<string, unknown>) => unknown | Promise<unknown>) {
+function server(routes: (path: string, body: Record<string, unknown>) => unknown | Promise<unknown>, packs = [{ id: 'agent', title: 'Agent 基础档', status: 'published', version: 1 }]) {
   const calls: { path: string; body: Record<string, unknown> }[] = []
   const api = createPracticeApi({ fetchImpl: vi.fn(async (input, init) => {
     const path = String(input).replace('/api/v1', '')
     const body = init?.body ? JSON.parse(String(init.body)) : {}
     calls.push({ path, body })
     let data: unknown
-    if (path === '/role-packs') data = { items: [{ id: 'agent', title: 'Agent 基础档', status: 'published', version: 1 }] }
+    if (path === '/role-packs') data = { items: packs }
     else if (path.endsWith('/availability')) data = { can_start: true, available_count: 57, eligible_topic_count: 6, minimum_topic_count: 3, topics: [], stages: [], missing: [] }
     else if (path.startsWith('/sessions?')) data = { items: [], total: 0, page: 1, page_size: 20 }
     else data = await routes(path, body)
@@ -27,6 +27,162 @@ function server(routes: (path: string, body: Record<string, unknown>) => unknown
 }
 
 afterEach(() => { localStorage.clear(); vi.restoreAllMocks() })
+
+const jdPreview = {
+  id: 'jd1', revision: 0, status: 'preview', pack_id: 'agent', difficulty: 'easy', text: '熟悉工具调用；掌握 Kubernetes',
+  mapping_version: 'agent_explicit_terms_v1', confirmed_requirement_ids: [], usage: 'job_matching_and_followup_context_only', limitations: ['请核对提取结果'],
+  requirements: [
+    { id: 'r1', text: '熟悉工具调用', source_span: { start: 0, end: 6, line: 1 }, competency_ids: ['agent_tool_calling'], gap_reason: null, coverage: [{ competency_id: 'agent_tool_calling', topic: '工具调用', eligible_question_count: 6, eligible: true, reason: null }] },
+    { id: 'r2', text: '掌握 Kubernetes', source_span: { start: 7, end: 20, line: 1 }, competency_ids: [], gap_reason: 'unmapped_requirement', coverage: [] },
+  ],
+}
+
+it('previews JD requirements and starts without using unconfirmed content', async () => {
+  const user = userEvent.setup()
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return jdPreview
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  await user.type(await screen.findByRole('textbox', { name: '岗位 JD（可选）' }), jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  expect(await screen.findByRole('heading', { name: '可覆盖要求' })).toBeTruthy()
+  expect(screen.getByRole('heading', { name: '暂不能覆盖的要求' })).toBeTruthy()
+  expect(screen.getByText('掌握 Kubernetes', { selector: 'strong' })).toBeTruthy()
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect((calls.find(call => call.path === '/sessions')?.body.config as Record<string, unknown>).jd).toBeUndefined()
+})
+
+it('confirms JD with accepted gaps, shows actual draw weights and retains the requirement in the report', async () => {
+  const user = userEvent.setup()
+  const confirmed = { ...jdPreview, status: 'confirmed', revision: 1, confirmed_requirement_ids: ['r1', 'r2'] }
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return jdPreview
+    if (path.endsWith('/confirm')) return confirmed
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0, jd: confirmed }
+    if (path.endsWith('/start')) return { ...active, jd: confirmed, plan: { ...active.plan, topic_candidates: [{ competency_id: 'agent_tool_calling', weight: 4, eligible_question_count: 6, matched_requirement_ids: ['r1'] }], selected_topics: ['agent_tool_calling'] } }
+    if (path.endsWith('/finish')) return { ...active, status: 'ended_early', phase: 'feedback_ready', revision: 2, available_actions: [] }
+    if (path.endsWith('/report')) return { ...partialReport, jd: confirmed, jd_gaps: [jdPreview.requirements[1]], jd_coverage_status: 'partial' }
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  await user.type(await screen.findByRole('textbox', { name: '岗位 JD（可选）' }), jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  await user.click(await screen.findByRole('button', { name: '确认要求并接受覆盖缺口' }))
+  expect(await screen.findByText('已确认，本场将使用所选 JD 要求。')).toBeTruthy()
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await user.click(await screen.findByText('本场主题抽选与 JD'))
+  expect(screen.getByText(/权重 4/)).toBeTruthy()
+  expect(calls.find(call => call.path.endsWith('/confirm'))?.body).toEqual({ expected_revision: 0, confirmed_requirement_ids: ['r1', 'r2'] })
+  expect(calls.find(call => call.path === '/sessions')?.body).toMatchObject({ config: { jd: { mapping_id: 'jd1', revision: 1 } } })
+  await user.click(screen.getByRole('button', { name: '结束面试' }))
+  await user.click(screen.getByRole('button', { name: '结束并生成报告' }))
+  expect(await screen.findByRole('heading', { name: 'JD 要求覆盖' })).toBeTruthy()
+  expect(screen.getByText('掌握 Kubernetes', { selector: 'strong' })).toBeTruthy()
+  expect(screen.getByText('暂未映射到题库维护的能力')).toBeTruthy()
+})
+
+it.each(['text', 'selection'] as const)('invalidates confirmed JD after changing %s', async change => {
+  const user = userEvent.setup()
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return jdPreview
+    if (path.endsWith('/confirm')) return { ...jdPreview, status: 'confirmed', revision: 1, confirmed_requirement_ids: ['r1', 'r2'] }
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  const input = await screen.findByRole('textbox', { name: '岗位 JD（可选）' })
+  await user.type(input, jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  await user.click(await screen.findByRole('button', { name: '确认要求并接受覆盖缺口' }))
+  await screen.findByText('已确认，本场将使用所选 JD 要求。')
+  if (change === 'text') await user.type(input, '；熟悉上下文工程')
+  else await user.click(screen.getByRole('checkbox', { name: '掌握 Kubernetes' }))
+  expect(screen.queryByText('已确认，本场将使用所选 JD 要求。')).toBeNull()
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect((calls.find(call => call.path === '/sessions')?.body.config as Record<string, unknown>).jd).toBeUndefined()
+})
+
+it('uses only the requirements the user selected and blocks start during confirmation', async () => {
+  const user = userEvent.setup()
+  let finishConfirmation!: (value: unknown) => void
+  const response = new Promise(resolve => { finishConfirmation = resolve })
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return jdPreview
+    if (path.endsWith('/confirm')) return response
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  await user.type(await screen.findByRole('textbox', { name: '岗位 JD（可选）' }), jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  await user.click(await screen.findByRole('checkbox', { name: '掌握 Kubernetes' }))
+  await user.dblClick(screen.getByRole('button', { name: '确认所选要求' }))
+  expect((screen.getByRole('button', { name: '开始模拟面试' }) as HTMLButtonElement).disabled).toBe(true)
+  expect(calls.filter(call => call.path.endsWith('/confirm'))).toHaveLength(1)
+  expect(calls.find(call => call.path.endsWith('/confirm'))?.body).toEqual({ expected_revision: 0, confirmed_requirement_ids: ['r1'] })
+  finishConfirmation({ ...jdPreview, status: 'confirmed', revision: 1, confirmed_requirement_ids: ['r1'] })
+  await screen.findByText('已确认，本场将使用所选 JD 要求。')
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect(calls.find(call => call.path === '/sessions')?.body).toMatchObject({ config: { jd: { mapping_id: 'jd1', revision: 1 } } })
+})
+
+it('retains JD after a failed confirmation and allows a retry before starting', async () => {
+  const user = userEvent.setup()
+  let failed = false
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return jdPreview
+    if (path.endsWith('/confirm')) {
+      if (!failed) { failed = true; throw new TypeError('connection lost') }
+      return { ...jdPreview, status: 'confirmed', revision: 1, confirmed_requirement_ids: ['r1', 'r2'] }
+    }
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  await user.type(await screen.findByRole('textbox', { name: '岗位 JD（可选）' }), jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  await user.click(await screen.findByRole('button', { name: '确认要求并接受覆盖缺口' }))
+  expect(await screen.findByRole('alert')).toHaveProperty('textContent', expect.stringContaining('JD 文本已保留'))
+  expect((screen.getByRole('textbox', { name: '岗位 JD（可选）' }) as HTMLTextAreaElement).value).toBe(jdPreview.text)
+  expect(screen.queryByText('已确认，本场将使用所选 JD 要求。')).toBeNull()
+  await user.click(screen.getByRole('button', { name: '确认要求并接受覆盖缺口' }))
+  await screen.findByText('已确认，本场将使用所选 JD 要求。')
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect(calls.find(call => call.path === '/sessions')?.body).toMatchObject({ config: { jd: { mapping_id: 'jd1', revision: 1 } } })
+})
+
+it('discards a late JD response when the user changes the question pack', async () => {
+  const user = userEvent.setup()
+  let finishPreview!: (value: unknown) => void
+  const response = new Promise(resolve => { finishPreview = resolve })
+  const { api, calls } = server(path => {
+    if (path === '/jd-mappings') return response
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  }, [{ id: 'agent', title: 'Agent 基础档', status: 'published', version: 1 }, { id: 'other', title: '另一个题包', status: 'published', version: 1 }])
+  render(<MockInterview api={api} />)
+  await user.type(await screen.findByRole('textbox', { name: '岗位 JD（可选）' }), jdPreview.text)
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  await user.selectOptions(screen.getByRole('combobox', { name: '岗位包' }), 'other')
+  finishPreview(jdPreview)
+  await user.selectOptions(screen.getByRole('combobox', { name: '岗位包' }), 'agent')
+  expect((screen.getByRole('textbox', { name: '岗位 JD（可选）' }) as HTMLTextAreaElement).value).toBe('')
+  expect(screen.queryByRole('checkbox', { name: '掌握 Kubernetes' })).toBeNull()
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect((calls.find(call => call.path === '/sessions')?.body.config as Record<string, unknown>).jd).toBeUndefined()
+})
 
 it('starts a server interview, saves one answer and shows the returned follow-up without scores or answers', async () => {
   const user = userEvent.setup()

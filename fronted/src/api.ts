@@ -16,6 +16,27 @@ export type InterviewConfig = {
   feedback_timing: 'after_session'
   experience_mode: 'experience' | 'scenario'
   max_followups_per_question: number
+  jd?: JDReference
+}
+export type JDReference = { mapping_id: string; revision: number }
+export type JDRequirement = {
+  id: string
+  text: string
+  source_span: { start: number; end: number; line: number }
+  competency_ids: string[]
+  coverage: { competency_id: string; topic: string; eligible_question_count: number; eligible: boolean; reason: 'no_published_questions' | 'insufficient_topic_questions' | null }[]
+  gap_reason: 'unmapped_requirement' | 'topic_not_eligible' | 'not_selected' | 'insufficient_evidence' | null
+}
+export type JDMapping = {
+  id: string
+  revision: number
+  status: 'preview' | 'confirmed'
+  pack_id: string
+  difficulty: Difficulty
+  text: string
+  requirements: JDRequirement[]
+  confirmed_requirement_ids: string[]
+  limitations: string[]
 }
 export type InterviewStage = 'introduction' | 'experience' | 'scenario' | 'technical' | 'behavioral' | 'candidate_questions'
 export type Coverage = {
@@ -92,9 +113,10 @@ export type SessionView = {
   submissions: Submission[]
   available_actions: string[]
   mode?: PracticeMode
+  jd?: JDMapping
   turns?: Turn[]
   coverage?: Coverage[]
-  plan?: { selected_topics: string[]; max_main_questions: number; max_turns: number; questions: PlannedQuestion[] }
+  plan?: { selected_topics: string[]; max_main_questions: number; max_turns: number; questions: PlannedQuestion[]; topic_candidates?: { competency_id: string; weight: number; eligible_question_count: number; matched_requirement_ids: string[] }[] }
 }
 
 export type Pack = { id: string; title: string; status: string; version: number }
@@ -129,6 +151,10 @@ export type Report = {
   scoring_scope: string
 }
 export type InterviewReport = Report & {
+  plan?: SessionView['plan']
+  jd?: JDMapping | null
+  jd_gaps?: JDRequirement[]
+  jd_coverage_status?: 'not_provided' | 'partial' | 'covered'
   completeness: 'complete' | 'partial'
   stop_reason: string
   stop_reason_detail: string
@@ -195,6 +221,12 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
 
   return {
     packs: () => request<{ items: Pack[] }>('/role-packs'),
+    previewJD: (packId: string, text: string) => request<JDMapping>('/jd-mappings', {
+      method: 'POST', body: JSON.stringify({ pack_id: packId, text, difficulty: 'easy' }),
+    }),
+    confirmJD: (reference: JDReference, ids: string[]) => request<JDMapping>(`/jd-mappings/${encodeURIComponent(reference.mapping_id)}/confirm`, {
+      method: 'POST', body: JSON.stringify({ expected_revision: reference.revision, confirmed_requirement_ids: ids }),
+    }),
     availability: (packId: string, config: AvailabilityConfig) =>
       request<Availability>(`/role-packs/${encodeURIComponent(packId)}/availability`, {
         method: 'POST',
