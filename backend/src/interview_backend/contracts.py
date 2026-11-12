@@ -67,12 +67,31 @@ class Dimension(BaseModel):
     answer_quote: str = Field(min_length=1, max_length=5000)
 
 
+class TechnicalCheck(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    claim: str = Field(min_length=1, max_length=2000)
+    query: str = Field(min_length=1, max_length=500)
+    reason: Literal["outside_answer", "version_dispute"]
+    affected_dimensions: list[
+        Literal["accuracy", "completeness", "relevance", "structure", "specificity"]
+    ] = Field(default=["accuracy", "completeness"], min_length=1, max_length=5)
+
+
+class EvidenceVerdict(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    supported: bool = Field(strict=True)
+    reference_id: str | None = None
+    quote: str = Field(default="", max_length=5000)
+
+
 class ModelEvaluation(BaseModel):
     # A provider-supplied overall_score is deliberately ignored.
     model_config = ConfigDict(extra="ignore")
     dimensions: list[Dimension] = Field(min_length=5, max_length=5)
     strengths: list[str] = Field(min_length=1, max_length=10)
     improvements: list[str] = Field(min_length=1, max_length=10)
+    used_reference_ids: list[str] = Field(default_factory=list, max_length=30)
+    technical_checks: list[TechnicalCheck] = Field(default_factory=list, max_length=5)
 
     @model_validator(mode="after")
     def unique_dimensions(self) -> ModelEvaluation:
