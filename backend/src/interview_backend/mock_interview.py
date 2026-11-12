@@ -98,6 +98,13 @@ def public_question(question: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def resume_snapshot(db: sqlite3.Connection, session_id: str) -> dict[str, Any] | None:
+    row = db.execute(
+        "SELECT snapshot_json FROM session_resumes WHERE session_id=?", (session_id,)
+    ).fetchone()
+    return json.loads(row[0]) if row else None
+
+
 def plan(
     db: sqlite3.Connection, session_id: str, pool: list[dict[str, Any]], config: MockConfig
 ) -> None:
@@ -111,6 +118,10 @@ def plan(
     eligible = eligible_topics(pool)
     selected = rng.sample(eligible, rng.randint(3, min(4, len(eligible))))
     common = {q["stage"]: q for q in common_questions(db)}
+    resume_context = resume_snapshot(db, session_id)
+    experience_mode = config.experience_mode
+    if resume_context is not None:
+        experience_mode = "scenario" if resume_context["no_project_experience"] else "experience"
     technical = []
     backups = {}
     for key in selected:
@@ -120,13 +131,14 @@ def plan(
         backups[key] = candidates[1:]
     questions = [
         common["introduction"],
-        common[config.experience_mode],
+        common[experience_mode],
         *technical,
         common["behavioral"],
         common["candidate_questions"],
     ]
     state: dict[str, Any] = {
         "seed": str(seed),
+        "resume_context": resume_context,
         "selected_topics": selected,
         "candidate_pool": [{"code": q["code"], "version": q["version"]} for q in pool],
         "questions": questions,
@@ -151,7 +163,7 @@ def plan(
         "max_followups": config.max_followups_per_question,
         "stop_reason": None,
     }
-    if config.experience_mode == "scenario":
+    if experience_mode == "scenario":
         state["coverage"]["experience"]["status"] = "not_applicable"
         state["coverage"]["experience"]["unresolved"] = ["用户配置选择假设情境，未评价真实项目经历"]
     else:
@@ -172,7 +184,12 @@ def begin_group(db: sqlite3.Connection, session_id: str, state: dict[str, Any]) 
         "followups": 0,
     }
     state["groups"].append(group)
-    issue_turn(db, session_id, state, question, "main", question["prompt"])
+    text = question["prompt"]
+    resume_context = state.get("resume_context")
+    if question["stage"] == "experience" and resume_context and resume_context["projects"]:
+        excerpts = "\n".join(p["text"][:500] for p in resume_context["projects"][:3])
+        text += "\n【候选人自述，已确认片段，未经外部核实】\n" + excerpts
+    issue_turn(db, session_id, state, question, "main", text)
 
 
 def issue_turn(
@@ -214,6 +231,7 @@ def decorate(view: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
     view["plan"]["questions"] = [public_question(q) for q in state["questions"]]
     view["coverage"] = [{"competency_id": key, **item} for key, item in state["coverage"].items()]
     view["stop_reason"] = state["stop_reason"]
+    view["resume_context"] = state.get("resume_context")
     if view["status"] not in {"completed", "ended_early"}:
         for submission in view["submissions"]:
             submission.pop("score", None)
@@ -248,6 +266,8 @@ def evaluation_context(db: sqlite3.Connection, state: dict[str, Any]) -> tuple[d
         "remaining_followups": state["max_followups"] - group["followups"],
         "stage": question["stage"],
     }
+    if question["stage"] in {"experience", "technical"} and state.get("resume_context"):
+        question["interview_context"]["resume_context"] = state["resume_context"]
     return question, "\n".join(answers)
 
 
@@ -330,6 +350,13 @@ def after_answer(
         status, reason = "not_applicable", "用户确认没有项目经历"
         state["coverage"]["scenario"]["status"] = "unobserved"
         state["questions"].insert(state["index"] + 1, state["scenario"])
+        if state.get("resume_context"):
+            state["resume_context"] = {
+                **state["resume_context"],
+                "projects": [],
+                "no_project_experience": True,
+                "interview_override": "用户在面试中明确确认没有项目经历，不再使用原项目片段",
+            }
     if disposition == "no_questions":
         status, reason = "observed", "用户明确选择没有反问，不评分"
     record_evidence(state, status, answer, reason)
@@ -434,6 +461,7 @@ def report(
         "session_id": session_id,
         "status": "completed" if state["stop_reason"] == "coverage_satisfied" else "ended_early",
         "scoring_scope": "mock_interview_training",
+        "resume_context": state.get("resume_context"),
         "completeness": "complete" if state["stop_reason"] == "coverage_satisfied" else "partial",
         "stop_reason": state["stop_reason"],
         "stop_reason_detail": STOP_REASONS[state["stop_reason"]],

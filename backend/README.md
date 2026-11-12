@@ -2,6 +2,25 @@
 
 Python 3.11+、FastAPI、SQLite。提供两道自编 Agent 基础技术样题的真实单题闭环，以及 MianStack 固定版本题目的逐题发布入口。自编样题与 MianStack 题包独立，后者初始可用数为 0，发布通过项后才可抽取。03 附带两道真实来源题验证发布机制；全部 115 道题的整理与每主题人工抽查属于 05/06。
 
+## 简历项目确认（11）
+
+接口均带 `/api/v1` 前缀，响应沿用统一信封。简历记录和会话快照保存在 schema 5 SQLite。只提供本机后端能力；前端上传确认接入属于 12。
+
+| 接口 | 请求与结果 |
+| --- | --- |
+| `POST /resumes` | multipart 字段 `file`，仅 PDF/DOCX、最大 5 MiB。返回 201 预览，包含 `resume_id/revision/status/blocks/project_fragments/confirmed/error/warnings`；解析失败也保存 `status=parse_failed` 预览并说明粘贴回退；格式不支持 415、超大小 413。 |
+| `POST /resumes/text` | `{"text":"相关项目原文"}`，1–50000 字；返回新预览，原始行定位。不自动确认。 |
+| `GET /resumes/{resume_id}` | 读取保存的原文、来源定位、项目候选片段和确认结果。 |
+| `POST /resumes/{resume_id}/confirm` | `{"expected_revision":0,"fragment_ids":["project-paragraph-4"],"no_project_experience":false}`；最多选 20 片段、合计 12000 字，或空列表加 `no_project_experience=true`。只能选当前预览 ID；成功为 revision 1；过期或重复确认 409。 |
+
+PDF 原文定位是页码和提取行号，DOCX 是段落序号（含表格），粘贴文本是行号；片段保留提取出的原文。PDF 上限 30 页，全部提取原文最多 50000 字。扫描件不支持 OCR；文件损坏、加密、结构异常或超解析上限会有失败预览。DOCX 限制解压体积并拒绝 XML 实体。项目章节标题识别不保证所有布局；未识别时显示原文和提示，可粘贴相关片段重新预览。原文件和路径不落库，解析预览和确认内容留本机数据库，不进入知识库。
+
+创建模拟面试时在 `config` 中传 `resume_id`。未确认返回 `400 RESUME_NOT_CONFIRMED`；确认内容在创建事务中保存快照，之后只将所选片段发送给模型。选择项目会使用已发布的经历问题切入；确认无项目会覆盖 `experience_mode`，使用明确标注的已发布假设情境题。省略 `resume_id` 沿用原有无资料流程。确认记录不可修改，要更正需重新预览并创建新会话。
+
+会话视图及结束报告包含 `resume_context`，带 `evidence_kind=candidate_statement`、`externally_verified=false` 和原文定位。项目只用于候选人自述与相关追问情境，不修改已发布主问题、技术参考答案或评分表，不构成独立技术证据。模型评分引文必须来自实际作答，不能引用简历代替。面试中再明确声明无项目时切换情境，并在会话中记录覆盖，原确认记录保留。
+
+验证步骤、边界与记录见 [11 后端验收](../docs/verification/11-backend-resume-projects.md)。
+
 ## 本地运行
 
 从 `backend/` 目录执行：
@@ -12,7 +31,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 4；现有 schema 1/2/3 自动迁移，保留原题与会话。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 5；现有 schema 1/2/3/4 自动迁移，保留原题与会话。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
