@@ -20,6 +20,7 @@ from .contracts import (
 from .errors import PracticeError
 from .model import INTERVIEW_PROMPT_VERSION, PROMPT_VERSION, Evaluator, ModelError
 from .publishing import PACK_ID, TOPICS, topic_counts
+from .resumes import Resumes
 from .store import Store
 
 
@@ -180,6 +181,7 @@ class Practice:
             return mock_interview.decorate(result, state)
         if json.loads(row["config_json"])["mode"] == "mock_interview":
             result["mode"] = "mock_interview"
+            result["resume_context"] = mock_interview.resume_snapshot(db, session_id)
         return result
 
     def view(self, session_id: str) -> dict[str, Any]:
@@ -204,6 +206,13 @@ class Practice:
 
     def create(self, request: CreateSession) -> dict[str, Any]:
         with self.store.connect(write=True) as db:
+            resume_context = None
+            if isinstance(request.config, MockConfig) and request.config.resume_id:
+                resume_context = Resumes.read(db, request.config.resume_id)["confirmed"]
+                if resume_context is None:
+                    raise PracticeError(
+                        "RESUME_NOT_CONFIRMED", "请先确认项目片段，或不关联简历开始面试", 400
+                    )
             if (
                 isinstance(request.config, MockConfig)
                 and not mock_interview.readiness(
@@ -224,6 +233,10 @@ class Practice:
             if isinstance(request.config, MockConfig) and request.config.jd is not None:
                 jd.attach(
                     db, session_id, request.config.jd, request.pack_id, request.config.difficulty
+                )
+            if resume_context is not None:
+                db.execute(
+                    "INSERT INTO session_resumes VALUES (?,?)", (session_id, encode(resume_context))
                 )
             return self._view(db, session_id)
 

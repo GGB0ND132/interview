@@ -43,6 +43,7 @@ class JDReference(BaseModel):
 
 class MockConfig(SelectionCriteria):
     mode: Literal["mock_interview"]
+    resume_id: str | None = Field(default=None, min_length=1, max_length=100)
     max_followups_per_question: int = Field(default=2, ge=0, le=2, strict=True)
     feedback_timing: Literal["after_session"] = "after_session"
     experience_mode: Literal["experience", "scenario"] = "scenario"

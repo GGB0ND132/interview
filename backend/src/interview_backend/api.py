@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 from uuid import uuid4
 
 import httpx
-from fastapi import BackgroundTasks, FastAPI, Query, Request
+from fastapi import BackgroundTasks, FastAPI, File, Query, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 
 from . import jd
 from .contracts import AvailabilityConfig, CreateSession, RevisionRequest, SubmitAnswer
@@ -17,6 +18,7 @@ from .mock_catalog import publish_common
 from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
 from .publishing import DisableQuestion, PublicationRequest, Publishing
+from .resumes import MAX_UPLOAD_BYTES, ConfirmResume, Resumes, ResumeText
 from .store import Store
 from .topic_quality import QualityCorrection, QualityIncident, QualityResume, TopicQuality
 
@@ -38,6 +40,7 @@ def create_app(
     app = FastAPI(title="Interview Agent — practice and question publishing API", version="0.2.0")
     publishing = Publishing(service.store, source_transport)
     quality = TopicQuality(publishing)
+    resumes = Resumes(service.store)
 
     def response(data: Any = None, *, error: Any = None, status: int = 200) -> JSONResponse:
         return JSONResponse(
@@ -95,6 +98,27 @@ def create_app(
     def confirm_jd(mapping_id: str, request: jd.ConfirmJD) -> JSONResponse:
         with service.store.connect(write=True) as db:
             return response(jd.confirm(db, mapping_id, request))
+
+    @app.post("/api/v1/resumes")
+    async def upload_resume(file: Annotated[UploadFile, File()]) -> JSONResponse:
+        try:
+            content = await file.read(MAX_UPLOAD_BYTES + 1)
+            preview = await run_in_threadpool(resumes.upload, file.filename or "", content)
+            return response(preview, status=201)
+        finally:
+            await file.close()
+
+    @app.post("/api/v1/resumes/text")
+    def paste_resume(request: ResumeText) -> JSONResponse:
+        return response(resumes.paste(request), status=201)
+
+    @app.get("/api/v1/resumes/{resume_id}")
+    def get_resume(resume_id: str) -> JSONResponse:
+        return response(resumes.view(resume_id))
+
+    @app.post("/api/v1/resumes/{resume_id}/confirm")
+    def confirm_resume(resume_id: str, request: ConfirmResume) -> JSONResponse:
+        return response(resumes.confirm(resume_id, request))
 
     @app.post("/api/v1/maintenance/question-publications/preview")
     def preview_publication(request: PublicationRequest) -> JSONResponse:

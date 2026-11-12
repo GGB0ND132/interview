@@ -1,0 +1,1748 @@
+{
+  "model_boundary": "configured real provider",
+  "docx": {
+    "resume_id": "7d7543f5-a70c-4f60-a585-0e2b4d7c54c2",
+    "revision": 1,
+    "status": "confirmed",
+    "source_type": "docx",
+    "blocks": [
+      {
+        "id": "paragraph-1",
+        "text": "项目经历",
+        "source": {
+          "paragraph": 1
+        }
+      },
+      {
+        "id": "paragraph-2",
+        "text": "订单 Agent：我负责工具参数校验、权限检查和失败停止机制。",
+        "source": {
+          "paragraph": 2
+        }
+      }
+    ],
+    "project_fragments": [
+      {
+        "id": "project-paragraph-2",
+        "text": "订单 Agent：我负责工具参数校验、权限检查和失败停止机制。",
+        "source": {
+          "paragraph": 2
+        }
+      }
+    ],
+    "confirmed": {
+      "resume_id": "7d7543f5-a70c-4f60-a585-0e2b4d7c54c2",
+      "source_type": "docx",
+      "revision": 1,
+      "projects": [
+        {
+          "id": "project-paragraph-2",
+          "text": "订单 Agent：我负责工具参数校验、权限检查和失败停止机制。",
+          "source": {
+            "paragraph": 2
+          }
+        }
+      ],
+      "no_project_experience": false,
+      "evidence_kind": "candidate_statement",
+      "externally_verified": false,
+      "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。"
+    },
+    "error": null,
+    "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+    "fallback": "请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。",
+    "warnings": []
+  },
+  "pdf": {
+    "resume_id": "82011f2c-0153-4878-8479-ddb3228affd6",
+    "revision": 0,
+    "status": "needs_confirmation",
+    "source_type": "pdf",
+    "blocks": [
+      {
+        "id": "page-1-line-1",
+        "text": "Projects",
+        "source": {
+          "page": 1,
+          "line": 1
+        }
+      },
+      {
+        "id": "page-1-line-2",
+        "text": "Order Agent: tool validation.",
+        "source": {
+          "page": 1,
+          "line": 2
+        }
+      }
+    ],
+    "project_fragments": [
+      {
+        "id": "project-page-1-line-2",
+        "text": "Order Agent: tool validation.",
+        "source": {
+          "page": 1,
+          "line": 2
+        }
+      }
+    ],
+    "confirmed": null,
+    "error": null,
+    "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+    "fallback": "请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。",
+    "warnings": []
+  },
+  "failed": {
+    "resume_id": "dd208323-5e05-43d5-ab41-6e84b83b3aef",
+    "revision": 0,
+    "status": "parse_failed",
+    "source_type": "pdf",
+    "blocks": [],
+    "project_fragments": [],
+    "confirmed": null,
+    "error": {
+      "code": "RESUME_PARSE_FAILED",
+      "message": "无法提取可用原文：可能是扫描件（不支持 OCR）、加密/损坏文件、格式不匹配，或超过 30 页/50000 字解析上限。请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。"
+    },
+    "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+    "fallback": "请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。",
+    "warnings": []
+  },
+  "pasted": {
+    "resume_id": "b6e10a19-076f-4b0f-b21b-07722375238a",
+    "revision": 0,
+    "status": "needs_confirmation",
+    "source_type": "pasted_text",
+    "blocks": [
+      {
+        "id": "line-1",
+        "text": "课程项目：我实现了工具调用日志。",
+        "source": {
+          "line": 1
+        }
+      }
+    ],
+    "project_fragments": [
+      {
+        "id": "project-line-1",
+        "text": "课程项目：我实现了工具调用日志。",
+        "source": {
+          "line": 1
+        }
+      }
+    ],
+    "confirmed": null,
+    "error": null,
+    "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+    "fallback": "请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。",
+    "warnings": []
+  },
+  "no_project": {
+    "resume_id": "dd208323-5e05-43d5-ab41-6e84b83b3aef",
+    "revision": 1,
+    "status": "confirmed",
+    "source_type": "pdf",
+    "blocks": [],
+    "project_fragments": [],
+    "confirmed": {
+      "resume_id": "dd208323-5e05-43d5-ab41-6e84b83b3aef",
+      "source_type": "pdf",
+      "revision": 1,
+      "projects": [],
+      "no_project_experience": true,
+      "evidence_kind": "candidate_statement",
+      "externally_verified": false,
+      "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。"
+    },
+    "error": {
+      "code": "RESUME_PARSE_FAILED",
+      "message": "无法提取可用原文：可能是扫描件（不支持 OCR）、加密/损坏文件、格式不匹配，或超过 30 页/50000 字解析上限。请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。"
+    },
+    "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+    "fallback": "请粘贴相关项目原文后重新预览并确认；也可确认没有相关项目经历。",
+    "warnings": []
+  },
+  "scenario_session": {
+    "session_id": "1110c5cf-82aa-450f-a9a7-0986f8c71dfb",
+    "pack_id": "pack_agent_basics_mianstack",
+    "pack_version": 1,
+    "pack_title": "Agent 原理与系统基础档（MianStack）",
+    "created_at": "2026-11-12T09:07:31.426Z",
+    "difficulty": "easy",
+    "revision": 4,
+    "status": "active",
+    "phase": "awaiting_answer",
+    "current_turn": {
+      "id": "a4c28681-0d0d-4cec-9673-eab385fc62e1",
+      "group_id": "9f992fab-c27a-4a4d-9054-3fe54437afca",
+      "question_code": "Q-INTERVIEW-SCENARIO",
+      "question_version": 1,
+      "kind": "main",
+      "question_type": "scenario",
+      "stage": "scenario",
+      "topic": "经历或假设情境",
+      "competency_id": "scenario",
+      "text": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+    },
+    "submissions": [
+      {
+        "id": "32220b4c-4e40-46a6-83f4-79068e66b4c9",
+        "turn_id": "25fc505c-aad6-43fa-9353-ce91ba89df1b",
+        "client_submission_id": "25fc505c-aad6-43fa-9353-ce91ba89df1b",
+        "disposition": "skipped",
+        "answer_text": "",
+        "status": "completed",
+        "job_id": null
+      }
+    ],
+    "available_actions": [
+      "answer",
+      "skip",
+      "finish"
+    ],
+    "mode": "mock_interview",
+    "turns": [
+      {
+        "id": "25fc505c-aad6-43fa-9353-ce91ba89df1b",
+        "group_id": "f63cf86b-4bae-450e-ab82-8fdea87accef",
+        "question_code": "Q-INTERVIEW-INTRODUCTION",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "introduction",
+        "stage": "introduction",
+        "topic": "开场",
+        "competency_id": "introduction",
+        "text": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+      },
+      {
+        "id": "a4c28681-0d0d-4cec-9673-eab385fc62e1",
+        "group_id": "9f992fab-c27a-4a4d-9054-3fe54437afca",
+        "question_code": "Q-INTERVIEW-SCENARIO",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "scenario",
+        "stage": "scenario",
+        "topic": "经历或假设情境",
+        "competency_id": "scenario",
+        "text": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+      }
+    ],
+    "plan": {
+      "seed": "4595108671212483835",
+      "selected_topics": [
+        "agent_context_engineering",
+        "agent_application_architecture",
+        "agent_tool_calling",
+        "agent_planning"
+      ],
+      "candidate_pool": [
+        {
+          "code": "Q-0058",
+          "version": 1
+        },
+        {
+          "code": "Q-0062",
+          "version": 1
+        },
+        {
+          "code": "Q-0419",
+          "version": 1
+        },
+        {
+          "code": "Q-0561",
+          "version": 1
+        },
+        {
+          "code": "Q-0597",
+          "version": 1
+        },
+        {
+          "code": "Q-0883",
+          "version": 1
+        },
+        {
+          "code": "Q-0898",
+          "version": 1
+        },
+        {
+          "code": "Q-1009",
+          "version": 1
+        },
+        {
+          "code": "Q-1434",
+          "version": 1
+        },
+        {
+          "code": "Q-1555",
+          "version": 1
+        },
+        {
+          "code": "Q-1674",
+          "version": 1
+        },
+        {
+          "code": "Q-1675",
+          "version": 1
+        },
+        {
+          "code": "Q-1843",
+          "version": 1
+        },
+        {
+          "code": "Q-1909",
+          "version": 1
+        },
+        {
+          "code": "Q-2001",
+          "version": 1
+        },
+        {
+          "code": "Q-2007",
+          "version": 1
+        },
+        {
+          "code": "Q-2078",
+          "version": 1
+        },
+        {
+          "code": "Q-2186",
+          "version": 1
+        },
+        {
+          "code": "Q-2330",
+          "version": 1
+        },
+        {
+          "code": "Q-2466",
+          "version": 1
+        },
+        {
+          "code": "Q-2506",
+          "version": 1
+        },
+        {
+          "code": "Q-2507",
+          "version": 1
+        },
+        {
+          "code": "Q-2536",
+          "version": 1
+        },
+        {
+          "code": "Q-2612",
+          "version": 1
+        },
+        {
+          "code": "Q-2637",
+          "version": 1
+        },
+        {
+          "code": "Q-2659",
+          "version": 1
+        },
+        {
+          "code": "Q-2676",
+          "version": 1
+        },
+        {
+          "code": "Q-2797",
+          "version": 1
+        },
+        {
+          "code": "Q-2985",
+          "version": 1
+        },
+        {
+          "code": "Q-3003",
+          "version": 1
+        },
+        {
+          "code": "Q-3054",
+          "version": 1
+        },
+        {
+          "code": "Q-3168",
+          "version": 1
+        },
+        {
+          "code": "Q-3322",
+          "version": 1
+        },
+        {
+          "code": "Q-3323",
+          "version": 1
+        },
+        {
+          "code": "Q-3383",
+          "version": 1
+        },
+        {
+          "code": "Q-3456",
+          "version": 1
+        },
+        {
+          "code": "Q-3642",
+          "version": 1
+        },
+        {
+          "code": "Q-3921",
+          "version": 1
+        },
+        {
+          "code": "Q-3946",
+          "version": 1
+        },
+        {
+          "code": "Q-4188",
+          "version": 1
+        },
+        {
+          "code": "Q-4836",
+          "version": 1
+        },
+        {
+          "code": "Q-4837",
+          "version": 1
+        },
+        {
+          "code": "Q-4839",
+          "version": 1
+        },
+        {
+          "code": "Q-4896",
+          "version": 1
+        },
+        {
+          "code": "Q-5588",
+          "version": 1
+        },
+        {
+          "code": "Q-5711",
+          "version": 1
+        },
+        {
+          "code": "Q-7020",
+          "version": 1
+        },
+        {
+          "code": "Q-7196",
+          "version": 1
+        }
+      ],
+      "max_main_questions": 12,
+      "max_turns": 36,
+      "questions": [
+        {
+          "code": "Q-INTERVIEW-INTRODUCTION",
+          "version": 1,
+          "stage": "introduction",
+          "topic": "开场",
+          "competency_id": "introduction",
+          "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+        },
+        {
+          "code": "Q-INTERVIEW-SCENARIO",
+          "version": 1,
+          "stage": "scenario",
+          "topic": "经历或假设情境",
+          "competency_id": "scenario",
+          "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+        },
+        {
+          "code": "Q-7020",
+          "version": 1,
+          "stage": "technical",
+          "topic": "上下文工程",
+          "competency_id": "agent_context_engineering",
+          "prompt": "Context Engineering 与 RAG 是什么关系？"
+        },
+        {
+          "code": "Q-1009",
+          "version": 1,
+          "stage": "technical",
+          "topic": "Agent 应用架构与场景设计",
+          "competency_id": "agent_application_architecture",
+          "prompt": "是否了解 Deep Research，它是什么？"
+        },
+        {
+          "code": "Q-5588",
+          "version": 1,
+          "stage": "technical",
+          "topic": "工具调用与 Function Calling",
+          "competency_id": "agent_tool_calling",
+          "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+        },
+        {
+          "code": "Q-3322",
+          "version": 1,
+          "stage": "technical",
+          "topic": "规划、推理与任务执行",
+          "competency_id": "agent_planning",
+          "prompt": "如何理解 Graph 和 DAG 框架？"
+        },
+        {
+          "code": "Q-INTERVIEW-BEHAVIORAL",
+          "version": 1,
+          "stage": "behavioral",
+          "topic": "行为",
+          "competency_id": "behavioral",
+          "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+        },
+        {
+          "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+          "version": 1,
+          "stage": "candidate_questions",
+          "topic": "候选人反问",
+          "competency_id": "candidate_questions",
+          "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+        }
+      ]
+    },
+    "coverage": [
+      {
+        "competency_id": "introduction",
+        "status": "insufficient",
+        "group_ids": [
+          "f63cf86b-4bae-450e-ab82-8fdea87accef"
+        ],
+        "answer_quotes": [],
+        "unresolved": [
+          "跳过或空白，缺少可评价材料"
+        ],
+        "reason": "跳过或空白，缺少可评价材料"
+      },
+      {
+        "competency_id": "experience",
+        "status": "not_applicable",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": [
+          "用户配置选择假设情境，未评价真实项目经历"
+        ]
+      },
+      {
+        "competency_id": "scenario",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_context_engineering",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_application_architecture",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_tool_calling",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_planning",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "behavioral",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "candidate_questions",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      }
+    ],
+    "stop_reason": null,
+    "resume_context": {
+      "evidence_kind": "candidate_statement",
+      "externally_verified": false,
+      "no_project_experience": true,
+      "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+      "projects": [],
+      "resume_id": "dd208323-5e05-43d5-ab41-6e84b83b3aef",
+      "revision": 1,
+      "source_type": "pdf"
+    }
+  },
+  "session": {
+    "session_id": "73ea689d-1774-45aa-825d-7d1e33739e31",
+    "pack_id": "pack_agent_basics_mianstack",
+    "pack_version": 1,
+    "pack_title": "Agent 原理与系统基础档（MianStack）",
+    "created_at": "2026-11-12T09:06:45.385Z",
+    "difficulty": "easy",
+    "revision": 12,
+    "status": "ended_early",
+    "phase": "feedback_ready",
+    "current_turn": {
+      "id": "3e529dad-795f-48b4-b6f0-6e674b123afb",
+      "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+      "question_code": "Q-3642",
+      "question_version": 1,
+      "kind": "followup",
+      "question_type": "technical",
+      "stage": "technical",
+      "topic": "记忆系统",
+      "competency_id": "agent_memory",
+      "text": "你提到‘模型理解输入并提出调用意图’，在记忆系统中，这个‘意图’具体会包含哪些与记忆操作直接相关的判断？比如，它如何决定该去读某位用户的过往对话，还是该把当前反馈写入长期偏好？"
+    },
+    "submissions": [
+      {
+        "id": "268e24a1-b32c-4659-9da6-c70bb93a7b58",
+        "turn_id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+        "client_submission_id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+        "disposition": "skipped",
+        "answer_text": "",
+        "status": "completed",
+        "job_id": null,
+        "score": null
+      },
+      {
+        "id": "09512d66-3d34-4159-afdd-9d66e18bad17",
+        "turn_id": "0f804727-d151-4c8a-a848-80deea1476c6",
+        "client_submission_id": "0f804727-d151-4c8a-a848-80deea1476c6",
+        "disposition": "answered",
+        "answer_text": "我在课程练习中实现了订单查询 Agent 的工具执行层。我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。这个练习没有真实业务指标。",
+        "status": "completed",
+        "job_id": "61514ea8-62e2-48cf-b05b-5c33d1827352",
+        "score": 93,
+        "feedback": {
+          "answer_generation": null,
+          "answer_origin": "project_original",
+          "answer_version": 1,
+          "assessment_coverage": 1.0,
+          "assessment_status": "complete",
+          "dimensions": [
+            {
+              "answer_quote": "",
+              "name": "accuracy",
+              "reason": "此环节不适用该维度",
+              "score": null
+            },
+            {
+              "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。",
+              "name": "completeness",
+              "reason": "覆盖目标（订单查询 Agent 工具执行层）、职责（参数类型与权限校验、模型仅选工具/程序执行查询）、技术决策隐含在‘失败时返回明确错误并停止重试’（拒绝重试是明确行为约束决策）、验证方式（三类用例检查）；唯缺对‘目标’的显性表述（如‘支撑模型安全调用后端服务’），但‘工具执行层’可合理推断目标，故轻微缺失。",
+              "score": 85
+            },
+            {
+              "answer_quote": "我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。",
+              "name": "relevance",
+              "reason": "全部内容紧扣题目四要素：课程练习对应项目背景，‘工具执行层’对应目标，‘负责参数类型与权限校验…’对应职责，‘三类用例检查’对应验证，‘失败时返回明确错误并停止重试’体现决策逻辑。",
+              "score": 100
+            },
+            {
+              "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。",
+              "name": "structure",
+              "reason": "按‘项目—职责—决策—验证’隐性顺序展开，逻辑连贯；仅‘目标’未单列强调，但首句即点明项目及定位，整体信息流清晰。",
+              "score": 90
+            },
+            {
+              "answer_quote": "我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。",
+              "name": "specificity",
+              "reason": "使用具体技术动作（参数类型校验、权限校验、停止重试）、具体用例类型（成功/无权限/超时）、具体行为结果（返回明确错误），并限定范围（‘模型只选择工具，程序执行实际查询’），无模糊表述。",
+              "score": 95
+            }
+          ],
+          "evidence_reason": "用户完整回答覆盖题目全部子问题要素，信息具体、结构可辨，虽为课程练习但已提供足够细节用于评价各维度；‘无真实业务指标’的坦诚亦属有效证据。",
+          "evidence_status": "observed",
+          "followup": null,
+          "improvements": [
+            "应在开头明确声明‘这是课程练习而非真实项目’，以严格响应题目‘没有项目经历请明确说明’的指令。",
+            "可补一句目标本质，例如‘目标是保障LLM调用后端订单服务时的安全性与可控性’，使目标更可评估。",
+            "‘权限校验’可稍作展开（如基于角色还是Token？校验时机？），增强决策上下文厚度。",
+            "未提及任何反思或后续优化点（如‘发现超时阈值需根据DB负载动态调整’），错失展示闭环思维的机会。"
+          ],
+          "independent_references": [],
+          "limitations": [],
+          "overall_score": 93,
+          "prompt_version": "interview_group_v3",
+          "question_source": {
+            "kind": "project_original",
+            "path": "backend/src/interview_backend/mock_catalog.py",
+            "revision": "07.1"
+          },
+          "reference_answer": "围绕候选人自述观察职责、决策理由、验证与反思；个人成果未经外部核实，不评价真实性。无经历转假设情境，不编造项目。",
+          "requested_model": "qwen-plus",
+          "rubric_version": "interview_experience_v1",
+          "strengths": [
+            "清晰界定分工边界：‘模型只选择工具，程序执行实际查询’，体现对Agent系统分层职责的理解。",
+            "验证设计具象可操作：明确列出‘成功、无权限、超时’三类用例，覆盖核心异常路径。",
+            "技术决策有行为锚点：‘失败时返回明确错误并停止重试’是可观察、可验证的确定性策略。",
+            "主动澄清局限：‘这个练习没有真实业务指标’坦诚说明验证尺度，体现元认知。",
+            "全程使用主动语态与第一人称，责任归属明确，符合‘区分个人贡献’要求。"
+          ]
+        }
+      },
+      {
+        "id": "3cb2af15-a5c3-4431-bff3-90a41c321df7",
+        "turn_id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+        "client_submission_id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+        "disposition": "answered",
+        "answer_text": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。验证时分别构造成功、超时和无权限输入；失败时返回明确错误，并用固定次数上限停止重试。我还不确定本题所有细节，不能用项目自述证明技术结论。",
+        "status": "completed",
+        "job_id": "bdac9b46-cacf-4353-9534-306910e33b9f",
+        "score": 39,
+        "feedback": {
+          "answer_generation": {
+            "author": "Codex (ticket 05)",
+            "generated_at": "2026-11-10",
+            "model": "Codex (exact runtime model ID unavailable)",
+            "revision": "05.1"
+          },
+          "answer_origin": "agent_generated",
+          "answer_version": 1,
+          "assessment_coverage": 0.4,
+          "assessment_status": "partial",
+          "dimensions": [
+            {
+              "answer_quote": "",
+              "name": "accuracy",
+              "reason": "用户未直接回答‘意图识别承担什么职责’，而是转向说明模型与程序边界、验证方法及知识状态声明；题干要求的是职责定义，非实现机制或验证策略，无法依据参考答案标准判断其陈述是否准确对应职责。",
+              "score": null
+            },
+            {
+              "answer_quote": "",
+              "name": "completeness",
+              "reason": "未覆盖题干明确要求的核心职责：回忆/写入/更正/删除的路由判断、用户/项目/任务范围选择、临时vs持久偏好区分、不替代权限与事实校验等；回答完全偏离内容维度，无法评估是否完整。",
+              "score": null
+            },
+            {
+              "answer_quote": "模型理解输入并提出调用意图",
+              "name": "relevance",
+              "reason": "仅部分相关：提及‘模型理解输入并提出调用意图’触及意图识别表层动作，但全文重心在程序校验、失败处理和知识自省，与‘记忆系统中意图识别的职责’这一主题弱关联。",
+              "score": 30
+            },
+            {
+              "answer_quote": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。",
+              "name": "structure",
+              "reason": "有基本逻辑分层：先划边界→再讲验证→最后声明认知局限；但结构服务于自身论证框架，未按题干隐含结构（职责定位→具体作用→关键边界）组织，导致专业表达目的性偏移。",
+              "score": 60
+            },
+            {
+              "answer_quote": "验证时分别构造成功、超时和无权限输入；",
+              "name": "specificity",
+              "reason": "除‘调用意图’一词外，其余均为通用工程实践描述（如构造三类输入、固定重试上限），未出现任何记忆系统特有概念（如用户记忆分区、时间戳时效性、来源保留、偏好持久化机制等），缺乏领域具体性。",
+              "score": 20
+            }
+          ],
+          "evidence_reason": "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。",
+          "evidence_status": "insufficient",
+          "followup": {
+            "answer_quote": "模型理解输入并提出调用意图",
+            "competency_id": "agent_memory",
+            "purpose": "澄清用户对‘意图’在记忆系统中的具体内涵理解，聚焦职责定义而非实现机制",
+            "question_code": "Q-3642",
+            "text": "你提到‘模型理解输入并提出调用意图’，在记忆系统中，这个‘意图’具体会包含哪些与记忆操作直接相关的判断？比如，它如何决定该去读某位用户的过往对话，还是该把当前反馈写入长期偏好？"
+          },
+          "improvements": [
+            "需直接回应题干核心：明确说明意图识别在记忆系统中负责路由检索/写入/更新/删除操作，并绑定用户、项目、任务等上下文维度",
+            "应区分‘临时约束’（如本次英文要求）与‘持久偏好’，说明二者在记忆写入策略上的不同处理",
+            "必须强调意图识别结果仅为路由候选，不替代权限检查、事实核查与来源验证——当前回答将校验责任全归程序，未点明识别层本身的边界",
+            "避免用通用工具调用流程替代记忆系统特有职责；需嵌入‘记忆’语境（如回忆旧订单、写入新偏好、更正错误地址）",
+            "可补充简例说明意图识别如何影响后续动作，例如‘识别出‘查上周会议纪要’即路由至用户A的会议记忆分区并加时效过滤’"
+          ],
+          "independent_references": [],
+          "limitations": [
+            "部分维度未评估"
+          ],
+          "overall_score": 39,
+          "prompt_version": "interview_group_v3",
+          "question_source": {
+            "answer_status": "pending",
+            "attribution": "Copyright (c) 2026 didilili",
+            "category": "agent",
+            "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+            "file_sha256": "9d34c5497ae763646d72578ea89dba98376900fb803cf41bccfb0dee41a3117b",
+            "level": "基础",
+            "license": "MIT",
+            "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+            "original_id": "Q-3642",
+            "original_title": "记忆系统中的意图识别承担什么职责？",
+            "path": "questions/Q-3642.md",
+            "repository": "https://github.com/didilili/mianstack",
+            "topic": "记忆系统",
+            "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3642.md"
+          },
+          "reference_answer": "记忆系统里的意图识别帮助判断当前请求是否需要回忆、写入、更正或删除信息，以及应查询哪个用户、项目或任务范围。例如这次改用英文是临时约束，今后都用英文才可能成为持久偏好候选。识别结果只是路由或候选，不替代权限、事实和来源验证；应避免把模型推断固化成用户事实。读取后仍检查相关性和时效，写入需按产品约定保留来源并支持更正删除。",
+          "requested_model": "qwen-plus",
+          "rubric_version": "interview_technical_v1",
+          "strengths": [
+            "清晰划定了模型与程序的职责边界，体现系统分层意识",
+            "主动声明知识不确定性和证据约束（‘不能用项目自述证明技术结论’），展现严谨性",
+            "提出了可操作的验证方法（成功/超时/无权限输入构造），具备工程落地思维",
+            "使用‘固定次数上限停止重试’等具体机制表述，避免空泛",
+            "结尾强调技术结论需独立于项目自述，符合科学验证原则"
+          ]
+        }
+      }
+    ],
+    "available_actions": [],
+    "mode": "mock_interview",
+    "turns": [
+      {
+        "id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+        "group_id": "22dd0f52-ee91-42c8-bdee-62282f5f7a21",
+        "question_code": "Q-INTERVIEW-INTRODUCTION",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "introduction",
+        "stage": "introduction",
+        "topic": "开场",
+        "competency_id": "introduction",
+        "text": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+      },
+      {
+        "id": "0f804727-d151-4c8a-a848-80deea1476c6",
+        "group_id": "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9",
+        "question_code": "Q-INTERVIEW-EXPERIENCE",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "experience",
+        "stage": "experience",
+        "topic": "经历或假设情境",
+        "competency_id": "experience",
+        "text": "请介绍一个你参与的项目：目标是什么、你具体负责什么、作过什么技术决策、如何验证结果？没有项目经历请明确说明。\n【候选人自述，已确认片段，未经外部核实】\n订单 Agent：我负责工具参数校验、权限检查和失败停止机制。"
+      },
+      {
+        "id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+        "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+        "question_code": "Q-3642",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "technical",
+        "stage": "technical",
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "text": "记忆系统中的意图识别承担什么职责？"
+      },
+      {
+        "id": "3e529dad-795f-48b4-b6f0-6e674b123afb",
+        "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+        "question_code": "Q-3642",
+        "question_version": 1,
+        "kind": "followup",
+        "question_type": "technical",
+        "stage": "technical",
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "text": "你提到‘模型理解输入并提出调用意图’，在记忆系统中，这个‘意图’具体会包含哪些与记忆操作直接相关的判断？比如，它如何决定该去读某位用户的过往对话，还是该把当前反馈写入长期偏好？"
+      }
+    ],
+    "plan": {
+      "seed": "14175631449430772959",
+      "selected_topics": [
+        "agent_memory",
+        "agent_loop",
+        "agent_tool_calling"
+      ],
+      "candidate_pool": [
+        {
+          "code": "Q-0058",
+          "version": 1
+        },
+        {
+          "code": "Q-0062",
+          "version": 1
+        },
+        {
+          "code": "Q-0419",
+          "version": 1
+        },
+        {
+          "code": "Q-0561",
+          "version": 1
+        },
+        {
+          "code": "Q-0597",
+          "version": 1
+        },
+        {
+          "code": "Q-0883",
+          "version": 1
+        },
+        {
+          "code": "Q-0898",
+          "version": 1
+        },
+        {
+          "code": "Q-1009",
+          "version": 1
+        },
+        {
+          "code": "Q-1434",
+          "version": 1
+        },
+        {
+          "code": "Q-1555",
+          "version": 1
+        },
+        {
+          "code": "Q-1674",
+          "version": 1
+        },
+        {
+          "code": "Q-1675",
+          "version": 1
+        },
+        {
+          "code": "Q-1843",
+          "version": 1
+        },
+        {
+          "code": "Q-1909",
+          "version": 1
+        },
+        {
+          "code": "Q-2001",
+          "version": 1
+        },
+        {
+          "code": "Q-2007",
+          "version": 1
+        },
+        {
+          "code": "Q-2078",
+          "version": 1
+        },
+        {
+          "code": "Q-2186",
+          "version": 1
+        },
+        {
+          "code": "Q-2330",
+          "version": 1
+        },
+        {
+          "code": "Q-2466",
+          "version": 1
+        },
+        {
+          "code": "Q-2506",
+          "version": 1
+        },
+        {
+          "code": "Q-2507",
+          "version": 1
+        },
+        {
+          "code": "Q-2536",
+          "version": 1
+        },
+        {
+          "code": "Q-2612",
+          "version": 1
+        },
+        {
+          "code": "Q-2637",
+          "version": 1
+        },
+        {
+          "code": "Q-2659",
+          "version": 1
+        },
+        {
+          "code": "Q-2676",
+          "version": 1
+        },
+        {
+          "code": "Q-2797",
+          "version": 1
+        },
+        {
+          "code": "Q-2985",
+          "version": 1
+        },
+        {
+          "code": "Q-3003",
+          "version": 1
+        },
+        {
+          "code": "Q-3054",
+          "version": 1
+        },
+        {
+          "code": "Q-3168",
+          "version": 1
+        },
+        {
+          "code": "Q-3322",
+          "version": 1
+        },
+        {
+          "code": "Q-3323",
+          "version": 1
+        },
+        {
+          "code": "Q-3383",
+          "version": 1
+        },
+        {
+          "code": "Q-3456",
+          "version": 1
+        },
+        {
+          "code": "Q-3642",
+          "version": 1
+        },
+        {
+          "code": "Q-3921",
+          "version": 1
+        },
+        {
+          "code": "Q-3946",
+          "version": 1
+        },
+        {
+          "code": "Q-4188",
+          "version": 1
+        },
+        {
+          "code": "Q-4836",
+          "version": 1
+        },
+        {
+          "code": "Q-4837",
+          "version": 1
+        },
+        {
+          "code": "Q-4839",
+          "version": 1
+        },
+        {
+          "code": "Q-4896",
+          "version": 1
+        },
+        {
+          "code": "Q-5588",
+          "version": 1
+        },
+        {
+          "code": "Q-5711",
+          "version": 1
+        },
+        {
+          "code": "Q-7020",
+          "version": 1
+        },
+        {
+          "code": "Q-7196",
+          "version": 1
+        }
+      ],
+      "max_main_questions": 12,
+      "max_turns": 36,
+      "questions": [
+        {
+          "code": "Q-INTERVIEW-INTRODUCTION",
+          "version": 1,
+          "stage": "introduction",
+          "topic": "开场",
+          "competency_id": "introduction",
+          "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+        },
+        {
+          "code": "Q-INTERVIEW-EXPERIENCE",
+          "version": 1,
+          "stage": "experience",
+          "topic": "经历或假设情境",
+          "competency_id": "experience",
+          "prompt": "请介绍一个你参与的项目：目标是什么、你具体负责什么、作过什么技术决策、如何验证结果？没有项目经历请明确说明。"
+        },
+        {
+          "code": "Q-3642",
+          "version": 1,
+          "stage": "technical",
+          "topic": "记忆系统",
+          "competency_id": "agent_memory",
+          "prompt": "记忆系统中的意图识别承担什么职责？"
+        },
+        {
+          "code": "Q-1555",
+          "version": 1,
+          "stage": "technical",
+          "topic": "Agent 基础与运行循环",
+          "competency_id": "agent_loop",
+          "prompt": "Agent 会用到哪些数据结构？"
+        },
+        {
+          "code": "Q-5588",
+          "version": 1,
+          "stage": "technical",
+          "topic": "工具调用与 Function Calling",
+          "competency_id": "agent_tool_calling",
+          "prompt": "Function Calling 与 RAG 分别解决什么问题，如何配合使用？"
+        },
+        {
+          "code": "Q-INTERVIEW-BEHAVIORAL",
+          "version": 1,
+          "stage": "behavioral",
+          "topic": "行为",
+          "competency_id": "behavioral",
+          "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+        },
+        {
+          "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+          "version": 1,
+          "stage": "candidate_questions",
+          "topic": "候选人反问",
+          "competency_id": "candidate_questions",
+          "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+        }
+      ]
+    },
+    "coverage": [
+      {
+        "competency_id": "introduction",
+        "status": "insufficient",
+        "group_ids": [
+          "22dd0f52-ee91-42c8-bdee-62282f5f7a21"
+        ],
+        "answer_quotes": [],
+        "unresolved": [
+          "跳过或空白，缺少可评价材料"
+        ],
+        "reason": "跳过或空白，缺少可评价材料"
+      },
+      {
+        "competency_id": "experience",
+        "status": "observed",
+        "group_ids": [
+          "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9"
+        ],
+        "answer_quotes": [
+          {
+            "group_id": "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9",
+            "quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。这个练习没有真实业务指标。"
+          }
+        ],
+        "unresolved": [],
+        "reason": "用户完整回答覆盖题目全部子问题要素，信息具体、结构可辨，虽为课程练习但已提供足够细节用于评价各维度；‘无真实业务指标’的坦诚亦属有效证据。"
+      },
+      {
+        "competency_id": "scenario",
+        "status": "not_applicable",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_memory",
+        "status": "insufficient",
+        "group_ids": [
+          "cae1e77c-b700-4a8b-ac23-3679f8892f54"
+        ],
+        "answer_quotes": [
+          {
+            "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+            "quote": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。验证时分别构造成功、超时和无权限输入；失败时返回明确错误，并用固定次数上限停止重试。我还不确定本题所有细节，不能用项目自述证明技术结论。"
+          }
+        ],
+        "unresolved": [
+          "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+        ],
+        "reason": "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+      },
+      {
+        "competency_id": "agent_loop",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_tool_calling",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "behavioral",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "candidate_questions",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      }
+    ],
+    "stop_reason": "user_ended",
+    "resume_context": {
+      "evidence_kind": "candidate_statement",
+      "externally_verified": false,
+      "no_project_experience": false,
+      "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+      "projects": [
+        {
+          "id": "project-paragraph-2",
+          "source": {
+            "paragraph": 2
+          },
+          "text": "订单 Agent：我负责工具参数校验、权限检查和失败停止机制。"
+        }
+      ],
+      "resume_id": "7d7543f5-a70c-4f60-a585-0e2b4d7c54c2",
+      "revision": 1,
+      "source_type": "docx"
+    }
+  },
+  "report": {
+    "session_id": "73ea689d-1774-45aa-825d-7d1e33739e31",
+    "status": "ended_early",
+    "scoring_scope": "mock_interview_training",
+    "resume_context": {
+      "evidence_kind": "candidate_statement",
+      "externally_verified": false,
+      "no_project_experience": false,
+      "notice": "项目与成果仅为候选人陈述，未经外部核实，不作为技术答案或独立技术依据。",
+      "projects": [
+        {
+          "id": "project-paragraph-2",
+          "source": {
+            "paragraph": 2
+          },
+          "text": "订单 Agent：我负责工具参数校验、权限检查和失败停止机制。"
+        }
+      ],
+      "resume_id": "7d7543f5-a70c-4f60-a585-0e2b4d7c54c2",
+      "revision": 1,
+      "source_type": "docx"
+    },
+    "completeness": "partial",
+    "stop_reason": "user_ended",
+    "stop_reason_detail": "用户提前结束，报告仅基于已完成题组，未完成部分不计分。",
+    "average_score": 93,
+    "technical_average_score": null,
+    "answered_count": 1,
+    "blank_count": 0,
+    "skipped_count": 1,
+    "coverage": [
+      {
+        "competency_id": "introduction",
+        "status": "insufficient",
+        "group_ids": [
+          "22dd0f52-ee91-42c8-bdee-62282f5f7a21"
+        ],
+        "answer_quotes": [],
+        "unresolved": [
+          "跳过或空白，缺少可评价材料"
+        ],
+        "reason": "跳过或空白，缺少可评价材料"
+      },
+      {
+        "competency_id": "experience",
+        "status": "observed",
+        "group_ids": [
+          "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9"
+        ],
+        "answer_quotes": [
+          {
+            "group_id": "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9",
+            "quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。这个练习没有真实业务指标。"
+          }
+        ],
+        "unresolved": [],
+        "reason": "用户完整回答覆盖题目全部子问题要素，信息具体、结构可辨，虽为课程练习但已提供足够细节用于评价各维度；‘无真实业务指标’的坦诚亦属有效证据。"
+      },
+      {
+        "competency_id": "scenario",
+        "status": "not_applicable",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_memory",
+        "status": "insufficient",
+        "group_ids": [
+          "cae1e77c-b700-4a8b-ac23-3679f8892f54"
+        ],
+        "answer_quotes": [
+          {
+            "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+            "quote": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。验证时分别构造成功、超时和无权限输入；失败时返回明确错误，并用固定次数上限停止重试。我还不确定本题所有细节，不能用项目自述证明技术结论。"
+          }
+        ],
+        "unresolved": [
+          "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+        ],
+        "reason": "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+      },
+      {
+        "competency_id": "agent_loop",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_tool_calling",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "behavioral",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "candidate_questions",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      }
+    ],
+    "gaps": [
+      {
+        "competency_id": "introduction",
+        "status": "insufficient",
+        "group_ids": [
+          "22dd0f52-ee91-42c8-bdee-62282f5f7a21"
+        ],
+        "answer_quotes": [],
+        "unresolved": [
+          "跳过或空白，缺少可评价材料"
+        ],
+        "reason": "跳过或空白，缺少可评价材料"
+      },
+      {
+        "competency_id": "agent_memory",
+        "status": "insufficient",
+        "group_ids": [
+          "cae1e77c-b700-4a8b-ac23-3679f8892f54"
+        ],
+        "answer_quotes": [
+          {
+            "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+            "quote": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。验证时分别构造成功、超时和无权限输入；失败时返回明确错误，并用固定次数上限停止重试。我还不确定本题所有细节，不能用项目自述证明技术结论。"
+          }
+        ],
+        "unresolved": [
+          "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+        ],
+        "reason": "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。"
+      },
+      {
+        "competency_id": "agent_loop",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "agent_tool_calling",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "behavioral",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      },
+      {
+        "competency_id": "candidate_questions",
+        "status": "unobserved",
+        "group_ids": [],
+        "answer_quotes": [],
+        "unresolved": []
+      }
+    ],
+    "groups": [
+      {
+        "id": "22dd0f52-ee91-42c8-bdee-62282f5f7a21",
+        "question": {
+          "code": "Q-INTERVIEW-INTRODUCTION",
+          "version": 1,
+          "stage": "introduction",
+          "topic": "开场",
+          "competency_id": "introduction",
+          "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+        },
+        "status": "completed",
+        "feedback": null,
+        "score": null,
+        "followups": 0,
+        "disposition": "skipped",
+        "submissions": [
+          {
+            "id": "268e24a1-b32c-4659-9da6-c70bb93a7b58",
+            "turn_id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+            "client_submission_id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+            "disposition": "skipped",
+            "answer_text": "",
+            "status": "completed",
+            "job_id": null,
+            "score": null
+          }
+        ]
+      },
+      {
+        "id": "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9",
+        "question": {
+          "code": "Q-INTERVIEW-EXPERIENCE",
+          "version": 1,
+          "stage": "experience",
+          "topic": "经历或假设情境",
+          "competency_id": "experience",
+          "prompt": "请介绍一个你参与的项目：目标是什么、你具体负责什么、作过什么技术决策、如何验证结果？没有项目经历请明确说明。"
+        },
+        "status": "completed",
+        "feedback": {
+          "dimensions": [
+            {
+              "name": "accuracy",
+              "score": null,
+              "reason": "此环节不适用该维度",
+              "answer_quote": ""
+            },
+            {
+              "name": "completeness",
+              "score": 85,
+              "reason": "覆盖目标（订单查询 Agent 工具执行层）、职责（参数类型与权限校验、模型仅选工具/程序执行查询）、技术决策隐含在‘失败时返回明确错误并停止重试’（拒绝重试是明确行为约束决策）、验证方式（三类用例检查）；唯缺对‘目标’的显性表述（如‘支撑模型安全调用后端服务’），但‘工具执行层’可合理推断目标，故轻微缺失。",
+              "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。"
+            },
+            {
+              "name": "relevance",
+              "score": 100,
+              "reason": "全部内容紧扣题目四要素：课程练习对应项目背景，‘工具执行层’对应目标，‘负责参数类型与权限校验…’对应职责，‘三类用例检查’对应验证，‘失败时返回明确错误并停止重试’体现决策逻辑。",
+              "answer_quote": "我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。"
+            },
+            {
+              "name": "structure",
+              "score": 90,
+              "reason": "按‘项目—职责—决策—验证’隐性顺序展开，逻辑连贯；仅‘目标’未单列强调，但首句即点明项目及定位，整体信息流清晰。",
+              "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。"
+            },
+            {
+              "name": "specificity",
+              "score": 95,
+              "reason": "使用具体技术动作（参数类型校验、权限校验、停止重试）、具体用例类型（成功/无权限/超时）、具体行为结果（返回明确错误），并限定范围（‘模型只选择工具，程序执行实际查询’），无模糊表述。",
+              "answer_quote": "我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。"
+            }
+          ],
+          "strengths": [
+            "清晰界定分工边界：‘模型只选择工具，程序执行实际查询’，体现对Agent系统分层职责的理解。",
+            "验证设计具象可操作：明确列出‘成功、无权限、超时’三类用例，覆盖核心异常路径。",
+            "技术决策有行为锚点：‘失败时返回明确错误并停止重试’是可观察、可验证的确定性策略。",
+            "主动澄清局限：‘这个练习没有真实业务指标’坦诚说明验证尺度，体现元认知。",
+            "全程使用主动语态与第一人称，责任归属明确，符合‘区分个人贡献’要求。"
+          ],
+          "improvements": [
+            "应在开头明确声明‘这是课程练习而非真实项目’，以严格响应题目‘没有项目经历请明确说明’的指令。",
+            "可补一句目标本质，例如‘目标是保障LLM调用后端订单服务时的安全性与可控性’，使目标更可评估。",
+            "‘权限校验’可稍作展开（如基于角色还是Token？校验时机？），增强决策上下文厚度。",
+            "未提及任何反思或后续优化点（如‘发现超时阈值需根据DB负载动态调整’），错失展示闭环思维的机会。"
+          ],
+          "evidence_status": "observed",
+          "evidence_reason": "用户完整回答覆盖题目全部子问题要素，信息具体、结构可辨，虽为课程练习但已提供足够细节用于评价各维度；‘无真实业务指标’的坦诚亦属有效证据。",
+          "followup": null,
+          "overall_score": 93,
+          "assessment_coverage": 1.0,
+          "assessment_status": "complete",
+          "rubric_version": "interview_experience_v1",
+          "limitations": [],
+          "answer_version": 1,
+          "answer_origin": "project_original",
+          "reference_answer": "围绕候选人自述观察职责、决策理由、验证与反思；个人成果未经外部核实，不评价真实性。无经历转假设情境，不编造项目。",
+          "prompt_version": "interview_group_v3",
+          "requested_model": "qwen-plus",
+          "question_source": {
+            "kind": "project_original",
+            "path": "backend/src/interview_backend/mock_catalog.py",
+            "revision": "07.1"
+          },
+          "answer_generation": null,
+          "independent_references": []
+        },
+        "score": 93,
+        "followups": 0,
+        "disposition": "answered",
+        "submissions": [
+          {
+            "id": "09512d66-3d34-4159-afdd-9d66e18bad17",
+            "turn_id": "0f804727-d151-4c8a-a848-80deea1476c6",
+            "client_submission_id": "0f804727-d151-4c8a-a848-80deea1476c6",
+            "disposition": "answered",
+            "answer_text": "我在课程练习中实现了订单查询 Agent 的工具执行层。我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。这个练习没有真实业务指标。",
+            "status": "completed",
+            "job_id": "61514ea8-62e2-48cf-b05b-5c33d1827352",
+            "score": 93,
+            "feedback": {
+              "answer_generation": null,
+              "answer_origin": "project_original",
+              "answer_version": 1,
+              "assessment_coverage": 1.0,
+              "assessment_status": "complete",
+              "dimensions": [
+                {
+                  "answer_quote": "",
+                  "name": "accuracy",
+                  "reason": "此环节不适用该维度",
+                  "score": null
+                },
+                {
+                  "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。",
+                  "name": "completeness",
+                  "reason": "覆盖目标（订单查询 Agent 工具执行层）、职责（参数类型与权限校验、模型仅选工具/程序执行查询）、技术决策隐含在‘失败时返回明确错误并停止重试’（拒绝重试是明确行为约束决策）、验证方式（三类用例检查）；唯缺对‘目标’的显性表述（如‘支撑模型安全调用后端服务’），但‘工具执行层’可合理推断目标，故轻微缺失。",
+                  "score": 85
+                },
+                {
+                  "answer_quote": "我用成功、无权限和超时三类用例检查行为，失败时返回明确错误并停止重试。",
+                  "name": "relevance",
+                  "reason": "全部内容紧扣题目四要素：课程练习对应项目背景，‘工具执行层’对应目标，‘负责参数类型与权限校验…’对应职责，‘三类用例检查’对应验证，‘失败时返回明确错误并停止重试’体现决策逻辑。",
+                  "score": 100
+                },
+                {
+                  "answer_quote": "我在课程练习中实现了订单查询 Agent 的工具执行层。",
+                  "name": "structure",
+                  "reason": "按‘项目—职责—决策—验证’隐性顺序展开，逻辑连贯；仅‘目标’未单列强调，但首句即点明项目及定位，整体信息流清晰。",
+                  "score": 90
+                },
+                {
+                  "answer_quote": "我负责参数类型与权限校验，模型只选择工具，程序执行实际查询。",
+                  "name": "specificity",
+                  "reason": "使用具体技术动作（参数类型校验、权限校验、停止重试）、具体用例类型（成功/无权限/超时）、具体行为结果（返回明确错误），并限定范围（‘模型只选择工具，程序执行实际查询’），无模糊表述。",
+                  "score": 95
+                }
+              ],
+              "evidence_reason": "用户完整回答覆盖题目全部子问题要素，信息具体、结构可辨，虽为课程练习但已提供足够细节用于评价各维度；‘无真实业务指标’的坦诚亦属有效证据。",
+              "evidence_status": "observed",
+              "followup": null,
+              "improvements": [
+                "应在开头明确声明‘这是课程练习而非真实项目’，以严格响应题目‘没有项目经历请明确说明’的指令。",
+                "可补一句目标本质，例如‘目标是保障LLM调用后端订单服务时的安全性与可控性’，使目标更可评估。",
+                "‘权限校验’可稍作展开（如基于角色还是Token？校验时机？），增强决策上下文厚度。",
+                "未提及任何反思或后续优化点（如‘发现超时阈值需根据DB负载动态调整’），错失展示闭环思维的机会。"
+              ],
+              "independent_references": [],
+              "limitations": [],
+              "overall_score": 93,
+              "prompt_version": "interview_group_v3",
+              "question_source": {
+                "kind": "project_original",
+                "path": "backend/src/interview_backend/mock_catalog.py",
+                "revision": "07.1"
+              },
+              "reference_answer": "围绕候选人自述观察职责、决策理由、验证与反思；个人成果未经外部核实，不评价真实性。无经历转假设情境，不编造项目。",
+              "requested_model": "qwen-plus",
+              "rubric_version": "interview_experience_v1",
+              "strengths": [
+                "清晰界定分工边界：‘模型只选择工具，程序执行实际查询’，体现对Agent系统分层职责的理解。",
+                "验证设计具象可操作：明确列出‘成功、无权限、超时’三类用例，覆盖核心异常路径。",
+                "技术决策有行为锚点：‘失败时返回明确错误并停止重试’是可观察、可验证的确定性策略。",
+                "主动澄清局限：‘这个练习没有真实业务指标’坦诚说明验证尺度，体现元认知。",
+                "全程使用主动语态与第一人称，责任归属明确，符合‘区分个人贡献’要求。"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+        "question": {
+          "code": "Q-3642",
+          "version": 1,
+          "stage": "technical",
+          "topic": "记忆系统",
+          "competency_id": "agent_memory",
+          "prompt": "记忆系统中的意图识别承担什么职责？"
+        },
+        "status": "incomplete",
+        "feedback": null,
+        "score": null,
+        "followups": 1,
+        "submissions": [
+          {
+            "id": "3cb2af15-a5c3-4431-bff3-90a41c321df7",
+            "turn_id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+            "client_submission_id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+            "disposition": "answered",
+            "answer_text": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。验证时分别构造成功、超时和无权限输入；失败时返回明确错误，并用固定次数上限停止重试。我还不确定本题所有细节，不能用项目自述证明技术结论。",
+            "status": "completed",
+            "job_id": "bdac9b46-cacf-4353-9534-306910e33b9f",
+            "score": 39,
+            "feedback": {
+              "answer_generation": {
+                "author": "Codex (ticket 05)",
+                "generated_at": "2026-11-10",
+                "model": "Codex (exact runtime model ID unavailable)",
+                "revision": "05.1"
+              },
+              "answer_origin": "agent_generated",
+              "answer_version": 1,
+              "assessment_coverage": 0.4,
+              "assessment_status": "partial",
+              "dimensions": [
+                {
+                  "answer_quote": "",
+                  "name": "accuracy",
+                  "reason": "用户未直接回答‘意图识别承担什么职责’，而是转向说明模型与程序边界、验证方法及知识状态声明；题干要求的是职责定义，非实现机制或验证策略，无法依据参考答案标准判断其陈述是否准确对应职责。",
+                  "score": null
+                },
+                {
+                  "answer_quote": "",
+                  "name": "completeness",
+                  "reason": "未覆盖题干明确要求的核心职责：回忆/写入/更正/删除的路由判断、用户/项目/任务范围选择、临时vs持久偏好区分、不替代权限与事实校验等；回答完全偏离内容维度，无法评估是否完整。",
+                  "score": null
+                },
+                {
+                  "answer_quote": "模型理解输入并提出调用意图",
+                  "name": "relevance",
+                  "reason": "仅部分相关：提及‘模型理解输入并提出调用意图’触及意图识别表层动作，但全文重心在程序校验、失败处理和知识自省，与‘记忆系统中意图识别的职责’这一主题弱关联。",
+                  "score": 30
+                },
+                {
+                  "answer_quote": "我会先说明本题涉及的模型与程序边界：模型理解输入并提出调用意图，程序校验工具参数、权限并执行，再把真实结果交回模型。",
+                  "name": "structure",
+                  "reason": "有基本逻辑分层：先划边界→再讲验证→最后声明认知局限；但结构服务于自身论证框架，未按题干隐含结构（职责定位→具体作用→关键边界）组织，导致专业表达目的性偏移。",
+                  "score": 60
+                },
+                {
+                  "answer_quote": "验证时分别构造成功、超时和无权限输入；",
+                  "name": "specificity",
+                  "reason": "除‘调用意图’一词外，其余均为通用工程实践描述（如构造三类输入、固定重试上限），未出现任何记忆系统特有概念（如用户记忆分区、时间戳时效性、来源保留、偏好持久化机制等），缺乏领域具体性。",
+                  "score": 20
+                }
+              ],
+              "evidence_reason": "用户未提供任何关于记忆系统中意图识别职责的具体定义、作用机制或边界说明；所有陈述均围绕模型-程序协作与验证策略展开，与题干要求的内容无实质交集。",
+              "evidence_status": "insufficient",
+              "followup": {
+                "answer_quote": "模型理解输入并提出调用意图",
+                "competency_id": "agent_memory",
+                "purpose": "澄清用户对‘意图’在记忆系统中的具体内涵理解，聚焦职责定义而非实现机制",
+                "question_code": "Q-3642",
+                "text": "你提到‘模型理解输入并提出调用意图’，在记忆系统中，这个‘意图’具体会包含哪些与记忆操作直接相关的判断？比如，它如何决定该去读某位用户的过往对话，还是该把当前反馈写入长期偏好？"
+              },
+              "improvements": [
+                "需直接回应题干核心：明确说明意图识别在记忆系统中负责路由检索/写入/更新/删除操作，并绑定用户、项目、任务等上下文维度",
+                "应区分‘临时约束’（如本次英文要求）与‘持久偏好’，说明二者在记忆写入策略上的不同处理",
+                "必须强调意图识别结果仅为路由候选，不替代权限检查、事实核查与来源验证——当前回答将校验责任全归程序，未点明识别层本身的边界",
+                "避免用通用工具调用流程替代记忆系统特有职责；需嵌入‘记忆’语境（如回忆旧订单、写入新偏好、更正错误地址）",
+                "可补充简例说明意图识别如何影响后续动作，例如‘识别出‘查上周会议纪要’即路由至用户A的会议记忆分区并加时效过滤’"
+              ],
+              "independent_references": [],
+              "limitations": [
+                "部分维度未评估"
+              ],
+              "overall_score": 39,
+              "prompt_version": "interview_group_v3",
+              "question_source": {
+                "answer_status": "pending",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "9d34c5497ae763646d72578ea89dba98376900fb803cf41bccfb0dee41a3117b",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-3642",
+                "original_title": "记忆系统中的意图识别承担什么职责？",
+                "path": "questions/Q-3642.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "记忆系统",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3642.md"
+              },
+              "reference_answer": "记忆系统里的意图识别帮助判断当前请求是否需要回忆、写入、更正或删除信息，以及应查询哪个用户、项目或任务范围。例如这次改用英文是临时约束，今后都用英文才可能成为持久偏好候选。识别结果只是路由或候选，不替代权限、事实和来源验证；应避免把模型推断固化成用户事实。读取后仍检查相关性和时效，写入需按产品约定保留来源并支持更正删除。",
+              "requested_model": "qwen-plus",
+              "rubric_version": "interview_technical_v1",
+              "strengths": [
+                "清晰划定了模型与程序的职责边界，体现系统分层意识",
+                "主动声明知识不确定性和证据约束（‘不能用项目自述证明技术结论’），展现严谨性",
+                "提出了可操作的验证方法（成功/超时/无权限输入构造），具备工程落地思维",
+                "使用‘固定次数上限停止重试’等具体机制表述，避免空泛",
+                "结尾强调技术结论需独立于项目自述，符合科学验证原则"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "turns": [
+      {
+        "id": "e14cadd6-2038-4c12-9fd8-f4c8a93c276e",
+        "group_id": "22dd0f52-ee91-42c8-bdee-62282f5f7a21",
+        "question_code": "Q-INTERVIEW-INTRODUCTION",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "introduction",
+        "stage": "introduction",
+        "topic": "开场",
+        "competency_id": "introduction",
+        "text": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+      },
+      {
+        "id": "0f804727-d151-4c8a-a848-80deea1476c6",
+        "group_id": "ea66df26-8e82-4c5d-a18e-1ab4a0e955a9",
+        "question_code": "Q-INTERVIEW-EXPERIENCE",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "experience",
+        "stage": "experience",
+        "topic": "经历或假设情境",
+        "competency_id": "experience",
+        "text": "请介绍一个你参与的项目：目标是什么、你具体负责什么、作过什么技术决策、如何验证结果？没有项目经历请明确说明。\n【候选人自述，已确认片段，未经外部核实】\n订单 Agent：我负责工具参数校验、权限检查和失败停止机制。"
+      },
+      {
+        "id": "bcaa2fc2-81b6-4e32-ac8f-3b95e0554ec3",
+        "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+        "question_code": "Q-3642",
+        "question_version": 1,
+        "kind": "main",
+        "question_type": "technical",
+        "stage": "technical",
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "text": "记忆系统中的意图识别承担什么职责？"
+      },
+      {
+        "id": "3e529dad-795f-48b4-b6f0-6e674b123afb",
+        "group_id": "cae1e77c-b700-4a8b-ac23-3679f8892f54",
+        "question_code": "Q-3642",
+        "question_version": 1,
+        "kind": "followup",
+        "question_type": "technical",
+        "stage": "technical",
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "text": "你提到‘模型理解输入并提出调用意图’，在记忆系统中，这个‘意图’具体会包含哪些与记忆操作直接相关的判断？比如，它如何决定该去读某位用户的过往对话，还是该把当前反馈写入长期偏好？"
+      }
+    ],
+    "limitations": [
+      "训练评价不是招聘结论；经历与成果仅为候选人自述",
+      "本场只覆盖所选技术主题，不代表全部岗位能力"
+    ]
+  }
+}

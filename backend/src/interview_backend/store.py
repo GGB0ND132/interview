@@ -82,7 +82,14 @@ class Store:
                     + files("interview_backend").joinpath("migration_5.sql").read_text("utf-8")
                     + "\nCOMMIT;"
                 )
-            elif version != 5:
+                version = 5
+            if version == 5:
+                db.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + files("interview_backend").joinpath("migration_6.sql").read_text("utf-8")
+                    + "\nCOMMIT;"
+                )
+            elif version != 6:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
 
     @contextmanager
