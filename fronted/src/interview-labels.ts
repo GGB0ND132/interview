@@ -6,5 +6,5 @@ export const DIMENSIONS: Record<Dimension['name'], string> = { accuracy: '准确
 export const DISPOSITIONS: Record<Disposition, string> = { answered: '', blank_answer: '空白提交', skipped: '已跳过，不计分', no_experience: '没有项目经历', no_questions: '没有问题' }
 
 export function competencyLabel(id: string, questions: PlannedQuestion[]) {
-  return questions.find(question => question.competency_id === id)?.topic ?? STAGES[id as InterviewStage] ?? id
+  return STAGES[id as InterviewStage] ?? questions.find(question => question.competency_id === id)?.topic ?? id
 }
