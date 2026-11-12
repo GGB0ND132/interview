@@ -354,7 +354,14 @@ def test_confirming_no_project_overrides_experience_mode_with_a_labeled_scenario
         )
 
 
-@pytest.mark.parametrize("xml", [b"<broken", b'<!DOCTYPE x [<!ENTITY x "expanded">]><x>&x;</x>'])
+@pytest.mark.parametrize(
+    "xml",
+    [
+        b"<broken",
+        b'<!DOCTYPE x [<!ENTITY x "expanded">]><x>&x;</x>',
+        b'<?xml version="1.0" encoding="unknown-resume-encoding"?><x/>',
+    ],
+)
 def test_invalid_docx_xml_returns_a_failure_preview(tmp_path, xml):
     output = BytesIO()
     with ZipFile(output, "w") as archive:

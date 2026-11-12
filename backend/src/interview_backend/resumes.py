@@ -177,14 +177,13 @@ class Resumes:
                 raise ValueError("Extracted text exceeds limit")
         except (
             ValueError,
-            KeyError,
+            LookupError,
             BadZipFile,
             ParseError,
             DefusedXmlException,
             PyPdfError,
             OSError,
             ZlibError,
-            IndexError,
             TypeError,
             OverflowError,
             NotImplementedError,
