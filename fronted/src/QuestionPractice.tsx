@@ -148,7 +148,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   const refreshHistory = useCallback(async () => {
     try {
       const recent = await api.history(1, 10)
-      setHistory(recent.items)
+      setHistory(recent.items.filter(item => item.mode !== 'mock_interview'))
     } catch {
       // History is a convenience; the current session stays usable.
     }
@@ -192,7 +192,7 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
       const published = list.items.filter(item => item.status === 'published')
       const first = published.find(pack => pack.id === 'pack_agent_basics_mianstack') ?? published[0]
       setPacks(published)
-      setHistory(recent.items)
+      setHistory(recent.items.filter(item => item.mode !== 'mock_interview'))
       const stored = readStored()
       let restored: SessionView | null = null
       if (stored) {
@@ -295,10 +295,10 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
         {availability && <details className="qp-topics"><summary>查看主题覆盖与缺口</summary><ul className="qp-topic-list" aria-label="主题覆盖">{availability.topics.filter(topic => !focus || topic.competency_id === focus).map(topic => <li key={topic.competency_id}><span>{topic.topic}</span><span>{mode === 'mock_interview' ? topic.interview_count : topic.available_count} 道</span></li>)}</ul></details>}
       </section>
       {error && <p className="field-error" role="alert">{error}</p>}
-      <button className="button primary setup-submit" type="submit" disabled={!availability?.can_start || busy || mode === 'mock_interview'}><Play size={17} />{mode === 'mock_interview' ? '开始模拟面试' : busy ? '正在抽题' : '随机抽一题'}</button>
+      {mode === 'mock_interview' && availability?.can_start ? <a className="button primary setup-submit" href="/practice"><Play size={17} />进入模拟面试</a> : <button className="button primary setup-submit" type="submit" disabled={!availability?.can_start || busy || mode === 'mock_interview'}><Play size={17} />{mode === 'mock_interview' ? '开始模拟面试' : busy ? '正在抽题' : '随机抽一题'}</button>}
     </form>}
     {history.length > 0 && <section className="qp-history"><h2>最近练习</h2><div className="history-list">{history.map(item => <button className="history-row qp-history-row" key={item.session_id} onClick={() => void reopen(item.session_id)}><div><strong>{item.current_turn?.topic ?? '抽题中'}</strong><div className="history-sub"><span>{item.pack_title ?? item.pack_id}</span><span>{new Intl.DateTimeFormat('zh-CN', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(item.created_at))}</span><span>{PHASES[item.phase]}</span></div></div><span className="history-score">{item.submissions[0]?.score ?? '—'}</span></button>)}</div></section>}
-    <p className="page-footnote">可用性、单题练习和最近练习来自本机服务；面试演示、资料管理和旧历史页仍为演示数据。</p>
+    <p className="page-footnote">试题练习与模拟面试来自本机服务；资料管理和独立历史页仍为演示数据。</p>
   </main>
 }
 
@@ -308,6 +308,7 @@ const PHASES: Record<SessionView['phase'], string> = {
   evaluating: '评价中',
   feedback_ready: '已反馈',
   evaluation_failed: '评价失败',
+  stage_transition: '环节切换',
 }
 
 type TurnKey = { turn: string; disposition: Submission['disposition']; text: string }

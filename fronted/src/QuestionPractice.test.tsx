@@ -2,6 +2,7 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import QuestionPractice from './QuestionPractice'
+import { createPracticeApi } from './api'
 import type {
   Availability,
   Feedback,
@@ -142,6 +143,7 @@ const HISTORY: HistoryPage = { items: [awaiting()], page: 1, page_size: 10, tota
 
 function fakeApi() {
   return {
+    ...createPracticeApi(),
     packs: vi.fn<PracticeApi['packs']>(async () => ({ items: [PACK] })),
     availability: vi.fn<PracticeApi['availability']>(async () => AVAILABILITY),
     create: vi.fn<PracticeApi['create']>(async () => draft()),
