@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 from .contracts import AvailabilityConfig, CreateSession, RevisionRequest, SubmitAnswer
 from .errors import PracticeError
+from .mock_catalog import publish_common
 from .model import Evaluator, HttpEvaluator, ModelSettings
 from .practice import Practice
 from .publishing import DisableQuestion, PublicationRequest, Publishing
@@ -84,6 +85,10 @@ def create_app(
     def preview_publication(request: PublicationRequest) -> JSONResponse:
         return response(publishing.review(request, publish=False))
 
+    @app.post("/api/v1/maintenance/mock-interview-questions/publish")
+    def publish_interview_stages() -> JSONResponse:
+        return response(publish_common(service.store), status=201)
+
     @app.post("/api/v1/maintenance/question-publications")
     def publish_questions(request: PublicationRequest) -> JSONResponse:
         return response(publishing.review(request, publish=True), status=201)
@@ -129,6 +134,14 @@ def create_app(
     @app.get("/api/v1/sessions/{session_id}")
     def get_session(session_id: str) -> JSONResponse:
         return response(service.view(session_id))
+
+    @app.post("/api/v1/sessions/{session_id}/next")
+    def next_group(session_id: str, request: RevisionRequest) -> JSONResponse:
+        return response(service.advance(session_id, request.expected_revision))
+
+    @app.post("/api/v1/sessions/{session_id}/finish")
+    def finish(session_id: str, request: RevisionRequest) -> JSONResponse:
+        return response(service.finish(session_id, request.expected_revision))
 
     @app.post("/api/v1/sessions/{session_id}/answers")
     def submit(session_id: str, request: SubmitAnswer, background: BackgroundTasks) -> JSONResponse:
