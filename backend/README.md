@@ -116,3 +116,11 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 后六主题 58 题（16 原文、5 维护者修订、37 补答）已通过三个独立子 Agent 全量审核和正式发布；6 处问题修正并复核后无未决项，GUI 唯一来源题已全量核查。显式 `--review-policy agent_full --scope second-half` 使用真实 Agent 身份及完整内容哈希审批；默认 `human_sample` 保留，人工模板不代填。06 工作区的本地持久化实例为 API 8001、前端 5174，继承 05 已发布的 57 题后，该实例全部 12 主题实际可抽 115；05 原服务不受影响。详见 [在线发布与验收](../docs/verification/06-live-release.md)、[题包说明](../docs/content-baseline/agent-topics-06/README.md) 和 [内容审核](../docs/verification/06-content-review.md)。main 已合并 05 与 06 的候选源码；各工作区的本地数据库不会随 Git 合并自动复制或发布，可用数以连接目标的实际接口为准。
 
 06 增加 schema 3 的题目隔离、主题暂停及版本绑定的更正/扩大抽查/恢复接口。已知错题先停用，同主题重复错误暂停评分（错误类别可以不同），纠正并复查后才能恢复；暂停或隔离同时影响抽题与进行中的模型评分，用户回答保留。普通 03 发布仍不允许绕过停用；须先登记该版本质量问题，再经 `/maintenance/topic-quality/{competency_id}/corrections` 人工核查后提交新版本，扩大复查完成前仍隔离。完整请求格式与边界见上述说明。
+
+## 13：答案追溯、证据与用户报错
+
+每次作答（含空白、跳过、失败）保存答案版本与来源快照。普通反馈的 `independent_references` 只包含实际使用的已核验支持片段；原题定位单列 `question_source`，补答与生成元数据仅在维护接口可见。
+
+维护者通过 `POST /api/v1/maintenance/questions/{code}/evidence` 登记真实核对过的 claim、正文片段和最终文档 URL。超出答案范围或版本争议时，检索同题同答案版本的核验资料库并复查支持关系；无直接证据时不作确定新增判断。此功能不提供开放互联网搜索。
+
+用户通过 `POST /api/v1/sessions/{id}/reports` 提交题目或评分疑问，服务端绑定历史题目和答案版本。维护者从 `/api/v1/maintenance/reports` 查询与处理，再按已有停用/质量流程操作题目。完整请求、返回字段、迁移及验收见 [13 接口与验证记录](../docs/verification/13-provenance-and-reports.md)。

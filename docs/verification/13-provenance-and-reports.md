@@ -33,7 +33,7 @@
 
 检索候选须重新读取来源且保存片段仍在正文；模型再次判断是否直接支持具体结论，服务端核查所选 ID 和支持引文的精确子串。关键词重合不足以支持结论。只将 `verified` 结果作为 `technical_explanations`，并保存支持片段与证据 ID。没有直接证据为 `insufficient_evidence`；网络、文档变化或模型核查失败为 `retrieval_failed`，保存 `attempt_id,query,candidate_ids,source_failures,error_code`，不回显提供商错误正文。
 
-未能核实的争议至少使 accuracy/completeness 及声明受影响维度成为 null；重算分数和覆盖率，替换可能含确定结论的建议文案。实际回答不变，用户可报错等待维护。新增资料后可用于后续会话或正在评价的按需检索；已保存结果不会被后台资料更新改写。本项不新增已完成评分的重评入口。
+未能核实的争议至少使 accuracy/completeness 及声明受影响维度成为 null；重算分数和覆盖率，替换所有维度理由及建议文案。此时丢弃模型最初选择的引用，独立引用只保留运行时直接核验通过的资料，避免已被拒绝的依据又从初始引用路径重新出现。实际回答不变，用户可报错等待维护。新增资料后可用于后续会话或正在评价的按需检索；已保存结果不会被后台资料更新改写。本项不新增已完成评分的重评入口。
 
 该后端沿用本机单用户、维护接口无认证的现有运行边界。
 
@@ -51,4 +51,34 @@ uv run python -X utf8 scripts/acceptance_provenance.py --database data/13-live-n
 
 定向 HTTP 测试覆盖完整片段与实际引用、仅原题来源、无证据争议、支持/不支持/网络失败/伪造引文的检索、用户报错/改版/处理/停用/重启、空白与跳过、旧库迁移、伪造资料 ID。仅替换外部模型与文档 HTTP 边界。
 
-真实验收结果、完整回归及独立双轴审查将在完成后记录于此。
+完整回归：后端 `pytest` 105 passed；`mypy`、Ruff lint/format 全部通过。前端回归 20 passed，TypeScript/Vite 构建及 ESLint 通过。定向来源/报错 HTTP 测试 19 passed，包含初始引用与拒绝支持交叉路径。
+
+2026-11-12 修正后使用真实 `qwen-plus`、实际 Anthropic 文档和独立临时 SQLite 完成 TCP HTTP 验收。仅原题来源无独立引用；登记并使用完整支持片段后返回真实引用；LangGraph 虚构版本断言检索后无直接支持，相关维度不评分且不返回支持引用；用户报错进入 `open` 并可处理到 `in_review`。服务重启后逐字段比较三份反馈与报错记录，一致。实际语义核查模型另验证直接支持和主题无关两种结果。原始记录见 [13-live-provenance.json](13-live-provenance.json)，最终运行无模型重试。
+
+首次真实验收中一次结构化模型输出不合约被严格拒绝，未降级为假反馈。验收脚本现通过既有 retry 接口最多显式重试两次并记录原因；最终完整运行不需重试。故障路径、改版与停用使用可重复 HTTP 测试，不把模拟外部故障说成真实网络故障验收。
+
+## Standards
+
+首次独立审查未发现阻塞问题或文档规范违规。P3 建议：运行时核查结果在多个模块间以 `dict[str, Any]` 传递，状态相关的支持字段缺少静态约束。
+
+复查原文：
+
+> P3 addressed: `CheckedClaim` and `SourceFailure` now define the shared runtime contract, constrain statuses, and validate support invariants. `resolve_checks`, `abstain`, and `Practice` consume typed attributes; the validated construction dictionary is reasonable.
+>
+> The conservative unresolved-check handling consistently removes startup references and replaces dimension prose before persistence.
+>
+> No new blocker or documented-standard breach found in the targeted diff. Read-only review; I did not rerun the reported checks.
+
+## Spec
+
+首次独立审查发现 P1：证据在会话开始前已登记、随后被核查为不支持结论时，初始 `used_reference_ids` 路径仍可把它带入可展示引用。已按 red→green 增加交叉路径回归并修正筛选。
+
+复查原文：
+
+> Spec re-review: previous P1 is resolved. Unresolved checks now exclude startup citations; only independently verified runtime evidence remains visible. Abstention also clears potentially unsupported assertions from every dimension’s reason.
+>
+> The new regression covers evidence registered before session start, rejected support, and surviving prose. Source-change coverage verifies a locatable retrieval failure. `CheckedClaim` rejects inconsistent support states.
+>
+> Verified: `uv run pytest tests/test_provenance.py -q` — 19 passed. No new spec blocker or scope creep found in the working-tree fixes.
+
+两个轴各发现 1 项，均已修正并复查；Standards 剩余 0 项，Spec 剩余 0 项。

@@ -348,27 +348,30 @@ class Practice:
             checks, retrieved = resolve_checks(evaluation, question, self.evidence, self.verifier)
             evaluation = abstain(evaluation, checks)
             result = feedback(evaluation, row["answer_text"])
-            result["technical_checks"] = checks
+            result["technical_checks"] = [check.model_dump() for check in checks]
             result["technical_explanations"] = [
                 {
-                    "claim": c["claim"],
-                    "reference_id": c["reference_id"],
-                    "support_quote": c["support_quote"],
+                    "claim": c.claim,
+                    "reference_id": c.reference_id,
+                    "support_quote": c.support_quote,
                 }
                 for c in checks
-                if c["status"] == "verified"
+                if c.status == "verified"
             ]
             references = question.get("verified_references", [])
             if set(evaluation.used_reference_ids) - {r["id"] for r in references}:
                 raise ValueError("Model used an unknown evidence ID")
             provenance = snapshot(question)
+            has_unresolved = any(c.status != "verified" for c in checks)
             provenance["independent_references"] = [
-                r for r in references if r["id"] in evaluation.used_reference_ids
+                r
+                for r in references
+                if not has_unresolved and r["id"] in evaluation.used_reference_ids
             ]
             for reference in retrieved:
                 if reference["id"] not in {r["id"] for r in provenance["independent_references"]}:
                     provenance["independent_references"].append(reference)
-            provenance["technical_checks"] = checks
+            provenance["technical_checks"] = [check.model_dump() for check in checks]
             result.update(public_provenance(provenance))
             result.update(
                 {

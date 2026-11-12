@@ -152,11 +152,15 @@ def test_disputed_claim_without_direct_evidence_abstains_and_is_traceable(tmp_pa
         assert feedback["independent_references"] == []
 
 
-@pytest.mark.parametrize("outcome", ["supported", "unrelated", "timeout", "invented_quote"])
+@pytest.mark.parametrize(
+    "outcome", ["supported", "unrelated", "timeout", "invented_quote", "changed_excerpt"]
+)
 def test_on_demand_retrieval_requires_direct_support_and_records_failure(tmp_path, outcome):
     def document(_):
         if outcome == "timeout" and registered:
             raise httpx.ReadTimeout("private provider detail must stay private")
+        if outcome == "changed_excerpt" and registered:
+            return httpx.Response(200, text="Source changed and the original quote disappeared.")
         return httpx.Response(200, text=f"<p>{EXCERPT}</p>")
 
     def model(request):
@@ -214,7 +218,7 @@ def test_on_demand_retrieval_requires_direct_support_and_records_failure(tmp_pat
             assert feedback["dimensions"][0]["score"] is None
             assert check["status"] == (
                 "retrieval_failed"
-                if outcome in {"timeout", "invented_quote"}
+                if outcome in {"timeout", "invented_quote", "changed_excerpt"}
                 else "insufficient_evidence"
             )
             assert check["attempt_id"]
@@ -395,3 +399,55 @@ def test_model_cannot_invent_reference_ids_and_answer_remains_retryable(tmp_path
         assert submission["error"]["code"] == "MODEL_OUTPUT_INVALID"
         assert submission["answer_text"] == "根据真实结果继续执行"
         assert "feedback" not in submission
+
+
+def test_rejected_support_cannot_survive_as_startup_citation_or_unaffected_prose(tmp_path):
+    class OverconfidentEvaluator(DisputedEvaluator):
+        def evaluate(self, **kwargs):
+            result = super().evaluate(**kwargs)
+            return result.model_copy(
+                update={
+                    "dimensions": [
+                        d.model_copy(update={"reason": "UNVERIFIED_CONCLUSION is definitely true"})
+                        for d in result.dimensions
+                    ]
+                }
+            )
+
+    def reject(_):
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "supported": False,
+                                    "reference_id": None,
+                                    "quote": "",
+                                }
+                            )
+                        }
+                    }
+                ]
+            },
+        )
+
+    from interview_backend.model import ModelSettings
+
+    with TestClient(
+        create_app(
+            database_path=tmp_path / "rejected.sqlite3",
+            evaluator=OverconfidentEvaluator(),
+            evidence_transport=httpx.MockTransport(lambda _: httpx.Response(200, text=EXCERPT)),
+            model_transport=httpx.MockTransport(reject),
+            model_settings=ModelSettings(api_key="test-only"),
+        )
+    ) as client:
+        for code in ("Q-AGENT-SAMPLE-01", "Q-AGENT-SAMPLE-02"):
+            data(register(client, code))
+        feedback = complete(client, start(client))["feedback"]
+        assert feedback["technical_checks"][0]["status"] == "insufficient_evidence"
+        assert feedback["independent_references"] == []
+        assert all("UNVERIFIED_CONCLUSION" not in d["reason"] for d in feedback["dimensions"])

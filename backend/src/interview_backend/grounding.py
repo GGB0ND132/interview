@@ -3,17 +3,17 @@ from __future__ import annotations
 from typing import Any
 from uuid import uuid4
 
-from .contracts import ModelEvaluation
+from .contracts import CheckedClaim, ModelEvaluation
 from .errors import PracticeError
 from .model import ClaimVerifier, ModelError
 from .provenance import Evidence, timestamp
 
 
-def abstain(evaluation: ModelEvaluation, checks: list[dict[str, Any]]) -> ModelEvaluation:
-    unresolved = [c for c in checks if c["status"] != "verified"]
+def abstain(evaluation: ModelEvaluation, checks: list[CheckedClaim]) -> ModelEvaluation:
+    unresolved = [c for c in checks if c.status != "verified"]
     if not unresolved:
         return evaluation
-    affected = {name for c in unresolved for name in c["affected_dimensions"]}
+    affected = {name for c in unresolved for name in c.affected_dimensions}
     # A technical dispute always makes technical accuracy and completeness uncertain.
     affected.update({"accuracy", "completeness"})
     dimensions = [
@@ -24,7 +24,9 @@ def abstain(evaluation: ModelEvaluation, checks: list[dict[str, Any]]) -> ModelE
             }
         )
         if d.name in affected
-        else d
+        else d.model_copy(
+            update={"reason": "仅按已保存回答的表达评价此维度；争议技术结论暂不判断。"}
+        )
         for d in evaluation.dimensions
     ]
     return evaluation.model_copy(
@@ -41,8 +43,8 @@ def resolve_checks(
     question: dict[str, Any],
     evidence: Evidence,
     verifier: ClaimVerifier,
-) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    checks: list[dict[str, Any]] = []
+) -> tuple[list[CheckedClaim], list[dict[str, Any]]]:
+    checks: list[CheckedClaim] = []
     used: dict[str, dict[str, Any]] = {}
     for check in evaluation.technical_checks:
         outcome: dict[str, Any] = {
@@ -84,5 +86,5 @@ def resolve_checks(
                 outcome.update(status="retrieval_failed", error_code=failures[0]["code"])
         except ModelError as exc:
             outcome.update(status="retrieval_failed", error_code=exc.code)
-        checks.append(outcome)
+        checks.append(CheckedClaim.model_validate(outcome))
     return checks, list(used.values())

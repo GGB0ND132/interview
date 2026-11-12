@@ -84,6 +84,30 @@ class EvidenceVerdict(BaseModel):
     quote: str = Field(default="", max_length=5000)
 
 
+class SourceFailure(BaseModel):
+    reference_id: str
+    code: str
+
+
+class CheckedClaim(TechnicalCheck):
+    status: Literal["verified", "insufficient_evidence", "retrieval_failed"]
+    attempt_id: str
+    checked_at: str
+    candidate_ids: list[str] = Field(default_factory=list)
+    source_failures: list[SourceFailure] = Field(default_factory=list)
+    error_code: str | None = None
+    reference_id: str | None = None
+    support_quote: str = ""
+
+    @model_validator(mode="after")
+    def valid_support(self) -> CheckedClaim:
+        if self.status == "verified" and (not self.reference_id or not self.support_quote.strip()):
+            raise ValueError("Verified claim requires a supporting reference and quote")
+        if self.status != "verified" and (self.reference_id or self.support_quote):
+            raise ValueError("Unverified claim cannot contain confirmed support")
+        return self
+
+
 class ModelEvaluation(BaseModel):
     # A provider-supplied overall_score is deliberately ignored.
     model_config = ConfigDict(extra="ignore")
