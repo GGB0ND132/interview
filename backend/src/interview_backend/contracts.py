@@ -99,6 +99,47 @@ class Followup(BaseModel):
     competency_id: str = Field(min_length=1, max_length=100)
 
 
+class TechnicalCheck(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    claim: str = Field(min_length=1, max_length=2000)
+    query: str = Field(min_length=1, max_length=500)
+    reason: Literal["outside_answer", "version_dispute"]
+    affected_dimensions: list[
+        Literal["accuracy", "completeness", "relevance", "structure", "specificity"]
+    ] = Field(default=["accuracy", "completeness"], min_length=1, max_length=5)
+
+
+class EvidenceVerdict(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    supported: bool = Field(strict=True)
+    reference_id: str | None = None
+    quote: str = Field(default="", max_length=5000)
+
+
+class SourceFailure(BaseModel):
+    reference_id: str
+    code: str
+
+
+class CheckedClaim(TechnicalCheck):
+    status: Literal["verified", "insufficient_evidence", "retrieval_failed"]
+    attempt_id: str
+    checked_at: str
+    candidate_ids: list[str] = Field(default_factory=list)
+    source_failures: list[SourceFailure] = Field(default_factory=list)
+    error_code: str | None = None
+    reference_id: str | None = None
+    support_quote: str = ""
+
+    @model_validator(mode="after")
+    def valid_support(self) -> CheckedClaim:
+        if self.status == "verified" and (not self.reference_id or not self.support_quote.strip()):
+            raise ValueError("Verified claim requires a supporting reference and quote")
+        if self.status != "verified" and (self.reference_id or self.support_quote):
+            raise ValueError("Unverified claim cannot contain confirmed support")
+        return self
+
+
 class ModelEvaluation(BaseModel):
     # A provider-supplied overall_score is deliberately ignored.
     model_config = ConfigDict(extra="ignore")
@@ -108,6 +149,8 @@ class ModelEvaluation(BaseModel):
     evidence_status: Literal["observed", "insufficient"] | None = None
     evidence_reason: str = Field(default="", max_length=2000)
     followup: Followup | None = None
+    used_reference_ids: list[str] = Field(default_factory=list, max_length=30)
+    technical_checks: list[TechnicalCheck] = Field(default_factory=list, max_length=5)
 
     @model_validator(mode="after")
     def unique_dimensions(self) -> ModelEvaluation:

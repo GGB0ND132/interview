@@ -13,12 +13,21 @@ from .contracts import (
     Config,
     CreateSession,
     MockConfig,
+    ModelEvaluation,
     SelectionCriteria,
     SubmitAnswer,
     feedback,
 )
 from .errors import PracticeError
-from .model import INTERVIEW_PROMPT_VERSION, PROMPT_VERSION, Evaluator, ModelError
+from .grounding import abstain, resolve_checks
+from .model import (
+    INTERVIEW_PROMPT_VERSION,
+    PROMPT_VERSION,
+    ClaimVerifier,
+    Evaluator,
+    ModelError,
+)
+from .provenance import Evidence, public_provenance, snapshot
 from .publishing import PACK_ID, TOPICS, topic_counts
 from .resumes import Resumes
 from .store import Store
@@ -29,10 +38,20 @@ def encode(value: Any) -> str:
 
 
 class Practice:
-    def __init__(self, store: Store, evaluator: Evaluator, model_name: str = "external_adapter"):
+    def __init__(
+        self,
+        store: Store,
+        evaluator: Evaluator,
+        *,
+        evidence: Evidence,
+        verifier: ClaimVerifier,
+        model_name: str = "external_adapter",
+    ):
         self.store = store
         self.evaluator = evaluator
         self.model_name = model_name
+        self.evidence = evidence
+        self.verifier = verifier
 
     def _pool(
         self, db: sqlite3.Connection, pack_id: str, config: SelectionCriteria
@@ -127,7 +146,9 @@ class Practice:
         if row["status"] == "completed":
             result["score"] = row["score"]
             if row["evaluation_json"]:
-                result["feedback"] = json.loads(row["evaluation_json"])
+                result["feedback"] = public_provenance(json.loads(row["evaluation_json"]))
+        if row["provenance_json"]:
+            result["provenance"] = public_provenance(json.loads(row["provenance_json"]))
         if row["error_json"]:
             result["error"] = json.loads(row["error_json"])
         return result
@@ -179,7 +200,7 @@ class Practice:
         state = mock_interview.load(db, session_id)
         if state is not None:
             return mock_interview.decorate(result, state)
-        if json.loads(row["config_json"])["mode"] == "mock_interview":
+        if json.loads(row["config_json"]).get("mode") == "mock_interview":
             result["mode"] = "mock_interview"
             result["resume_context"] = mock_interview.resume_snapshot(db, session_id)
         return result
@@ -259,6 +280,9 @@ class Practice:
                 raise PracticeError("QUESTION_POOL_EXHAUSTED", "开始时已无可用题目", 400)
             seed = secrets.randbits(64)
             question = random.Random(seed).choice(pool)
+            question["verified_references"] = self.evidence.references(
+                question["code"], question["version"]
+            )
             selection = {
                 "seed": str(seed),
                 "candidate_pool": [{"code": q["code"], "version": q["version"]} for q in pool],
@@ -327,6 +351,13 @@ class Practice:
                     job_id,
                 ),
             )
+            db.execute(
+                "UPDATE submissions SET provenance_json=? WHERE id=?",
+                (
+                    encode(snapshot(json.loads(session["question_json"]))),
+                    submission_id,
+                ),
+            )
             if job_id:
                 db.execute(
                     "INSERT INTO jobs VALUES (?,?,'queued','evaluation',NULL)",
@@ -378,28 +409,53 @@ class Practice:
             if block:
                 raise ModelError("题目已停用或主题评分暂停；回答已保留，请等待维护复核", block)
             evaluation = self.evaluator.evaluate(question=question, answer=answer)
+            evaluation = ModelEvaluation.model_validate(evaluation.model_dump())
+            checks, retrieved = resolve_checks(evaluation, question, self.evidence, self.verifier)
+            evaluation = abstain(evaluation, checks)
             result = (
                 mock_interview.assess(evaluation, answer, question["stage"])
                 if state is not None
                 else feedback(evaluation, answer)
             )
+            result["technical_checks"] = [check.model_dump() for check in checks]
+            result["technical_explanations"] = [
+                {
+                    "claim": c.claim,
+                    "reference_id": c.reference_id,
+                    "support_quote": c.support_quote,
+                }
+                for c in checks
+                if c.status == "verified"
+            ]
+            references = question.get("verified_references", [])
+            if set(evaluation.used_reference_ids) - {r["id"] for r in references}:
+                raise ValueError("Model used an unknown evidence ID")
+            provenance = snapshot(question)
+            has_unresolved = any(c.status != "verified" for c in checks)
+            provenance["independent_references"] = [
+                r
+                for r in references
+                if not has_unresolved and r["id"] in evaluation.used_reference_ids
+            ]
+            for reference in retrieved:
+                if reference["id"] not in {r["id"] for r in provenance["independent_references"]}:
+                    provenance["independent_references"].append(reference)
+            provenance["technical_checks"] = [check.model_dump() for check in checks]
+            result.update(public_provenance(provenance))
             result.update(
                 {
-                    "answer_version": question["version"],
-                    "answer_origin": question["answer_origin"],
                     "reference_answer": question["answer"],
                     "prompt_version": INTERVIEW_PROMPT_VERSION
                     if state is not None
                     else PROMPT_VERSION,
                     "requested_model": self.model_name,
-                    "question_source": question["source"],
-                    "answer_generation": question.get("generation"),
-                    "independent_references": question.get("answer_refs", []),
                 }
             )
         except ModelError as exc:
+            result = None
             failure = {"code": exc.code, "message": str(exc), "retryable": True}
         except ValueError:
+            result = None
             failure = {
                 "code": "MODEL_OUTPUT_INVALID",
                 "message": "模型评价或回答引文无效，回答已保留",
@@ -436,6 +492,14 @@ class Practice:
                     job_id,
                 ),
             )
+            if result:
+                db.execute(
+                    "UPDATE submissions SET provenance_json=? WHERE id=?",
+                    (
+                        encode(provenance),
+                        row["id"],
+                    ),
+                )
             db.execute(
                 "UPDATE sessions SET revision=revision+1,phase=?,status=? WHERE id=?",
                 (
@@ -484,7 +548,7 @@ class Practice:
     def report(self, session_id: str) -> dict[str, Any]:
         with self.store.connect() as db:
             session = self._row(db, session_id)
-            if json.loads(session["config_json"])["mode"] == "mock_interview":
+            if json.loads(session["config_json"]).get("mode") == "mock_interview":
                 if session["status"] not in {"completed", "ended_early"}:
                     raise PracticeError("REPORT_NOT_READY", "模拟面试结束后才公开详细报告")
                 state = mock_interview.load(db, session_id)
@@ -504,6 +568,7 @@ class Practice:
         ]
         return {
             "session_id": session_id,
+            "provenance": submissions[0].get("provenance") if submissions else None,
             "average_score": round(sum(scores) / len(scores)) if scores else None,
             "answered_count": len(scores),
             "blank_count": sum(s["disposition"] == "blank_answer" for s in submissions),
@@ -534,3 +599,12 @@ class Practice:
                 raise PracticeError("STATE_CONFLICT", "当前状态不能结束模拟面试")
             mock_interview.finish(db, session_id, state, "user_ended")
             return self._view(db, session_id)
+
+    def provenance(self, submission_id: str) -> dict[str, Any]:
+        with self.store.connect() as db:
+            row = db.execute(
+                "SELECT provenance_json FROM submissions WHERE id=?", (submission_id,)
+            ).fetchone()
+            if row is None:
+                raise PracticeError("NOT_FOUND", "评分记录不存在", 404)
+            return json.loads(row[0]) if row[0] else {}

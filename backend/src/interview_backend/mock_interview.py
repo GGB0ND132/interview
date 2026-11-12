@@ -15,6 +15,7 @@ from . import jd
 from .contracts import WEIGHTS, MockConfig, ModelEvaluation, feedback
 from .errors import PracticeError
 from .mock_catalog import STAGES, common_questions
+from .provenance import public_provenance
 from .store import Store
 
 MINIMUM_QUESTIONS_PER_TOPIC = jd.MINIMUM_QUESTIONS_PER_TOPIC
@@ -228,6 +229,14 @@ def issue_turn(
     kind: str,
     text: str,
 ) -> None:
+    if "verified_references" not in question:
+        question["verified_references"] = [
+            json.loads(row[0])
+            for row in db.execute(
+                "SELECT payload FROM verified_evidence WHERE question_code=? AND answer_version=? ORDER BY id",
+                (question["code"], question["version"]),
+            )
+        ]
     turn = {
         "id": str(uuid4()),
         "group_id": state["groups"][-1]["id"],
@@ -532,7 +541,9 @@ def report(
             {
                 **g,
                 "question": public_question(g["question"]),
-                "feedback": g["feedback"] if g["status"] == "completed" else None,
+                "feedback": public_provenance(g["feedback"])
+                if g["status"] == "completed" and g["feedback"]
+                else None,
                 "submissions": [
                     s
                     for s in submissions

@@ -69,6 +69,15 @@ class Store:
                     + "\nCOMMIT;"
                 )
                 version = 3
+            # Ticket 13 independently used schema 4 for provenance.
+            has_provenance = any(
+                column[1] == "provenance_json"
+                for column in db.execute("PRAGMA table_info(submissions)")
+            )
+            if version == 4 and has_provenance:
+                db.execute(
+                    "CREATE TABLE IF NOT EXISTS mock_interviews (session_id TEXT PRIMARY KEY REFERENCES sessions(id), state_json TEXT NOT NULL)"
+                )
             if version == 3:
                 db.executescript(
                     "BEGIN IMMEDIATE;\n"
@@ -89,8 +98,48 @@ class Store:
                     + files("interview_backend").joinpath("migration_6.sql").read_text("utf-8")
                     + "\nCOMMIT;"
                 )
-            elif version != 6:
+                version = 6
+            if version == 6:
+                db.execute("BEGIN IMMEDIATE")
+                if not has_provenance:
+                    db.execute("ALTER TABLE submissions ADD COLUMN provenance_json TEXT")
+                db.commit()
+                db.executescript(
+                    "BEGIN IMMEDIATE;\n"
+                    + files("interview_backend").joinpath("migration_7.sql").read_text("utf-8")
+                )
+                self._backfill_provenance(db)
+            elif version != 7:
                 raise RuntimeError(f"Unsupported database schema version: {version}")
+
+    @staticmethod
+    def _backfill_provenance(db: sqlite3.Connection) -> None:
+        from .provenance import snapshot
+
+        for row in db.execute(
+            "SELECT a.id,a.turn_id,s.question_json,m.state_json FROM submissions a "
+            "JOIN sessions s ON s.id=a.session_id LEFT JOIN mock_interviews m ON m.session_id=s.id "
+            "WHERE a.provenance_json IS NULL"
+        ).fetchall():
+            question = json.loads(row["question_json"]) if row["question_json"] else None
+            if row["state_json"]:
+                state = json.loads(row["state_json"])
+                turn = next((t for t in state["turns"] if t["id"] == row["turn_id"]), None)
+                question = next(
+                    (
+                        g["question"]
+                        for g in state["groups"]
+                        if turn and g["id"] == turn["group_id"]
+                    ),
+                    None,
+                )
+            if question:
+                provenance = snapshot(question)
+                provenance["provenance_status"] = "legacy_without_evidence_snapshot"
+                db.execute(
+                    "UPDATE submissions SET provenance_json=? WHERE id=?",
+                    (json.dumps(provenance, ensure_ascii=False), row["id"]),
+                )
 
     @contextmanager
     def connect(self, *, write: bool = False) -> Iterator[sqlite3.Connection]:
