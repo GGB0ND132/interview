@@ -37,6 +37,28 @@ const jdPreview = {
   ],
 }
 
+it('validates a short JD on blur, retains focus on invalid analysis and still allows no-JD practice', async () => {
+  const user = userEvent.setup()
+  const { api, calls } = server(path => {
+    if (path === '/sessions') return { ...active, phase: 'draft', revision: 0 }
+    if (path.endsWith('/start')) return active
+    throw new Error(path)
+  })
+  render(<MockInterview api={api} />)
+  const input = await screen.findByRole('textbox', { name: '岗位 JD（可选）' })
+  await user.type(input, '熟悉工具调用')
+  expect(screen.queryByText('岗位描述至少 20 字才能分析')).toBeNull()
+  await user.tab()
+  expect(screen.getByText('岗位描述至少 20 字才能分析')).toBeTruthy()
+  expect(input.getAttribute('aria-invalid')).toBe('true')
+  await user.click(screen.getByRole('button', { name: '提取岗位要求' }))
+  expect(document.activeElement).toBe(input)
+  expect(calls.some(call => call.path === '/jd-mappings')).toBe(false)
+  await user.click(screen.getByRole('button', { name: '开始模拟面试' }))
+  await screen.findByRole('textbox', { name: '你的回答' })
+  expect((calls.find(call => call.path === '/sessions')?.body.config as Record<string, unknown>).jd).toBeUndefined()
+})
+
 it('previews JD requirements and starts without using unconfirmed content', async () => {
   const user = userEvent.setup()
   const { api, calls } = server(path => {

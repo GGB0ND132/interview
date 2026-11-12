@@ -22,7 +22,7 @@ export function JDSelection({ session }: { session: Pick<SessionView, 'plan' | '
     <p className="meta-note">{session.jd ? '已确认的 JD 提高相关合格主题的抽选权重。' : '本场未使用 JD，合格主题按基础权重抽选。'}仍随机选择 3～4 个主题，权重不代表入选概率，也不保证每次抽中。</p>
     <ul className="qp-stage-list">{session.plan.topic_candidates.map(item => <li key={item.competency_id}>
       <span>{session.jd?.requirements.flatMap(requirement => requirement.coverage).find(topic => topic.competency_id === item.competency_id)?.topic ?? competencyLabel(item.competency_id, session.plan?.questions ?? [])}</span>
-      <span>权重 {item.weight} · {item.eligible_question_count} 道题 · {session.plan?.selected_topics.includes(item.competency_id) ? '本场已抽中' : '本场未抽中'}</span>
+      <span className="jd-topic-meta"><span>权重 {item.weight}</span><span>{item.eligible_question_count} 道题</span><span>{session.plan?.selected_topics.includes(item.competency_id) ? '本场已抽中' : '本场未抽中'}</span></span>
     </li>)}</ul>
     {session.jd?.requirements.some(item => item.gap_reason) && <p className="field-help">JD 中题库暂不能覆盖的要求会保留在报告中。</p>}
   </details>
