@@ -23,7 +23,7 @@
 
 采用工单和阶段规格已经指定的会话 HTTP API 验收边界，真实临时 SQLite；仅控制外部模型与随机数边界。按 TDD 逐片实现：提取接口先 404；未确认引用先 422；抽选记录字段缺失；报告缺少 JD 字段；模型缺少标注情境；混合条目掩盖不支持部分，均先见失败再补实现。
 
-`tests/test_jd_weighting.py` 的 14 项检查覆盖：
+`tests/test_jd_weighting.py` 的 17 项检查覆盖：
 
 - 原始 CRLF 中文文本与精确片段位置、已发布题数、未知及未发布能力。
 - 未确认拒绝、部分确认、revision 冲突与单题模式拒绝 JD。
@@ -34,8 +34,9 @@
 - 外部 HTTP 模型边界的真实请求结构：只有确认片段进入情境、版本化技术答案不变、无伪造引用。
 - 开始前停用题目时重新计算能力可用性；重复和不存在的确认项被拒绝。
 - 过多确认能力中的未抽中项、混合已知/未知要求均保留缺口；React、communication skills 不误映射。
+- 审查新增三例 `+`、`/`、中文括号并列未知技术的完整会话回归，保留 Kubernetes 缺口，不拆散 C++ 技术名。
 
-2026-11-12 最终后端检查：`uv run --locked pytest -q` **127 项通过**（新增 14 项）；`uv run --locked mypy`、`uv run --locked ruff check .`、`uv run --locked ruff format --check .` 全部通过。仅有现存 Starlette/httpx TestClient 弃用提示。既有单题、发布、质量隔离与模拟面试检查均纳入本次回归。
+2026-11-12 最终后端检查：`uv run --locked pytest -q` **130 项通过**（新增 17 项）；`uv run --locked mypy`、`uv run --locked ruff check .`、`uv run --locked ruff format --check .` 全部通过。仅有现存 Starlette/httpx TestClient 弃用提示。既有单题、发布、质量隔离与模拟面试检查均纳入本次回归。审查前全量为 127 项通过；审查修正后 JD 单文件 **17 项通过**，再次全量 **130 项通过**。
 
 ## 真实 HTTP 与模型验收
 
@@ -52,6 +53,10 @@
 三场均未创建临时主问题；所有技术主问题属于保存的已发布候选池。每个主题仍随机抽题，候选权重与逐轮结果可按种子重放。真实 `qwen-plus` 运行使用提示词版本 `interview_group_v3_jd`。
 
 停止并重启本工作区 8009 服务后，运行 `--verify-existing`，三场已保存报告的 SHA-256 均与验收时相同，**3/3 重启读取一致**，未再次调用模型。
+
+## 独立审查
+
+按 code-review 技能以 `2ba2cff` 为固定基线，两个独立 Agent 分别审查规范和规格。规范无硬性违规，保留一项非阻断 `dict[str, Any]` 显式类型建议。规格发现一项 P2：`+`、`/`、括号内的不支持技术可能被同句的已映射能力掩盖；已先加入三个失败的完整会话回归，再于 `8d81cf9` 修正。原审查 Agent 独立复跑三例通过，另核对全部主题名、C++ 与 ASCII 括号，确认原缺陷解决、无新增阻断问题。完整分轴记录见 [09-code-review.md](09-code-review.md)。
 
 ## 验收边界
 
