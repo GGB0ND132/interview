@@ -1,0 +1,273 @@
+{
+  "captured_at": "2026-11-12T17:24:09.5688788+08:00",
+  "frontend": "http://127.0.0.1:5180/practice",
+  "backend": "http://127.0.0.1:8010/api/v1",
+  "code_commit": "541c973",
+  "database": "backend/data/10-acceptance.sqlite3",
+  "cases": [
+    {
+      "session_id": "fe21b053-d2a5-4083-93c3-15f22c09e1cc",
+      "jd_text": null,
+      "status": "ended_early",
+      "completeness": "partial",
+      "interview_completeness": "partial",
+      "jd_coverage_status": "not_provided",
+      "stop_reason": "user_ended",
+      "main_question_count": 8,
+      "stage_sequence": [
+        "introduction",
+        "scenario",
+        "technical",
+        "technical",
+        "technical",
+        "technical",
+        "behavioral",
+        "candidate_questions"
+      ],
+      "selected_topics": [
+        "agent_application_architecture",
+        "agent_planning",
+        "agent_loop",
+        "agent_context_engineering"
+      ],
+      "topic_candidates": [
+        {
+          "competency_id": "agent_application_architecture",
+          "eligible_question_count": 11,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_context_engineering",
+          "eligible_question_count": 2,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_loop",
+          "eligible_question_count": 16,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_memory",
+          "eligible_question_count": 6,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_planning",
+          "eligible_question_count": 8,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_tool_calling",
+          "eligible_question_count": 5,
+          "weight": 1,
+          "matched_requirement_ids": []
+        }
+      ],
+      "technical_main_questions_from_saved_pool": true,
+      "jd_gaps": [],
+      "requested_models": [],
+      "report_sha256": "3ab85c0a1c419b67ba9006126e15f6fb532a79642e592173cf4bb5596fef3221"
+    },
+    {
+      "session_id": "e26a43c3-738f-4044-a731-496c6e79b17f",
+      "jd_text": "熟悉工具调用与 Function Calling",
+      "status": "ended_early",
+      "completeness": "partial",
+      "interview_completeness": "partial",
+      "jd_coverage_status": "partial",
+      "stop_reason": "user_ended",
+      "main_question_count": 7,
+      "stage_sequence": [
+        "introduction",
+        "scenario",
+        "technical",
+        "technical",
+        "technical",
+        "behavioral",
+        "candidate_questions"
+      ],
+      "selected_topics": [
+        "agent_tool_calling",
+        "agent_memory",
+        "agent_context_engineering"
+      ],
+      "topic_candidates": [
+        {
+          "competency_id": "agent_application_architecture",
+          "eligible_question_count": 11,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_context_engineering",
+          "eligible_question_count": 2,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_loop",
+          "eligible_question_count": 16,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_memory",
+          "eligible_question_count": 6,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_planning",
+          "eligible_question_count": 8,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_tool_calling",
+          "eligible_question_count": 5,
+          "weight": 4,
+          "matched_requirement_ids": [
+            "requirement_1"
+          ]
+        }
+      ],
+      "technical_main_questions_from_saved_pool": true,
+      "jd_gaps": [
+        {
+          "id": "requirement_1",
+          "text": "熟悉工具调用与 Function Calling",
+          "source_span": {
+            "start": 0,
+            "end": 24,
+            "line": 1
+          },
+          "competency_ids": [
+            "agent_tool_calling"
+          ],
+          "coverage": [
+            {
+              "competency_id": "agent_tool_calling",
+              "topic": "工具调用与 Function Calling",
+              "eligible_question_count": 5,
+              "eligible": true,
+              "reason": null
+            }
+          ],
+          "gap_reason": "insufficient_evidence"
+        }
+      ],
+      "requested_models": [],
+      "report_sha256": "2949d3cb471215698a2ced1938e1bb44888f605aff6b44acd304b4717ff78b25"
+    },
+    {
+      "session_id": "fe72e5c3-9ca9-439b-a081-2fc2ed23932c",
+      "jd_text": "熟悉工具调用；掌握 Kubernetes；熟悉 MCP",
+      "status": "completed",
+      "completeness": "partial",
+      "interview_completeness": "complete",
+      "jd_coverage_status": "partial",
+      "stop_reason": "coverage_satisfied",
+      "main_question_count": 7,
+      "stage_sequence": [
+        "introduction",
+        "scenario",
+        "technical",
+        "technical",
+        "technical",
+        "behavioral",
+        "candidate_questions"
+      ],
+      "selected_topics": [
+        "agent_tool_calling",
+        "agent_memory",
+        "agent_loop"
+      ],
+      "topic_candidates": [
+        {
+          "competency_id": "agent_application_architecture",
+          "eligible_question_count": 11,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_context_engineering",
+          "eligible_question_count": 2,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_loop",
+          "eligible_question_count": 16,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_memory",
+          "eligible_question_count": 6,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_planning",
+          "eligible_question_count": 8,
+          "weight": 1,
+          "matched_requirement_ids": []
+        },
+        {
+          "competency_id": "agent_tool_calling",
+          "eligible_question_count": 5,
+          "weight": 4,
+          "matched_requirement_ids": [
+            "requirement_1"
+          ]
+        }
+      ],
+      "technical_main_questions_from_saved_pool": true,
+      "jd_gaps": [
+        {
+          "id": "requirement_2",
+          "text": "掌握 Kubernetes",
+          "source_span": {
+            "start": 7,
+            "end": 20,
+            "line": 1
+          },
+          "competency_ids": [],
+          "coverage": [],
+          "gap_reason": "unmapped_requirement"
+        },
+        {
+          "id": "requirement_3",
+          "text": "熟悉 MCP",
+          "source_span": {
+            "start": 21,
+            "end": 27,
+            "line": 1
+          },
+          "competency_ids": [
+            "agent_protocols"
+          ],
+          "coverage": [
+            {
+              "competency_id": "agent_protocols",
+              "topic": "MCP、A2A 与工具协议",
+              "eligible_question_count": 0,
+              "eligible": false,
+              "reason": "no_published_questions"
+            }
+          ],
+          "gap_reason": "topic_not_eligible"
+        }
+      ],
+      "requested_models": [
+        "qwen-plus"
+      ],
+      "report_sha256": "92f8ead9e4407cb28fa12995836c03b0b65d91358fc12e41215a2bbc0a53e5ee"
+    }
+  ]
+}
