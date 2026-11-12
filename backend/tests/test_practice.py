@@ -344,6 +344,7 @@ def model_output():
         "non_json",
         "timeout",
         "upstream",
+        "rate_limit",
     ],
 )
 def test_invalid_model_output_or_failure_preserves_answer_without_feedback(
@@ -369,6 +370,8 @@ def test_invalid_model_output_or_failure_preserves_answer_without_feedback(
             raise httpx.ReadTimeout("secret-provider-detail")
         if invalid == "upstream":
             return httpx.Response(401, text="secret-provider-detail")
+        if invalid == "rate_limit":
+            return httpx.Response(429, text="secret-provider-detail")
         return httpx.Response(
             200,
             json={
@@ -397,6 +400,9 @@ def test_invalid_model_output_or_failure_preserves_answer_without_feedback(
         assert submission["answer_text"] == "agent uses tools" and submission["status"] == "failed"
         assert "feedback" not in submission and "score" not in submission
         assert "secret" not in json.dumps(failed)
+        if invalid == "rate_limit":
+            assert submission["error"]["code"] == "MODEL_RATE_LIMITED"
+            assert submission["error"]["action"] == "retry"
         job = data(client.get(f"/api/v1/jobs/{submission['job_id']}"))
         assert job["status"] == "failed" and job["error"]["retryable"] is True
 

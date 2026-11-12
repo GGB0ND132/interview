@@ -51,7 +51,7 @@ def test_legacy_layouts_upgrade_without_losing_records_or_sessions(tmp_path, leg
             if resume is not None:
                 assert data(client.get(f"/api/v1/resumes/{resume['resume_id']}")) == resume
         with sqlite3.connect(database) as db:
-            assert db.execute("PRAGMA user_version").fetchone()[0] == 7
+            assert db.execute("PRAGMA user_version").fetchone()[0] == 8
             assert db.execute("PRAGMA foreign_key_check").fetchall() == []
             for table, rows in saved_rows.items():
                 assert db.execute(f'SELECT * FROM "{table}"').fetchall() == rows

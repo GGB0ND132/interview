@@ -21,15 +21,16 @@ class Store:
         path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
+            # Serialize inspection and the entire upgrade, including concurrent startups.
+            db.execute("BEGIN IMMEDIATE")
             version = db.execute("PRAGMA user_version").fetchone()[0]
+            if version not in range(9):
+                raise RuntimeError(f"Unsupported database schema version: {version}")
             if version == 0:
-                db.executescript(
-                    files("interview_backend").joinpath("schema.sql").read_text(encoding="utf-8")
-                )
+                self._execute_migration(db, "schema.sql")
                 pack = json.loads(
                     files("interview_backend").joinpath("samples.json").read_text(encoding="utf-8")
                 )
-                db.execute("BEGIN IMMEDIATE")
                 db.execute(
                     "INSERT OR IGNORE INTO role_packs VALUES (?, ?, ?, ?)",
                     (pack["pack_id"], pack["title"], pack["status"], pack["version"]),
@@ -49,68 +50,48 @@ class Store:
                         ),
                     )
                 db.execute("PRAGMA user_version=1")
-                db.commit()
                 version = 1
             if version == 1:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend")
-                    .joinpath("migration_2.sql")
-                    .read_text(encoding="utf-8")
-                    + "\nCOMMIT;"
-                )
+                self._execute_migration(db, "migration_2.sql")
                 version = 2
             if version == 2:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend")
-                    .joinpath("migration_3.sql")
-                    .read_text(encoding="utf-8")
-                    + "\nCOMMIT;"
-                )
+                self._execute_migration(db, "migration_3.sql")
                 version = 3
-            # Ticket 13 independently used schema 4 for provenance.
-            has_provenance = any(
-                column[1] == "provenance_json"
-                for column in db.execute("PRAGMA table_info(submissions)")
-            )
-            if version == 4 and has_provenance:
+            if version < 8:
+                # Independent branches reused versions 4 and 5 for different features.
+                # Add missing tables, never replay conflicting CREATE/ALTER statements.
                 db.execute(
                     "CREATE TABLE IF NOT EXISTS mock_interviews (session_id TEXT PRIMARY KEY REFERENCES sessions(id), state_json TEXT NOT NULL)"
                 )
-            if version == 3:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend").joinpath("migration_4.sql").read_text("utf-8")
-                    + "\nCOMMIT;"
+                self._execute_migration(db, "migration_6.sql")
+                has_provenance = any(
+                    column[1] == "provenance_json"
+                    for column in db.execute("PRAGMA table_info(submissions)")
                 )
-                version = 4
-            if version == 4:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend").joinpath("migration_5.sql").read_text("utf-8")
-                    + "\nCOMMIT;"
-                )
-                version = 5
-            if version == 5:
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend").joinpath("migration_6.sql").read_text("utf-8")
-                    + "\nCOMMIT;"
-                )
-                version = 6
-            if version == 6:
-                db.execute("BEGIN IMMEDIATE")
                 if not has_provenance:
                     db.execute("ALTER TABLE submissions ADD COLUMN provenance_json TEXT")
-                db.commit()
-                db.executescript(
-                    "BEGIN IMMEDIATE;\n"
-                    + files("interview_backend").joinpath("migration_7.sql").read_text("utf-8")
-                )
+                self._execute_migration(db, "migration_7.sql")
                 self._backfill_provenance(db)
-            elif version != 7:
-                raise RuntimeError(f"Unsupported database schema version: {version}")
+                has_recovery = any(
+                    column[1] == "claim_token" for column in db.execute("PRAGMA table_info(jobs)")
+                )
+                if not has_recovery:
+                    self._execute_migration(db, "migration_8.sql")
+                else:
+                    # Ticket 15's schema 5 already contains the lease columns and index.
+                    db.execute("PRAGMA user_version=8")
+
+    @staticmethod
+    def _execute_migration(db: sqlite3.Connection, name: str) -> None:
+        # executescript implicitly commits, which would release the upgrade lock.
+        statement = ""
+        for line in files("interview_backend").joinpath(name).read_text("utf-8").splitlines(True):
+            statement += line
+            if sqlite3.complete_statement(statement):
+                db.execute(statement)
+                statement = ""
+        if statement.strip():
+            raise RuntimeError(f"Incomplete SQL migration: {name}")
 
     @staticmethod
     def _backfill_provenance(db: sqlite3.Connection) -> None:

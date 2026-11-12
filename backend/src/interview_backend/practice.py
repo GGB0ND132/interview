@@ -4,6 +4,7 @@ import json
 import random
 import secrets
 import sqlite3
+import time
 from typing import Any, cast
 from uuid import uuid4
 
@@ -46,12 +47,14 @@ class Practice:
         evidence: Evidence,
         verifier: ClaimVerifier,
         model_name: str = "external_adapter",
+        job_lease_seconds: float = 150,
     ):
         self.store = store
         self.evaluator = evaluator
         self.model_name = model_name
         self.evidence = evidence
         self.verifier = verifier
+        self.job_lease_seconds = job_lease_seconds
 
     def _pool(
         self, db: sqlite3.Connection, pack_id: str, config: SelectionCriteria
@@ -360,8 +363,9 @@ class Practice:
             )
             if job_id:
                 db.execute(
-                    "INSERT INTO jobs VALUES (?,?,'queued','evaluation',NULL)",
-                    (job_id, submission_id),
+                    "INSERT INTO jobs(id,submission_id,status,phase,recovery_after) "
+                    "VALUES (?,?,'queued','evaluation',?)",
+                    (job_id, submission_id, time.time() + 1),
                 )
             db.execute(
                 "UPDATE sessions SET revision=revision+1,phase=?,status=? WHERE id=?",
@@ -385,9 +389,13 @@ class Practice:
             }, job_id
 
     def evaluate(self, job_id: str) -> None:
+        claim_token = str(uuid4())
         with self.store.connect(write=True) as db:
             claimed = db.execute(
-                "UPDATE jobs SET status='running' WHERE id=? AND status='queued'", (job_id,)
+                "UPDATE jobs SET status='running',claim_token=?,lease_expires_at=?,"
+                "attempts=attempts+1 WHERE id=? AND (status='queued' OR "
+                "(status='running' AND COALESCE(lease_expires_at,0)<=?))",
+                (claim_token, time.time() + self.job_lease_seconds, job_id, time.time()),
             ).rowcount
             if not claimed:
                 return
@@ -452,19 +460,41 @@ class Practice:
                 }
             )
         except ModelError as exc:
-            result = None
-            failure = {"code": exc.code, "message": str(exc), "retryable": True}
+            failure = {
+                "code": exc.code,
+                "message": str(exc),
+                "retryable": True,
+                "phase": exc.stage,
+                "action": "retry",
+            }
         except ValueError:
             result = None
             failure = {
                 "code": "MODEL_OUTPUT_INVALID",
                 "message": "模型评价或回答引文无效，回答已保留",
                 "retryable": True,
+                "phase": "evaluation",
+                "action": "retry",
             }
+        except Exception:  # noqa: BLE001 -- External evaluator failures become safe retryable results.
+            failure = {
+                "code": "EVALUATION_FAILED",
+                "message": "评价暂时失败，回答已保留，请重试",
+                "retryable": True,
+                "phase": "evaluation",
+                "action": "retry",
+            }
+        if failure:
+            result = None
         with self.store.connect(write=True) as db:
             # Commit only the job claimed above.
-            job = db.execute("SELECT status FROM jobs WHERE id=?", (job_id,)).fetchone()
-            if job is None or job["status"] != "running":
+            job = db.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+            if (
+                job is None
+                or job["status"] != "running"
+                or job["claim_token"] != claim_token
+                or job["lease_expires_at"] <= time.time()
+            ):
                 return
             block = self.store.scoring_block(db, question)
             if block:
@@ -473,6 +503,8 @@ class Practice:
                     "code": block,
                     "message": "题目已停用或主题评分暂停；回答已保留，请等待维护复核",
                     "retryable": True,
+                    "phase": "evaluation",
+                    "action": "retry",
                 }
             db.execute(
                 "UPDATE submissions SET status=?,score=?,evaluation_json=?,error_json=? WHERE id=?",
@@ -511,9 +543,28 @@ class Practice:
             if state is not None and not failure:
                 mock_interview.after_answer(db, row["session_id"], state, row, result)
 
+    def pending_jobs(self) -> list[str]:
+        """Include legacy jobs without leases; never steal an unexpired claim."""
+        with self.store.connect() as db:
+            return [
+                row["id"]
+                for row in db.execute(
+                    "SELECT id FROM jobs WHERE (status='queued' AND recovery_after<=?) OR "
+                    "(status='running' AND COALESCE(lease_expires_at,0)<=?)",
+                    (time.time(), time.time()),
+                )
+            ]
+
     def retry(self, session_id: str, revision: int) -> str:
         with self.store.connect(write=True) as db:
             session = self._row(db, session_id)
+            previous = db.execute(
+                "SELECT j.id FROM jobs j JOIN submissions a ON a.id=j.submission_id "
+                "WHERE a.session_id=? AND j.retry_revision=?",
+                (session_id, revision),
+            ).fetchone()
+            if previous is not None:
+                return str(previous["id"])
             if session["revision"] != revision or session["phase"] != "evaluation_failed":
                 raise PracticeError("STATE_CONFLICT", "没有此版本可重试的评价任务")
             row = db.execute(
@@ -522,7 +573,11 @@ class Practice:
             ).fetchone()
             assert row is not None
             job_id: str = row["job_id"]
-            db.execute("UPDATE jobs SET status='queued',error_json=NULL WHERE id=?", (job_id,))
+            db.execute(
+                "UPDATE jobs SET status='queued',error_json=NULL,claim_token=NULL,"
+                "lease_expires_at=NULL,retry_revision=?,recovery_after=? WHERE id=?",
+                (revision, time.time() + 1, job_id),
+            )
             db.execute(
                 "UPDATE submissions SET status='saved',error_json=NULL WHERE id=?", (row["id"],)
             )
@@ -541,6 +596,7 @@ class Practice:
                 "job_id": row["id"],
                 "status": row["status"],
                 "phase": row["phase"],
+                "attempts": row["attempts"],
                 "result_entity_id": row["submission_id"] if row["status"] == "succeeded" else None,
                 "error": json.loads(row["error_json"]) if row["error_json"] else None,
             }

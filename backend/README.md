@@ -4,7 +4,7 @@ Python 3.11+、FastAPI、SQLite。提供两道自编 Agent 基础技术样题的
 
 ## 简历项目确认（11）
 
-接口均带 `/api/v1` 前缀，响应沿用统一信封。简历记录和会话快照保存在 schema 5 SQLite。只提供本机后端能力；前端上传确认接入属于 12。
+接口均带 `/api/v1` 前缀，响应沿用统一信封。简历记录和会话快照保存在 SQLite（当前 schema 8）。只提供本机后端能力；前端上传确认接入属于 12。
 
 | 接口 | 请求与结果 |
 | --- | --- |
@@ -31,7 +31,7 @@ uv sync --extra dev
 uv run uvicorn interview_backend.api:create_app --factory --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 7；现有 schema 1–6 自动迁移，保留原题与会话。兼容 13 的来源版 schema 4、07 的面试版 schema 4，以及 09/11 的两种 schema 5，保留已有引用、报错、JD、简历及会话快照。旧评分不重算，旧链接不追认为完整资料证据。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
+已在进程环境设置密钥时可省略 `--env-file .env`。`LLM_BASE_URL` 是兼容聊天协议的 API 根路径，服务追加 `/chat/completions`；默认百炼 `qwen-plus`。密钥只留服务端。`DATABASE_PATH` 默认为当前目录的 `data/practice.sqlite3`。首次启动导入自编样题，随后迁移至 schema 8；现有 schema 1–7 自动迁移，保留原题与会话。兼容 13 的来源版 schema 4、07 的面试版 schema 4，以及 09 的 JD、11 的简历、15 的恢复任务三种 schema 5，保留已有引用、报错、JD、简历、任务租约及会话快照。升级全程在同一写事务中检查并补齐缺失结构，支持并发启动。旧评分不重算，旧链接不追认为完整资料证据。MianStack 示例、06 候选题和 07 通用环节题不会自动发布。
 
 交互文档：<http://127.0.0.1:8000/docs>。第一步 `GET /api/v1/role-packs`，样题包 ID 为 `pack_agent_basics_sample`。
 
@@ -78,7 +78,7 @@ uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-liv
 
 ## 当前边界
 
-仅绑定本机使用，无用户认证，维护入口同样限本机用途。试题练习页面（02）已通过 `/api` 代理接入本服务；模拟面试后端由 07 提供，前端接入属于 08，资料管理和旧历史页仍为浏览器内演示数据。03 已提供逐题发布与可用性接口，主题内容与发布属于 05/06；前端草稿与后台任务的崩溃接管属于 15/16。正常重启可读已保存题目、回答和反馈；进程在模型调用中崩溃时，持久化任务可能停留 queued/running，本项不自动接管，也不保证远端模型计费幂等。
+仅绑定本机使用，无用户认证，维护入口同样限本机用途。试题练习（02）、模拟面试（08）及引用与报错（14）已接入真实服务，资料管理和旧历史页仍为浏览器内演示数据。03 已提供逐题发布与可用性接口，主题内容与发布由 05/06 提供。已保存的问题、回答和反馈可重启读取；15 提供中断任务的租约接管与失败重试，未提交的前端草稿属于 16，不保证远端模型计费幂等。
 
 ## MianStack 发布（03）
 
@@ -166,7 +166,7 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 经历环节可提交 `disposition=no_experience, answer_text=""`，记录不适用并插入已发布假设情境；明确输入“我没有项目经历”等短声明也走这一分支。场景必须取得证据才可完整。反问环节可提交 `no_questions`，或明确输入“没有问题”，表示该环节已进行且无提问质量分数；这两个 disposition 用在其他环节返回 400。空白为 0 分、证据不足；跳过无分数、证据不足，两者不调用模型也不追问。
 
-在等待回答、题组切换或评价失败时，可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束。模型评价执行中返回 409，不中断远端请求；等待评价成功、超时或失败后操作。正式后台任务崩溃接管仍属于 15。
+在等待回答、题组切换或评价失败时，可用当前 revision 调用 `POST /sessions/{id}/finish` 提前结束。模型评价执行中返回 409，不中断远端请求；等待评价成功、超时或失败后操作。后台任务崩溃接管见下方 15。
 
 结束前，所有会话、历史和重复提交响应均隐藏详细分数与反馈，`GET /sessions/{id}/report` 返回 409。只有所需环节及本场优先能力都证据充分时以 `coverage_satisfied` 生成 `complete`、会话 `completed`；其他原因 `user_ended/safety_limit/question_pool_exhausted/key_evidence_insufficient` 一律为 `partial`、会话 `ended_early`，报告列出缺口与中文原因。报告保留完整问答、逐组反馈、整体组均分及独立技术均分；未完成组不计分，开场、行为、真实经历与反问按适用维度评价，不核实个人履历或伪造技术引用。项目采用 20/20/20/15/25 权重后排除不可核实的准确性，行为题适用四维各 25%，评分覆盖率分母只包含适用维度；评分维度为 null 不自动改变能力的观察状态。
 
@@ -212,3 +212,17 @@ uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url htt
 维护者通过 `POST /api/v1/maintenance/questions/{code}/evidence` 登记真实核对过的 claim、正文片段和最终文档 URL。超出答案范围或版本争议时，检索同题同答案版本的核验资料库并复查支持关系；无直接证据时不作确定新增判断。此功能不提供开放互联网搜索。
 
 用户通过 `POST /api/v1/sessions/{id}/reports` 提交题目或评分疑问，服务端绑定历史题目和答案版本。维护者从 `/api/v1/maintenance/reports` 查询与处理，再按已有停用/质量流程操作题目。完整请求、返回字段、迁移及验收见 [13 接口与验证记录](../docs/verification/13-provenance-and-reports.md)。
+
+## 15：会话恢复与失败重试
+
+双模式使用原有 `GET /api/v1/sessions/{id}`、`GET /sessions`、`GET /jobs/{id}` 与 `GET /sessions/{id}/report` 读取 SQLite 中的版本、题目快照、已提交回答、任务、评价与报告。schema 8 从旧版自动迁移，旧版未完成任务也会被接管。未提交的浏览器草稿属于 16。
+
+服务 ASGI lifespan 启动恢复线程，每 0.1 秒扫描待执行或租约过期的任务。请求的 BackgroundTasks 优先执行刚保存的任务，恢复扫描对新队列任务有 1 秒宽限期。运行任务领取租约和唯一执行令牌；写回时必须仍持有有效租约与令牌，评价、追问/阶段更新、报告状态在同一事务内提交。多个服务实例不会抢占尚未过期的任务；中断后至多等待剩余租约再接管，不要求重新提交答案。
+
+默认租约为 `max(150, MODEL_TIMEOUT_SECONDS * 6 + 250 + 30)` 秒：预留一次评价、最多五次支持关系核查，以及每项最多五份资料的读取时间；模型超时默认 60 秒时为 640 秒。集成适配器可在 `create_app(job_lease_seconds=...)` 显式配置，必须是有限正数，且应长于一次任务中模型评价、资料抓取与支持关系核查的总时间。租约不续期；自定义适配器或持续流式读取超出预算时仍须增大配置，超期调用可能再次请求外部服务，旧令牌不能写回。系统保证本地只有一份有效答案/评价/题目状态，不承诺远端模型只计费一次。应用应正常启用 lifespan（uvicorn 默认启用）。
+
+失败回答和原 job ID 保留，公开错误包括 `code/message/retryable/phase/action`：超时 `MODEL_TIMEOUT`、限流 `MODEL_RATE_LIMITED`、非法输出 `MODEL_OUTPUT_INVALID`；`phase=evaluation`、`action=retry`。外部适配器可用 `ModelError(..., stage="retrieval")` 定位检索失败。13 的证据不足或资料抓取/支持关系核查失败仍按其契约保存可定位的 `technical_checks`，对争议结论保留判断，不把这些结果伪装成成功引用。任务在该核查过程中崩溃时，由原任务租约接管后重新评价和核查，不提供内部阶段检查点。失败不保存半成品反馈、不生成预设结果。
+
+用失败会话的 revision 调用 `POST /sessions/{id}/retry`；同一 revision 的重复/并发请求返回原 job ID，不新增回答、题目或反馈。已被后续重试覆盖的旧版本可能返回 409。其他并发版本冲突返回 `STATE_CONFLICT` 和 `action=refresh_session`，读取最新会话后再决定操作。`GET /jobs/{id}` 新增 `attempts`，表示领取执行次数。
+
+可复现的恢复验收：`uv run --extra dev pytest tests/test_recovery.py -q`。覆盖双模式真实进程退出、TCP 服务强制结束后接管、完整历史及报告二次重启一致、旧 schema 队列/运行任务迁移、五类失败重试及过期执行结果隔离。外部模型使用受控适配器，不调用收费模型或真实检索，详见 [15 验证记录](../docs/verification/15-backend-session-recovery.md)。
