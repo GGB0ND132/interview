@@ -134,3 +134,21 @@ it('rejects unsupported and oversized uploads locally with a paste fallback', as
   expect(screen.getByText('仅支持不超过 5 MiB 的文字版 PDF 或 DOCX。请改为粘贴项目文本。')).toBeTruthy()
   expect(calls).toHaveLength(0)
 })
+
+it('retains a corrected draft after a failed file parse and associates upload errors with the field', async () => {
+  const user = userEvent.setup()
+  let finish!: (data: unknown) => void
+  const { api } = server(() => new Promise(resolve => { finish = resolve }))
+  render(<ResumePreparation api={api} disabled={false} onChange={() => {}} />)
+  const text = screen.getByLabelText('粘贴或修正项目文本') as HTMLTextAreaElement
+  await user.type(text, '项目草稿不能丢失')
+  const file = screen.getByLabelText('上传简历（可选）')
+  await user.upload(file, new File(['scan'], 'scan.pdf'))
+  expect(file.getAttribute('aria-busy')).toBe('true')
+  finish({ ...preview, status: 'parse_failed', blocks: [], project_fragments: [], error: { code: 'RESUME_PARSE_FAILED', message: '无法解析扫描件' } })
+  await screen.findByText('无法解析扫描件')
+  expect(text.value).toBe('项目草稿不能丢失')
+  expect(file.getAttribute('aria-invalid')).toBe('true')
+  const errorId = file.getAttribute('aria-describedby')?.split(' ').find(id => id.endsWith('-error'))
+  expect(document.getElementById(errorId ?? '')?.textContent).toContain('无法解析扫描件')
+})
