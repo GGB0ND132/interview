@@ -1,0 +1,532 @@
+{
+  "checked_at": "2026-11-13T16:38:14.890566+00:00",
+  "base_url": "http://127.0.0.1:8017",
+  "fixture_notice": "Synthetic acceptance answers; provider identity is retained per feedback",
+  "cases": [
+    {
+      "case": "answered",
+      "session": {
+        "session_id": "ba96d430-9471-4835-9e18-f75a7865050d",
+        "pack_id": "pack_agent_basics_mianstack",
+        "pack_version": 2,
+        "pack_title": "Agent 原理与系统基础档（MianStack）",
+        "created_at": "2026-11-13T16:30:51.413Z",
+        "difficulty": "easy",
+        "revision": 3,
+        "status": "completed",
+        "phase": "feedback_ready",
+        "current_turn": {
+          "id": "8ab6d281-0b8b-4c2a-b41e-33240a2d1a30",
+          "question_code": "Q-0379",
+          "question_version": 1,
+          "kind": "main",
+          "question_type": "technical",
+          "stage": "technical",
+          "topic": "Skills 能力系统",
+          "competency_id": "agent_skills",
+          "text": "Skill、提示词工程与 MCP 有什么区别和联系？"
+        },
+        "submissions": [
+          {
+            "id": "55c3226a-5a97-4ea8-96e7-1c245a55bcdd",
+            "turn_id": "8ab6d281-0b8b-4c2a-b41e-33240a2d1a30",
+            "client_submission_id": "682dfebf-3ff1-469f-8ee7-1ae80443c1d9",
+            "disposition": "answered",
+            "answer_text": "Skill 把完成某类任务的步骤、约束和可复用资料组织为能力，提示词负责说明目标与行为规则，MCP 是应用连接工具和资料的协议。三者可以组合：用提示词说明何时选用 Skill，按 Skill 的步骤通过 MCP 读取资料或请求工具，实际执行与权限校验仍由程序完成。Skill 本身不保证每次执行成功，MCP 连通也不保证工具结果正确，需要检查真实回执和停止条件。",
+            "status": "completed",
+            "job_id": "ff36fda6-e18b-486e-b858-37bb0b64400a",
+            "score": 91,
+            "feedback": {
+              "answer_version": 1,
+              "assessment_coverage": 0.4,
+              "assessment_status": "partial",
+              "content_version": "agent-basics-06-v2",
+              "dimensions": [
+                {
+                  "answer_quote": "",
+                  "name": "accuracy",
+                  "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+                  "score": null
+                },
+                {
+                  "answer_quote": "三者可以组合：用提示词说明何时选用 Skill，按 Skill 的步骤通过 MCP 读取资料或请求工具，实际执行与权限校验仍由程序完成。",
+                  "name": "completeness",
+                  "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+                  "score": null
+                },
+                {
+                  "answer_quote": "Skill 把完成某类任务的步骤、约束和可复用资料组织为能力，提示词负责说明目标与行为规则，MCP 是应用连接工具和资料的协议。",
+                  "name": "relevance",
+                  "reason": "仅按已保存回答的表达评价此维度；争议技术结论暂不判断。",
+                  "score": 100
+                },
+                {
+                  "answer_quote": "三者可以组合：用提示词说明何时选用 Skill，按 Skill 的步骤通过 MCP 读取资料或请求工具，实际执行与权限校验仍由程序完成。",
+                  "name": "structure",
+                  "reason": "仅按已保存回答的表达评价此维度；争议技术结论暂不判断。",
+                  "score": 90
+                },
+                {
+                  "answer_quote": "按 Skill 的步骤通过 MCP 读取资料或请求工具，实际执行与权限校验仍由程序完成。",
+                  "name": "specificity",
+                  "reason": "仅按已保存回答的表达评价此维度；争议技术结论暂不判断。",
+                  "score": 80
+                }
+              ],
+              "evidence_reason": "",
+              "evidence_status": null,
+              "followup": null,
+              "improvements": [
+                "争议技术结论尚无直接证据，请提交疑问供维护者复核。"
+              ],
+              "independent_references": [],
+              "limitations": [
+                "部分维度未评估"
+              ],
+              "overall_score": 91,
+              "prompt_version": "single_question_provenance_v2",
+              "question_code": "Q-0379",
+              "question_source": {
+                "answer_status": "ready",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "f5c31d677730914803c2de8d7dfd6cbeaf1bcf32021c7fa2cc1424ff80c01ab5",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-0379",
+                "original_title": "Skill、提示词工程与 MCP 有什么区别和联系？",
+                "path": "questions/Q-0379.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Skills 能力系统",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0379.md"
+              },
+              "question_version": 1,
+              "reference_answer": "提示词工程关注怎样组织指令、上下文、示例和输出约束，帮助模型理解某次任务；Skill 把某类任务的知识、步骤和资源组织成可复用的技能包，可能包含提示示例、参考文档和脚本，宿主按需加载；MCP 则规定宿主客户端与外部能力服务器的接入交互，按 MCP 2025-06-18 可发现和调用 Tools、读取 Resources、获取 Prompts。三者可以配合：提示说明本次目标，Skill 指导工作方法，宿主通过 MCP 连接执行所需工具。Skill 不等于一个新的执行 Agent，MCP 也不是替模型编写业务决策的提示模板；提示写得好、Skill 已加载或 MCP 已连接，都不能证明实际任务完成。工具权限、参数校验、预算和最终结果验证须由宿主及业务系统落实。具体 Skill 触发与加载方式依赖所用产品，不应把某个宿主的惯例称为通用协议保证。依据：https://agentskills.io/specification 和 https://modelcontextprotocol.io/specification/2025-06-18/architecture 。",
+              "requested_model": "qwen-plus",
+              "rubric_version": "technical_v1",
+              "source_answer_status": "ready",
+              "strengths": [
+                "已保留实际回答及可评估维度。"
+              ],
+              "technical_checks": [
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "2611f339-2ce6-4d69-9639-615ee7035898",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.743315+00:00",
+                  "claim": "Skill 把完成某类任务的步骤、约束和可复用资料组织为能力",
+                  "error_code": null,
+                  "query": "agentskills.io Skill definition",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                },
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "5c6069d7-f69c-4ab9-9962-0a66448a6e77",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.747356+00:00",
+                  "claim": "MCP 是应用连接工具和资料的协议",
+                  "error_code": null,
+                  "query": "modelcontextprotocol.io MCP architecture 2025-06-18",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                },
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "08713425-5874-4948-85fe-f706a72a14b1",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.750870+00:00",
+                  "claim": "提示词负责说明目标与行为规则",
+                  "error_code": null,
+                  "query": "prompt engineering definition in context of Skill and MCP",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                }
+              ],
+              "technical_explanations": [],
+              "used_reference_ids": []
+            },
+            "provenance": {
+              "answer_version": 1,
+              "content_version": "agent-basics-06-v2",
+              "independent_references": [],
+              "question_code": "Q-0379",
+              "question_source": {
+                "answer_status": "ready",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "f5c31d677730914803c2de8d7dfd6cbeaf1bcf32021c7fa2cc1424ff80c01ab5",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-0379",
+                "original_title": "Skill、提示词工程与 MCP 有什么区别和联系？",
+                "path": "questions/Q-0379.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Skills 能力系统",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0379.md"
+              },
+              "question_version": 1,
+              "source_answer_status": "ready",
+              "technical_checks": [
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "2611f339-2ce6-4d69-9639-615ee7035898",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.743315+00:00",
+                  "claim": "Skill 把完成某类任务的步骤、约束和可复用资料组织为能力",
+                  "error_code": null,
+                  "query": "agentskills.io Skill definition",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                },
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "5c6069d7-f69c-4ab9-9962-0a66448a6e77",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.747356+00:00",
+                  "claim": "MCP 是应用连接工具和资料的协议",
+                  "error_code": null,
+                  "query": "modelcontextprotocol.io MCP architecture 2025-06-18",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                },
+                {
+                  "affected_dimensions": [
+                    "accuracy"
+                  ],
+                  "attempt_id": "08713425-5874-4948-85fe-f706a72a14b1",
+                  "candidate_ids": [],
+                  "checked_at": "2026-11-13T16:32:18.750870+00:00",
+                  "claim": "提示词负责说明目标与行为规则",
+                  "error_code": null,
+                  "query": "prompt engineering definition in context of Skill and MCP",
+                  "reason": "outside_answer",
+                  "reference_id": null,
+                  "source_failures": [],
+                  "status": "insufficient_evidence",
+                  "support_quote": ""
+                }
+              ]
+            }
+          }
+        ],
+        "available_actions": []
+      },
+      "report": {
+        "session_id": "ba96d430-9471-4835-9e18-f75a7865050d",
+        "provenance": {
+          "answer_version": 1,
+          "content_version": "agent-basics-06-v2",
+          "independent_references": [],
+          "question_code": "Q-0379",
+          "question_source": {
+            "answer_status": "ready",
+            "attribution": "Copyright (c) 2026 didilili",
+            "category": "agent",
+            "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+            "file_sha256": "f5c31d677730914803c2de8d7dfd6cbeaf1bcf32021c7fa2cc1424ff80c01ab5",
+            "level": "基础",
+            "license": "MIT",
+            "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+            "original_id": "Q-0379",
+            "original_title": "Skill、提示词工程与 MCP 有什么区别和联系？",
+            "path": "questions/Q-0379.md",
+            "repository": "https://github.com/didilili/mianstack",
+            "topic": "Skills 能力系统",
+            "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0379.md"
+          },
+          "question_version": 1,
+          "source_answer_status": "ready",
+          "technical_checks": [
+            {
+              "affected_dimensions": [
+                "accuracy"
+              ],
+              "attempt_id": "2611f339-2ce6-4d69-9639-615ee7035898",
+              "candidate_ids": [],
+              "checked_at": "2026-11-13T16:32:18.743315+00:00",
+              "claim": "Skill 把完成某类任务的步骤、约束和可复用资料组织为能力",
+              "error_code": null,
+              "query": "agentskills.io Skill definition",
+              "reason": "outside_answer",
+              "reference_id": null,
+              "source_failures": [],
+              "status": "insufficient_evidence",
+              "support_quote": ""
+            },
+            {
+              "affected_dimensions": [
+                "accuracy"
+              ],
+              "attempt_id": "5c6069d7-f69c-4ab9-9962-0a66448a6e77",
+              "candidate_ids": [],
+              "checked_at": "2026-11-13T16:32:18.747356+00:00",
+              "claim": "MCP 是应用连接工具和资料的协议",
+              "error_code": null,
+              "query": "modelcontextprotocol.io MCP architecture 2025-06-18",
+              "reason": "outside_answer",
+              "reference_id": null,
+              "source_failures": [],
+              "status": "insufficient_evidence",
+              "support_quote": ""
+            },
+            {
+              "affected_dimensions": [
+                "accuracy"
+              ],
+              "attempt_id": "08713425-5874-4948-85fe-f706a72a14b1",
+              "candidate_ids": [],
+              "checked_at": "2026-11-13T16:32:18.750870+00:00",
+              "claim": "提示词负责说明目标与行为规则",
+              "error_code": null,
+              "query": "prompt engineering definition in context of Skill and MCP",
+              "reason": "outside_answer",
+              "reference_id": null,
+              "source_failures": [],
+              "status": "insufficient_evidence",
+              "support_quote": ""
+            }
+          ]
+        },
+        "average_score": 91,
+        "answered_count": 1,
+        "blank_count": 0,
+        "skipped_count": 0,
+        "status": "completed",
+        "scoring_scope": "single_question_training"
+      },
+      "jobs": [
+        {
+          "job_id": "ff36fda6-e18b-486e-b858-37bb0b64400a",
+          "status": "succeeded",
+          "phase": "evaluation",
+          "attempts": 1,
+          "result_entity_id": "55c3226a-5a97-4ea8-96e7-1c245a55bcdd",
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "blank",
+      "session": {
+        "session_id": "b0eaf5ef-28b1-4ac0-ae05-909108f9682a",
+        "pack_id": "pack_agent_basics_mianstack",
+        "pack_version": 2,
+        "pack_title": "Agent 原理与系统基础档（MianStack）",
+        "created_at": "2026-11-13T16:37:44.331Z",
+        "difficulty": "easy",
+        "revision": 2,
+        "status": "completed",
+        "phase": "feedback_ready",
+        "current_turn": {
+          "id": "e67b5c5c-9455-42b1-a85f-3f08e084c3c9",
+          "question_code": "Q-4923",
+          "question_version": 1,
+          "kind": "main",
+          "question_type": "technical",
+          "stage": "technical",
+          "topic": "Agent 框架与 Harness",
+          "competency_id": "agent_frameworks_harness",
+          "text": "LangChain 中的 LLM、Chat Model 和 Embedding 模型抽象有何区别？"
+        },
+        "submissions": [
+          {
+            "id": "322f610b-545c-4f49-b570-d65c0c1f7f0b",
+            "turn_id": "e67b5c5c-9455-42b1-a85f-3f08e084c3c9",
+            "client_submission_id": "6bea7731-1175-49c2-847d-9b1e36792d8b",
+            "disposition": "blank_answer",
+            "answer_text": "",
+            "status": "completed",
+            "job_id": null,
+            "score": 0,
+            "provenance": {
+              "answer_version": 1,
+              "content_version": "agent-basics-06-v1",
+              "independent_references": [],
+              "question_code": "Q-4923",
+              "question_source": {
+                "answer_status": "pending",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "8404b5a9a8b13b66ce135a3067d521a52e189f8a55d2dc5a0b9d6d2084267d83",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-4923",
+                "original_title": "LangChain 中的 LLM、Chat Model 和 Embedding 模型抽象有何区别？",
+                "path": "questions/Q-4923.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Agent 框架与 Harness",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4923.md"
+              },
+              "question_version": 1,
+              "source_answer_status": "pending"
+            }
+          }
+        ],
+        "available_actions": []
+      },
+      "report": {
+        "session_id": "b0eaf5ef-28b1-4ac0-ae05-909108f9682a",
+        "provenance": {
+          "answer_version": 1,
+          "content_version": "agent-basics-06-v1",
+          "independent_references": [],
+          "question_code": "Q-4923",
+          "question_source": {
+            "answer_status": "pending",
+            "attribution": "Copyright (c) 2026 didilili",
+            "category": "agent",
+            "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+            "file_sha256": "8404b5a9a8b13b66ce135a3067d521a52e189f8a55d2dc5a0b9d6d2084267d83",
+            "level": "基础",
+            "license": "MIT",
+            "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+            "original_id": "Q-4923",
+            "original_title": "LangChain 中的 LLM、Chat Model 和 Embedding 模型抽象有何区别？",
+            "path": "questions/Q-4923.md",
+            "repository": "https://github.com/didilili/mianstack",
+            "topic": "Agent 框架与 Harness",
+            "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-4923.md"
+          },
+          "question_version": 1,
+          "source_answer_status": "pending"
+        },
+        "average_score": 0,
+        "answered_count": 1,
+        "blank_count": 1,
+        "skipped_count": 0,
+        "status": "completed",
+        "scoring_scope": "single_question_training"
+      },
+      "jobs": []
+    },
+    {
+      "case": "skipped",
+      "session": {
+        "session_id": "ebff54a7-0e2c-4172-9c57-8efda7fd641c",
+        "pack_id": "pack_agent_basics_mianstack",
+        "pack_version": 2,
+        "pack_title": "Agent 原理与系统基础档（MianStack）",
+        "created_at": "2026-11-13T16:37:45.025Z",
+        "difficulty": "easy",
+        "revision": 2,
+        "status": "completed",
+        "phase": "feedback_ready",
+        "current_turn": {
+          "id": "bfe43411-476c-4909-9fd9-97f5d3d7f2d1",
+          "question_code": "Q-3003",
+          "question_version": 1,
+          "kind": "main",
+          "question_type": "technical",
+          "stage": "technical",
+          "topic": "Agent 基础与运行循环",
+          "competency_id": "agent_loop",
+          "text": "Loop Engineering 是什么？"
+        },
+        "submissions": [
+          {
+            "id": "009c3f9d-19aa-49ff-a29e-352ada475446",
+            "turn_id": "bfe43411-476c-4909-9fd9-97f5d3d7f2d1",
+            "client_submission_id": "3a9beb26-cca9-4727-b343-13007713b74e",
+            "disposition": "skipped",
+            "answer_text": "",
+            "status": "completed",
+            "job_id": null,
+            "score": null,
+            "provenance": {
+              "answer_version": 1,
+              "content_version": "05.1",
+              "independent_references": [],
+              "question_code": "Q-3003",
+              "question_source": {
+                "answer_status": "pending",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "a12ad3d630b7d1b8cdfc58f8fc6457dfeb84086b353e857fa61066c398bf1de0",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-3003",
+                "original_title": "Loop Engineering 是什么？",
+                "path": "questions/Q-3003.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Agent 基础与运行循环",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3003.md"
+              },
+              "question_version": 1,
+              "source_answer_status": "pending"
+            }
+          }
+        ],
+        "available_actions": []
+      },
+      "report": {
+        "session_id": "ebff54a7-0e2c-4172-9c57-8efda7fd641c",
+        "provenance": {
+          "answer_version": 1,
+          "content_version": "05.1",
+          "independent_references": [],
+          "question_code": "Q-3003",
+          "question_source": {
+            "answer_status": "pending",
+            "attribution": "Copyright (c) 2026 didilili",
+            "category": "agent",
+            "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+            "file_sha256": "a12ad3d630b7d1b8cdfc58f8fc6457dfeb84086b353e857fa61066c398bf1de0",
+            "level": "基础",
+            "license": "MIT",
+            "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+            "original_id": "Q-3003",
+            "original_title": "Loop Engineering 是什么？",
+            "path": "questions/Q-3003.md",
+            "repository": "https://github.com/didilili/mianstack",
+            "topic": "Agent 基础与运行循环",
+            "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-3003.md"
+          },
+          "question_version": 1,
+          "source_answer_status": "pending"
+        },
+        "average_score": null,
+        "answered_count": 0,
+        "blank_count": 0,
+        "skipped_count": 1,
+        "status": "completed",
+        "scoring_scope": "single_question_training"
+      },
+      "jobs": []
+    }
+  ],
+  "restart_verified_at": "2026-11-13T16:43:56.091218+00:00"
+}

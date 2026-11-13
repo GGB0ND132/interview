@@ -1,0 +1,3200 @@
+{
+  "checked_at": "2026-11-13T16:43:26.970359+00:00",
+  "scope": "HTTP inventory only; not browser/model/human acceptance",
+  "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+  "source_count": 115,
+  "source_ready_count": 30,
+  "validation_passed_count": 115,
+  "rejected_count": 0,
+  "published_source_count": 115,
+  "available_count": 115,
+  "release_matches_candidates": true,
+  "topics": [
+    {
+      "topic": "Agent 基础与运行循环",
+      "source_count": 17,
+      "available_count": 17,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "Agent 应用架构与场景设计",
+      "source_count": 18,
+      "available_count": 18,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "规划、推理与任务执行",
+      "source_count": 8,
+      "available_count": 8,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "上下文工程",
+      "source_count": 2,
+      "available_count": 2,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "记忆系统",
+      "source_count": 6,
+      "available_count": 6,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "工具调用与 Function Calling",
+      "source_count": 6,
+      "available_count": 6,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "MCP、A2A 与工具协议",
+      "source_count": 15,
+      "available_count": 15,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "Skills 能力系统",
+      "source_count": 13,
+      "available_count": 13,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "工作流、状态与执行恢复",
+      "source_count": 5,
+      "available_count": 5,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "多 Agent 编排与协作",
+      "source_count": 8,
+      "available_count": 8,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "Agent 框架与 Harness",
+      "source_count": 16,
+      "available_count": 16,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": true
+    },
+    {
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "source_count": 1,
+      "available_count": 1,
+      "distinct_human_samples_required": 2,
+      "two_distinct_source_questions_exist": false
+    }
+  ],
+  "questions": [
+    {
+      "code": "Q-0019",
+      "topic": "工作流、状态与执行恢复",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 57,
+        "code": "Q-0019",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0022",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 58,
+        "code": "Q-0022",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0048",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 59,
+        "code": "Q-0048",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0058",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 0,
+        "code": "Q-0058",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0062",
+      "topic": "记忆系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 1,
+        "code": "Q-0062",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0137",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 2,
+        "code": "Q-0137",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0140",
+      "topic": "工作流、状态与执行恢复",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 60,
+        "code": "Q-0140",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0322",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 61,
+        "code": "Q-0322",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0361",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 62,
+        "code": "Q-0361",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0378",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 63,
+        "code": "Q-0378",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0379",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 64,
+        "code": "Q-0379",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0382",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 65,
+        "code": "Q-0382",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0416",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 66,
+        "code": "Q-0416",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0419",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 3,
+        "code": "Q-0419",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0544",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 4,
+        "code": "Q-0544",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0561",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 5,
+        "code": "Q-0561",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0597",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 6,
+        "code": "Q-0597",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0624",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 67,
+        "code": "Q-0624",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0798",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 68,
+        "code": "Q-0798",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0852",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 69,
+        "code": "Q-0852",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0871",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 70,
+        "code": "Q-0871",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0872",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 71,
+        "code": "Q-0872",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0883",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 7,
+        "code": "Q-0883",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0897",
+      "topic": "GUI、Computer Use 与多模态 Agent",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 72,
+        "code": "Q-0897",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0898",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 8,
+        "code": "Q-0898",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0925",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 9,
+        "code": "Q-0925",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0935",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 73,
+        "code": "Q-0935",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0976",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 74,
+        "code": "Q-0976",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-0977",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 75,
+        "code": "Q-0977",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1009",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 10,
+        "code": "Q-1009",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1085",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 76,
+        "code": "Q-1085",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1247",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 77,
+        "code": "Q-1247",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1268",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 78,
+        "code": "Q-1268",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1434",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 11,
+        "code": "Q-1434",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1555",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 12,
+        "code": "Q-1555",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1664",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "agent-basics-06-v2",
+      "validation": {
+        "index": 79,
+        "code": "Q-1664",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1674",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 13,
+        "code": "Q-1674",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1675",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 14,
+        "code": "Q-1675",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1768",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 80,
+        "code": "Q-1768",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1843",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 15,
+        "code": "Q-1843",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1897",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 16,
+        "code": "Q-1897",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-1909",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 17,
+        "code": "Q-1909",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2001",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 18,
+        "code": "Q-2001",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2007",
+      "topic": "记忆系统",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 19,
+        "code": "Q-2007",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2075",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 81,
+        "code": "Q-2075",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2078",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 20,
+        "code": "Q-2078",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2095",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 82,
+        "code": "Q-2095",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2186",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 21,
+        "code": "Q-2186",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2266",
+      "topic": "工作流、状态与执行恢复",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 83,
+        "code": "Q-2266",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2330",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 22,
+        "code": "Q-2330",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2343",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 84,
+        "code": "Q-2343",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2426",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 85,
+        "code": "Q-2426",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2466",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 23,
+        "code": "Q-2466",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2506",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 24,
+        "code": "Q-2506",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2507",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 25,
+        "code": "Q-2507",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2536",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "ready",
+      "answer_origin": "maintainer_edited",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 26,
+        "code": "Q-2536",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2537",
+      "topic": "工作流、状态与执行恢复",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 86,
+        "code": "Q-2537",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2612",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 27,
+        "code": "Q-2612",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2637",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 28,
+        "code": "Q-2637",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2639",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 87,
+        "code": "Q-2639",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2659",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 29,
+        "code": "Q-2659",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2676",
+      "topic": "记忆系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 30,
+        "code": "Q-2676",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2797",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 31,
+        "code": "Q-2797",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2864",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 88,
+        "code": "Q-2864",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2920",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 89,
+        "code": "Q-2920",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2985",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 32,
+        "code": "Q-2985",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2993",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 33,
+        "code": "Q-2993",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-2995",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.2",
+      "validation": {
+        "index": 34,
+        "code": "Q-2995",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3003",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 35,
+        "code": "Q-3003",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3054",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 36,
+        "code": "Q-3054",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3168",
+      "topic": "记忆系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 37,
+        "code": "Q-3168",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3169",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 90,
+        "code": "Q-3169",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3257",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 91,
+        "code": "Q-3257",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3287",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 92,
+        "code": "Q-3287",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3322",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 38,
+        "code": "Q-3322",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3323",
+      "topic": "规划、推理与任务执行",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 39,
+        "code": "Q-3323",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3382",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 40,
+        "code": "Q-3382",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3383",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 41,
+        "code": "Q-3383",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3456",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 42,
+        "code": "Q-3456",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3486",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 93,
+        "code": "Q-3486",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3487",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "ready",
+      "answer_origin": "source_original",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 94,
+        "code": "Q-3487",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3588",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 95,
+        "code": "Q-3588",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3642",
+      "topic": "记忆系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 43,
+        "code": "Q-3642",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3687",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 96,
+        "code": "Q-3687",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3696",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 97,
+        "code": "Q-3696",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3748",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 98,
+        "code": "Q-3748",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3749",
+      "topic": "多 Agent 编排与协作",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 99,
+        "code": "Q-3749",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3784",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 100,
+        "code": "Q-3784",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3795",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 101,
+        "code": "Q-3795",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3921",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 44,
+        "code": "Q-3921",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3939",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 45,
+        "code": "Q-3939",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-3946",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 46,
+        "code": "Q-3946",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4112",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 102,
+        "code": "Q-4112",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4113",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 103,
+        "code": "Q-4113",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4188",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 47,
+        "code": "Q-4188",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4240",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 104,
+        "code": "Q-4240",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4303",
+      "topic": "Agent 应用架构与场景设计",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 48,
+        "code": "Q-4303",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4456",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 105,
+        "code": "Q-4456",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4460",
+      "topic": "工作流、状态与执行恢复",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 106,
+        "code": "Q-4460",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4836",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 49,
+        "code": "Q-4836",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4837",
+      "topic": "记忆系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 50,
+        "code": "Q-4837",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4839",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.2",
+      "validation": {
+        "index": 51,
+        "code": "Q-4839",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.2",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4896",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 52,
+        "code": "Q-4896",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4923",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 107,
+        "code": "Q-4923",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4924",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 108,
+        "code": "Q-4924",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-4925",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 109,
+        "code": "Q-4925",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-5078",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 110,
+        "code": "Q-5078",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-5588",
+      "topic": "工具调用与 Function Calling",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 53,
+        "code": "Q-5588",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-5711",
+      "topic": "Agent 基础与运行循环",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 54,
+        "code": "Q-5711",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-7004",
+      "topic": "Agent 框架与 Harness",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 111,
+        "code": "Q-7004",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-7020",
+      "topic": "上下文工程",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 55,
+        "code": "Q-7020",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-7077",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 112,
+        "code": "Q-7077",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-7091",
+      "topic": "Skills 能力系统",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 113,
+        "code": "Q-7091",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-7196",
+      "topic": "上下文工程",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "05.1",
+      "validation": {
+        "index": 56,
+        "code": "Q-7196",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "05.1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    },
+    {
+      "code": "Q-9127",
+      "topic": "MCP、A2A 与工具协议",
+      "source_answer_status": "pending",
+      "answer_origin": "agent_generated",
+      "candidate_content_version": "agent-basics-06-v1",
+      "validation": {
+        "index": 114,
+        "code": "Q-9127",
+        "accepted": true,
+        "reasons": [
+          {
+            "code": "VALIDATED",
+            "message": "内容结构、分类与固定来源校验通过"
+          }
+        ],
+        "version": 1,
+        "action": "unchanged"
+      },
+      "status": "published",
+      "published_version": 1,
+      "published_content_version": "agent-basics-06-v1",
+      "matches_candidate": true,
+      "disabled_reason": null
+    }
+  ],
+  "availability": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "question_practice",
+    "available_count": 115,
+    "topic_counts": {
+      "Agent 基础与运行循环": 17,
+      "Agent 应用架构与场景设计": 18,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 6,
+      "MCP、A2A 与工具协议": 15,
+      "Skills 能力系统": 13,
+      "工作流、状态与执行恢复": 5,
+      "多 Agent 编排与协作": 8,
+      "Agent 框架与 Harness": 16,
+      "GUI、Computer Use 与多模态 Agent": 1
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 17,
+        "interview_count": 16
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 18,
+        "interview_count": 11
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 8,
+        "interview_count": 8
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 2,
+        "interview_count": 2
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 6,
+        "interview_count": 6
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 6,
+        "interview_count": 5
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 15,
+        "interview_count": 13
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 13,
+        "interview_count": 12
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 5,
+        "interview_count": 5
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 8,
+        "interview_count": 6
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 16,
+        "interview_count": 13
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 1,
+        "interview_count": 1
+      }
+    ],
+    "can_start": true,
+    "missing": []
+  },
+  "mock_availability": {
+    "pack_id": "pack_agent_basics_mianstack",
+    "mode": "mock_interview",
+    "available_count": 98,
+    "topic_counts": {
+      "Agent 基础与运行循环": 16,
+      "Agent 应用架构与场景设计": 11,
+      "规划、推理与任务执行": 8,
+      "上下文工程": 2,
+      "记忆系统": 6,
+      "工具调用与 Function Calling": 5,
+      "MCP、A2A 与工具协议": 13,
+      "Skills 能力系统": 12,
+      "工作流、状态与执行恢复": 5,
+      "多 Agent 编排与协作": 6,
+      "Agent 框架与 Harness": 13,
+      "GUI、Computer Use 与多模态 Agent": 1
+    },
+    "topics": [
+      {
+        "topic": "Agent 基础与运行循环",
+        "competency_id": "agent_loop",
+        "available_count": 17,
+        "interview_count": 16
+      },
+      {
+        "topic": "Agent 应用架构与场景设计",
+        "competency_id": "agent_application_architecture",
+        "available_count": 18,
+        "interview_count": 11
+      },
+      {
+        "topic": "规划、推理与任务执行",
+        "competency_id": "agent_planning",
+        "available_count": 8,
+        "interview_count": 8
+      },
+      {
+        "topic": "上下文工程",
+        "competency_id": "agent_context_engineering",
+        "available_count": 2,
+        "interview_count": 2
+      },
+      {
+        "topic": "记忆系统",
+        "competency_id": "agent_memory",
+        "available_count": 6,
+        "interview_count": 6
+      },
+      {
+        "topic": "工具调用与 Function Calling",
+        "competency_id": "agent_tool_calling",
+        "available_count": 6,
+        "interview_count": 5
+      },
+      {
+        "topic": "MCP、A2A 与工具协议",
+        "competency_id": "agent_protocols",
+        "available_count": 15,
+        "interview_count": 13
+      },
+      {
+        "topic": "Skills 能力系统",
+        "competency_id": "agent_skills",
+        "available_count": 13,
+        "interview_count": 12
+      },
+      {
+        "topic": "工作流、状态与执行恢复",
+        "competency_id": "agent_workflow_recovery",
+        "available_count": 5,
+        "interview_count": 5
+      },
+      {
+        "topic": "多 Agent 编排与协作",
+        "competency_id": "agent_multi_agent",
+        "available_count": 8,
+        "interview_count": 6
+      },
+      {
+        "topic": "Agent 框架与 Harness",
+        "competency_id": "agent_frameworks_harness",
+        "available_count": 16,
+        "interview_count": 13
+      },
+      {
+        "topic": "GUI、Computer Use 与多模态 Agent",
+        "competency_id": "agent_gui",
+        "available_count": 1,
+        "interview_count": 1
+      }
+    ],
+    "can_start": true,
+    "missing": [],
+    "eligible_topic_count": 11,
+    "minimum_topic_count": 3,
+    "minimum_questions_per_topic": 2,
+    "stages": [
+      {
+        "id": "introduction",
+        "label": "开场",
+        "available_count": 1,
+        "ready": true
+      },
+      {
+        "id": "experience_or_scenario",
+        "label": "经历或假设情境",
+        "available_count": 2,
+        "ready": true
+      },
+      {
+        "id": "technical_topics",
+        "label": "技术",
+        "available_count": 98,
+        "ready": true
+      },
+      {
+        "id": "behavioral",
+        "label": "行为",
+        "available_count": 1,
+        "ready": true
+      },
+      {
+        "id": "candidate_questions",
+        "label": "候选人反问",
+        "available_count": 1,
+        "ready": true
+      }
+    ]
+  }
+}

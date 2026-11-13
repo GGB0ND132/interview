@@ -1,0 +1,659 @@
+{
+  "checked_at": "2026-11-13T16:37:43.089434+00:00",
+  "base_url": "http://127.0.0.1:8117",
+  "fixture_notice": "Synthetic acceptance answers; provider identity is retained per feedback",
+  "cases": [
+    {
+      "case": "question",
+      "session": {
+        "session_id": "269c1911-27fe-4b97-a297-3f8c08cf15d4",
+        "pack_id": "pack_agent_basics_mianstack",
+        "pack_version": 1,
+        "pack_title": "Agent 原理与系统基础档（MianStack）",
+        "created_at": "2026-11-13T16:36:02.333Z",
+        "difficulty": "easy",
+        "revision": 5,
+        "status": "completed",
+        "phase": "feedback_ready",
+        "current_turn": {
+          "id": "235502cf-1be7-4173-b745-d63f3d1b0959",
+          "question_code": "Q-0561",
+          "question_version": 1,
+          "kind": "main",
+          "question_type": "technical",
+          "stage": "technical",
+          "topic": "Agent 应用架构与场景设计",
+          "competency_id": "agent_application_architecture",
+          "text": "Agent 与 RAG 有什么区别和联系？"
+        },
+        "submissions": [
+          {
+            "id": "cb4f8ee5-5a9f-4ec3-8f83-cb6b41af58d6",
+            "turn_id": "235502cf-1be7-4173-b745-d63f3d1b0959",
+            "client_submission_id": "7aecfff0-b62a-49a4-b0b0-bbaed9ef5c65",
+            "disposition": "answered",
+            "answer_text": "合成受控恢复验收 ia-qp-session：模型提出工具调用，程序检查权限与参数后实际执行，再保存真实回执；失败时保留回答。",
+            "status": "completed",
+            "job_id": "faa69176-48e6-4e41-8122-f98c1e53abfa",
+            "score": 75,
+            "feedback": {
+              "answer_version": 1,
+              "assessment_coverage": 1.0,
+              "assessment_status": "complete",
+              "content_version": "05.1",
+              "dimensions": [
+                {
+                  "answer_quote": "合成受控恢复验收 ia-qp-sessi",
+                  "name": "accuracy",
+                  "reason": "受控恢复验收结果",
+                  "score": 75
+                },
+                {
+                  "answer_quote": "合成受控恢复验收 ia-qp-sessi",
+                  "name": "completeness",
+                  "reason": "受控恢复验收结果",
+                  "score": 75
+                },
+                {
+                  "answer_quote": "合成受控恢复验收 ia-qp-sessi",
+                  "name": "relevance",
+                  "reason": "受控恢复验收结果",
+                  "score": 75
+                },
+                {
+                  "answer_quote": "合成受控恢复验收 ia-qp-sessi",
+                  "name": "structure",
+                  "reason": "受控恢复验收结果",
+                  "score": 75
+                },
+                {
+                  "answer_quote": "合成受控恢复验收 ia-qp-sessi",
+                  "name": "specificity",
+                  "reason": "受控恢复验收结果",
+                  "score": 75
+                }
+              ],
+              "evidence_reason": "受控恢复验收",
+              "evidence_status": "observed",
+              "followup": null,
+              "improvements": [
+                "本结果仅用于恢复验收，不代表模型评分质量"
+              ],
+              "independent_references": [],
+              "limitations": [],
+              "overall_score": 75,
+              "prompt_version": "single_question_provenance_v2",
+              "question_code": "Q-0561",
+              "question_source": {
+                "answer_status": "ready",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "a8df6126ae8bb1b0c750fd41e2990f51f173fb14e42d571ad6df9adb65ab2381",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-0561",
+                "original_title": "Agent 与 RAG 有什么区别和联系？",
+                "path": "questions/Q-0561.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Agent 应用架构与场景设计",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0561.md"
+              },
+              "question_version": 1,
+              "reference_answer": "> 在面栈阅读：[Agent 与 RAG 有什么区别和联系？](https://mianstack.com/question/q-0561)\n\n## 核心回答\n\n**RAG解决“回答时从哪里取得依据”，Agent解决“围绕目标下一步做什么”。** RAG把外部检索结果与模型生成结合起来；Agent根据当前状态和观察选择动作、调用工具并推进任务。它们处在不同维度，可以独立使用，也可以组合。\n\n不能把RAG简单叫作“有记忆的知识库”：知识库和检索只是其中一部分，检索结果如何进入生成、回答是否受证据支持也很重要。也不能只要调用一次API就宣称系统具备完整的自主任务能力。\n\n## 职责与流程有什么不同\n\n典型两步RAG先检索相关资料，再结合资料回答。离线可以做清洗、切分、索引；在线做查询、过滤、排序和上下文组装。它适合制度、产品文档等知识问答，不需要让模型自主决定整个执行路线。\n\nAgent通常维护任务状态，在“判断 → 执行动作 → 观察结果”之间迭代。工具可以是检索，也可以是计算、代码执行或业务接口。下一步可能随结果改变：查不到材料就换查询，发现条件不足就补充信息，满足目标后停止。\n\n因此，RAG的重点是检索覆盖、证据质量与回答忠实度；Agent还要关心动作正确性、任务完成、执行恢复、成本与权限范围。RAG本身并不等于自动长期记忆，Agent也不一定需要向量数据库。\n\n## 二者如何组合\n\n例如用户问“退款期限是多少”，检索当前政策并给出出处，固定RAG链路通常足够。若用户要求“查这笔订单是否能退款，并发起申请”，系统还需要识别订单、查询状态、结合政策判断、调用申请接口并验证结果。RAG可以提供政策依据，Agent负责动态组织查询与操作。\n\n在Agentic RAG中，检索成为模型可选择的工具：模型决定何时查、查什么、是否改写问题及何时结束。它适合复杂多跳研究或信息不足时反复补查；代价是调用次数和时延不稳定，还可能重复检索或提前停止。\n\n也可以用固定外层流程约束关键步骤，在某个节点内部允许Agent探索。混合架构通常比“全固定”或“全部自主”更贴近实际业务。\n\n## 如何选型与评估\n\n问题主要是缺少私有或最新资料，就先优化RAG；路线明确的多步业务用工作流；确实需要根据中间结果调整步骤，再引入Agent。不要为了名字升级而增加循环与多Agent。\n\n评RAG要拆开看资料有没有召回、证据是否足够、回答是否忠实；评Agent还要检查工具、参数、最终环境状态和恢复能力。二者结合时，轨迹能帮助分辨是“没找到政策”“理解错政策”还是“操作接口用错了”。技术亮点是**让知识供给与行动控制分别承担职责，并在需要时通过工具连接**。\n\n## 对应教程\n\n- [1-3-RAG、微调、续训与智能体选型](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/1-3-RAG%E3%80%81%E5%BE%AE%E8%B0%83%E3%80%81%E7%BB%AD%E8%AE%AD%E4%B8%8E%E6%99%BA%E8%83%BD%E4%BD%93%E9%80%89%E5%9E%8B.md)：从知识需求和行动需求选择方案。\n- [19-RAG检索增强生成](https://github.com/didilili/ai-agents-from-zero/blob/c05fb5979cf0aa3b6b4ed8c29f450f640fb9c18f/19-RAG%E6%A3%80%E7%B4%A2%E5%A2%9E%E5%BC%BA%E7%94%9F%E6%88%90.md)：理解离线索引与在线检索生成。\n\n## 参考资料\n\n- 国内：[JavaGuide：AI Agent基础](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/agent-basis.md)：采用 Agent 循环与工具反馈机制，区分正文中行动决策的职责和检索供给知识的作用。\n- 国内：[JavaGuide：Workflow、Graph与Loop](https://github.com/Snailclimb/JavaGuide/blob/50f02a5984c062fe7221629d0a6a40ec15c26fd7/docs/ai/agent/workflow-graph-loop.md)：依据固定流程与动态控制的比较，说明正文中何时使用普通 RAG 链路、何时让 Agent 按反馈继续探索。\n- 国内：[Datawhale：上下文工程](https://github.com/datawhalechina/hello-agents/blob/36f583c233ea5cee4537ef93455702b55053af18/docs/chapter9/%E7%AC%AC%E4%B9%9D%E7%AB%A0%20%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B.md)：借鉴运行时按需获取上下文的方式，说明正文中检索如何成为 Agent 的知识输入。\n- 国外：[LangChain：Retrieval](https://docs.langchain.com/oss/python/deepagents/retrieval)：依据两步、Agentic 与混合 RAG 的官方分类，说明正文中 Agent 与 RAG 如何组合及二者为何不互斥。\n- 国外：[Anthropic：Building effective agents](https://www.anthropic.com/engineering/building-effective-agents)：采用工作流与 Agent 的边界和简单优先原则，说明正文中如何按任务特征选型。",
+              "requested_model": "external_adapter",
+              "rubric_version": "technical_v1",
+              "source_answer_status": "ready",
+              "strengths": [
+                "受控适配器已返回"
+              ],
+              "technical_checks": [],
+              "technical_explanations": [],
+              "used_reference_ids": []
+            },
+            "provenance": {
+              "answer_version": 1,
+              "content_version": "05.1",
+              "independent_references": [],
+              "question_code": "Q-0561",
+              "question_source": {
+                "answer_status": "ready",
+                "attribution": "Copyright (c) 2026 didilili",
+                "category": "agent",
+                "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+                "file_sha256": "a8df6126ae8bb1b0c750fd41e2990f51f173fb14e42d571ad6df9adb65ab2381",
+                "level": "基础",
+                "license": "MIT",
+                "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+                "original_id": "Q-0561",
+                "original_title": "Agent 与 RAG 有什么区别和联系？",
+                "path": "questions/Q-0561.md",
+                "repository": "https://github.com/didilili/mianstack",
+                "topic": "Agent 应用架构与场景设计",
+                "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0561.md"
+              },
+              "question_version": 1,
+              "source_answer_status": "ready",
+              "technical_checks": []
+            }
+          }
+        ],
+        "available_actions": []
+      },
+      "report": {
+        "session_id": "269c1911-27fe-4b97-a297-3f8c08cf15d4",
+        "provenance": {
+          "answer_version": 1,
+          "content_version": "05.1",
+          "independent_references": [],
+          "question_code": "Q-0561",
+          "question_source": {
+            "answer_status": "ready",
+            "attribution": "Copyright (c) 2026 didilili",
+            "category": "agent",
+            "commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
+            "file_sha256": "a8df6126ae8bb1b0c750fd41e2990f51f173fb14e42d571ad6df9adb65ab2381",
+            "level": "基础",
+            "license": "MIT",
+            "license_url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/LICENSE",
+            "original_id": "Q-0561",
+            "original_title": "Agent 与 RAG 有什么区别和联系？",
+            "path": "questions/Q-0561.md",
+            "repository": "https://github.com/didilili/mianstack",
+            "topic": "Agent 应用架构与场景设计",
+            "url": "https://github.com/didilili/mianstack/blob/b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77/questions/Q-0561.md"
+          },
+          "question_version": 1,
+          "source_answer_status": "ready",
+          "technical_checks": []
+        },
+        "average_score": 75,
+        "answered_count": 1,
+        "blank_count": 0,
+        "skipped_count": 0,
+        "status": "completed",
+        "scoring_scope": "single_question_training"
+      },
+      "jobs": [
+        {
+          "job_id": "faa69176-48e6-4e41-8122-f98c1e53abfa",
+          "status": "succeeded",
+          "phase": "evaluation",
+          "attempts": 2,
+          "result_entity_id": "cb4f8ee5-5a9f-4ec3-8f83-cb6b41af58d6",
+          "error": null
+        }
+      ]
+    },
+    {
+      "case": "mock",
+      "session": {
+        "session_id": "612229a5-5d26-4366-ab1e-8fa88e848d08",
+        "pack_id": "pack_agent_basics_mianstack",
+        "pack_version": 1,
+        "pack_title": "Agent 原理与系统基础档（MianStack）",
+        "created_at": "2026-11-13T16:36:05.221Z",
+        "difficulty": "easy",
+        "revision": 6,
+        "status": "active",
+        "phase": "stage_transition",
+        "current_turn": {
+          "id": "63bc0838-fa76-4373-9119-cf33c93b3393",
+          "group_id": "dbd1b29f-6169-433d-a2c7-132de7f59201",
+          "question_code": "Q-INTERVIEW-INTRODUCTION",
+          "question_version": 1,
+          "kind": "main",
+          "question_type": "introduction",
+          "stage": "introduction",
+          "topic": "开场",
+          "competency_id": "introduction",
+          "text": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+        },
+        "submissions": [
+          {
+            "id": "a0a9d9e9-7ad0-4975-a084-179cfa6ee502",
+            "turn_id": "63bc0838-fa76-4373-9119-cf33c93b3393",
+            "client_submission_id": "dbbae5a2-4a67-451a-8d6c-f39b75affa22",
+            "disposition": "answered",
+            "answer_text": "合成受控恢复验收 ia-mi-session：模型提出工具调用，程序检查权限与参数后实际执行，再保存真实回执；失败时保留回答。",
+            "status": "completed",
+            "job_id": "e09e1633-8b69-47f7-8504-97262c19cea6",
+            "provenance": {
+              "answer_version": 1,
+              "content_version": "07.1",
+              "independent_references": [],
+              "question_code": "Q-INTERVIEW-INTRODUCTION",
+              "question_source": {
+                "kind": "project_original",
+                "path": "backend/src/interview_backend/mock_catalog.py",
+                "revision": "07.1"
+              },
+              "question_version": 1,
+              "source_answer_status": null,
+              "technical_checks": []
+            }
+          }
+        ],
+        "available_actions": [
+          "next",
+          "finish"
+        ],
+        "mode": "mock_interview",
+        "turns": [
+          {
+            "id": "63bc0838-fa76-4373-9119-cf33c93b3393",
+            "group_id": "dbd1b29f-6169-433d-a2c7-132de7f59201",
+            "question_code": "Q-INTERVIEW-INTRODUCTION",
+            "question_version": 1,
+            "kind": "main",
+            "question_type": "introduction",
+            "stage": "introduction",
+            "topic": "开场",
+            "competency_id": "introduction",
+            "text": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+          }
+        ],
+        "plan": {
+          "seed": "8118695940753373947",
+          "selected_topics": [
+            "agent_memory",
+            "agent_context_engineering",
+            "agent_application_architecture"
+          ],
+          "candidate_pool": [
+            {
+              "code": "Q-0058",
+              "version": 1
+            },
+            {
+              "code": "Q-0062",
+              "version": 1
+            },
+            {
+              "code": "Q-0419",
+              "version": 1
+            },
+            {
+              "code": "Q-0561",
+              "version": 1
+            },
+            {
+              "code": "Q-0597",
+              "version": 1
+            },
+            {
+              "code": "Q-0883",
+              "version": 1
+            },
+            {
+              "code": "Q-0898",
+              "version": 1
+            },
+            {
+              "code": "Q-1009",
+              "version": 1
+            },
+            {
+              "code": "Q-1434",
+              "version": 1
+            },
+            {
+              "code": "Q-1555",
+              "version": 1
+            },
+            {
+              "code": "Q-1674",
+              "version": 1
+            },
+            {
+              "code": "Q-1675",
+              "version": 1
+            },
+            {
+              "code": "Q-1843",
+              "version": 1
+            },
+            {
+              "code": "Q-1909",
+              "version": 1
+            },
+            {
+              "code": "Q-2001",
+              "version": 1
+            },
+            {
+              "code": "Q-2007",
+              "version": 1
+            },
+            {
+              "code": "Q-2078",
+              "version": 1
+            },
+            {
+              "code": "Q-2186",
+              "version": 1
+            },
+            {
+              "code": "Q-2330",
+              "version": 1
+            },
+            {
+              "code": "Q-2466",
+              "version": 1
+            },
+            {
+              "code": "Q-2506",
+              "version": 1
+            },
+            {
+              "code": "Q-2507",
+              "version": 1
+            },
+            {
+              "code": "Q-2536",
+              "version": 1
+            },
+            {
+              "code": "Q-2612",
+              "version": 1
+            },
+            {
+              "code": "Q-2637",
+              "version": 1
+            },
+            {
+              "code": "Q-2659",
+              "version": 1
+            },
+            {
+              "code": "Q-2676",
+              "version": 1
+            },
+            {
+              "code": "Q-2797",
+              "version": 1
+            },
+            {
+              "code": "Q-2985",
+              "version": 1
+            },
+            {
+              "code": "Q-3003",
+              "version": 1
+            },
+            {
+              "code": "Q-3054",
+              "version": 1
+            },
+            {
+              "code": "Q-3168",
+              "version": 1
+            },
+            {
+              "code": "Q-3322",
+              "version": 1
+            },
+            {
+              "code": "Q-3323",
+              "version": 1
+            },
+            {
+              "code": "Q-3383",
+              "version": 1
+            },
+            {
+              "code": "Q-3456",
+              "version": 1
+            },
+            {
+              "code": "Q-3642",
+              "version": 1
+            },
+            {
+              "code": "Q-3921",
+              "version": 1
+            },
+            {
+              "code": "Q-3946",
+              "version": 1
+            },
+            {
+              "code": "Q-4188",
+              "version": 1
+            },
+            {
+              "code": "Q-4836",
+              "version": 1
+            },
+            {
+              "code": "Q-4837",
+              "version": 1
+            },
+            {
+              "code": "Q-4839",
+              "version": 1
+            },
+            {
+              "code": "Q-4896",
+              "version": 1
+            },
+            {
+              "code": "Q-5588",
+              "version": 1
+            },
+            {
+              "code": "Q-5711",
+              "version": 1
+            },
+            {
+              "code": "Q-7020",
+              "version": 1
+            },
+            {
+              "code": "Q-7196",
+              "version": 1
+            }
+          ],
+          "max_main_questions": 12,
+          "max_turns": 36,
+          "questions": [
+            {
+              "code": "Q-INTERVIEW-INTRODUCTION",
+              "version": 1,
+              "stage": "introduction",
+              "topic": "开场",
+              "competency_id": "introduction",
+              "prompt": "请简要介绍你的学习背景、Agent 相关准备，以及希望在这个岗位解决什么问题。"
+            },
+            {
+              "code": "Q-INTERVIEW-SCENARIO",
+              "version": 1,
+              "stage": "scenario",
+              "topic": "经历或假设情境",
+              "competency_id": "scenario",
+              "prompt": "【假设情境，并非你的真实经历】团队要做一个能查询订单的 Agent。你会怎样拆分模型、工具和程序的职责，并验证失败时能安全停止？"
+            },
+            {
+              "code": "Q-4837",
+              "version": 1,
+              "stage": "technical",
+              "topic": "记忆系统",
+              "competency_id": "agent_memory",
+              "prompt": "Agent 记忆有哪些类型，短期、长期与情景记忆如何区分？"
+            },
+            {
+              "code": "Q-7196",
+              "version": 1,
+              "stage": "technical",
+              "topic": "上下文工程",
+              "competency_id": "agent_context_engineering",
+              "prompt": "输入超过模型上下文窗口时，有哪些处理方式？"
+            },
+            {
+              "code": "Q-1009",
+              "version": 1,
+              "stage": "technical",
+              "topic": "Agent 应用架构与场景设计",
+              "competency_id": "agent_application_architecture",
+              "prompt": "是否了解 Deep Research，它是什么？"
+            },
+            {
+              "code": "Q-INTERVIEW-BEHAVIORAL",
+              "version": 1,
+              "stage": "behavioral",
+              "topic": "行为",
+              "competency_id": "behavioral",
+              "prompt": "请用一次学习、协作或生活中的困难说明：你采取了什么具体行动、结果怎样、下次会如何改进？不要求工作经历。"
+            },
+            {
+              "code": "Q-INTERVIEW-CANDIDATE_QUESTIONS",
+              "version": 1,
+              "stage": "candidate_questions",
+              "topic": "候选人反问",
+              "competency_id": "candidate_questions",
+              "prompt": "面试即将结束，你想向团队了解什么？也可以明确选择没有问题。"
+            }
+          ],
+          "selection_algorithm": "weighted_without_replacement_v1",
+          "topic_candidates": [
+            {
+              "competency_id": "agent_application_architecture",
+              "eligible_question_count": 11,
+              "weight": 1,
+              "matched_requirement_ids": []
+            },
+            {
+              "competency_id": "agent_context_engineering",
+              "eligible_question_count": 2,
+              "weight": 1,
+              "matched_requirement_ids": []
+            },
+            {
+              "competency_id": "agent_loop",
+              "eligible_question_count": 16,
+              "weight": 1,
+              "matched_requirement_ids": []
+            },
+            {
+              "competency_id": "agent_memory",
+              "eligible_question_count": 6,
+              "weight": 1,
+              "matched_requirement_ids": []
+            },
+            {
+              "competency_id": "agent_planning",
+              "eligible_question_count": 8,
+              "weight": 1,
+              "matched_requirement_ids": []
+            },
+            {
+              "competency_id": "agent_tool_calling",
+              "eligible_question_count": 5,
+              "weight": 1,
+              "matched_requirement_ids": []
+            }
+          ],
+          "topic_draws": [
+            {
+              "random_value": 0.5492146559063685,
+              "total_weight": 6,
+              "selected_topic": "agent_memory"
+            },
+            {
+              "random_value": 0.308015592402075,
+              "total_weight": 5,
+              "selected_topic": "agent_context_engineering"
+            },
+            {
+              "random_value": 0.1801479539265083,
+              "total_weight": 4,
+              "selected_topic": "agent_application_architecture"
+            }
+          ]
+        },
+        "coverage": [
+          {
+            "competency_id": "introduction",
+            "status": "observed",
+            "group_ids": [
+              "dbd1b29f-6169-433d-a2c7-132de7f59201"
+            ],
+            "answer_quotes": [
+              {
+                "group_id": "dbd1b29f-6169-433d-a2c7-132de7f59201",
+                "quote": "合成受控恢复验收 ia-mi-session：模型提出工具调用，程序检查权限与参数后实际执行，再保存真实回执；失败时保留回答。"
+              }
+            ],
+            "unresolved": [],
+            "reason": "受控恢复验收"
+          },
+          {
+            "competency_id": "experience",
+            "status": "not_applicable",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": [
+              "用户配置选择假设情境，未评价真实项目经历"
+            ]
+          },
+          {
+            "competency_id": "scenario",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          },
+          {
+            "competency_id": "agent_memory",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          },
+          {
+            "competency_id": "agent_context_engineering",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          },
+          {
+            "competency_id": "agent_application_architecture",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          },
+          {
+            "competency_id": "behavioral",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          },
+          {
+            "competency_id": "candidate_questions",
+            "status": "unobserved",
+            "group_ids": [],
+            "answer_quotes": [],
+            "unresolved": []
+          }
+        ],
+        "stop_reason": null,
+        "resume_context": null
+      },
+      "report": null,
+      "jobs": [
+        {
+          "job_id": "e09e1633-8b69-47f7-8504-97262c19cea6",
+          "status": "succeeded",
+          "phase": "evaluation",
+          "attempts": 2,
+          "result_entity_id": "a0a9d9e9-7ad0-4975-a084-179cfa6ee502",
+          "error": null
+        }
+      ]
+    }
+  ]
+}
