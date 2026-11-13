@@ -22,6 +22,14 @@
 .mi-dimension blockquote { margin-top: 12px; border-left: 2px solid var(--accent); padding-left: 12px; }
 .mi-jump { font-size: var(--fs-meta); margin-bottom: 12px; }
 .jd-preparation { border-top: 1px solid var(--border-subtle); padding-top: 28px; }
+.resume-preparation { border-top: 1px solid var(--border-subtle); padding-top: 28px; display: grid; gap: 20px; }
+.resume-preparation .practice-actions { flex-wrap: wrap; }
+.resume-preparation textarea { resize: vertical; }
+.resume-preparation p, .resume-preparation label, .resume-context p { overflow-wrap: anywhere; white-space: pre-wrap; }
+.resume-preparation h2, .resume-preview h3 { font-weight: 600; }
+.resume-original summary { cursor: pointer; padding: 8px 0; }
+.resume-original > div, .resume-context > div { margin-top: 16px; }
+.resume-preview > p, .resume-preview > .practice-actions { margin-top: 16px; }
 .jd-preparation textarea { min-height: 140px; resize: vertical; }
 .jd-preview { margin-top: 24px; }
 .jd-preview section + section { margin-top: 24px; }

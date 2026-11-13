@@ -10,6 +10,9 @@ import MockInterviewReport from './MockInterviewReport'
 import JDPreparation from './JDPreparation'
 import type { JDChoice } from './JDPreparation'
 import { JDSelection } from './JDCoverage'
+import ResumePreparation from './ResumePreparation'
+import type { ResumeChoice } from './ResumePreparation'
+import ConfirmedResume from './ResumeContext'
 import './question-availability.css'
 import './mock-interview.css'
 
@@ -36,6 +39,7 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   const [followups, setFollowups] = useState(2)
   const [jdChoice, setJDChoice] = useState<JDChoice>({ packId: '', pending: false })
   const [jdAttempt, setJDAttempt] = useState(0)
+  const [resumeChoice, setResumeChoice] = useState<ResumeChoice>({ pending: false })
   const jdPending = jdChoice.packId === packId && jdChoice.pending
   const { availability, availabilityError, refreshAvailability } = useQuestionAvailability(api, packId, 'mock_interview', 'easy', '')
   const [session, setSession] = useState<SessionView | null>(null)
@@ -166,9 +170,9 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   }
 
   async function start() {
-    if (!availability?.can_start || session || restoreFailed || jdPending) return
+    if (!availability?.can_start || session || restoreFailed || jdPending || resumeChoice.pending) return
     await run(async () => {
-      const draft = await api.create(packId, { mode: 'mock_interview', difficulty: 'easy', feedback_timing: 'after_session', experience_mode: experience, max_followups_per_question: followups, ...(jdChoice.packId === packId && jdChoice.reference ? { jd: jdChoice.reference } : {}) })
+      const draft = await api.create(packId, { mode: 'mock_interview', difficulty: 'easy', feedback_timing: 'after_session', experience_mode: resumeChoice.mode ?? experience, max_followups_per_question: followups, ...(jdChoice.packId === packId && jdChoice.reference ? { jd: jdChoice.reference } : {}), ...(resumeChoice.resumeId ? { resume_id: resumeChoice.resumeId } : {}) })
       accept(draft)
       accept(await api.start(draft.session_id, draft.revision))
     })
@@ -212,6 +216,7 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     setHistoryAttempt(value => value + 1)
     setJDChoice({ packId: '', pending: false })
     setJDAttempt(value => value + 1)
+    setResumeChoice({ pending: false })
     refreshAvailability()
   }
 
@@ -219,7 +224,7 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     <div className="page-header"><h1>模拟面试</h1><p>从开场到候选人反问，完成一次 Agent 基础档交流。</p></div>
     {booting ? <p role="status">正在连接面试服务</p> : <form className="setup-form" aria-busy={busy} onSubmit={event => { event.preventDefault(); void start() }}>
       <div className="form-field"><label htmlFor="mi-pack">岗位包</label><select id="mi-pack" className="field" value={packId} disabled={busy} onChange={event => { setPackId(event.target.value); setJDChoice({ packId: '', pending: false }) }}>{packs.map(pack => <option key={pack.id} value={pack.id}>{pack.title}</option>)}</select><p className="field-help">Agent 基础档；无需上传资料即可开始。</p></div>
-      <div className="form-field"><label htmlFor="mi-experience">经历环节</label><select id="mi-experience" className="field" value={experience} onChange={event => setExperience(event.target.value as typeof experience)}><option value="scenario">没有项目经历，回答假设情境</option><option value="experience">分享我的项目经历</option></select></div>
+      <div className="form-field"><label htmlFor="mi-experience">经历环节</label><select id="mi-experience" className="field" value={resumeChoice.mode ?? experience} disabled={busy || resumeChoice.pending || Boolean(resumeChoice.resumeId)} onChange={event => setExperience(event.target.value as typeof experience)}><option value="scenario">没有项目经历，回答假设情境</option><option value="experience">分享我的项目经历</option></select><p className="field-help">确认项目后自动使用对应环节；清除项目内容后可重新选择。</p></div>
       <div className="form-field"><label htmlFor="mi-followups">每组追问上限</label><select id="mi-followups" className="field" value={followups} onChange={event => setFollowups(Number(event.target.value))}>{[0, 1, 2].map(value => <option key={value} value={value}>{value} 次</option>)}</select></div>
       <section className="qp-coverage" aria-label="面试可用性"><div className="field-heading"><h2>环节与能力覆盖</h2><button type="button" className="text-link" onClick={refreshAvailability}>刷新可用性</button></div>
         <p className="field-help">基础难度；开场、经历或情境、技术、行为与反问。技术交流随机选择 3～4 个题量充足的主题。</p>
@@ -228,8 +233,9 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
         {availability && !availability.can_start && <p className="field-error">必需环节或技术主题不足，请发布合格题目后刷新。</p>}
       </section>
       <JDPreparation key={`${packId}:${jdAttempt}`} api={api} packId={packId} disabled={busy} onChange={setJDChoice} />
+      <ResumePreparation api={api} disabled={busy} onChange={setResumeChoice} />
       <p className="meta-note">面试过程中展示交流进度，详细评分和参考答案在结束后公开。</p>
-      <button className="button primary setup-submit" aria-busy={busy} disabled={!availability?.can_start || busy || restoreFailed || jdPending}>{busy ? '正在开始' : '开始模拟面试'}<Play size={16} aria-hidden="true" /></button>
+      <button className="button primary setup-submit" aria-busy={busy} disabled={!availability?.can_start || busy || restoreFailed || jdPending || resumeChoice.pending}>{busy ? '正在开始' : '开始模拟面试'}<Play size={16} aria-hidden="true" /></button>
     </form>}
     {error && <div className="qp-error" role="alert"><p>{error}</p>{(!packs.length || restoreFailed) && <button className="button secondary" onClick={() => { setBooting(true); setConnectionAttempt(value => value + 1) }}>重新连接</button>}</div>}
     <section className="qp-history"><div className="field-heading"><h2>最近模拟面试</h2><button className="text-link" disabled={busy} onClick={() => setHistoryAttempt(value => value + 1)}>刷新最近会话</button></div><p className="meta-note">显示服务端最近 20 条会话中的模拟面试，可继续交流或回看报告。</p>{historyError && <p role="alert" className="field-error">{historyError}</p>}{history.map(item => <button className="history-row qp-history-row" key={item.session_id} disabled={busy} onClick={() => void run(async () => { setReport(null); setReportError(''); setPaused(false); accept(await api.session(item.session_id)) })}><div><strong>{item.pack_title ?? 'Agent 基础档'}</strong><div className="history-sub"><span>{new Date(item.created_at).toLocaleString('zh-CN')}</span><span>{item.status === 'completed' ? '面试已结束' : item.status === 'ended_early' ? '部分报告' : item.status === 'draft' ? '待开始' : '进行中'}</span></div></div><span>{isEnded(item) ? '查看报告' : '继续面试'}</span></button>)}</section>
@@ -249,6 +255,7 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
       <div className="progress-meta"><span>{turn ? STAGES[turn.stage] : '准备开始'}</span><span>基础</span></div>
       <details className="mi-coverage"><summary>本场环节与能力覆盖</summary><p className="meta-note">已了解表示已有材料可评价，不等于掌握。</p><ul className="qp-stage-list">{session.coverage?.map(item => <li key={item.competency_id}><span>{competencyLabel(item.competency_id, session.plan?.questions ?? [])}</span><span>{COVERAGE[item.status]}</span></li>)}</ul></details>
       <JDSelection session={session} />
+      <ConfirmedResume context={session.resume_context} />
       {(session.turns ?? []).map(item => <article className="question-block" key={item.id}>
         <h2>{item.kind === 'followup' ? '面试官追问' : STAGES[item.stage]}</h2><p>{item.text}</p>
         {session.submissions.filter(submitted => submitted.turn_id === item.id).map(submitted => <div className="turn" key={submitted.id}><span className="meta-label">你的回答</span><p className="submitted-answer">{submitted.answer_text || DISPOSITIONS[submitted.disposition]}</p></div>)}

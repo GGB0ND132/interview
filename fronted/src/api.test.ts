@@ -18,6 +18,17 @@ function recording(response: () => Response) {
 }
 
 describe('practice API client', () => {
+  it('uploads a resume as multipart data and confirms only selected fragment IDs', async () => {
+    const { calls, fetchImpl } = recording(() => envelope({ resume_id: 'resume1', status: 'needs_confirmation' }))
+    const api = createPracticeApi({ fetchImpl })
+    const file = new File(['resume'], 'resume.docx')
+    await api.uploadResume(file)
+    expect(calls[0].url).toBe('/api/v1/resumes')
+    expect((calls[0].init?.body as FormData).get('file')).toBe(file)
+    expect(new Headers(calls[0].init?.headers).has('content-type')).toBe(false)
+    await api.confirmResume('resume1', 0, ['project-1'], false)
+    expect(JSON.parse(String(calls[1].init?.body))).toEqual({ expected_revision: 0, fragment_ids: ['project-1'], no_project_experience: false })
+  })
   it('unwraps the server envelope and returns the data payload', async () => {
     const { calls, fetchImpl } = recording(() => envelope([{ id: 'pack_agent', title: '包' }]))
     const api = createPracticeApi({ fetchImpl })

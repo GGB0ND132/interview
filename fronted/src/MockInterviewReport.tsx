@@ -2,6 +2,7 @@ import type { InterviewReport, PlannedQuestion, PracticeApi } from './api'
 import { FeedbackSources, ReportProblem } from './FeedbackSources'
 import { competencyLabel, COVERAGE, DIMENSIONS, DISPOSITIONS } from './interview-labels'
 import { JDReportCoverage, JDSelection } from './JDCoverage'
+import ConfirmedResume from './ResumeContext'
 
 export default function MockInterviewReport({ api, report, questions, onBack }: { api: PracticeApi; report: InterviewReport; questions: PlannedQuestion[]; onBack: () => void }) {
   return <main className="page-content report-page mi-report">
@@ -10,6 +11,7 @@ export default function MockInterviewReport({ api, report, questions, onBack }: 
     <div className="report-body">
       <JDReportCoverage report={report} />
       <JDSelection session={{ plan: report.plan, jd: report.jd ?? undefined }} />
+      <ConfirmedResume context={report.resume_context} />
       <section><h2>本场表现</h2><div className="mi-scores"><p>整体题组均分<strong>{report.average_score ?? '未评价'}</strong></p><p>技术题组均分<strong>{report.technical_average_score ?? '未评价'}</strong></p></div>
         <p className="meta-note">仅计算已完成且有分数的题组，追问不单独计分；空白记 0 分，跳过与未完成题组不计分。</p>
         <div className="report-stats"><span>{report.answered_count} 个计分题组</span><span>{report.blank_count} 个空白</span><span>{report.skipped_count} 个跳过</span></div>
