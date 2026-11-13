@@ -3,6 +3,7 @@ import { ArrowRight, LoaderCircle, Play, SkipForward } from 'lucide-react'
 import { FeedbackSources, ReportProblem } from './FeedbackSources'
 import { ApiError, createPracticeApi } from './api'
 import { useQuestionAvailability } from './useQuestionAvailability'
+import { useAnswerDraft } from './useAnswerDraft'
 import './question-availability.css'
 import type {
   Dimension,
@@ -58,6 +59,8 @@ const defaultApi = createPracticeApi()
 
 export default function QuestionPractice({ api = defaultApi }: { api?: PracticeApi }) {
   const [booting, setBooting] = useState(true)
+  const [restoreFailed, setRestoreFailed] = useState(false)
+  const [syncRequired, setSyncRequired] = useState(false)
   const [packs, setPacks] = useState<Pack[]>([])
   const [packId, setPackId] = useState('')
   const [difficulty, setDifficulty] = useState<Difficulty>('easy')
@@ -65,14 +68,23 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   const [focus, setFocus] = useState('')
   const { availability, availabilityError, refreshAvailability } = useQuestionAvailability(api, packId, mode, difficulty, focus)
   const [session, setSession] = useState<SessionView | null>(null)
-  const [answer, setAnswer] = useState('')
+  const { answer, setAnswer, restoreDraft, answerRequest, detachDraft } = useAnswerDraft()
   const [busy, setBusy] = useState(false)
   const [watching, setWatching] = useState(false)
   const [error, setError] = useState('')
   const [history, setHistory] = useState<SessionView[]>([])
-  const submitKey = useRef<string | null>(null)
-  const submitLock = useRef<TurnKey | null>(null)
+  const operationLock = useRef(false)
+  const current = useRef<SessionView | null>(null)
+  const watchGeneration = useRef(0)
   const bottomRef = useRef<HTMLDivElement>(null)
+
+  const accept = useCallback((view: SessionView) => {
+    if (current.current?.session_id === view.session_id && current.current.revision > view.revision) return
+    current.current = view
+    restoreDraft(view)
+    setSession(view)
+    setSyncRequired(false)
+  }, [restoreDraft])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'end' })
@@ -85,63 +97,50 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
   }
 
   async function draw() {
-    if (!packId || busy || mode !== 'question_practice' || !availability?.can_start) return
+    if (!packId || operationLock.current || restoreFailed || mode !== 'question_practice' || !availability?.can_start) return
+    operationLock.current = true
     setBusy(true)
     setError('')
     try {
       const draft = await api.create(packId, { mode: 'question_practice', difficulty, ...(focus ? { focus_competency_ids: [focus] } : {}) })
       const started = await api.start(draft.session_id, draft.revision)
       storeSession(started.session_id)
-      submitKey.current = null
-      setAnswer('')
-      setSession(started)
+      accept(started)
     } catch (failure) {
       setError(message(failure))
       refreshAvailability()
     } finally {
+      operationLock.current = false
       setBusy(false)
     }
   }
 
   async function send(disposition: Submission['disposition'], text = '') {
-    if (!session?.current_turn || busy || watching) return
-    if (submitLock.current?.turn === session.current_turn.id && submitLock.current.disposition === disposition && submitLock.current.text === text) return
-    submitLock.current = { turn: session.current_turn.id, disposition, text }
+    if (!session?.current_turn || operationLock.current || watching || syncRequired
+      || !session.available_actions.includes(disposition === 'skipped' ? 'skip' : 'answer')) return
+    operationLock.current = true
     setBusy(true)
     setError('')
-    submitKey.current ??= `submission-${crypto.randomUUID()}`
     try {
-      const result = await api.submit(session.session_id, {
-        turn_id: session.current_turn.id,
-        expected_revision: session.revision,
-        client_submission_id: submitKey.current,
-        disposition,
-        answer_text: disposition === 'answered' ? text : '',
-      })
-      setSession(result.session)
-      setAnswer('')
+      const result = await api.submit(session.session_id, answerRequest(session, disposition, disposition === 'answered' ? text : ''))
+      accept(result.session)
       if (result.session.phase === 'evaluating') void watchJob(result.session, result.submission.job_id)
-      else {
-        submitLock.current = null
-        submitKey.current = null
-      }
     } catch (failure) {
-      submitLock.current = null
       setError(message(failure))
       // The request may have been stored before the connection dropped; the
       // server is the source of truth, so reconcile instead of leaving a stale view.
       try {
         const stored = await api.session(session.session_id)
+        accept(stored)
         if (stored.phase !== 'awaiting_answer') {
           setError('')
-          setAnswer('')
-          setSession(stored)
           if (stored.phase === 'evaluating') void watchJob(stored, stored.submissions[0]?.job_id ?? null)
         }
       } catch {
-        // Keep the local error; the user can retry or reopen the session later.
+        setSyncRequired(true)
       }
     } finally {
+      operationLock.current = false
       setBusy(false)
     }
   }
@@ -155,7 +154,9 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
     }
   }, [api])
 
-  const watchJob = useCallback(async (current: SessionView, jobId: string | null) => {
+  const watchJob = useCallback(async (view: SessionView, jobId: string | null) => {
+    const generation = ++watchGeneration.current
+    const isCurrent = () => generation === watchGeneration.current && current.current?.session_id === view.session_id
     setWatching(true)
     let lastError = ''
     try {
@@ -163,60 +164,68 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
         const deadline = Date.now() + 150_000
         for (;;) {
           const job = await api.job(jobId)
+          if (!isCurrent()) return
           if (job.status === 'succeeded' || job.status === 'failed') break
           if (Date.now() >= deadline) {
             lastError = '评价仍在排队或运行，回答已经保存。可以稍后重新打开本次练习查看结果。'
             break
           }
           await sleep(700)
+          if (!isCurrent()) return
         }
       }
-      const updated = await api.session(current.session_id)
-      setSession(updated)
+      const updated = await api.session(view.session_id)
+      if (!isCurrent()) return
+      accept(updated)
       if (lastError) {
         setError(lastError)
       } else if (updated.phase !== 'evaluating') {
-        submitLock.current = null
-        submitKey.current = null
         void refreshHistory()
       }
     } catch (failure) {
-      setError(message(failure))
+      if (isCurrent()) {
+        setError(message(failure))
+        setSyncRequired(true)
+      }
     } finally {
-      setWatching(false)
+      if (isCurrent()) setWatching(false)
     }
-  }, [api, refreshHistory])
+  }, [api, refreshHistory, accept])
 
   const load = useCallback(async () => {
     try {
-      const [list, recent] = await Promise.all([api.packs(), api.history(1, 10)])
+      const list = await api.packs()
       const published = list.items.filter(item => item.status === 'published')
       const first = published.find(pack => pack.id === 'pack_agent_basics_mianstack') ?? published[0]
       setPacks(published)
-      setHistory(recent.items.filter(item => item.mode !== 'mock_interview'))
+      void refreshHistory()
       const stored = readStored()
       let restored: SessionView | null = null
       if (stored) {
         try {
           restored = await api.session(stored)
-        } catch {
-          storeSession(null)
+        } catch (failure) {
+          if (failure instanceof ApiError && failure.status === 404) storeSession(null)
+          else { setRestoreFailed(true); throw failure }
         }
       }
+      if (restored?.mode === 'mock_interview') { storeSession(null); restored = null }
       if (restored) {
         setPackId(restored.pack_id)
         setDifficulty(restored.difficulty)
-        setSession(restored)
+        accept(restored)
         if (restored.phase === 'evaluating') void watchJob(restored, restored.submissions[0]?.job_id ?? null)
       } else if (first) {
         setPackId(first.id)
       }
+      setRestoreFailed(false)
+      setError('')
     } catch (failure) {
       setError(message(failure))
     } finally {
       setBooting(false)
     }
-  }, [api, watchJob])
+  }, [api, watchJob, accept, refreshHistory])
 
   function reconnect() {
     setBooting(true)
@@ -229,34 +238,43 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
     // not a synchronous cascading render.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void load()
+    return () => { watchGeneration.current += 1 }
   }, [load])
 
   async function retryEvaluation() {
-    if (!session || busy || watching) return
+    if (!session || operationLock.current || watching || syncRequired || !session.available_actions.includes('retry')) return
+    operationLock.current = true
     setBusy(true)
     setError('')
     try {
-      await api.retry(session.session_id, session.revision)
-      await watchJob(session, session.submissions[0]?.job_id ?? null)
+      const job = await api.retry(session.session_id, session.revision)
+      await watchJob(session, job.job_id)
     } catch (failure) {
       setError(message(failure))
+      setSyncRequired(true)
     } finally {
+      operationLock.current = false
       setBusy(false)
     }
   }
 
   function leave() {
+    if (operationLock.current) return
+    watchGeneration.current += 1
+    setWatching(false)
     storeSession(null)
-    submitKey.current = null
-    submitLock.current = null
+    current.current = null
     setSession(null)
-    setAnswer('')
+    detachDraft()
     setError('')
+    setSyncRequired(false)
     void refreshHistory()
     refreshAvailability()
   }
 
   async function reopen(id: string) {
+    if (operationLock.current || watching) return
+    operationLock.current = true
     setBusy(true)
     setError('')
     try {
@@ -264,20 +282,21 @@ export default function QuestionPractice({ api = defaultApi }: { api?: PracticeA
       storeSession(restored.session_id)
       setPackId(restored.pack_id)
       setDifficulty(restored.difficulty)
-      setSession(restored)
+      accept(restored)
       if (restored.phase === 'evaluating') void watchJob(restored, restored.submissions[0]?.job_id ?? null)
     } catch (failure) {
       setError(message(failure))
     } finally {
+      operationLock.current = false
       setBusy(false)
     }
   }
 
-  if (session) return <PracticeRun api={api} session={session} answer={answer} setAnswer={setAnswer} busy={busy} watching={watching} error={error} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
+  if (session) return <PracticeRun api={api} session={session} answer={answer} setAnswer={setAnswer} busy={busy || syncRequired} watching={watching} error={error} onSync={() => { setError(''); void reopen(session.session_id) }} onSend={send} onRetry={retryEvaluation} onLeave={leave} bottomRef={bottomRef} />
 
   return <main className="page-content qp-setup">
     <div className="page-header"><h1>{mode === 'question_practice' ? '试题练习' : '模拟面试'}</h1><p>查看 Agent 基础档的实际可用题目与覆盖范围，再选择练习。</p></div>
-    {booting ? <div className="processing" role="status"><LoaderCircle size={16} className="spin" />正在读取练习服务</div> : error && !packs.length ? <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" onClick={reconnect}>重新连接</button></div> : <form className="setup-form" onSubmit={event => { event.preventDefault(); void draw() }}>
+    {booting ? <div className="processing" role="status"><LoaderCircle size={16} className="spin" />正在读取练习服务</div> : error && (!packs.length || restoreFailed) ? <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" onClick={reconnect}>重新连接</button></div> : <form className="setup-form" onSubmit={event => { event.preventDefault(); void draw() }}>
       <fieldset className="choice-field"><legend>练习模式</legend><div className="choice-row">{([{ value: 'question_practice', label: '试题练习' }, { value: 'mock_interview', label: '模拟面试' }] as const).map(item => <label className={`choice ${mode === item.value ? 'selected' : ''}`} key={item.value}><input type="radio" name="qp-mode" checked={mode === item.value} onChange={() => { setMode(item.value); setError('') }} /><span>{item.label}</span></label>)}</div></fieldset>
       <div className="form-field"><label htmlFor="qp-pack">岗位包</label><select id="qp-pack" className="field" value={packId} onChange={e => { setPackId(e.target.value); setFocus(''); setError('') }}>{packs.map(pack => <option key={pack.id} value={pack.id}>{pack.title}</option>)}</select><p className="field-help">首批开放 Agent 原理与系统基础档，题目与答案带来源版本。</p></div>
       <fieldset className="choice-field"><legend>难度</legend><div className="choice-row">{DIFFICULTIES.map(level => <label className={`choice ${difficulty === level.value ? 'selected' : ''}`} key={level.value}><input type="radio" name="qp-difficulty" checked={difficulty === level.value} onChange={() => void chooseDifficulty(level.value)} /><span>{level.label}</span></label>)}</div></fieldset>
@@ -312,9 +331,7 @@ const PHASES: Record<SessionView['phase'], string> = {
   stage_transition: '环节切换',
 }
 
-type TurnKey = { turn: string; disposition: Submission['disposition']; text: string }
-
-function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, onSend, onRetry, onLeave, bottomRef }: {
+function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, onSync, onSend, onRetry, onLeave, bottomRef }: {
   api: PracticeApi
   session: SessionView
   answer: string
@@ -322,6 +339,7 @@ function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, o
   busy: boolean
   watching: boolean
   error: string
+  onSync: () => void
   onSend: (disposition: Submission['disposition'], text?: string) => void
   onRetry: () => void
   onLeave: () => void
@@ -340,14 +358,14 @@ function PracticeRun({ api, session, answer, setAnswer, busy, watching, error, o
       {turn && <article className="question-block"><h1>{turn.topic}</h1><p>{turn.text}</p><span className="meta-note mono">题目 {turn.question_code} · 版本 {turn.question_version}</span></article>}
       {submission?.answer_text && <div className="turn"><span className="meta-label">你的回答</span><p className="submitted-answer">{submission.answer_text}</p></div>}
       {session.phase === 'evaluating' && <div className="processing" role="status"><LoaderCircle size={16} className="spin" />回答已保存，正在生成反馈</div>}
-      {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>评价未完成</h2><p>{submission?.error?.message ?? '模型评价暂时失败，你的回答已经保存。'}</p><button className="button primary" disabled={busy || watching} onClick={onRetry}>{watching ? '正在重试' : '重试评价'}</button></section>}
+      {session.phase === 'evaluation_failed' && <section className="skipped-block"><h2>评价未完成</h2><p>{submission?.error?.message ?? '模型评价暂时失败，你的回答已经保存。'}</p><button className="button primary" disabled={busy || watching || !actions.includes('retry')} onClick={onRetry}>{watching ? '正在重试' : '重试评价'}</button></section>}
       {session.phase === 'feedback_ready' && submission && <QuestionFeedback submission={submission} />}
       {session.phase === 'feedback_ready' && submission && turn && <>
         <FeedbackSources provenance={submission.feedback ?? submission.provenance} />
         <ReportProblem key={`${session.session_id}-${turn.id}`} api={api} sessionId={session.session_id} turnId={turn.id} canReportScore={submission.status === 'completed' && (submission.disposition === 'blank_answer' || (submission.disposition === 'answered' && !!submission.feedback))} />
       </>}
       {(canAnswer || canSkip) && !processing && <p className="meta-note qp-submit-note">提交后立即返回本题反馈；空白提交记 0 分并计入均分，明确跳过不计分。</p>}
-      {error && <p className="field-error" role="alert">{error}</p>}
+      {error && <div className="qp-error" role="alert"><p>{error}</p><button className="button secondary" disabled={watching} onClick={onSync}>重新同步会话</button></div>}
       <div ref={bottomRef} />
     </div></div>
     {canAnswer && <div className="composer-area"><div className="composer-inner">

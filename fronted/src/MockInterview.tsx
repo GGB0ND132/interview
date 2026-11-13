@@ -3,6 +3,7 @@ import { LoaderCircle, Pause, Play } from 'lucide-react'
 import { ApiError, createPracticeApi } from './api'
 import type { Disposition, InterviewReport, Pack, PracticeApi, SessionView } from './api'
 import { useQuestionAvailability } from './useQuestionAvailability'
+import { useAnswerDraft } from './useAnswerDraft'
 import { competencyLabel, COVERAGE, DISPOSITIONS, STAGES } from './interview-labels'
 import { Modal } from './components'
 import MockInterviewReport from './MockInterviewReport'
@@ -15,7 +16,6 @@ import './mock-interview.css'
 const defaultApi = createPracticeApi()
 const errorMessage = (error: unknown) => error instanceof ApiError ? error.message : '模拟面试服务暂时不可用，请重新同步会话'
 const isEnded = (session: SessionView) => session.status === 'completed' || session.status === 'ended_early'
-type AnswerRequest = Parameters<PracticeApi['submit']>[1]
 const SESSION_KEY = 'ia-mi-session'
 function storedSession(): string | null { try { return localStorage.getItem(SESSION_KEY) } catch { return null } }
 function remember(id: string | null) {
@@ -40,10 +40,9 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   const { availability, availabilityError, refreshAvailability } = useQuestionAvailability(api, packId, 'mock_interview', 'easy', '')
   const [session, setSession] = useState<SessionView | null>(null)
   const current = useRef<SessionView | null>(null)
-  const [answer, setAnswer] = useState('')
+  const { answer, setAnswer, restoreDraft, answerRequest, detachDraft } = useAnswerDraft()
   const [busy, setBusy] = useState(false)
   const lock = useRef(false)
-  const pendingAnswer = useRef<AnswerRequest | null>(null)
   const [error, setError] = useState('')
   const [syncRequired, setSyncRequired] = useState(false)
   const [paused, setPaused] = useState(false)
@@ -60,15 +59,12 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     if (previous?.session_id === view.session_id && previous.revision > view.revision) return
     const oldTurn = previous?.current_turn?.id
     if (oldTurn !== view.current_turn?.id && !following.current) setUnread(true)
-    if (oldTurn !== view.current_turn?.id || view.submissions.some(item => item.turn_id === oldTurn)) {
-      setAnswer('')
-      pendingAnswer.current = null
-    }
     current.current = view
+    restoreDraft(view)
     remember(view.session_id)
     setSession(view)
     setSyncRequired(false)
-  }, [])
+  }, [restoreDraft])
 
   useEffect(() => {
     let cancelled = false
@@ -181,15 +177,10 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
   async function send(disposition: Disposition) {
     const view = current.current
     if (!view?.current_turn || syncRequired || paused || !view.available_actions.includes(disposition === 'skipped' ? 'skip' : 'answer')) return
-    const turnId = view.current_turn.id
     const text = disposition === 'answered' ? answer.trim() : ''
     if (disposition === 'answered' && !text) return
     await run(async () => {
-      const previous = pendingAnswer.current
-      const body: AnswerRequest = previous?.turn_id === turnId && previous.disposition === disposition && previous.answer_text === text ? previous : {
-        turn_id: turnId, expected_revision: view.revision, client_submission_id: crypto.randomUUID(), disposition, answer_text: text,
-      }
-      pendingAnswer.current = body
+      const body = answerRequest(view, disposition, text)
       accept((await api.submit(view.session_id, body)).session)
     })
   }
@@ -212,13 +203,12 @@ export default function MockInterview({ api = defaultApi }: { api?: PracticeApi 
     setSession(null)
     setReport(null)
     setReportError('')
-    setAnswer('')
+    detachDraft()
     setError('')
     setPaused(false)
     following.current = true
     setUnread(false)
     setSyncRequired(false)
-    pendingAnswer.current = null
     setHistoryAttempt(value => value + 1)
     setJDChoice({ packId: '', pending: false })
     setJDAttempt(value => value + 1)
