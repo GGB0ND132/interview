@@ -17,6 +17,30 @@ export type InterviewConfig = {
   experience_mode: 'experience' | 'scenario'
   max_followups_per_question: number
   jd?: JDReference
+  resume_id?: string
+}
+export type ResumeFragment = { id: string; text: string; source: { page?: number; paragraph?: number; line?: number } }
+export type ResumeContext = {
+  resume_id: string
+  source_type: string
+  revision: number
+  projects: ResumeFragment[]
+  no_project_experience: boolean
+  evidence_kind: 'candidate_statement'
+  externally_verified: false
+  notice: string
+}
+export type ResumePreview = {
+  resume_id: string
+  revision: number
+  status: 'needs_confirmation' | 'parse_failed' | 'confirmed'
+  source_type: string
+  blocks: ResumeFragment[]
+  project_fragments: ResumeFragment[]
+  confirmed: ResumeContext | null
+  error: { code: string; message: string } | null
+  notice: string
+  warnings: string[]
 }
 export type JDReference = { mapping_id: string; revision: number }
 export type JDRequirement = {
@@ -153,6 +177,7 @@ export type SessionView = {
   available_actions: string[]
   mode?: PracticeMode
   jd?: JDMapping
+  resume_context?: ResumeContext | null
   turns?: Turn[]
   coverage?: Coverage[]
   plan?: { selected_topics: string[]; max_main_questions: number; max_turns: number; questions: PlannedQuestion[]; topic_candidates?: { competency_id: string; weight: number; eligible_question_count: number; matched_requirement_ids: string[] }[] }
@@ -190,6 +215,7 @@ export type Report = {
   scoring_scope: string
 }
 export type InterviewReport = Report & {
+  resume_context?: ResumeContext | null
   plan?: SessionView['plan']
   jd?: JDMapping | null
   jd_gaps?: JDRequirement[]
@@ -239,7 +265,7 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
     try {
       response = await fetchImpl(`${baseUrl}${path}`, {
         ...init,
-        headers: { accept: 'application/json', ...(init.body ? { 'content-type': 'application/json' } : {}), ...init.headers },
+        headers: { accept: 'application/json', ...(typeof init.body === 'string' ? { 'content-type': 'application/json' } : {}), ...init.headers },
       })
     } catch {
       throw new ApiError('NETWORK_ERROR', '无法连接练习服务，请确认后端已启动', true, 0)
@@ -264,6 +290,16 @@ export function createPracticeApi(options: { baseUrl?: string; fetchImpl?: typeo
   }
 
   return {
+    uploadResume: (file: File) => {
+      const body = new FormData()
+      body.append('file', file)
+      return request<ResumePreview>('/resumes', { method: 'POST', body })
+    },
+    pasteResume: (text: string) => request<ResumePreview>('/resumes/text', { method: 'POST', body: JSON.stringify({ text }) }),
+    confirmResume: (resumeId: string, revision: number, fragmentIds: string[], noProjectExperience: boolean) =>
+      request<ResumePreview>(`/resumes/${encodeURIComponent(resumeId)}/confirm`, {
+        method: 'POST', body: JSON.stringify({ expected_revision: revision, fragment_ids: fragmentIds, no_project_experience: noProjectExperience }),
+      }),
     packs: () => request<{ items: Pack[] }>('/role-packs'),
     previewJD: (packId: string, text: string) => request<JDMapping>('/jd-mappings', {
       method: 'POST', body: JSON.stringify({ pack_id: packId, text, difficulty: 'easy' }),
