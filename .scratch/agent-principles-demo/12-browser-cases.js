@@ -1,4 +1,4 @@
-// Playwright CLI, real HTTP and isolated acceptance database. Starts in the confirmed DOCX interview.
+// Playwright CLI, real HTTP and isolated acceptance database. Starts at /practice.
 async (page) => {
   const cases = [];
   const readSession = async () => {
@@ -24,6 +24,13 @@ async (page) => {
     await page.getByRole('textbox', { name: '你的回答' }).waitFor();
     return readSession();
   };
+  if (await page.getByRole('button', { name: '返回模拟面试入口' }).isVisible()) await back();
+  if (await page.getByLabel('上传简历（可选）').isVisible()) {
+    await page.getByLabel('上传简历（可选）').setInputFiles('output/playwright/12-resume.docx');
+    await page.getByRole('button', { name: '确认所选项目', exact: true }).click();
+    await page.getByText('已确认，本场使用所选项目陈述。', { exact: true }).waitFor();
+    await start(); await experience();
+  }
   let session = await readSession();
   if (session.current_turn.stage !== 'experience' || !session.current_turn.text.includes('工具参数校验')) throw new Error('DOCX context missing');
   cases.push({ case: 'docx_confirmed', session_id: session.session_id, resume_id: session.resume_context.resume_id, stage: session.current_turn.stage });
@@ -35,8 +42,11 @@ async (page) => {
   await page.getByText('订单 Agent：我负责工具参数校验、权限检查和失败停止机制。', { exact: true }).waitFor();
   await back();
 
+  await page.getByLabel('粘贴或修正项目文本').fill('解析失败也应保留的项目草稿');
   await page.getByLabel('上传简历（可选）').setInputFiles('output/playwright/12-scanned.pdf');
   await page.getByText(/无法提取可用原文/).waitFor();
+  if (await page.getByLabel('粘贴或修正项目文本').inputValue() !== '解析失败也应保留的项目草稿') throw new Error('Draft lost after parse failure');
+  if (await page.getByLabel('上传简历（可选）').getAttribute('aria-invalid') !== 'true') throw new Error('Missing file error association');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('alert').scrollIntoViewIfNeeded();
   await page.screenshot({ path: 'output/playwright/12-parse-fallback-mobile.png' });
