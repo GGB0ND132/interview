@@ -16,7 +16,9 @@ from typing import Any, Protocol
 import httpx
 
 from .publishing import COMMIT, PACK_ID, TOPICS
-from .topic_pack import source_catalog
+from .store import active_incidents
+from .topic_pack import candidate_digest, source_catalog
+from .topic_quality import as_candidate
 
 
 class ReleaseClient(Protocol):
@@ -53,6 +55,10 @@ def inspect_release(client: ReleaseClient) -> dict[str, Any]:
             json={"mode": "question_practice", "difficulty": "easy"},
         )
     )
+    quality = {
+        topic: data(client.get(f"/api/v1/maintenance/topic-quality/{competency}"))
+        for topic, competency in TOPICS.items()
+    }
     questions = []
     for source in sources:
         code = source["id"]
@@ -63,6 +69,15 @@ def inspect_release(client: ReleaseClient) -> dict[str, Any]:
             current = max(versions, key=lambda row: row["version"])
         candidate = expected[code]
         status = current["status"] if current else "unpublished"
+        state = quality[source["topic"]]
+        exclusions = []
+        if status != "published":
+            exclusions.append("QUESTION_DISABLED" if status == "disabled" else "UNPUBLISHED")
+        if state["paused"]:
+            exclusions.append("TOPIC_SCORING_PAUSED")
+        if code in {incident["code"] for incident in active_incidents(state)}:
+            exclusions.append("QUESTION_QUARANTINED")
+        snapshot = as_candidate(current) if current else None
         matches = (
             current is not None
             and all(
@@ -87,6 +102,10 @@ def inspect_release(client: ReleaseClient) -> dict[str, Any]:
                 "published_content_version": current["content_version"] if current else None,
                 "matches_candidate": matches,
                 "disabled_reason": current.get("disabled_reason") if current else None,
+                "available_for_scoring": not exclusions,
+                "exclusion_reasons": exclusions,
+                "current_candidate": snapshot,
+                "current_candidate_sha256": candidate_digest(snapshot) if snapshot else None,
             }
         )
     published = [row for row in questions if row["status"] == "published"]
@@ -95,12 +114,19 @@ def inspect_release(client: ReleaseClient) -> dict[str, Any]:
             "topic": topic,
             "source_count": sum(row["topic"] == topic for row in sources),
             "available_count": available["topic_counts"][topic],
+            "scorable_source_count": sum(
+                row["topic"] == topic and row["available_for_scoring"] for row in questions
+            ),
             "distinct_human_samples_required": 2,
             "two_distinct_source_questions_exist": sum(row["topic"] == topic for row in sources)
             >= 2,
         }
         for topic in TOPICS
     ]
+    scorable_count = sum(row["available_for_scoring"] for row in questions)
+    counts_match = scorable_count == available["available_count"] and all(
+        topic["scorable_source_count"] == topic["available_count"] for topic in topics
+    )
     return {
         "checked_at": datetime.now(UTC).isoformat(),
         "scope": "HTTP inventory only; not browser/model/human acceptance",
@@ -111,7 +137,11 @@ def inspect_release(client: ReleaseClient) -> dict[str, Any]:
         "rejected_count": preview["rejected_count"],
         "published_source_count": len(published),
         "available_count": available["available_count"],
+        "scorable_source_count": scorable_count,
+        "excluded_source_count": len(questions) - scorable_count,
+        "counts_match_availability": counts_match,
         "release_matches_candidates": len(published) == available["available_count"] == 115
+        and counts_match
         and all(row["matches_candidate"] and row["validation"]["accepted"] for row in questions),
         "topics": topics,
         "questions": questions,

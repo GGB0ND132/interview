@@ -20,3 +20,8 @@
 - 后续质量问题如实记录：明确不会的技术回答仍可能得到较高表达分；一次经历追问含未被回答明确提供的前提；“失败重试”未映射到 JD 主题。没有隐藏这些真实输出或宣称评分质量通过。
 - 11 月 14 日预验收不代记 11 月 16 日预检或 18 日现场已完成。详情：`docs/verification/17-demo-acceptance.md`、`17-demo-runbook.md`；最终独立审查及修正另见 `17-code-review.md`。
 - 最终检查：后端 205 项、前端 61 项，mypy、TypeScript/Vite、ESLint、Ruff check/format 通过。Standards 独立审查 0 项；Spec 未发现本次新增缺陷，保留人工抽查及追问事实前提两项既存 P2。未将工单记为全部验收通过。
+- 2026-11-14 跟进用户回归：以 evaluator 边界模拟 0.3 秒耗时，稳定复现短租约造成 attempts=3；仅被杀进程保留 0.2/0.4 秒租约，正常接管使用默认预算，保留 attempts==2 及唯一回答断言。恢复专项 23 项通过，见 `docs/verification/17-recovery-test-fix.md`。
+- 补齐 `17-publication-record.md` 的 115 行处理表及逐题快照/摘要；实际可评分数额外排除错题隔离与主题暂停，与服务端逐主题数量核对。当前演示库校验通过 115、拒绝 0、实际可评分 115、排除 0。临时库回归确认 published 的隔离题不计数、暂停主题全部不计数。
+- `17-human-review-packet.md` 提供 23 道指定题的当前答案/评分要点/来源/版本及摘要，`17-human-reviews.json` 保留真实待审身份与空结论。人工通过 0、失败 0、待审 23，GUI 第二位 `SOURCE_SHORTAGE`。缺少实际人工结论及唯一来源题例外决定，第一项继续未勾选，不以准备材料代替完成抽查。
+- 本轮全量复核：后端 206 passed，前端 61 passed，mypy、Ruff check/format、TypeScript/Vite build、ESLint 均通过。23 个抽查题摘要与当前发布版本匹配，重复生成不会覆盖人工已填表。
+- 本轮独立审查：Standards 0 项；Spec 新增缺陷 0，保留人工抽查/GUI 来源不足这一既存 P2。审查者独立验证 5 项专项及生成材料一致性，均通过；见 `17-code-review.md` 的用户回归跟进章节。

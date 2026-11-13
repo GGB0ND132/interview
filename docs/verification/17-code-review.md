@@ -30,3 +30,19 @@
 审查前自动检查发现新测试 import 排序，已修正并通过 Ruff check/format 与专项测试；浏览器 prepare 输出改用实际存在的 `selection_algorithm/topic_candidates/topic_draws`；操作手册补充 `--verify-existing`。两个审查者都检查了这两处工作树补充。
 
 Standards：0 项，最严重问题无。Spec：2 项已披露的既存 P2 问题，分别是人工抽查缺口与追问事实边界；本次新增缺陷 0 项。
+
+## 用户回归跟进审查
+
+固定基线 `b7f905742fabb98a1bca439141b9ab56bdc7c7e5`，提交前以 `git diff --cached b7f9057` 检查新增修正；提交列表当时为空。两个独立新上下文审查者不修改代码，规范和规格来源沿用上文。
+
+### Standards
+
+审查者 `/root/followup_standards_review`：0 项硬性违规，0 项值得提出的代码异味。工单状态与 Comments 符合约定；人工身份与结论为空/pending，生成器拒绝覆盖已存人工表。HTTP 清单、文档生成与恢复测试职责及现有写法一致，无需修正。
+
+### Spec
+
+审查者 `/root/followup_spec_review`：新增缺陷 0、范围扩张 0。保留 1 项既存 P2：工单第一项要求各主题两题人工结论，实际只有 23 题待审材料、GUI 第二位缺来源，不能认定人工验收完成；不应撤销 05/06 既有 Agent 发布授权。当前实际可评分过滤与服务端最新 published、错题隔离及主题暂停规则一致。
+
+审查者独立运行针对性 5 项测试，覆盖未发布、停用、修正隔离、主题暂停及双模式恢复；全部通过。另验证生成的发布表、抽查包、人工表与清单一致，题号分别为 115/23 个唯一值。本轮完整验证：后端 206 passed、前端 61 passed，mypy、Ruff check/format、TypeScript/Vite build、ESLint 通过。没有新增浏览器或收费模型调用。
+
+本轮 Standards 0 项，最严重问题无；Spec 1 项既存 P2 人工验收缺口，新增问题 0 项。

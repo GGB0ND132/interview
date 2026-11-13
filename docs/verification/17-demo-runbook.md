@@ -48,7 +48,13 @@ node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5177 --strictPort
 ```powershell
 # backend 目录
 uv run --locked python -X utf8 -m interview_backend.demo_acceptance --base-url http://127.0.0.1:8017 --output ../docs/verification/17-release-current.json
+# 生成逐题可读发布表、23 题待审材料和人工结论空表。使用新目录，避免覆盖人工已填结果。
+uv run --locked python -X utf8 scripts/record_demo_release.py --inventory ../docs/verification/17-release-current.json --output-dir ../output/17-review-current
 ```
+
+若终端启用了全局 HTTP 代理，访问本机前设置 `$env:NO_PROXY='127.0.0.1,localhost'`。发布清单的 `available_for_scoring` 同时排除错题隔离与主题暂停，不仅检查 published；`counts_match_availability` 为 false 时应重新捕获一致快照。渲染脚本拒绝覆盖已有 `17-human-reviews.json`，不会发布、批准题目或回写人工结论。
+
+人工审核见 [待审材料](17-human-review-packet.md)：审核人核对实际资料后在 [结论表](17-human-reviews.json) 填写身份、时间、资料定位/版本/片段、发现及 passed/failed。该文件是 17 验收记录，不会自动调用发布或恢复 API；发现错题仍须通过既有维护流程隔离与复查。固定来源只有 23 道不同抽查题，GUI 第二位必须由维护者决定是否接受唯一来源题例外，不能复制同题或另生成题目凑数。
 
 浏览器回归使用 Playwright CLI。创建独立浏览器会话，先 `snapshot` 检查页面。`17-browser-prepare.js` 从模拟面试准备页执行 JD、DOCX 确认和草稿刷新；`17-browser-step.js` 每次只做一步，可反复执行直到报告。两者使用真实服务和模型，非空回答产生实际模型调用费用。其答案明确为合成验收样例，技术题主要使用明确的知识缺口回答，用于验证流程，不验证评分准确性。
 
