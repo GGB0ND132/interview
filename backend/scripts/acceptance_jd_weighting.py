@@ -149,7 +149,7 @@ def run_case(client: httpx.Client, name: str, text: str | None) -> dict[str, Any
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base-url", default="http://127.0.0.1:8009")
-    parser.add_argument("--output", type=Path, default=Path("../docs/verification/09-live-jd.json"))
+    parser.add_argument("--output", type=Path, default=Path("../output/09-live-jd.json"))
     parser.add_argument(
         "--verify-existing", action="store_true", help="Read stored reports only; no model calls"
     )

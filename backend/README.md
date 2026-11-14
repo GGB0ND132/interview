@@ -1,10 +1,10 @@
 # 试题练习、模拟面试、题库与答案追溯服务
 
-Python 3.11+、FastAPI、SQLite。提供两道自编 Agent 基础技术样题的真实单题闭环，以及 MianStack 固定版本题目的逐题发布入口。自编样题与 MianStack 题包独立，后者初始可用数为 0，发布通过项后才可抽取。03 附带两道真实来源题验证发布机制；全部 115 道题的整理与每主题人工抽查属于 05/06。
+Python 3.11+、FastAPI、SQLite。已实现单题练习、模拟面试、JD/简历确认、答案证据核验、问题报告及任务恢复。日常启动和完整题库初始化请先读[根 README](../README.md)；本文保留接口契约和各工单的技术细节。115 道固定来源技术题与 5 道通用环节题需要显式发布，不随 Git 合并或首次启动自动进入数据库。
 
 ## 简历项目确认（11）
 
-接口均带 `/api/v1` 前缀，响应沿用统一信封。简历记录和会话快照保存在 SQLite（当前 schema 8）。只提供本机后端能力；前端上传确认接入属于 12。
+接口均带 `/api/v1` 前缀，响应沿用统一信封。简历记录和会话快照保存在 SQLite（当前 schema 8）。12 已完成前端上传和确认接入。
 
 | 接口 | 请求与结果 |
 | --- | --- |
@@ -19,7 +19,7 @@ PDF 原文定位是页码和提取行号，DOCX 是段落序号（含表格）�
 
 会话视图及结束报告包含 `resume_context`，带 `evidence_kind=candidate_statement`、`externally_verified=false` 和原文定位。项目只用于候选人自述与相关追问情境，不修改已发布主问题、技术参考答案或评分表，不构成独立技术证据。模型评分引文必须来自实际作答，不能引用简历代替。面试中再明确声明无项目时切换情境，并在会话中记录覆盖，原确认记录保留。
 
-验证步骤、边界与记录见 [11 后端验收](../docs/verification/11-backend-resume-projects.md)。
+验证步骤、边界与记录见 [最终验收](../docs/acceptance/17-demo-acceptance.md)。
 
 ## 本地运行
 
@@ -71,7 +71,7 @@ uv run mypy
 uv run ruff check .
 uv run ruff format --check .
 # 服务已启动且密钥可用时，产生实际调用费用：
-uv run python -X utf8 scripts/acceptance.py --output ../docs/verification/01-live-model.json
+uv run python -X utf8 scripts/acceptance.py --output ../output/01-live-model.json
 ```
 
 可重复测试用真实 API 与临时 SQLite，仅替换外部模型边界；真实验收脚本通过 TCP HTTP 调用运行服务，检查模型反馈、引文、服务端分数与幂等重试。保存的验收文件不含密钥。
@@ -122,17 +122,17 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 
 ## 工单 05：前六主题候选题包
 
-本批 57 题已整理并自动校验，三个独立子 Agent 审核及问题修正复查已通过，状态为 `ready-for-agent`，**不随服务启动自动发布**。用户授权 05 先由子 Agent 审核，未解决疑点才转人工；审核结论见 [05-independent-agent-review.md](../docs/verification/05-independent-agent-review.md)，执行方式见 [05-human-sampling.md](../docs/verification/05-human-sampling.md)。
+本批 57 题已整理并自动校验，三个独立子 Agent 审核及问题修正复查已通过，状态为 `ready-for-agent`，**不随服务启动自动发布**。用户授权 05 先由子 Agent 审核，未解决疑点才转人工；审核结论见 [独立审核数据](../backend/src/interview_backend/first_half_agent_audit.json)，执行方式见 [题库审核流程](../docs/题库建设与运行流程.md)。
 
-2026-11-10 已按用户后续指示发布到 `05` 工作区的持久化 `backend/data/practice.sqlite3`，57 题可用，六主题抽题与页面数量核对通过，工单 5/5。数据库按忽略规则仅留本机；其他检出仍须显式发布。证据见 [05-live-release.md](../docs/verification/05-live-release.md)。
+2026-11-10 已按用户后续指示发布到 `05` 工作区的持久化 `backend/data/practice.sqlite3`，57 题可用，六主题抽题与页面数量核对通过，工单 5/5。数据库按忽略规则仅留本机；其他检出仍须显式发布。证据见 [最终验收](../docs/acceptance/17-demo-acceptance.md)。
 
 在本目录预览：`uv run --locked python -X utf8 -m interview_backend.first_half_release --database data/practice.sqlite3`。本批 `first_half_review.json` 已记录明确的 `independent_agent_first` 策略及真实审核，后续加 `--publish` 可发布到指定数据库；内容变更、失败或未完成扩大复查时仍拒绝。人审与 Agent 字段分别保存，不把 Agent 记录冒充人审。可用数以实际接口为准，预览通过数不等于已发布数。本批正式发布须使用这个命令，03 通用维护 API 仍是底层维护入口。
 
-运行服务确认连接目标后，可用 `uv run --locked python -X utf8 scripts/release_first_half.py --database data/practice.sqlite3 --base-url http://127.0.0.1:8000 --output ../docs/verification/05-live-release.json` 执行上述审核门槛发布和持久化 HTTP 验收。它会发布、重复发布并创建六个未作答练习，不提交答案、不调用模型；输出文件只在全部检查通过后保存。仅适用于当前前六主题 57 题的独立目标库。
+运行服务确认连接目标后，可用 `uv run --locked python -X utf8 scripts/release_first_half.py --database data/practice.sqlite3 --base-url http://127.0.0.1:8000 --output ../output/05-live-release.json` 执行上述审核门槛发布和持久化 HTTP 验收。它会发布、重复发布并创建六个未作答练习，不提交答案、不调用模型；输出文件只在全部检查通过后保存。仅适用于当前前六主题 57 题的独立目标库。
 
 ## 06：后六主题内容与质量维护
 
-后六主题 58 题（16 原文、5 维护者修订、37 补答）已通过三个独立子 Agent 全量审核和正式发布；6 处问题修正并复核后无未决项，GUI 唯一来源题已全量核查。显式 `--review-policy agent_full --scope second-half` 使用真实 Agent 身份及完整内容哈希审批；默认 `human_sample` 保留，人工模板不代填。06 工作区的本地持久化实例为 API 8001、前端 5174，继承 05 已发布的 57 题后，该实例全部 12 主题实际可抽 115；05 原服务不受影响。详见 [在线发布与验收](../docs/verification/06-live-release.md)、[题包说明](../docs/content-baseline/agent-topics-06/README.md) 和 [内容审核](../docs/verification/06-content-review.md)。main 已合并 05 与 06 的候选源码；各工作区的本地数据库不会随 Git 合并自动复制或发布，可用数以连接目标的实际接口为准。
+后六主题 58 题（16 原文、5 维护者修订、37 补答）已通过三个独立子 Agent 全量审核和正式发布；6 处问题修正并复核后无未决项，GUI 唯一来源题已全量核查。显式 `--review-policy agent_full --scope second-half` 使用真实 Agent 身份及完整内容哈希审批；默认 `human_sample` 保留，人工模板不代填。06 工作区的本地持久化实例为 API 8001、前端 5174，继承 05 已发布的 57 题后，该实例全部 12 主题实际可抽 115；05 原服务不受影响。详见 [最终发布记录](../docs/acceptance/17-publication-record.md)、[题包说明](../docs/content-baseline/agent-topics-06/README.md) 和 [逐题审核数据](../tests/fixtures/question-reviews/)。main 已合并 05 与 06 的候选源码；各工作区的本地数据库不会随 Git 合并自动复制或发布，可用数以连接目标的实际接口为准。
 
 06 增加 schema 3 的题目隔离、主题暂停及版本绑定的更正/扩大抽查/恢复接口。已知错题先停用，同主题重复错误暂停评分（错误类别可以不同），纠正并复查后才能恢复；暂停或隔离同时影响抽题与进行中的模型评分，用户回答保留。普通 03 发布仍不允许绕过停用；须先登记该版本质量问题，再经 `/maintenance/topic-quality/{competency_id}/corrections` 人工核查后提交新版本，扩大复查完成前仍隔离。完整请求格式与边界见上述说明。
 
@@ -173,10 +173,10 @@ uv run python -X utf8 scripts/acceptance_publishing.py --base-url http://127.0.0
 真实模型验收（先启动已发布技术题和通用题的服务，会调用收费模型）：
 
 ```powershell
-uv run python -X utf8 scripts/acceptance_mock_interview.py --base-url http://127.0.0.1:8007 --output ../docs/verification/07-live-model.json
+uv run python -X utf8 scripts/acceptance_mock_interview.py --base-url http://127.0.0.1:8007 --output ../output/07-live-model.json
 ```
 
-脚本使用明确标注的合成候选人回答；完整路径技术回答取已发布参考文本，用于验证编排与真实模型连接，不代表模型评分质量基准或真实候选人水平。接口检查与边界见 [07 验证记录](../docs/verification/07-backend-mock-interview.md)。
+脚本使用明确标注的合成候选人回答；完整路径技术回答取已发布参考文本，用于验证编排与真实模型连接，不代表模型评分质量基准或真实候选人水平。接口检查与边界见 [最终验收](../docs/acceptance/17-demo-acceptance.md)。
 
 ## 09：JD 文本确认与加权选题
 
@@ -211,7 +211,7 @@ uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url htt
 
 维护者通过 `POST /api/v1/maintenance/questions/{code}/evidence` 登记真实核对过的 claim、正文片段和最终文档 URL。超出答案范围或版本争议时，检索同题同答案版本的核验资料库并复查支持关系；无直接证据时不作确定新增判断。此功能不提供开放互联网搜索。
 
-用户通过 `POST /api/v1/sessions/{id}/reports` 提交题目或评分疑问，服务端绑定历史题目和答案版本。维护者从 `/api/v1/maintenance/reports` 查询与处理，再按已有停用/质量流程操作题目。完整请求、返回字段、迁移及验收见 [13 接口与验证记录](../docs/verification/13-provenance-and-reports.md)。
+用户通过 `POST /api/v1/sessions/{id}/reports` 提交题目或评分疑问，服务端绑定历史题目和答案版本。维护者从 `/api/v1/maintenance/reports` 查询与处理，再按已有停用/质量流程操作题目。完整请求、返回字段、迁移及验收见 [最终验收](../docs/acceptance/17-demo-acceptance.md)。
 
 ## 15：会话恢复与失败重试
 
@@ -225,4 +225,4 @@ uv run --locked python -X utf8 scripts/acceptance_jd_weighting.py --base-url htt
 
 用失败会话的 revision 调用 `POST /sessions/{id}/retry`；同一 revision 的重复/并发请求返回原 job ID，不新增回答、题目或反馈。已被后续重试覆盖的旧版本可能返回 409。其他并发版本冲突返回 `STATE_CONFLICT` 和 `action=refresh_session`，读取最新会话后再决定操作。`GET /jobs/{id}` 新增 `attempts`，表示领取执行次数。
 
-可复现的恢复验收：`uv run --extra dev pytest tests/test_recovery.py -q`。覆盖双模式真实进程退出、TCP 服务强制结束后接管、完整历史及报告二次重启一致、旧 schema 队列/运行任务迁移、五类失败重试及过期执行结果隔离。外部模型使用受控适配器，不调用收费模型或真实检索，详见 [15 验证记录](../docs/verification/15-backend-session-recovery.md)。
+可复现的恢复验收：`uv run --extra dev pytest tests/test_recovery.py -q`。覆盖双模式真实进程退出、TCP 服务强制结束后接管、完整历史及报告二次重启一致、旧 schema 队列/运行任务迁移、五类失败重试及过期执行结果隔离。外部模型使用受控适配器，不调用收费模型或真实检索，详见 [最终验收](../docs/acceptance/17-demo-acceptance.md)。

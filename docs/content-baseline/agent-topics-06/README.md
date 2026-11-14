@@ -1,12 +1,12 @@
 # 06 题包与审核发布入口
 
-当前状态：**06 全部完成，独立 Agent 全量内容审核及正式本地持久化发布通过，工单 `ready-for-agent`**。固定 MianStack 提交 `b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的后六主题共 58 题：16 题保留原文答案，5 题明确标记维护者修订，37 题补答；58 题均有本项目独立编写的评分点。继承 05 已发布的 57 题后，06 演示库当前实际可抽 115，完整证据与启动方式见 [在线发布验收](../../verification/06-live-release.md)。
+当前状态：**06 全部完成，独立 Agent 全量内容审核及正式本地持久化发布通过，工单 `ready-for-agent`**。固定 MianStack 提交 `b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77` 的后六主题共 58 题：16 题保留原文答案，5 题明确标记维护者修订，37 题补答；58 题均有本项目独立编写的评分点。继承 05 已发布的 57 题后，06 演示库当前实际可抽 115，完整证据与启动方式见 [最终发布记录](../../../docs/acceptance/17-publication-record.md)。
 
-按 2026-11-10 用户最新要求，本轮由三个独立子 Agent 全量审核，仅将不能自行解决的问题交人工。58 题均已核查，6 处问题修正后复核通过，没有未决内容问题；不再将原来的人工抽查模板作为本轮工单审核阻塞。当前题目完整哈希与材料记录已独立验证，详见 [审核汇总](../../verification/06-content-review.md)。
+按 2026-11-10 用户最新要求，本轮由三个独立子 Agent 全量审核，仅将不能自行解决的问题交人工。58 题均已核查，6 处问题修正后复核通过，没有未决内容问题；不再将原来的人工抽查模板作为本轮工单审核阻塞。当前题目完整哈希与材料记录已独立验证，详见 [逐题审核数据](../../../tests/fixtures/question-reviews/)。
 
 ## 12 主题盘点
 
-下表为实际 06 演示库结果。本分支整理、预检和 Agent 审核仅计后六主题；前六主题继承 05 已发布的 57 题，候选源码未合入本分支。未整理与拒绝分开计数，未将前六主题计为本轮重新审核。本轮真实人工审核为 0，没有代填身份。
+下表为 06 阶段的历史发布结果。该阶段整理、预检和 Agent 审核仅计后六主题；前六主题继承 05 已发布的 57 题。两批候选源码现已合入 main，各检出的数据库仍需显式初始化。未整理与拒绝分开计数，未将前六主题计为该阶段重新审核；06 当时的真实人工审核为 0，17 的用户抽查另见最终验收记录。
 
 | 主题 | 取材 | 原仓库有答案 | 本分支已整理 | 自动通过 | 拒绝 | Agent 内容审核 | 正式可抽 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -28,9 +28,9 @@
 
 ## 文件与版本
 
-- [审核汇总](../../verification/06-content-review.md)：三个独立子 Agent 的 58 题全量审核、修订和复核结论。
+- [逐题审核数据](../../../tests/fixtures/question-reviews/)：三个独立子 Agent 的 58 题全量审核、修订和复核结论。
 - [review-cards.md](review-cards.md)：11 张备用人工核查卡片，包含完整答案、评分点、原题定位与完整内容 SHA-256；本轮无需代填。
-- [human-reviews.json](human-reviews.json)：保留原人工记录模板，目前均为真实空白 `pending`，不冒充 Agent 审核结论。
+- [human-reviews.json](../../../tests/fixtures/question-reviews/agent-topics-06-human-reviews.json)：保留原人工记录模板，目前均为真实空白 `pending`，不冒充 Agent 审核结论。
 - [逐题编辑稿](../../../backend/content/agent-topics-second-half.md)：每道题的评分点及缺答案题的完整补答，不复用万能答案。
 - [补答依据与版本](../../../backend/content/agent-answer-sources.json)：编辑阅读清单；动态文档按记录日期定位，不能当已独立核对的引用。
 - [逐题来源记录](../../../backend/content/agent-topics-second-half-provenance.json)：原文件 SHA-256、答案/评分点来源和依据键。
@@ -43,7 +43,7 @@
 
 本轮按用户“继续执行后续任务完成06”指令，通过显式 `--review-policy agent_full --scope second-half` 聚合三份真实 Agent 审核记录发布全部 58 题。此策略要求固定来源、全部选中题的身份/内容哈希/材料/结论有效，缺失、过期或无效审批阻止整批写入。默认 `human_sample` 仍要求每主题两道不同题的真实人工样本；质量更正及恢复接口仍使用人工策略。Agent 审核不写入人工模板。两种策略均遵循既有停用、隔离与主题暂停限制。
 
-本次实际发布命令和幂等/重启验收见 [在线发布验收](../../verification/06-live-release.md)。以下保留备用人工流程，未在本轮代填或执行：
+本次实际发布命令和幂等/重启验收见 [最终发布记录](../../../docs/acceptance/17-publication-record.md)。以下保留备用人工流程，未在本轮代填或执行：
 
 按 [卡片](review-cards.md) 打开原题和独立资料，核对技术结论、限定版本与评分点，填写 `human-reviews.json` 对应记录：
 
@@ -58,9 +58,9 @@ GUI 固定来源只有 Q-0897 一题，本轮已通过独立 Agent 全量 1/1 �
 
 ```powershell
 # 只预检和读取实时数量，默认不写题库
-uv run python -X utf8 scripts/release_agent_topics.py --reviews ../docs/content-baseline/agent-topics-06/human-reviews.json --output ../docs/verification/06-current-inventory.json
+uv run python -X utf8 scripts/release_agent_topics.py --reviews ../tests/fixtures/question-reviews/agent-topics-06-human-reviews.json --output ../output/06-current-inventory.json
 # 完成人工核查后，才通过此命令导入符合门槛的主题
-uv run python -X utf8 scripts/release_agent_topics.py --reviews ../docs/content-baseline/agent-topics-06/human-reviews.json --publish --output ../docs/verification/06-current-release.json
+uv run python -X utf8 scripts/release_agent_topics.py --reviews ../tests/fixtures/question-reviews/agent-topics-06-human-reviews.json --publish --output ../output/06-current-release.json
 ```
 
 审批绑定完整候选内容（包括题面、来源、答案、评分点和版本）的规范 JSON SHA-256；内容有改动须更新内容版本、重新核查。空白或无材料的审批不生效；无效、重复或过期的非 pending 审批会阻止本次写入。报告保留人工记录副本、逐题预检/发布原因、12 主题数量及当前服务的真实可抽数。
@@ -89,7 +89,7 @@ uv run python -X utf8 scripts/release_agent_topics.py --reviews ../docs/content-
 uv run python -X utf8 scripts/prepare_agent_sources.py
 uv run python -X utf8 scripts/build_agent_topic_pack.py
 uv run python -X utf8 scripts/build_agent_review_cards.py
-uv run python -X utf8 scripts/acceptance_agent_topics.py --output ../docs/verification/06-topics-http.json
+uv run python -X utf8 scripts/acceptance_agent_topics.py --output ../output/06-topics-http.json
 ```
 
-来源脚本只读取固定 commit 的标准题。卡片脚本不会覆盖已有人工 JSON；候选内容修改后需显式复核旧记录中的哈希。`acceptance_agent_topics.py` 只在临时数据库中验证机制，不生成真实审批、不调用模型、不修改正式数据库。实际持久化发布另见 `06-live-release.json`：本轮 Agent 审核 58、新增发布 58、全库可抽 115。`verify_live_agent_topics.py` 通过实际 HTTP 检查版本、继承数据与前端代理；`--draw` 会创建六个明确跳过的演示会话。
+来源脚本只读取固定 commit 的标准题。卡片脚本不会覆盖已有人工 JSON；候选内容修改后需显式复核旧记录中的哈希。`acceptance_agent_topics.py` 只在临时数据库中验证机制，不生成真实审批、不调用模型、不修改正式数据库。原 06 持久化发布结果为：本轮 Agent 审核 58、新增发布 58、全库可抽 115。`verify_live_agent_topics.py` 通过实际 HTTP 检查版本、继承数据与前端代理；`--draw` 会创建六个明确跳过的演示会话。

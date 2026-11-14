@@ -29,7 +29,8 @@ def main() -> None:
     args = parser.parse_args()
     reviews = json.loads(
         (
-            Path(__file__).parents[2] / "docs/content-baseline/agent-topics-06/human-reviews.json"
+            Path(__file__).parents[2]
+            / "tests/fixtures/question-reviews/agent-topics-06-human-reviews.json"
         ).read_text(encoding="utf-8")
     )
     with tempfile.TemporaryDirectory(prefix="agent-topics-06-") as directory:

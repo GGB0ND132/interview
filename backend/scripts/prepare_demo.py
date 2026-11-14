@@ -45,7 +45,7 @@ def main() -> None:
         check=True,
     )
     first_half = json.loads(first.stdout)
-    reports = Path(__file__).resolve().parents[2] / "docs/verification"
+    reports = Path(__file__).resolve().parents[2] / "tests/fixtures/question-reviews"
     records = [
         json.loads((reports / name).read_text("utf-8"))
         for name in (

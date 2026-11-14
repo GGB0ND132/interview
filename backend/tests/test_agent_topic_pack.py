@@ -19,7 +19,7 @@ SECOND_HALF = [
 
 
 def agent_reviews():
-    reports = Path(__file__).parents[2] / "docs/verification"
+    reports = Path(__file__).parents[2] / "tests/fixtures/question-reviews"
     samples = []
     for path in sorted(reports.glob("06-content-*-review.json")):
         samples.extend(json.loads(path.read_text(encoding="utf-8"))["samples"])

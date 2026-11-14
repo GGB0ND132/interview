@@ -1,75 +1,33 @@
-# React + TypeScript + Vite
+# 面试练习前端
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite。完整的首次配置和题库初始化见[根 README](../README.md)。目录名沿用 `fronted`。
 
-Currently, two official plugins are available:
+## 运行
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+在本目录执行，先确保后端已在 8017 端口启动：
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+npm ci
+$env:INTERVIEW_BACKEND_URL='http://127.0.0.1:8017'
+node node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5177 --strictPort
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+`/api` 由 Vite 代理至后端。没有设置环境变量时，默认后端为 `http://127.0.0.1:8000`；变量须在启动 Vite 的终端设置，修改后重启 Vite。
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| 路由 | 内容 |
+| --- | --- |
+| `/question-practice` | 真实随机单题、反馈、最近练习和问题报告 |
+| `/practice` | 真实模拟面试、JD/简历确认和最近会话/报告 |
+| `/materials`、`/history` | 仍含演示数据，不能当作真实资料入库和统一历史 |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+草稿使用浏览器 localStorage；服务端保存已提交答案及报告。浏览器或端口改变会切换草稿存储空间。密钥不要放到前端变量中。
 
+## 验证
+
+```powershell
+npm test
+npm run lint
+npm run build
 ```
+
+设计依据：[UI.md](../UI.md)和[当前页面稿](../docs/design/页面设计稿_V3.md)。验收步骤：[阶段演示手册](../docs/acceptance/17-demo-runbook.md)。

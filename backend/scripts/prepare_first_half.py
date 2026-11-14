@@ -137,7 +137,7 @@ def main():
         template = {
             "source_commit": COMMIT,
             "bundle_sha256": bundle_digest(bundle),
-            "instructions": "See docs/verification/05-human-sampling.md. Agent checks are not human approval. After errors, review every question in that topic and record incidents; do not erase failed findings.",
+            "instructions": "See docs/题库建设与运行流程.md. Agent checks are not human approval. After errors, review every question in that topic and record incidents; do not erase failed findings.",
             "samples": [
                 {"topic": topic, "code": code, "human_review": None}
                 for topic, codes in SAMPLES.items()
@@ -166,9 +166,9 @@ def main():
                 "\n".join(f"- {point}" for point in question["rubric"]) + "\n",
             ]
         )
-    (ROOT.parent / "docs/verification/05-sample-questions.md").write_text(
-        "\n".join(sample_doc), encoding="utf-8"
-    )
+    sample_output = ROOT.parent / "output/05-sample-questions.md"
+    sample_output.parent.mkdir(parents=True, exist_ok=True)
+    sample_output.write_text("\n".join(sample_doc), encoding="utf-8")
     print(
         json.dumps(
             {

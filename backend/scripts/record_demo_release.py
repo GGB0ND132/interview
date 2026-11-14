@@ -24,7 +24,9 @@ def render(inventory: dict[str, Any]) -> tuple[str, str, dict[str, Any]]:
         )
     sample_codes = {topic: list(codes) for topic, codes in SAMPLES.items()}
     second = json.loads(
-        (ROOT / "docs/content-baseline/agent-topics-06/human-reviews.json").read_text("utf-8")
+        (ROOT / "tests/fixtures/question-reviews/agent-topics-06-human-reviews.json").read_text(
+            "utf-8"
+        )
     )
     for sample in second["samples"]:
         sample_codes.setdefault(sample["topic"], []).append(sample["code"])
