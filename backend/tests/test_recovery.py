@@ -55,7 +55,9 @@ def wait_done(client, session):
 
 
 @pytest.mark.parametrize("mode", ["question_practice", "mock_interview"])
-def test_killed_process_is_taken_over_without_a_second_answer_or_question(tmp_path, mode):
+def test_killed_process_is_taken_over_without_a_second_answer_or_question(
+    tmp_path, mode, monkeypatch
+):
     database = tmp_path / "crash.sqlite3"
     with TestClient(create_app(database_path=database)) as client:
         if mode == "mock_interview":
@@ -72,9 +74,23 @@ def test_killed_process_is_taken_over_without_a_second_answer_or_question(tmp_pa
         if process.is_alive():
             process.kill()
             process.join(5)
-    with TestClient(
-        create_app(database_path=database, evaluator=InterviewEvaluator(), job_lease_seconds=0.2)
-    ) as client:
+    # The crashed claim expires quickly, but successful recovery still needs a
+    # normal task budget. Model a scheduling pause at the external boundary
+    # without relying on machine load or real sleeps to reproduce the race.
+    clock = time.time() + 1
+
+    class DelayedRecovery(InterviewEvaluator):
+        delayed = False
+
+        def evaluate(self, *, question, answer):
+            nonlocal clock
+            if not self.delayed:
+                self.delayed = True
+                clock += 0.3
+            return super().evaluate(question=question, answer=answer)
+
+    monkeypatch.setattr("interview_backend.practice.time.time", lambda: clock)
+    with TestClient(create_app(database_path=database, evaluator=DelayedRecovery())) as client:
         current = wait_done(client, session)
         assert current["phase"] == (
             "stage_transition" if mode == "mock_interview" else "feedback_ready"
@@ -296,7 +312,8 @@ def tcp_server(database, port, entered):
         create_app(
             database_path=database,
             evaluator=HoldDuringModel() if entered is not None else InterviewEvaluator(),
-            job_lease_seconds=0.4,
+            # Only the deliberately killed worker needs an accelerated lease.
+            job_lease_seconds=0.4 if entered is not None else None,
         ),
         host="127.0.0.1",
         port=port,

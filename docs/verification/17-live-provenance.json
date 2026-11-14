@@ -1,0 +1,411 @@
+{
+  "model": "qwen-plus",
+  "source": "https://www.anthropic.com/research/building-effective-agents",
+  "original_source_only": {
+    "session_id": "d529739b-ec87-4bf2-a8ff-4a303640e325",
+    "submission": {
+      "id": "a3de9a24-c408-44bd-a0e1-1ebbbdceae9e",
+      "turn_id": "e4c91fb1-e345-46fc-b0b5-a6230854e097",
+      "client_submission_id": "live-provenance",
+      "disposition": "answered",
+      "answer_text": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+      "status": "completed",
+      "job_id": "9e3c5a9b-6e09-4c1f-8a6c-3c333bfb862b",
+      "score": 99,
+      "feedback": {
+        "answer_version": 1,
+        "assessment_coverage": 1.0,
+        "assessment_status": "complete",
+        "content_version": null,
+        "dimensions": [
+          {
+            "answer_quote": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "accuracy",
+            "reason": "回答准确覆盖题干两个子问题：'如何根据工具执行结果继续任务'（对应'Agent 根据工具返回的实际结果判断后续动作、纠错'）和'为什么要有停止条件'（对应'完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控'），与评分点完全一致。",
+            "score": 100
+          },
+          {
+            "answer_quote": "完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "completeness",
+            "reason": "完整覆盖全部三条评分点：工具选择与执行（'模型选择需要的工具，程序实际执行工具并返回结果'）、依据实际结果而非臆测（'根据工具返回的实际结果判断后续动作、纠错'）、停止条件类型（完成、失败不可恢复、最大迭代次数）及目的（避免循环失控），无遗漏。",
+            "score": 100
+          },
+          {
+            "answer_quote": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "relevance",
+            "reason": "所有内容均紧扣'Agent如何根据工具执行结果继续任务'和'为何需停止条件'，未引入无关概念（如记忆机制、多Agent协作、具体工具API细节等），严格限定在题干语义范围内。",
+            "score": 100
+          },
+          {
+            "answer_quote": "完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "structure",
+            "reason": "逻辑清晰分两层：前半句回应'如何继续任务'，后半句用分号衔接回应'为何停止'，因果与并列关系明确；仅'失败无法恢复'表述稍简略（可更明确为'任务失败且无可行纠错路径'），但不影响整体结构有效性。",
+            "score": 95
+          },
+          {
+            "answer_quote": "失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "specificity",
+            "reason": "使用具体行为动词（'选择'、'执行'、'返回'、'判断'、'纠错'、'停止'、'说明'）和明确边界条件（'完成目标'、'失败无法恢复'、'最大迭代次数'），避免模糊表述如'适当时候'、'某些情况'。",
+            "score": 100
+          }
+        ],
+        "evidence_reason": "",
+        "evidence_status": null,
+        "followup": null,
+        "improvements": [
+          "'失败无法恢复'可微调为'任务失败且无有效纠错路径'，增强技术严谨性",
+          "可补充一个极简例子（如'调用API返回404则切换备用工具'）强化'根据实际结果纠错'的操作感",
+          "‘如实说明’可明确说明对象（如'向用户或上层调度器说明'），提升上下文完整性"
+        ],
+        "independent_references": [],
+        "limitations": [],
+        "overall_score": 99,
+        "prompt_version": "single_question_provenance_v2",
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "reference_answer": "模型决定下一步需要的工具，程序执行工具并返回结果；Agent 根据实际工具结果或环境反馈判断后续动作，必要时纠错。不能把发出调用当作执行成功。完成任务时结束；异常或超过最大迭代次数等边界时停止并说明结果，避免失控循环。",
+        "requested_model": "qwen-plus",
+        "rubric_version": "technical_v1",
+        "source_answer_status": null,
+        "strengths": [
+          "精准对应评分点三要素，无信息冗余或缺失",
+          "用分号自然区分两个子问题的回答，结构紧凑",
+          "关键动词（选择、执行、判断、纠错、停止）全部具象化，无抽象空泛表述",
+          "停止条件列举三种典型场景（完成、失败不可恢复、超限），覆盖鲁棒性要求",
+          "末句'避免循环失控'直指停止条件的核心工程价值，体现设计意识"
+        ],
+        "technical_checks": [],
+        "technical_explanations": [],
+        "used_reference_ids": []
+      },
+      "provenance": {
+        "answer_version": 1,
+        "content_version": null,
+        "independent_references": [],
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "source_answer_status": null,
+        "technical_checks": []
+      }
+    }
+  },
+  "verified_citation": {
+    "session_id": "9662ba4c-ff7c-4ecb-b64d-37c0b3be21c7",
+    "submission": {
+      "id": "409b430e-cb9f-42d9-acfb-ee264f569646",
+      "turn_id": "7007d27a-f7d2-4202-bb7d-afdc1f4350f3",
+      "client_submission_id": "live-provenance",
+      "disposition": "answered",
+      "answer_text": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+      "status": "completed",
+      "job_id": "5fc47b93-1fa2-4720-86c3-0f764d7c15c5",
+      "score": 98,
+      "feedback": {
+        "answer_version": 1,
+        "assessment_coverage": 1.0,
+        "assessment_status": "complete",
+        "content_version": null,
+        "dimensions": [
+          {
+            "answer_quote": "Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "accuracy",
+            "reason": "回答准确体现‘从实际工具结果获取环境反馈’这一核心机制，与 verified_references 中 excerpt ‘gain “ground truth” from the environment at each step (such as tool call results)’ 一致。",
+            "score": 100
+          },
+          {
+            "answer_quote": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "completeness",
+            "reason": "覆盖全部 rubric 三点：工具选择与执行（‘模型选择需要的工具，程序实际执行工具并返回结果’）、依据真实结果而非臆测（‘根据工具返回的实际结果’）、停止条件（完成目标、失败无法恢复、最大迭代次数），无遗漏。",
+            "score": 100
+          },
+          {
+            "answer_quote": "完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "relevance",
+            "reason": "所有内容紧扣‘如何根据工具执行结果继续任务’和‘为什么要有停止条件’两个子问题，未引入无关概念（如记忆机制、多 agent 协作等）。",
+            "score": 100
+          },
+          {
+            "answer_quote": "完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "structure",
+            "reason": "逻辑清晰分两层：先说明‘如何继续’（工具选择→执行→结果驱动决策），再说明‘为何停止’（完成/失败/超限三类边界），仅‘失败无法恢复’表述稍简略（未明示‘无法恢复’即纠错失败），但整体连贯。",
+            "score": 95
+          },
+          {
+            "answer_quote": "Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "specificity",
+            "reason": "明确指出‘工具返回的实际结果’‘完成目标’‘失败无法恢复’‘最大迭代次数’等具体触发条件，但未举例说明‘纠错’的具体形式（如重试、换工具、降级策略），属合理精简，未影响核心要点传达。",
+            "score": 90
+          }
+        ],
+        "evidence_reason": "",
+        "evidence_status": null,
+        "followup": null,
+        "improvements": [
+          "可补充一个极简例子说明‘纠错’：例如‘若调用搜索API返回空结果，则改用本地知识库检索’，以增强操作具体性。",
+          "‘失败无法恢复’可微调为‘纠错尝试后仍无法推进任务’，更准确对应 rubric 中‘异常或超过最大迭代次数等边界’的‘异常’维度。",
+          "‘完成目标时结束’可稍强化判定依据，如‘当工具结果满足预设成功判据（如答案置信度>0.95 或关键词匹配）时终止’，提升可落地性。",
+          "结构上可在‘停止’部分增加连接词，如‘因此，必须设置明确停止条件：……’，使因果更显性。",
+          "避免‘如实说明’中的模糊动词，改为‘返回结构化错误码与上下文快照’，更贴近生产级 agent 设计规范。"
+        ],
+        "independent_references": [
+          {
+            "answer_version": 1,
+            "checked_at": "2026-11-13T16:31:54.397401+00:00",
+            "claim": "Agent 需从实际工具执行结果获取环境反馈以判断任务进度。",
+            "document_sha256": "bed2789431aa555703ffc59b10e3bbdd08e412ea244a4749c5f9cd8b74e897d1",
+            "excerpt": "During execution, it's crucial for the agents to gain “ground truth” from the environment at each step (such as tool call results or code execution) to assess its progress.",
+            "id": "cd90d317-d7bc-440f-8bfa-c76003268de4",
+            "question_code": "Q-AGENT-SAMPLE-01",
+            "reviewer": "Codex source review 2026-11-12",
+            "title": "Building effective agents",
+            "url": "https://www.anthropic.com/research/building-effective-agents"
+          }
+        ],
+        "limitations": [],
+        "overall_score": 98,
+        "prompt_version": "single_question_provenance_v2",
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "reference_answer": "模型决定下一步需要的工具，程序执行工具并返回结果；Agent 根据实际工具结果或环境反馈判断后续动作，必要时纠错。不能把发出调用当作执行成功。完成任务时结束；异常或超过最大迭代次数等边界时停止并说明结果，避免失控循环。",
+        "requested_model": "qwen-plus",
+        "rubric_version": "technical_v1",
+        "source_answer_status": null,
+        "strengths": [
+          "精准使用‘工具返回的实际结果’这一关键短语，直击环境反馈本质，与权威资料中‘ground truth from the environment’严格对应。",
+          "完整覆盖评分标准全部三项要求，且将‘停止条件’细分为完成、失败、超限三类，逻辑严密。",
+          "用‘避免循环失控’点明停止条件的根本目的，体现对 agent 系统性风险的认知。",
+          "语言简洁无冗余，如‘程序实际执行工具并返回结果’比原题‘程序执行工具并返回结果’更强调‘实际’，强化准确性。",
+          "‘如实说明’一词体现结果透明性要求，隐含可观察、可调试的工程实践意识。"
+        ],
+        "technical_checks": [],
+        "technical_explanations": [],
+        "used_reference_ids": [
+          "cd90d317-d7bc-440f-8bfa-c76003268de4"
+        ]
+      },
+      "provenance": {
+        "answer_version": 1,
+        "content_version": null,
+        "independent_references": [
+          {
+            "answer_version": 1,
+            "checked_at": "2026-11-13T16:31:54.397401+00:00",
+            "claim": "Agent 需从实际工具执行结果获取环境反馈以判断任务进度。",
+            "document_sha256": "bed2789431aa555703ffc59b10e3bbdd08e412ea244a4749c5f9cd8b74e897d1",
+            "excerpt": "During execution, it's crucial for the agents to gain “ground truth” from the environment at each step (such as tool call results or code execution) to assess its progress.",
+            "id": "cd90d317-d7bc-440f-8bfa-c76003268de4",
+            "question_code": "Q-AGENT-SAMPLE-01",
+            "reviewer": "Codex source review 2026-11-12",
+            "title": "Building effective agents",
+            "url": "https://www.anthropic.com/research/building-effective-agents"
+          }
+        ],
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "source_answer_status": null,
+        "technical_checks": []
+      }
+    }
+  },
+  "live_support_check": {
+    "supported": {
+      "supported": true,
+      "reference_id": "cd90d317-d7bc-440f-8bfa-c76003268de4",
+      "quote": "During execution, it's crucial for the agents to gain “ground truth” from the environment at each step (such as tool call results or code execution) to assess its progress."
+    },
+    "unrelated": {
+      "supported": false,
+      "reference_id": null,
+      "quote": ""
+    }
+  },
+  "unverified_dispute": {
+    "session_id": "51a8fd9e-3668-4190-abe9-c647dcf6d6fc",
+    "submission": {
+      "id": "8397d246-8f1f-43dd-bdf7-30f57d0eb767",
+      "turn_id": "42d799ab-9687-45ff-9cbb-9a6a02717991",
+      "client_submission_id": "live-provenance",
+      "disposition": "answered",
+      "answer_text": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。另外，LangGraph 9.9.9 的 checkpointer 保证外部支付工具恰好执行一次，官方取消了重放限制。这个版本结论与题库范围不同。",
+      "status": "completed",
+      "job_id": "2dbc6f7f-bfa7-4fb0-a412-18177644ed5a",
+      "score": 95,
+      "feedback": {
+        "answer_version": 1,
+        "assessment_coverage": 0.15,
+        "assessment_status": "partial",
+        "content_version": null,
+        "dimensions": [
+          {
+            "answer_quote": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "accuracy",
+            "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+            "score": null
+          },
+          {
+            "answer_quote": "完成目标时结束；失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "completeness",
+            "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+            "score": null
+          },
+          {
+            "answer_quote": "另外，LangGraph 9.9.9 的 checkpointer 保证外部支付工具恰好执行一次，官方取消了重放限制。",
+            "name": "relevance",
+            "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+            "score": null
+          },
+          {
+            "answer_quote": "模型选择需要的工具，程序实际执行工具并返回结果，Agent 根据工具返回的实际结果判断后续动作、纠错。",
+            "name": "structure",
+            "reason": "仅按已保存回答的表达评价此维度；争议技术结论暂不判断。",
+            "score": 95
+          },
+          {
+            "answer_quote": "失败无法恢复或达到最大迭代次数时停止并如实说明，避免循环失控。",
+            "name": "specificity",
+            "reason": "存在答案范围外或版本争议，缺少直接资料证据，暂不判断。",
+            "score": null
+          }
+        ],
+        "evidence_reason": "",
+        "evidence_status": null,
+        "followup": null,
+        "improvements": [
+          "争议技术结论尚无直接证据，请提交疑问供维护者复核。"
+        ],
+        "independent_references": [],
+        "limitations": [
+          "部分维度未评估"
+        ],
+        "overall_score": 95,
+        "prompt_version": "single_question_provenance_v2",
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "reference_answer": "模型决定下一步需要的工具，程序执行工具并返回结果；Agent 根据实际工具结果或环境反馈判断后续动作，必要时纠错。不能把发出调用当作执行成功。完成任务时结束；异常或超过最大迭代次数等边界时停止并说明结果，避免失控循环。",
+        "requested_model": "qwen-plus",
+        "rubric_version": "technical_v1",
+        "source_answer_status": null,
+        "strengths": [
+          "已保留实际回答及可评估维度。"
+        ],
+        "technical_checks": [
+          {
+            "affected_dimensions": [
+              "accuracy",
+              "relevance",
+              "specificity"
+            ],
+            "attempt_id": "679a8237-82d1-47aa-b9f2-d894beaf509a",
+            "candidate_ids": [],
+            "checked_at": "2026-11-13T16:32:46.542070+00:00",
+            "claim": "LangGraph 9.9.9 版本存在且其 checkpointer 保证外部支付工具恰好执行一次，官方取消了重放限制。",
+            "error_code": null,
+            "query": "LangGraph 9.9.9 release notes checkpointer idempotency",
+            "reason": "version_dispute",
+            "reference_id": null,
+            "source_failures": [],
+            "status": "insufficient_evidence",
+            "support_quote": ""
+          }
+        ],
+        "technical_explanations": [],
+        "used_reference_ids": [
+          "cd90d317-d7bc-440f-8bfa-c76003268de4"
+        ]
+      },
+      "provenance": {
+        "answer_version": 1,
+        "content_version": null,
+        "independent_references": [],
+        "question_code": "Q-AGENT-SAMPLE-01",
+        "question_source": {
+          "author": "Codex",
+          "locator": "samples.json#Q-AGENT-SAMPLE-01",
+          "not_mianstack": true,
+          "source_id": "SRC-AGENT-DEMO-01",
+          "usage": "original_project_sample"
+        },
+        "question_version": 1,
+        "source_answer_status": null,
+        "technical_checks": [
+          {
+            "affected_dimensions": [
+              "accuracy",
+              "relevance",
+              "specificity"
+            ],
+            "attempt_id": "679a8237-82d1-47aa-b9f2-d894beaf509a",
+            "candidate_ids": [],
+            "checked_at": "2026-11-13T16:32:46.542070+00:00",
+            "claim": "LangGraph 9.9.9 版本存在且其 checkpointer 保证外部支付工具恰好执行一次，官方取消了重放限制。",
+            "error_code": null,
+            "query": "LangGraph 9.9.9 release notes checkpointer idempotency",
+            "reason": "version_dispute",
+            "reference_id": null,
+            "source_failures": [],
+            "status": "insufficient_evidence",
+            "support_quote": ""
+          }
+        ]
+      }
+    }
+  },
+  "user_report": {
+    "id": "05a49e98-1564-46a8-b786-4db29813f17a",
+    "session_id": "51a8fd9e-3668-4190-abe9-c647dcf6d6fc",
+    "turn_id": "42d799ab-9687-45ff-9cbb-9a6a02717991",
+    "submission_id": "8397d246-8f1f-43dd-bdf7-30f57d0eb767",
+    "question_code": "Q-AGENT-SAMPLE-01",
+    "answer_version": 1,
+    "content_version": null,
+    "category": "score",
+    "explanation": "请复核 LangGraph 版本争议；不应在无证据时确定判断。",
+    "status": "in_review",
+    "created_at": "2026-11-13T16:32:46.760028+00:00",
+    "history": [
+      {
+        "from_status": "open",
+        "status": "in_review",
+        "note": "已收到版本争议，等待资料核对。",
+        "handled_at": "2026-11-13T16:32:46.793020+00:00"
+      }
+    ]
+  },
+  "restart_equal": true,
+  "model_retries": []
+}
