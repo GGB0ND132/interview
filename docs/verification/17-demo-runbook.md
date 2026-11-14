@@ -54,7 +54,7 @@ uv run --locked python -X utf8 scripts/record_demo_release.py --inventory ../doc
 
 若终端启用了全局 HTTP 代理，访问本机前设置 `$env:NO_PROXY='127.0.0.1,localhost'`。发布清单的 `available_for_scoring` 同时排除错题隔离与主题暂停，不仅检查 published；`counts_match_availability` 为 false 时应重新捕获一致快照。渲染脚本拒绝覆盖已有 `17-human-reviews.json`，不会发布、批准题目或回写人工结论。
 
-人工审核见 [待审材料](17-human-review-packet.md)：审核人核对实际资料后在 [结论表](17-human-reviews.json) 填写身份、时间、资料定位/版本/片段、发现及 passed/failed。该文件是 17 验收记录，不会自动调用发布或恢复 API；发现错题仍须通过既有维护流程隔离与复查。固定来源只有 23 道不同抽查题，GUI 第二位必须由维护者决定是否接受唯一来源题例外，不能复制同题或另生成题目凑数。
+当前 [抽查材料](17-human-review-packet.md) 与 [结论表](17-human-reviews.json) 已记录用户确认：23 题均 passed，GUI 接受唯一来源题，其余审核字段省略。重新生成的空表只用于新一轮审核，不能替换已确认记录。结论表不会自动调用发布或恢复 API；发现错题仍须通过既有维护流程隔离与复查。
 
 浏览器回归使用 Playwright CLI。创建独立浏览器会话，先 `snapshot` 检查页面。`17-browser-prepare.js` 从模拟面试准备页执行 JD、DOCX 确认和草稿刷新；`17-browser-step.js` 每次只做一步，可反复执行直到报告。两者使用真实服务和模型，非空回答产生实际模型调用费用。其答案明确为合成验收样例，技术题主要使用明确的知识缺口回答，用于验证流程，不验证评分准确性。
 
@@ -104,8 +104,8 @@ uv run --locked python -X utf8 scripts/capture_demo_sessions.py --base-url http:
 
 有据引用的真实模型和文档抓取独立验收使用全新数据库：`uv run --locked python -X utf8 scripts/acceptance_provenance.py --database data/provenance-new.sqlite3 --output ../docs/verification/17-provenance-current.json`。该命令有真实网络及模型调用，拒绝覆盖现有数据库。
 
-## 尚未满足的原始验收条件
+## 用户确认与后续现场检查
 
-05/06 已有实际独立 Agent 审核及显式发布策略，记录没有冒充人工。原始 17 第一项仍要求“12 个主题各两题人工抽查”，本次没有人工审核身份/结论；GUI 在固定来源仅 1 题，也不能凑出第二道不同来源题。这两点保留在工单和发布记录，不以自动通过或 Agent 审查替代原文要求，不扩充来源绕过。
+05/06 已有独立 Agent 审核及显式发布策略。2026-11-14 用户明确将 17 的 23 道抽查题结论统一确认为 passed，接受 GUI 仅一题，并省略其余审核字段；17 全部交付项据此勾选。没有新增 GUI 题或补造审核人、审核时间及资料。
 
 11 月 16 日按本手册重新跑发布池核对与双模式闭环，11 月 18 日演示前再次检查服务、密钥和当前题数。本文是 11 月 14 日预验收，不能代记未来两次检查已经发生。

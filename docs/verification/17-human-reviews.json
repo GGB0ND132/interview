@@ -1,7 +1,13 @@
 {
   "source_commit": "b1e033dd72db1d4e23fa0c5b8d0ae28fd330de77",
   "inventory_checked_at": "2026-11-13T17:09:26.455749+00:00",
-  "status": "pending_human_review",
+  "status": "passed_with_source_exception",
+  "user_confirmation": {
+    "recorded_date": "2026-11-14",
+    "source": "current user conversation",
+    "statement": "GUI来源一题是题库就一题，conclusion均为passed，剩下的不想写了",
+    "scope": "23 listed samples passed; GUI uses its sole fixed-source question; other review fields intentionally omitted by user"
+  },
   "samples": [
     {
       "code": "Q-0419",
@@ -14,7 +20,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-1674",
@@ -27,7 +33,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0898",
@@ -40,7 +46,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-2078",
@@ -53,7 +59,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0883",
@@ -66,7 +72,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-2506",
@@ -79,7 +85,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-7020",
@@ -92,7 +98,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-7196",
@@ -105,7 +111,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0062",
@@ -118,7 +124,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-4837",
@@ -131,7 +137,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-1675",
@@ -144,7 +150,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-4836",
@@ -157,7 +163,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0322",
@@ -170,7 +176,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-2426",
@@ -183,7 +189,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0624",
@@ -196,7 +202,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-1768",
@@ -209,7 +215,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-4460",
@@ -222,7 +228,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0019",
@@ -235,7 +241,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-2075",
@@ -248,7 +254,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-3486",
@@ -261,7 +267,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0977",
@@ -274,7 +280,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-1085",
@@ -287,7 +293,7 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     },
     {
       "code": "Q-0897",
@@ -300,14 +306,16 @@
       "reviewed_at": "",
       "materials": [],
       "findings": "",
-      "conclusion": "pending"
+      "conclusion": "passed"
     }
   ],
   "missing_slots": [
     {
       "topic": "GUI、Computer Use 与多模态 Agent",
       "slot": 2,
-      "reason": "SOURCE_SHORTAGE"
+      "reason": "SOURCE_SHORTAGE",
+      "disposition": "accepted_by_user",
+      "replacement_required": false
     }
   ]
 }

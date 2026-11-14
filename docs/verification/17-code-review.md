@@ -46,3 +46,19 @@ Standards：0 项，最严重问题无。Spec：2 项已披露的既存 P2 问�
 审查者独立运行针对性 5 项测试，覆盖未发布、停用、修正隔离、主题暂停及双模式恢复；全部通过。另验证生成的发布表、抽查包、人工表与清单一致，题号分别为 115/23 个唯一值。本轮完整验证：后端 206 passed、前端 61 passed，mypy、Ruff check/format、TypeScript/Vite build、ESLint 通过。没有新增浏览器或收费模型调用。
 
 本轮 Standards 0 项，最严重问题无；Spec 1 项既存 P2 人工验收缺口，新增问题 0 项。
+
+## 用户最终确认后的记录审查
+
+基线 `a1a25bc95e734e90775a4efa170b6a986ab783f2`，审查命令 `git diff a1a25bc`，当时没有新增提交；仅修改验收文档和 JSON。
+
+### Standards
+
+`/root/confirmation_standards_review`：硬性违规 0、代码异味 0。合法状态和 Comments 追加符合规范；23 题用户确认、GUI 单题例外、空审核字段及版本摘要记录一致。
+
+### Spec
+
+`/root/confirmation_spec_review`：缺漏、越界及错误实现均为 0。用户最新明确确认取代此前待人工确认条件：23 题 passed，GUI 接受固定来源仅一题，其余审核字段省略。六文件一致，未来现场检查与已知质量问题仍保留。此前人工验收 P2 据此关闭。
+
+机器核对：23 个唯一题号、12 主题、全部 passed，候选摘要与发布快照一致；未提供审核字段仍为空，GUI 第二位为 accepted_by_user。两份工单内容一致且无未勾选项，`git diff --check` 通过。未改运行代码，本轮未重跑全量测试；上轮后端 206、前端 61 项通过记录保留。
+
+Standards 0 项，最严重问题无；Spec 0 项，最严重问题无。
